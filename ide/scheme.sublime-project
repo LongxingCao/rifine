@@ -1,0 +1,25 @@
+{
+	"folders":
+	[
+		{
+			"follow_symlinks": true,
+			"path": "../",
+            "folder_exclude_patterns": ["doc","dox","build","CMakeFiles","external","build_clang"],
+            "file_exclude_patterns": ["*.ninja","CMakeCache*","Makefile","main_test","quick_test","*.cmake",".ninja*"],
+		},
+	],
+	"build_systems":
+    [
+        {
+            "name": "quick_test",
+            "working_dir": "$project_path/..",
+            "shell_cmd": "cd build && time ninja -j8 quick_test && ./quick_test &> ../tmp/sublime_output.txt",
+            "variants" : [
+                {
+                    "name": "Run",
+                    "shell_cmd": "killall MacPyMOL; rm -f build/*.pdb; cd build && time ninja -j8 quick_test && ./quick_test &> ../tmp/sublime_output.txt && open *.pdb",
+                }
+            ]
+        },
+    ]
+}

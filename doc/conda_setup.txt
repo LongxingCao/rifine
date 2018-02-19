@@ -1,0 +1,5 @@
+conda install future
+conda install biopython                 #=1.66
+conda install -c datamicroscopes eigen3 #=3.2.1
+conda install -c conda-forge cmake      #=3.5.0
+conda install -c dlr-sc ninja           #=1.6.0
