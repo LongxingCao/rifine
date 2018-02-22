@@ -38,7 +38,7 @@ LIST( APPEND ALL_ROSETTA_LIBS gomp )
 
 add_subdirectory( riflib )
 
-set( EXES "test_librosetta" "rifgen" "rifine" "rif_dock_test" "scheme_make_bounding_grids" )
+set( EXES "test_librosetta" "rifgen" "rifine" "rif_dock_test" "prepare_scaff" "debug_longxing" "scheme_make_bounding_grids" )
 foreach( EXE ${EXES} )
 	message( "riflib exe: " ${EXE} )
 

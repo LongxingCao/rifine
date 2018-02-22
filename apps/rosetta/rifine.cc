@@ -375,7 +375,7 @@ int main( int argc, char *argv[] )
             std::cout << "/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////" << std::endl;
             
             
-            core::pose::Pose scaffold, scaffold_centered, scaffold_full_centered, both_pose, both_full_pose, scaffold_only_pose;
+            core::pose::Pose scaffold, scaffold_centered, scaffold_full_centered, both_pose, both_full_pose;
             float scaff_radius = 0.0;
             float redundancy_filter_rg = 0.0;
             
@@ -468,7 +468,7 @@ int main( int argc, char *argv[] )
                 // scaffold center and move the scaffold to the center. ########## setup the pose..
                 scaffold_center = pose_center( scaffold, scaffold_res );
                 scaffold_centered = scaffold;
-                scaffold_full_centered = scaffold;
+                // scaffold_full_centered = scaffold;
                 
                 for (int ir = 1; ir <= scaffold.size(); ++ir ) {
                     Vec tmp( scaffold_center[0], scaffold_center[1], scaffold_center[2] );
@@ -488,7 +488,7 @@ int main( int argc, char *argv[] )
                 
                 both_pose      = scaffold_centered;
                 both_full_pose = scaffold_full_centered;
-                scaffold_only_pose = scaffold_centered;
+                
                 ::devel::scheme::append_pose_to_pose( both_pose, target );
                 ::devel::scheme::append_pose_to_pose( both_full_pose, target );
                 runtime_assert( both_pose.size() == scaffold.size() + target.size() );
@@ -1147,9 +1147,9 @@ int main( int argc, char *argv[] )
                     for ( int i = 0; i < omp_max_threads(); ++i ) {
                         // both_full_per_thread[i] = both_full_pose;
                         if( opt.replace_orig_scaffold_res ){
-                            both_per_thread[i] = both_full_pose;
-                        } else {
                             both_per_thread[i] = both_pose;
+                        } else {
+                            both_per_thread[i] = both_full_pose;
                         }
                         // create score function
                         // scorefunc_pt[i] = core::scoring::ScoreFucntionFactory::create_score_function( opt.rosetta_soft_score );
@@ -1399,19 +1399,46 @@ int main( int argc, char *argv[] )
                 std::cout << std::endl << "Rosetta score and min done! Total " << elapsed_seconds_rosetta.count() << " CPU ticks spend." << std::endl << std::endl;
             }
         
-            for (int64_t i_samp = 0; i_samp < rifine_results.size(); ++i_samp) {
-                if ( i_samp > 20 || rifine_results[i_samp].pose_ == nullptr ) {
-                    break;
-                }
-                std::cout << "SeedP: " << rifine_results[i_samp].index.seeding_index << "_" << rifine_results[i_samp].index.nest_index << " " << rifine_results[i_samp].score << std::endl;
-                    rifine_results[i_samp].pose_->dump_pdb( "seed_" + str(rifine_results[i_samp].index.seeding_index) + "_" + str(rifine_results[i_samp].index.nest_index) + ".pdb" );
-            } // end if of the rosetta score and min
             
             
             
+            // output results here. It is easy here as ........
+            // there is no need to cluster the results ........
+            {
+                print_header("compile and output results");
+                for (int64_t i_samp = 0; i_samp < rifine_results.size(); ++i_samp) {
+                    if ( i_samp > opt.n_pdb_out || rifine_results[i_samp].pose_ == nullptr ) {
+                        break;
+                    }
+                    
+                    //pdb name
+                    std::string pdboutfile = opt.outdir + "/" + scafftag + "_" + devel::scheme::str(i_samp,9)+".pdb.gz";
+                    if( opt.output_tag.size() ){
+                        pdboutfile = opt.outdir + "/" + scafftag+"_" + opt.output_tag + "_" + devel::scheme::str(i_samp,9)+".pdb.gz";
+                    }
+                    std::ostringstream oss;
+                    oss << "rif score: " << I(4,i_samp)
+                    << " rank "       << I(9,i_samp)
+                    << " packscore: " << F(7,3,rifine_results[i_samp].score)
+                    << " rifrank: "   << I(7,rifine_results[i_samp].prepack_rank)
+                    << " " << pdboutfile
+                    << std::endl;
+                    std::cout << oss.str();
+                    dokout << oss.str(); dokout.flush();
+                    
+                    rifine_results[i_samp].pose_->dump_pdb(pdboutfile);
+                } // end loop of the output pdbfiles
+            } // end block of the pdb out
             
             /*
              
+             for (int64_t i_samp = 0; i_samp < rifine_results.size(); ++i_samp) {
+             if ( i_samp > 20 || rifine_results[i_samp].pose_ == nullptr ) {
+             break;
+             }
+             std::cout << "SeedP: " << rifine_results[i_samp].index.seeding_index << "_" << rifine_results[i_samp].index.nest_index << " " << rifine_results[i_samp].score << std::endl;
+             rifine_results[i_samp].pose_->dump_pdb( "seed_" + str(rifine_results[i_samp].index.seeding_index) + "_" + str(rifine_results[i_samp].index.nest_index) + ".pdb" );
+             } // end if of the rosetta score and min
              
              {
              
