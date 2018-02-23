@@ -48,10 +48,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/longxing/devel/rifine
+CMAKE_SOURCE_DIR = /home/longxing/devel/rifine-devel
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/longxing/devel/rifine/build
+CMAKE_BINARY_DIR = /home/longxing/devel/rifine-devel/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -124,14 +124,14 @@ install/strip/fast: install/strip
 
 # The main all target
 all: cmake_check_build_system
-	cd /home/longxing/devel/rifine/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/longxing/devel/rifine/build/CMakeFiles /home/longxing/devel/rifine/build/apps/rosetta/python/pysetta/CMakeFiles/progress.marks
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f CMakeFiles/Makefile2 apps/rosetta/python/pysetta/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/longxing/devel/rifine/build/CMakeFiles 0
+	cd /home/longxing/devel/rifine-devel/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/longxing/devel/rifine-devel/build/CMakeFiles /home/longxing/devel/rifine-devel/build/apps/rosetta/python/pysetta/CMakeFiles/progress.marks
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f CMakeFiles/Makefile2 apps/rosetta/python/pysetta/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/longxing/devel/rifine-devel/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f CMakeFiles/Makefile2 apps/rosetta/python/pysetta/clean
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f CMakeFiles/Makefile2 apps/rosetta/python/pysetta/clean
 .PHONY : clean
 
 # The main clean target
@@ -141,52 +141,22 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f CMakeFiles/Makefile2 apps/rosetta/python/pysetta/preinstall
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f CMakeFiles/Makefile2 apps/rosetta/python/pysetta/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f CMakeFiles/Makefile2 apps/rosetta/python/pysetta/preinstall
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f CMakeFiles/Makefile2 apps/rosetta/python/pysetta/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd /home/longxing/devel/rifine/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /home/longxing/devel/rifine-devel/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
 # Convenience name for target.
-apps/rosetta/python/pysetta/CMakeFiles/_pysetta_core_import_pose.dir/rule:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f CMakeFiles/Makefile2 apps/rosetta/python/pysetta/CMakeFiles/_pysetta_core_import_pose.dir/rule
-.PHONY : apps/rosetta/python/pysetta/CMakeFiles/_pysetta_core_import_pose.dir/rule
-
-# Convenience name for target.
-_pysetta_core_import_pose: apps/rosetta/python/pysetta/CMakeFiles/_pysetta_core_import_pose.dir/rule
-
-.PHONY : _pysetta_core_import_pose
-
-# fast build rule for target.
-_pysetta_core_import_pose/fast:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f apps/rosetta/python/pysetta/CMakeFiles/_pysetta_core_import_pose.dir/build.make apps/rosetta/python/pysetta/CMakeFiles/_pysetta_core_import_pose.dir/build
-.PHONY : _pysetta_core_import_pose/fast
-
-# Convenience name for target.
-apps/rosetta/python/pysetta/CMakeFiles/_pysetta_core_pose.dir/rule:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f CMakeFiles/Makefile2 apps/rosetta/python/pysetta/CMakeFiles/_pysetta_core_pose.dir/rule
-.PHONY : apps/rosetta/python/pysetta/CMakeFiles/_pysetta_core_pose.dir/rule
-
-# Convenience name for target.
-_pysetta_core_pose: apps/rosetta/python/pysetta/CMakeFiles/_pysetta_core_pose.dir/rule
-
-.PHONY : _pysetta_core_pose
-
-# fast build rule for target.
-_pysetta_core_pose/fast:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f apps/rosetta/python/pysetta/CMakeFiles/_pysetta_core_pose.dir/build.make apps/rosetta/python/pysetta/CMakeFiles/_pysetta_core_pose.dir/build
-.PHONY : _pysetta_core_pose/fast
-
-# Convenience name for target.
 apps/rosetta/python/pysetta/CMakeFiles/_pysetta_devel.dir/rule:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f CMakeFiles/Makefile2 apps/rosetta/python/pysetta/CMakeFiles/_pysetta_devel.dir/rule
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f CMakeFiles/Makefile2 apps/rosetta/python/pysetta/CMakeFiles/_pysetta_devel.dir/rule
 .PHONY : apps/rosetta/python/pysetta/CMakeFiles/_pysetta_devel.dir/rule
 
 # Convenience name for target.
@@ -196,8 +166,38 @@ _pysetta_devel: apps/rosetta/python/pysetta/CMakeFiles/_pysetta_devel.dir/rule
 
 # fast build rule for target.
 _pysetta_devel/fast:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f apps/rosetta/python/pysetta/CMakeFiles/_pysetta_devel.dir/build.make apps/rosetta/python/pysetta/CMakeFiles/_pysetta_devel.dir/build
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f apps/rosetta/python/pysetta/CMakeFiles/_pysetta_devel.dir/build.make apps/rosetta/python/pysetta/CMakeFiles/_pysetta_devel.dir/build
 .PHONY : _pysetta_devel/fast
+
+# Convenience name for target.
+apps/rosetta/python/pysetta/CMakeFiles/_pysetta_core_pose.dir/rule:
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f CMakeFiles/Makefile2 apps/rosetta/python/pysetta/CMakeFiles/_pysetta_core_pose.dir/rule
+.PHONY : apps/rosetta/python/pysetta/CMakeFiles/_pysetta_core_pose.dir/rule
+
+# Convenience name for target.
+_pysetta_core_pose: apps/rosetta/python/pysetta/CMakeFiles/_pysetta_core_pose.dir/rule
+
+.PHONY : _pysetta_core_pose
+
+# fast build rule for target.
+_pysetta_core_pose/fast:
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f apps/rosetta/python/pysetta/CMakeFiles/_pysetta_core_pose.dir/build.make apps/rosetta/python/pysetta/CMakeFiles/_pysetta_core_pose.dir/build
+.PHONY : _pysetta_core_pose/fast
+
+# Convenience name for target.
+apps/rosetta/python/pysetta/CMakeFiles/_pysetta_core_import_pose.dir/rule:
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f CMakeFiles/Makefile2 apps/rosetta/python/pysetta/CMakeFiles/_pysetta_core_import_pose.dir/rule
+.PHONY : apps/rosetta/python/pysetta/CMakeFiles/_pysetta_core_import_pose.dir/rule
+
+# Convenience name for target.
+_pysetta_core_import_pose: apps/rosetta/python/pysetta/CMakeFiles/_pysetta_core_import_pose.dir/rule
+
+.PHONY : _pysetta_core_import_pose
+
+# fast build rule for target.
+_pysetta_core_import_pose/fast:
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f apps/rosetta/python/pysetta/CMakeFiles/_pysetta_core_import_pose.dir/build.make apps/rosetta/python/pysetta/CMakeFiles/_pysetta_core_import_pose.dir/build
+.PHONY : _pysetta_core_import_pose/fast
 
 _pysetta_core_import_pose.o: _pysetta_core_import_pose.cc.o
 
@@ -205,7 +205,7 @@ _pysetta_core_import_pose.o: _pysetta_core_import_pose.cc.o
 
 # target to build an object file
 _pysetta_core_import_pose.cc.o:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f apps/rosetta/python/pysetta/CMakeFiles/_pysetta_core_import_pose.dir/build.make apps/rosetta/python/pysetta/CMakeFiles/_pysetta_core_import_pose.dir/_pysetta_core_import_pose.cc.o
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f apps/rosetta/python/pysetta/CMakeFiles/_pysetta_core_import_pose.dir/build.make apps/rosetta/python/pysetta/CMakeFiles/_pysetta_core_import_pose.dir/_pysetta_core_import_pose.cc.o
 .PHONY : _pysetta_core_import_pose.cc.o
 
 _pysetta_core_import_pose.i: _pysetta_core_import_pose.cc.i
@@ -214,7 +214,7 @@ _pysetta_core_import_pose.i: _pysetta_core_import_pose.cc.i
 
 # target to preprocess a source file
 _pysetta_core_import_pose.cc.i:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f apps/rosetta/python/pysetta/CMakeFiles/_pysetta_core_import_pose.dir/build.make apps/rosetta/python/pysetta/CMakeFiles/_pysetta_core_import_pose.dir/_pysetta_core_import_pose.cc.i
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f apps/rosetta/python/pysetta/CMakeFiles/_pysetta_core_import_pose.dir/build.make apps/rosetta/python/pysetta/CMakeFiles/_pysetta_core_import_pose.dir/_pysetta_core_import_pose.cc.i
 .PHONY : _pysetta_core_import_pose.cc.i
 
 _pysetta_core_import_pose.s: _pysetta_core_import_pose.cc.s
@@ -223,7 +223,7 @@ _pysetta_core_import_pose.s: _pysetta_core_import_pose.cc.s
 
 # target to generate assembly for a file
 _pysetta_core_import_pose.cc.s:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f apps/rosetta/python/pysetta/CMakeFiles/_pysetta_core_import_pose.dir/build.make apps/rosetta/python/pysetta/CMakeFiles/_pysetta_core_import_pose.dir/_pysetta_core_import_pose.cc.s
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f apps/rosetta/python/pysetta/CMakeFiles/_pysetta_core_import_pose.dir/build.make apps/rosetta/python/pysetta/CMakeFiles/_pysetta_core_import_pose.dir/_pysetta_core_import_pose.cc.s
 .PHONY : _pysetta_core_import_pose.cc.s
 
 _pysetta_core_pose.o: _pysetta_core_pose.cc.o
@@ -232,7 +232,7 @@ _pysetta_core_pose.o: _pysetta_core_pose.cc.o
 
 # target to build an object file
 _pysetta_core_pose.cc.o:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f apps/rosetta/python/pysetta/CMakeFiles/_pysetta_core_pose.dir/build.make apps/rosetta/python/pysetta/CMakeFiles/_pysetta_core_pose.dir/_pysetta_core_pose.cc.o
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f apps/rosetta/python/pysetta/CMakeFiles/_pysetta_core_pose.dir/build.make apps/rosetta/python/pysetta/CMakeFiles/_pysetta_core_pose.dir/_pysetta_core_pose.cc.o
 .PHONY : _pysetta_core_pose.cc.o
 
 _pysetta_core_pose.i: _pysetta_core_pose.cc.i
@@ -241,7 +241,7 @@ _pysetta_core_pose.i: _pysetta_core_pose.cc.i
 
 # target to preprocess a source file
 _pysetta_core_pose.cc.i:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f apps/rosetta/python/pysetta/CMakeFiles/_pysetta_core_pose.dir/build.make apps/rosetta/python/pysetta/CMakeFiles/_pysetta_core_pose.dir/_pysetta_core_pose.cc.i
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f apps/rosetta/python/pysetta/CMakeFiles/_pysetta_core_pose.dir/build.make apps/rosetta/python/pysetta/CMakeFiles/_pysetta_core_pose.dir/_pysetta_core_pose.cc.i
 .PHONY : _pysetta_core_pose.cc.i
 
 _pysetta_core_pose.s: _pysetta_core_pose.cc.s
@@ -250,7 +250,7 @@ _pysetta_core_pose.s: _pysetta_core_pose.cc.s
 
 # target to generate assembly for a file
 _pysetta_core_pose.cc.s:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f apps/rosetta/python/pysetta/CMakeFiles/_pysetta_core_pose.dir/build.make apps/rosetta/python/pysetta/CMakeFiles/_pysetta_core_pose.dir/_pysetta_core_pose.cc.s
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f apps/rosetta/python/pysetta/CMakeFiles/_pysetta_core_pose.dir/build.make apps/rosetta/python/pysetta/CMakeFiles/_pysetta_core_pose.dir/_pysetta_core_pose.cc.s
 .PHONY : _pysetta_core_pose.cc.s
 
 _pysetta_devel.o: _pysetta_devel.cc.o
@@ -259,7 +259,7 @@ _pysetta_devel.o: _pysetta_devel.cc.o
 
 # target to build an object file
 _pysetta_devel.cc.o:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f apps/rosetta/python/pysetta/CMakeFiles/_pysetta_devel.dir/build.make apps/rosetta/python/pysetta/CMakeFiles/_pysetta_devel.dir/_pysetta_devel.cc.o
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f apps/rosetta/python/pysetta/CMakeFiles/_pysetta_devel.dir/build.make apps/rosetta/python/pysetta/CMakeFiles/_pysetta_devel.dir/_pysetta_devel.cc.o
 .PHONY : _pysetta_devel.cc.o
 
 _pysetta_devel.i: _pysetta_devel.cc.i
@@ -268,7 +268,7 @@ _pysetta_devel.i: _pysetta_devel.cc.i
 
 # target to preprocess a source file
 _pysetta_devel.cc.i:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f apps/rosetta/python/pysetta/CMakeFiles/_pysetta_devel.dir/build.make apps/rosetta/python/pysetta/CMakeFiles/_pysetta_devel.dir/_pysetta_devel.cc.i
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f apps/rosetta/python/pysetta/CMakeFiles/_pysetta_devel.dir/build.make apps/rosetta/python/pysetta/CMakeFiles/_pysetta_devel.dir/_pysetta_devel.cc.i
 .PHONY : _pysetta_devel.cc.i
 
 _pysetta_devel.s: _pysetta_devel.cc.s
@@ -277,7 +277,7 @@ _pysetta_devel.s: _pysetta_devel.cc.s
 
 # target to generate assembly for a file
 _pysetta_devel.cc.s:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f apps/rosetta/python/pysetta/CMakeFiles/_pysetta_devel.dir/build.make apps/rosetta/python/pysetta/CMakeFiles/_pysetta_devel.dir/_pysetta_devel.cc.s
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f apps/rosetta/python/pysetta/CMakeFiles/_pysetta_devel.dir/build.make apps/rosetta/python/pysetta/CMakeFiles/_pysetta_devel.dir/_pysetta_devel.cc.s
 .PHONY : _pysetta_devel.cc.s
 
 # Help Target
@@ -288,11 +288,11 @@ help:
 	@echo "... depend"
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
-	@echo "... _pysetta_core_import_pose"
+	@echo "... _pysetta_devel"
 	@echo "... install"
 	@echo "... list_install_components"
 	@echo "... _pysetta_core_pose"
-	@echo "... _pysetta_devel"
+	@echo "... _pysetta_core_import_pose"
 	@echo "... install/local"
 	@echo "... install/strip"
 	@echo "... _pysetta_core_import_pose.o"
@@ -315,6 +315,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd /home/longxing/devel/rifine/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /home/longxing/devel/rifine-devel/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

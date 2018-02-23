@@ -1,4 +1,4 @@
-# Install script for directory: /home/longxing/devel/rifine/schemelib
+# Install script for directory: /home/longxing/devel/rifine-devel/schemelib
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -34,7 +34,7 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  include("/home/longxing/devel/rifine/build/schemelib/test/cmake_install.cmake")
+  include("/home/longxing/devel/rifine-devel/build/schemelib/test/cmake_install.cmake")
 
 endif()
 

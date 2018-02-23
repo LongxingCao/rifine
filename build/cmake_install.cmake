@@ -1,4 +1,4 @@
-# Install script for directory: /home/longxing/devel/rifine
+# Install script for directory: /home/longxing/devel/rifine-devel
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -34,9 +34,9 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  include("/home/longxing/devel/rifine/build/external/gmock/cmake_install.cmake")
-  include("/home/longxing/devel/rifine/build/schemelib/cmake_install.cmake")
-  include("/home/longxing/devel/rifine/build/apps/cmake_install.cmake")
+  include("/home/longxing/devel/rifine-devel/build/external/gmock/cmake_install.cmake")
+  include("/home/longxing/devel/rifine-devel/build/schemelib/cmake_install.cmake")
+  include("/home/longxing/devel/rifine-devel/build/apps/cmake_install.cmake")
 
 endif()
 
@@ -48,5 +48,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/longxing/devel/rifine/build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/longxing/devel/rifine-devel/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

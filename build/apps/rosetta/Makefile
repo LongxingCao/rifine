@@ -48,10 +48,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/longxing/devel/rifine
+CMAKE_SOURCE_DIR = /home/longxing/devel/rifine-devel
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/longxing/devel/rifine/build
+CMAKE_BINARY_DIR = /home/longxing/devel/rifine-devel/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -124,14 +124,14 @@ install/local/fast: install/local
 
 # The main all target
 all: cmake_check_build_system
-	cd /home/longxing/devel/rifine/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/longxing/devel/rifine/build/CMakeFiles /home/longxing/devel/rifine/build/apps/rosetta/CMakeFiles/progress.marks
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f CMakeFiles/Makefile2 apps/rosetta/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/longxing/devel/rifine/build/CMakeFiles 0
+	cd /home/longxing/devel/rifine-devel/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/longxing/devel/rifine-devel/build/CMakeFiles /home/longxing/devel/rifine-devel/build/apps/rosetta/CMakeFiles/progress.marks
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f CMakeFiles/Makefile2 apps/rosetta/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/longxing/devel/rifine-devel/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f CMakeFiles/Makefile2 apps/rosetta/clean
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f CMakeFiles/Makefile2 apps/rosetta/clean
 .PHONY : clean
 
 # The main clean target
@@ -141,22 +141,22 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f CMakeFiles/Makefile2 apps/rosetta/preinstall
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f CMakeFiles/Makefile2 apps/rosetta/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f CMakeFiles/Makefile2 apps/rosetta/preinstall
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f CMakeFiles/Makefile2 apps/rosetta/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd /home/longxing/devel/rifine/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /home/longxing/devel/rifine-devel/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
 # Convenience name for target.
 apps/rosetta/CMakeFiles/rif_dock_test.dir/rule:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f CMakeFiles/Makefile2 apps/rosetta/CMakeFiles/rif_dock_test.dir/rule
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f CMakeFiles/Makefile2 apps/rosetta/CMakeFiles/rif_dock_test.dir/rule
 .PHONY : apps/rosetta/CMakeFiles/rif_dock_test.dir/rule
 
 # Convenience name for target.
@@ -166,12 +166,12 @@ rif_dock_test: apps/rosetta/CMakeFiles/rif_dock_test.dir/rule
 
 # fast build rule for target.
 rif_dock_test/fast:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f apps/rosetta/CMakeFiles/rif_dock_test.dir/build.make apps/rosetta/CMakeFiles/rif_dock_test.dir/build
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f apps/rosetta/CMakeFiles/rif_dock_test.dir/build.make apps/rosetta/CMakeFiles/rif_dock_test.dir/build
 .PHONY : rif_dock_test/fast
 
 # Convenience name for target.
 apps/rosetta/CMakeFiles/rifine.dir/rule:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f CMakeFiles/Makefile2 apps/rosetta/CMakeFiles/rifine.dir/rule
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f CMakeFiles/Makefile2 apps/rosetta/CMakeFiles/rifine.dir/rule
 .PHONY : apps/rosetta/CMakeFiles/rifine.dir/rule
 
 # Convenience name for target.
@@ -181,12 +181,12 @@ rifine: apps/rosetta/CMakeFiles/rifine.dir/rule
 
 # fast build rule for target.
 rifine/fast:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f apps/rosetta/CMakeFiles/rifine.dir/build.make apps/rosetta/CMakeFiles/rifine.dir/build
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f apps/rosetta/CMakeFiles/rifine.dir/build.make apps/rosetta/CMakeFiles/rifine.dir/build
 .PHONY : rifine/fast
 
 # Convenience name for target.
 apps/rosetta/CMakeFiles/test_librosetta.dir/rule:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f CMakeFiles/Makefile2 apps/rosetta/CMakeFiles/test_librosetta.dir/rule
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f CMakeFiles/Makefile2 apps/rosetta/CMakeFiles/test_librosetta.dir/rule
 .PHONY : apps/rosetta/CMakeFiles/test_librosetta.dir/rule
 
 # Convenience name for target.
@@ -196,12 +196,12 @@ test_librosetta: apps/rosetta/CMakeFiles/test_librosetta.dir/rule
 
 # fast build rule for target.
 test_librosetta/fast:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f apps/rosetta/CMakeFiles/test_librosetta.dir/build.make apps/rosetta/CMakeFiles/test_librosetta.dir/build
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f apps/rosetta/CMakeFiles/test_librosetta.dir/build.make apps/rosetta/CMakeFiles/test_librosetta.dir/build
 .PHONY : test_librosetta/fast
 
 # Convenience name for target.
 apps/rosetta/CMakeFiles/rifgen.dir/rule:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f CMakeFiles/Makefile2 apps/rosetta/CMakeFiles/rifgen.dir/rule
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f CMakeFiles/Makefile2 apps/rosetta/CMakeFiles/rifgen.dir/rule
 .PHONY : apps/rosetta/CMakeFiles/rifgen.dir/rule
 
 # Convenience name for target.
@@ -211,12 +211,12 @@ rifgen: apps/rosetta/CMakeFiles/rifgen.dir/rule
 
 # fast build rule for target.
 rifgen/fast:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f apps/rosetta/CMakeFiles/rifgen.dir/build.make apps/rosetta/CMakeFiles/rifgen.dir/build
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f apps/rosetta/CMakeFiles/rifgen.dir/build.make apps/rosetta/CMakeFiles/rifgen.dir/build
 .PHONY : rifgen/fast
 
 # Convenience name for target.
 apps/rosetta/CMakeFiles/scheme_make_bounding_grids.dir/rule:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f CMakeFiles/Makefile2 apps/rosetta/CMakeFiles/scheme_make_bounding_grids.dir/rule
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f CMakeFiles/Makefile2 apps/rosetta/CMakeFiles/scheme_make_bounding_grids.dir/rule
 .PHONY : apps/rosetta/CMakeFiles/scheme_make_bounding_grids.dir/rule
 
 # Convenience name for target.
@@ -226,12 +226,12 @@ scheme_make_bounding_grids: apps/rosetta/CMakeFiles/scheme_make_bounding_grids.d
 
 # fast build rule for target.
 scheme_make_bounding_grids/fast:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f apps/rosetta/CMakeFiles/scheme_make_bounding_grids.dir/build.make apps/rosetta/CMakeFiles/scheme_make_bounding_grids.dir/build
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f apps/rosetta/CMakeFiles/scheme_make_bounding_grids.dir/build.make apps/rosetta/CMakeFiles/scheme_make_bounding_grids.dir/build
 .PHONY : scheme_make_bounding_grids/fast
 
 # Convenience name for target.
 apps/rosetta/CMakeFiles/prepare_scaff.dir/rule:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f CMakeFiles/Makefile2 apps/rosetta/CMakeFiles/prepare_scaff.dir/rule
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f CMakeFiles/Makefile2 apps/rosetta/CMakeFiles/prepare_scaff.dir/rule
 .PHONY : apps/rosetta/CMakeFiles/prepare_scaff.dir/rule
 
 # Convenience name for target.
@@ -241,12 +241,12 @@ prepare_scaff: apps/rosetta/CMakeFiles/prepare_scaff.dir/rule
 
 # fast build rule for target.
 prepare_scaff/fast:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f apps/rosetta/CMakeFiles/prepare_scaff.dir/build.make apps/rosetta/CMakeFiles/prepare_scaff.dir/build
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f apps/rosetta/CMakeFiles/prepare_scaff.dir/build.make apps/rosetta/CMakeFiles/prepare_scaff.dir/build
 .PHONY : prepare_scaff/fast
 
 # Convenience name for target.
 apps/rosetta/CMakeFiles/debug_longxing.dir/rule:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f CMakeFiles/Makefile2 apps/rosetta/CMakeFiles/debug_longxing.dir/rule
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f CMakeFiles/Makefile2 apps/rosetta/CMakeFiles/debug_longxing.dir/rule
 .PHONY : apps/rosetta/CMakeFiles/debug_longxing.dir/rule
 
 # Convenience name for target.
@@ -256,7 +256,7 @@ debug_longxing: apps/rosetta/CMakeFiles/debug_longxing.dir/rule
 
 # fast build rule for target.
 debug_longxing/fast:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f apps/rosetta/CMakeFiles/debug_longxing.dir/build.make apps/rosetta/CMakeFiles/debug_longxing.dir/build
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f apps/rosetta/CMakeFiles/debug_longxing.dir/build.make apps/rosetta/CMakeFiles/debug_longxing.dir/build
 .PHONY : debug_longxing/fast
 
 debug_longxing.o: debug_longxing.cc.o
@@ -265,7 +265,7 @@ debug_longxing.o: debug_longxing.cc.o
 
 # target to build an object file
 debug_longxing.cc.o:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f apps/rosetta/CMakeFiles/debug_longxing.dir/build.make apps/rosetta/CMakeFiles/debug_longxing.dir/debug_longxing.cc.o
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f apps/rosetta/CMakeFiles/debug_longxing.dir/build.make apps/rosetta/CMakeFiles/debug_longxing.dir/debug_longxing.cc.o
 .PHONY : debug_longxing.cc.o
 
 debug_longxing.i: debug_longxing.cc.i
@@ -274,7 +274,7 @@ debug_longxing.i: debug_longxing.cc.i
 
 # target to preprocess a source file
 debug_longxing.cc.i:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f apps/rosetta/CMakeFiles/debug_longxing.dir/build.make apps/rosetta/CMakeFiles/debug_longxing.dir/debug_longxing.cc.i
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f apps/rosetta/CMakeFiles/debug_longxing.dir/build.make apps/rosetta/CMakeFiles/debug_longxing.dir/debug_longxing.cc.i
 .PHONY : debug_longxing.cc.i
 
 debug_longxing.s: debug_longxing.cc.s
@@ -283,7 +283,7 @@ debug_longxing.s: debug_longxing.cc.s
 
 # target to generate assembly for a file
 debug_longxing.cc.s:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f apps/rosetta/CMakeFiles/debug_longxing.dir/build.make apps/rosetta/CMakeFiles/debug_longxing.dir/debug_longxing.cc.s
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f apps/rosetta/CMakeFiles/debug_longxing.dir/build.make apps/rosetta/CMakeFiles/debug_longxing.dir/debug_longxing.cc.s
 .PHONY : debug_longxing.cc.s
 
 prepare_scaff.o: prepare_scaff.cc.o
@@ -292,7 +292,7 @@ prepare_scaff.o: prepare_scaff.cc.o
 
 # target to build an object file
 prepare_scaff.cc.o:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f apps/rosetta/CMakeFiles/prepare_scaff.dir/build.make apps/rosetta/CMakeFiles/prepare_scaff.dir/prepare_scaff.cc.o
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f apps/rosetta/CMakeFiles/prepare_scaff.dir/build.make apps/rosetta/CMakeFiles/prepare_scaff.dir/prepare_scaff.cc.o
 .PHONY : prepare_scaff.cc.o
 
 prepare_scaff.i: prepare_scaff.cc.i
@@ -301,7 +301,7 @@ prepare_scaff.i: prepare_scaff.cc.i
 
 # target to preprocess a source file
 prepare_scaff.cc.i:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f apps/rosetta/CMakeFiles/prepare_scaff.dir/build.make apps/rosetta/CMakeFiles/prepare_scaff.dir/prepare_scaff.cc.i
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f apps/rosetta/CMakeFiles/prepare_scaff.dir/build.make apps/rosetta/CMakeFiles/prepare_scaff.dir/prepare_scaff.cc.i
 .PHONY : prepare_scaff.cc.i
 
 prepare_scaff.s: prepare_scaff.cc.s
@@ -310,7 +310,7 @@ prepare_scaff.s: prepare_scaff.cc.s
 
 # target to generate assembly for a file
 prepare_scaff.cc.s:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f apps/rosetta/CMakeFiles/prepare_scaff.dir/build.make apps/rosetta/CMakeFiles/prepare_scaff.dir/prepare_scaff.cc.s
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f apps/rosetta/CMakeFiles/prepare_scaff.dir/build.make apps/rosetta/CMakeFiles/prepare_scaff.dir/prepare_scaff.cc.s
 .PHONY : prepare_scaff.cc.s
 
 rif_dock_test.o: rif_dock_test.cc.o
@@ -319,7 +319,7 @@ rif_dock_test.o: rif_dock_test.cc.o
 
 # target to build an object file
 rif_dock_test.cc.o:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f apps/rosetta/CMakeFiles/rif_dock_test.dir/build.make apps/rosetta/CMakeFiles/rif_dock_test.dir/rif_dock_test.cc.o
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f apps/rosetta/CMakeFiles/rif_dock_test.dir/build.make apps/rosetta/CMakeFiles/rif_dock_test.dir/rif_dock_test.cc.o
 .PHONY : rif_dock_test.cc.o
 
 rif_dock_test.i: rif_dock_test.cc.i
@@ -328,7 +328,7 @@ rif_dock_test.i: rif_dock_test.cc.i
 
 # target to preprocess a source file
 rif_dock_test.cc.i:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f apps/rosetta/CMakeFiles/rif_dock_test.dir/build.make apps/rosetta/CMakeFiles/rif_dock_test.dir/rif_dock_test.cc.i
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f apps/rosetta/CMakeFiles/rif_dock_test.dir/build.make apps/rosetta/CMakeFiles/rif_dock_test.dir/rif_dock_test.cc.i
 .PHONY : rif_dock_test.cc.i
 
 rif_dock_test.s: rif_dock_test.cc.s
@@ -337,7 +337,7 @@ rif_dock_test.s: rif_dock_test.cc.s
 
 # target to generate assembly for a file
 rif_dock_test.cc.s:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f apps/rosetta/CMakeFiles/rif_dock_test.dir/build.make apps/rosetta/CMakeFiles/rif_dock_test.dir/rif_dock_test.cc.s
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f apps/rosetta/CMakeFiles/rif_dock_test.dir/build.make apps/rosetta/CMakeFiles/rif_dock_test.dir/rif_dock_test.cc.s
 .PHONY : rif_dock_test.cc.s
 
 rifgen.o: rifgen.cc.o
@@ -346,7 +346,7 @@ rifgen.o: rifgen.cc.o
 
 # target to build an object file
 rifgen.cc.o:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f apps/rosetta/CMakeFiles/rifgen.dir/build.make apps/rosetta/CMakeFiles/rifgen.dir/rifgen.cc.o
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f apps/rosetta/CMakeFiles/rifgen.dir/build.make apps/rosetta/CMakeFiles/rifgen.dir/rifgen.cc.o
 .PHONY : rifgen.cc.o
 
 rifgen.i: rifgen.cc.i
@@ -355,7 +355,7 @@ rifgen.i: rifgen.cc.i
 
 # target to preprocess a source file
 rifgen.cc.i:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f apps/rosetta/CMakeFiles/rifgen.dir/build.make apps/rosetta/CMakeFiles/rifgen.dir/rifgen.cc.i
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f apps/rosetta/CMakeFiles/rifgen.dir/build.make apps/rosetta/CMakeFiles/rifgen.dir/rifgen.cc.i
 .PHONY : rifgen.cc.i
 
 rifgen.s: rifgen.cc.s
@@ -364,7 +364,7 @@ rifgen.s: rifgen.cc.s
 
 # target to generate assembly for a file
 rifgen.cc.s:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f apps/rosetta/CMakeFiles/rifgen.dir/build.make apps/rosetta/CMakeFiles/rifgen.dir/rifgen.cc.s
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f apps/rosetta/CMakeFiles/rifgen.dir/build.make apps/rosetta/CMakeFiles/rifgen.dir/rifgen.cc.s
 .PHONY : rifgen.cc.s
 
 rifine.o: rifine.cc.o
@@ -373,7 +373,7 @@ rifine.o: rifine.cc.o
 
 # target to build an object file
 rifine.cc.o:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f apps/rosetta/CMakeFiles/rifine.dir/build.make apps/rosetta/CMakeFiles/rifine.dir/rifine.cc.o
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f apps/rosetta/CMakeFiles/rifine.dir/build.make apps/rosetta/CMakeFiles/rifine.dir/rifine.cc.o
 .PHONY : rifine.cc.o
 
 rifine.i: rifine.cc.i
@@ -382,7 +382,7 @@ rifine.i: rifine.cc.i
 
 # target to preprocess a source file
 rifine.cc.i:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f apps/rosetta/CMakeFiles/rifine.dir/build.make apps/rosetta/CMakeFiles/rifine.dir/rifine.cc.i
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f apps/rosetta/CMakeFiles/rifine.dir/build.make apps/rosetta/CMakeFiles/rifine.dir/rifine.cc.i
 .PHONY : rifine.cc.i
 
 rifine.s: rifine.cc.s
@@ -391,7 +391,7 @@ rifine.s: rifine.cc.s
 
 # target to generate assembly for a file
 rifine.cc.s:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f apps/rosetta/CMakeFiles/rifine.dir/build.make apps/rosetta/CMakeFiles/rifine.dir/rifine.cc.s
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f apps/rosetta/CMakeFiles/rifine.dir/build.make apps/rosetta/CMakeFiles/rifine.dir/rifine.cc.s
 .PHONY : rifine.cc.s
 
 scheme_make_bounding_grids.o: scheme_make_bounding_grids.cc.o
@@ -400,7 +400,7 @@ scheme_make_bounding_grids.o: scheme_make_bounding_grids.cc.o
 
 # target to build an object file
 scheme_make_bounding_grids.cc.o:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f apps/rosetta/CMakeFiles/scheme_make_bounding_grids.dir/build.make apps/rosetta/CMakeFiles/scheme_make_bounding_grids.dir/scheme_make_bounding_grids.cc.o
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f apps/rosetta/CMakeFiles/scheme_make_bounding_grids.dir/build.make apps/rosetta/CMakeFiles/scheme_make_bounding_grids.dir/scheme_make_bounding_grids.cc.o
 .PHONY : scheme_make_bounding_grids.cc.o
 
 scheme_make_bounding_grids.i: scheme_make_bounding_grids.cc.i
@@ -409,7 +409,7 @@ scheme_make_bounding_grids.i: scheme_make_bounding_grids.cc.i
 
 # target to preprocess a source file
 scheme_make_bounding_grids.cc.i:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f apps/rosetta/CMakeFiles/scheme_make_bounding_grids.dir/build.make apps/rosetta/CMakeFiles/scheme_make_bounding_grids.dir/scheme_make_bounding_grids.cc.i
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f apps/rosetta/CMakeFiles/scheme_make_bounding_grids.dir/build.make apps/rosetta/CMakeFiles/scheme_make_bounding_grids.dir/scheme_make_bounding_grids.cc.i
 .PHONY : scheme_make_bounding_grids.cc.i
 
 scheme_make_bounding_grids.s: scheme_make_bounding_grids.cc.s
@@ -418,7 +418,7 @@ scheme_make_bounding_grids.s: scheme_make_bounding_grids.cc.s
 
 # target to generate assembly for a file
 scheme_make_bounding_grids.cc.s:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f apps/rosetta/CMakeFiles/scheme_make_bounding_grids.dir/build.make apps/rosetta/CMakeFiles/scheme_make_bounding_grids.dir/scheme_make_bounding_grids.cc.s
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f apps/rosetta/CMakeFiles/scheme_make_bounding_grids.dir/build.make apps/rosetta/CMakeFiles/scheme_make_bounding_grids.dir/scheme_make_bounding_grids.cc.s
 .PHONY : scheme_make_bounding_grids.cc.s
 
 test_librosetta.o: test_librosetta.cc.o
@@ -427,7 +427,7 @@ test_librosetta.o: test_librosetta.cc.o
 
 # target to build an object file
 test_librosetta.cc.o:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f apps/rosetta/CMakeFiles/test_librosetta.dir/build.make apps/rosetta/CMakeFiles/test_librosetta.dir/test_librosetta.cc.o
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f apps/rosetta/CMakeFiles/test_librosetta.dir/build.make apps/rosetta/CMakeFiles/test_librosetta.dir/test_librosetta.cc.o
 .PHONY : test_librosetta.cc.o
 
 test_librosetta.i: test_librosetta.cc.i
@@ -436,7 +436,7 @@ test_librosetta.i: test_librosetta.cc.i
 
 # target to preprocess a source file
 test_librosetta.cc.i:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f apps/rosetta/CMakeFiles/test_librosetta.dir/build.make apps/rosetta/CMakeFiles/test_librosetta.dir/test_librosetta.cc.i
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f apps/rosetta/CMakeFiles/test_librosetta.dir/build.make apps/rosetta/CMakeFiles/test_librosetta.dir/test_librosetta.cc.i
 .PHONY : test_librosetta.cc.i
 
 test_librosetta.s: test_librosetta.cc.s
@@ -445,7 +445,7 @@ test_librosetta.s: test_librosetta.cc.s
 
 # target to generate assembly for a file
 test_librosetta.cc.s:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f apps/rosetta/CMakeFiles/test_librosetta.dir/build.make apps/rosetta/CMakeFiles/test_librosetta.dir/test_librosetta.cc.s
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f apps/rosetta/CMakeFiles/test_librosetta.dir/build.make apps/rosetta/CMakeFiles/test_librosetta.dir/test_librosetta.cc.s
 .PHONY : test_librosetta.cc.s
 
 # Help Target
@@ -499,6 +499,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd /home/longxing/devel/rifine/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /home/longxing/devel/rifine-devel/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

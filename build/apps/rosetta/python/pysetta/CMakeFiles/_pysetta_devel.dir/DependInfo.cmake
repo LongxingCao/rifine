@@ -4,7 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/longxing/devel/rifine/apps/rosetta/python/pysetta/_pysetta_devel.cc" "/home/longxing/devel/rifine/build/apps/rosetta/python/pysetta/CMakeFiles/_pysetta_devel.dir/_pysetta_devel.cc.o"
+  "/home/longxing/devel/rifine-devel/apps/rosetta/python/pysetta/_pysetta_devel.cc" "/home/longxing/devel/rifine-devel/build/apps/rosetta/python/pysetta/CMakeFiles/_pysetta_devel.dir/_pysetta_devel.cc.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 

@@ -1,4 +1,4 @@
-# Install script for directory: /home/longxing/devel/rifine/apps/rosetta/python/test
+# Install script for directory: /home/longxing/devel/rifine-devel/apps/rosetta/python/test
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -39,7 +39,7 @@ if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspeci
          FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/python2/test_pybind.so"
          RPATH "/usr/local/lib:/usr/local/lib64:/home/longxing/rosetta-master/source/cmake/build_cxx11_omp")
   endif()
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/python2" TYPE SHARED_LIBRARY FILES "/home/longxing/devel/rifine/build/apps/rosetta/python/test/test_pybind.so")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/python2" TYPE SHARED_LIBRARY FILES "/home/longxing/devel/rifine-devel/build/apps/rosetta/python/test/test_pybind.so")
   if(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/python2/test_pybind.so" AND
      NOT IS_SYMLINK "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/python2/test_pybind.so")
     file(RPATH_CHANGE

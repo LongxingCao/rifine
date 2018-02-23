@@ -1,4 +1,4 @@
-# Install script for directory: /home/longxing/devel/rifine/apps/rosetta/python/pysetta
+# Install script for directory: /home/longxing/devel/rifine-devel/apps/rosetta/python/pysetta
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -33,21 +33,21 @@ if(NOT DEFINED CMAKE_INSTALL_SO_NO_EXE)
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  if(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/python/_pysetta_core_import_pose.so" AND
-     NOT IS_SYMLINK "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/python/_pysetta_core_import_pose.so")
+  if(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/python/_pysetta_devel.so" AND
+     NOT IS_SYMLINK "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/python/_pysetta_devel.so")
     file(RPATH_CHECK
-         FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/python/_pysetta_core_import_pose.so"
+         FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/python/_pysetta_devel.so"
          RPATH "/usr/local/lib:/usr/local/lib64:/home/longxing/rosetta-master/source/cmake/build_cxx11_omp")
   endif()
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/python" TYPE SHARED_LIBRARY FILES "/home/longxing/devel/rifine/build/apps/rosetta/python/pysetta/_pysetta_core_import_pose.so")
-  if(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/python/_pysetta_core_import_pose.so" AND
-     NOT IS_SYMLINK "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/python/_pysetta_core_import_pose.so")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/python" TYPE SHARED_LIBRARY FILES "/home/longxing/devel/rifine-devel/build/apps/rosetta/python/pysetta/_pysetta_devel.so")
+  if(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/python/_pysetta_devel.so" AND
+     NOT IS_SYMLINK "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/python/_pysetta_devel.so")
     file(RPATH_CHANGE
-         FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/python/_pysetta_core_import_pose.so"
+         FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/python/_pysetta_devel.so"
          OLD_RPATH "/usr/local/lib:/usr/local/lib64:/home/longxing/rosetta-master/source/cmake/build_cxx11_omp:"
          NEW_RPATH "/usr/local/lib:/usr/local/lib64:/home/longxing/rosetta-master/source/cmake/build_cxx11_omp")
     if(CMAKE_INSTALL_DO_STRIP)
-      execute_process(COMMAND "/usr/bin/strip" "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/python/_pysetta_core_import_pose.so")
+      execute_process(COMMAND "/usr/bin/strip" "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/python/_pysetta_devel.so")
     endif()
   endif()
 endif()
@@ -59,7 +59,7 @@ if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspeci
          FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/python/_pysetta_core_pose.so"
          RPATH "/usr/local/lib:/usr/local/lib64:/home/longxing/rosetta-master/source/cmake/build_cxx11_omp")
   endif()
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/python" TYPE SHARED_LIBRARY FILES "/home/longxing/devel/rifine/build/apps/rosetta/python/pysetta/_pysetta_core_pose.so")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/python" TYPE SHARED_LIBRARY FILES "/home/longxing/devel/rifine-devel/build/apps/rosetta/python/pysetta/_pysetta_core_pose.so")
   if(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/python/_pysetta_core_pose.so" AND
      NOT IS_SYMLINK "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/python/_pysetta_core_pose.so")
     file(RPATH_CHANGE
@@ -73,21 +73,21 @@ if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspeci
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  if(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/python/_pysetta_devel.so" AND
-     NOT IS_SYMLINK "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/python/_pysetta_devel.so")
+  if(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/python/_pysetta_core_import_pose.so" AND
+     NOT IS_SYMLINK "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/python/_pysetta_core_import_pose.so")
     file(RPATH_CHECK
-         FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/python/_pysetta_devel.so"
+         FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/python/_pysetta_core_import_pose.so"
          RPATH "/usr/local/lib:/usr/local/lib64:/home/longxing/rosetta-master/source/cmake/build_cxx11_omp")
   endif()
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/python" TYPE SHARED_LIBRARY FILES "/home/longxing/devel/rifine/build/apps/rosetta/python/pysetta/_pysetta_devel.so")
-  if(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/python/_pysetta_devel.so" AND
-     NOT IS_SYMLINK "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/python/_pysetta_devel.so")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/python" TYPE SHARED_LIBRARY FILES "/home/longxing/devel/rifine-devel/build/apps/rosetta/python/pysetta/_pysetta_core_import_pose.so")
+  if(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/python/_pysetta_core_import_pose.so" AND
+     NOT IS_SYMLINK "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/python/_pysetta_core_import_pose.so")
     file(RPATH_CHANGE
-         FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/python/_pysetta_devel.so"
+         FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/python/_pysetta_core_import_pose.so"
          OLD_RPATH "/usr/local/lib:/usr/local/lib64:/home/longxing/rosetta-master/source/cmake/build_cxx11_omp:"
          NEW_RPATH "/usr/local/lib:/usr/local/lib64:/home/longxing/rosetta-master/source/cmake/build_cxx11_omp")
     if(CMAKE_INSTALL_DO_STRIP)
-      execute_process(COMMAND "/usr/bin/strip" "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/python/_pysetta_devel.so")
+      execute_process(COMMAND "/usr/bin/strip" "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/python/_pysetta_core_import_pose.so")
     endif()
   endif()
 endif()

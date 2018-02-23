@@ -1,4 +1,4 @@
-# Install script for directory: /home/longxing/devel/rifine/external/gmock/gtest
+# Install script for directory: /home/longxing/devel/rifine-devel/external/gmock/gtest
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

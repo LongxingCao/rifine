@@ -48,10 +48,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/longxing/devel/rifine
+CMAKE_SOURCE_DIR = /home/longxing/devel/rifine-devel
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/longxing/devel/rifine/build
+CMAKE_BINARY_DIR = /home/longxing/devel/rifine-devel/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -124,14 +124,14 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	cd /home/longxing/devel/rifine/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/longxing/devel/rifine/build/CMakeFiles /home/longxing/devel/rifine/build/apps/rosetta/riflib/CMakeFiles/progress.marks
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f CMakeFiles/Makefile2 apps/rosetta/riflib/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/longxing/devel/rifine/build/CMakeFiles 0
+	cd /home/longxing/devel/rifine-devel/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/longxing/devel/rifine-devel/build/CMakeFiles /home/longxing/devel/rifine-devel/build/apps/rosetta/riflib/CMakeFiles/progress.marks
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f CMakeFiles/Makefile2 apps/rosetta/riflib/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/longxing/devel/rifine-devel/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f CMakeFiles/Makefile2 apps/rosetta/riflib/clean
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f CMakeFiles/Makefile2 apps/rosetta/riflib/clean
 .PHONY : clean
 
 # The main clean target
@@ -141,22 +141,22 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f CMakeFiles/Makefile2 apps/rosetta/riflib/preinstall
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f CMakeFiles/Makefile2 apps/rosetta/riflib/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f CMakeFiles/Makefile2 apps/rosetta/riflib/preinstall
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f CMakeFiles/Makefile2 apps/rosetta/riflib/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd /home/longxing/devel/rifine/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /home/longxing/devel/rifine-devel/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
 # Convenience name for target.
 apps/rosetta/riflib/CMakeFiles/riflib.dir/rule:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f CMakeFiles/Makefile2 apps/rosetta/riflib/CMakeFiles/riflib.dir/rule
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f CMakeFiles/Makefile2 apps/rosetta/riflib/CMakeFiles/riflib.dir/rule
 .PHONY : apps/rosetta/riflib/CMakeFiles/riflib.dir/rule
 
 # Convenience name for target.
@@ -166,7 +166,7 @@ riflib: apps/rosetta/riflib/CMakeFiles/riflib.dir/rule
 
 # fast build rule for target.
 riflib/fast:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f apps/rosetta/riflib/CMakeFiles/riflib.dir/build.make apps/rosetta/riflib/CMakeFiles/riflib.dir/build
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f apps/rosetta/riflib/CMakeFiles/riflib.dir/build.make apps/rosetta/riflib/CMakeFiles/riflib.dir/build
 .PHONY : riflib/fast
 
 EtableParams_init.o: EtableParams_init.cc.o
@@ -175,7 +175,7 @@ EtableParams_init.o: EtableParams_init.cc.o
 
 # target to build an object file
 EtableParams_init.cc.o:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f apps/rosetta/riflib/CMakeFiles/riflib.dir/build.make apps/rosetta/riflib/CMakeFiles/riflib.dir/EtableParams_init.cc.o
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f apps/rosetta/riflib/CMakeFiles/riflib.dir/build.make apps/rosetta/riflib/CMakeFiles/riflib.dir/EtableParams_init.cc.o
 .PHONY : EtableParams_init.cc.o
 
 EtableParams_init.i: EtableParams_init.cc.i
@@ -184,7 +184,7 @@ EtableParams_init.i: EtableParams_init.cc.i
 
 # target to preprocess a source file
 EtableParams_init.cc.i:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f apps/rosetta/riflib/CMakeFiles/riflib.dir/build.make apps/rosetta/riflib/CMakeFiles/riflib.dir/EtableParams_init.cc.i
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f apps/rosetta/riflib/CMakeFiles/riflib.dir/build.make apps/rosetta/riflib/CMakeFiles/riflib.dir/EtableParams_init.cc.i
 .PHONY : EtableParams_init.cc.i
 
 EtableParams_init.s: EtableParams_init.cc.s
@@ -193,7 +193,7 @@ EtableParams_init.s: EtableParams_init.cc.s
 
 # target to generate assembly for a file
 EtableParams_init.cc.s:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f apps/rosetta/riflib/CMakeFiles/riflib.dir/build.make apps/rosetta/riflib/CMakeFiles/riflib.dir/EtableParams_init.cc.s
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f apps/rosetta/riflib/CMakeFiles/riflib.dir/build.make apps/rosetta/riflib/CMakeFiles/riflib.dir/EtableParams_init.cc.s
 .PHONY : EtableParams_init.cc.s
 
 HBondedPairGenerator.o: HBondedPairGenerator.cc.o
@@ -202,7 +202,7 @@ HBondedPairGenerator.o: HBondedPairGenerator.cc.o
 
 # target to build an object file
 HBondedPairGenerator.cc.o:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f apps/rosetta/riflib/CMakeFiles/riflib.dir/build.make apps/rosetta/riflib/CMakeFiles/riflib.dir/HBondedPairGenerator.cc.o
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f apps/rosetta/riflib/CMakeFiles/riflib.dir/build.make apps/rosetta/riflib/CMakeFiles/riflib.dir/HBondedPairGenerator.cc.o
 .PHONY : HBondedPairGenerator.cc.o
 
 HBondedPairGenerator.i: HBondedPairGenerator.cc.i
@@ -211,7 +211,7 @@ HBondedPairGenerator.i: HBondedPairGenerator.cc.i
 
 # target to preprocess a source file
 HBondedPairGenerator.cc.i:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f apps/rosetta/riflib/CMakeFiles/riflib.dir/build.make apps/rosetta/riflib/CMakeFiles/riflib.dir/HBondedPairGenerator.cc.i
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f apps/rosetta/riflib/CMakeFiles/riflib.dir/build.make apps/rosetta/riflib/CMakeFiles/riflib.dir/HBondedPairGenerator.cc.i
 .PHONY : HBondedPairGenerator.cc.i
 
 HBondedPairGenerator.s: HBondedPairGenerator.cc.s
@@ -220,7 +220,7 @@ HBondedPairGenerator.s: HBondedPairGenerator.cc.s
 
 # target to generate assembly for a file
 HBondedPairGenerator.cc.s:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f apps/rosetta/riflib/CMakeFiles/riflib.dir/build.make apps/rosetta/riflib/CMakeFiles/riflib.dir/HBondedPairGenerator.cc.s
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f apps/rosetta/riflib/CMakeFiles/riflib.dir/build.make apps/rosetta/riflib/CMakeFiles/riflib.dir/HBondedPairGenerator.cc.s
 .PHONY : HBondedPairGenerator.cc.s
 
 RifFactory.o: RifFactory.cc.o
@@ -229,7 +229,7 @@ RifFactory.o: RifFactory.cc.o
 
 # target to build an object file
 RifFactory.cc.o:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f apps/rosetta/riflib/CMakeFiles/riflib.dir/build.make apps/rosetta/riflib/CMakeFiles/riflib.dir/RifFactory.cc.o
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f apps/rosetta/riflib/CMakeFiles/riflib.dir/build.make apps/rosetta/riflib/CMakeFiles/riflib.dir/RifFactory.cc.o
 .PHONY : RifFactory.cc.o
 
 RifFactory.i: RifFactory.cc.i
@@ -238,7 +238,7 @@ RifFactory.i: RifFactory.cc.i
 
 # target to preprocess a source file
 RifFactory.cc.i:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f apps/rosetta/riflib/CMakeFiles/riflib.dir/build.make apps/rosetta/riflib/CMakeFiles/riflib.dir/RifFactory.cc.i
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f apps/rosetta/riflib/CMakeFiles/riflib.dir/build.make apps/rosetta/riflib/CMakeFiles/riflib.dir/RifFactory.cc.i
 .PHONY : RifFactory.cc.i
 
 RifFactory.s: RifFactory.cc.s
@@ -247,7 +247,7 @@ RifFactory.s: RifFactory.cc.s
 
 # target to generate assembly for a file
 RifFactory.cc.s:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f apps/rosetta/riflib/CMakeFiles/riflib.dir/build.make apps/rosetta/riflib/CMakeFiles/riflib.dir/RifFactory.cc.s
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f apps/rosetta/riflib/CMakeFiles/riflib.dir/build.make apps/rosetta/riflib/CMakeFiles/riflib.dir/RifFactory.cc.s
 .PHONY : RifFactory.cc.s
 
 RotamerGenerator.o: RotamerGenerator.cc.o
@@ -256,7 +256,7 @@ RotamerGenerator.o: RotamerGenerator.cc.o
 
 # target to build an object file
 RotamerGenerator.cc.o:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f apps/rosetta/riflib/CMakeFiles/riflib.dir/build.make apps/rosetta/riflib/CMakeFiles/riflib.dir/RotamerGenerator.cc.o
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f apps/rosetta/riflib/CMakeFiles/riflib.dir/build.make apps/rosetta/riflib/CMakeFiles/riflib.dir/RotamerGenerator.cc.o
 .PHONY : RotamerGenerator.cc.o
 
 RotamerGenerator.i: RotamerGenerator.cc.i
@@ -265,7 +265,7 @@ RotamerGenerator.i: RotamerGenerator.cc.i
 
 # target to preprocess a source file
 RotamerGenerator.cc.i:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f apps/rosetta/riflib/CMakeFiles/riflib.dir/build.make apps/rosetta/riflib/CMakeFiles/riflib.dir/RotamerGenerator.cc.i
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f apps/rosetta/riflib/CMakeFiles/riflib.dir/build.make apps/rosetta/riflib/CMakeFiles/riflib.dir/RotamerGenerator.cc.i
 .PHONY : RotamerGenerator.cc.i
 
 RotamerGenerator.s: RotamerGenerator.cc.s
@@ -274,7 +274,7 @@ RotamerGenerator.s: RotamerGenerator.cc.s
 
 # target to generate assembly for a file
 RotamerGenerator.cc.s:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f apps/rosetta/riflib/CMakeFiles/riflib.dir/build.make apps/rosetta/riflib/CMakeFiles/riflib.dir/RotamerGenerator.cc.s
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f apps/rosetta/riflib/CMakeFiles/riflib.dir/build.make apps/rosetta/riflib/CMakeFiles/riflib.dir/RotamerGenerator.cc.s
 .PHONY : RotamerGenerator.cc.s
 
 rif/RifGeneratorApoHSearch.o: rif/RifGeneratorApoHSearch.cc.o
@@ -283,7 +283,7 @@ rif/RifGeneratorApoHSearch.o: rif/RifGeneratorApoHSearch.cc.o
 
 # target to build an object file
 rif/RifGeneratorApoHSearch.cc.o:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f apps/rosetta/riflib/CMakeFiles/riflib.dir/build.make apps/rosetta/riflib/CMakeFiles/riflib.dir/rif/RifGeneratorApoHSearch.cc.o
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f apps/rosetta/riflib/CMakeFiles/riflib.dir/build.make apps/rosetta/riflib/CMakeFiles/riflib.dir/rif/RifGeneratorApoHSearch.cc.o
 .PHONY : rif/RifGeneratorApoHSearch.cc.o
 
 rif/RifGeneratorApoHSearch.i: rif/RifGeneratorApoHSearch.cc.i
@@ -292,7 +292,7 @@ rif/RifGeneratorApoHSearch.i: rif/RifGeneratorApoHSearch.cc.i
 
 # target to preprocess a source file
 rif/RifGeneratorApoHSearch.cc.i:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f apps/rosetta/riflib/CMakeFiles/riflib.dir/build.make apps/rosetta/riflib/CMakeFiles/riflib.dir/rif/RifGeneratorApoHSearch.cc.i
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f apps/rosetta/riflib/CMakeFiles/riflib.dir/build.make apps/rosetta/riflib/CMakeFiles/riflib.dir/rif/RifGeneratorApoHSearch.cc.i
 .PHONY : rif/RifGeneratorApoHSearch.cc.i
 
 rif/RifGeneratorApoHSearch.s: rif/RifGeneratorApoHSearch.cc.s
@@ -301,7 +301,7 @@ rif/RifGeneratorApoHSearch.s: rif/RifGeneratorApoHSearch.cc.s
 
 # target to generate assembly for a file
 rif/RifGeneratorApoHSearch.cc.s:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f apps/rosetta/riflib/CMakeFiles/riflib.dir/build.make apps/rosetta/riflib/CMakeFiles/riflib.dir/rif/RifGeneratorApoHSearch.cc.s
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f apps/rosetta/riflib/CMakeFiles/riflib.dir/build.make apps/rosetta/riflib/CMakeFiles/riflib.dir/rif/RifGeneratorApoHSearch.cc.s
 .PHONY : rif/RifGeneratorApoHSearch.cc.s
 
 rif/RifGeneratorSimpleHbonds.o: rif/RifGeneratorSimpleHbonds.cc.o
@@ -310,7 +310,7 @@ rif/RifGeneratorSimpleHbonds.o: rif/RifGeneratorSimpleHbonds.cc.o
 
 # target to build an object file
 rif/RifGeneratorSimpleHbonds.cc.o:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f apps/rosetta/riflib/CMakeFiles/riflib.dir/build.make apps/rosetta/riflib/CMakeFiles/riflib.dir/rif/RifGeneratorSimpleHbonds.cc.o
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f apps/rosetta/riflib/CMakeFiles/riflib.dir/build.make apps/rosetta/riflib/CMakeFiles/riflib.dir/rif/RifGeneratorSimpleHbonds.cc.o
 .PHONY : rif/RifGeneratorSimpleHbonds.cc.o
 
 rif/RifGeneratorSimpleHbonds.i: rif/RifGeneratorSimpleHbonds.cc.i
@@ -319,7 +319,7 @@ rif/RifGeneratorSimpleHbonds.i: rif/RifGeneratorSimpleHbonds.cc.i
 
 # target to preprocess a source file
 rif/RifGeneratorSimpleHbonds.cc.i:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f apps/rosetta/riflib/CMakeFiles/riflib.dir/build.make apps/rosetta/riflib/CMakeFiles/riflib.dir/rif/RifGeneratorSimpleHbonds.cc.i
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f apps/rosetta/riflib/CMakeFiles/riflib.dir/build.make apps/rosetta/riflib/CMakeFiles/riflib.dir/rif/RifGeneratorSimpleHbonds.cc.i
 .PHONY : rif/RifGeneratorSimpleHbonds.cc.i
 
 rif/RifGeneratorSimpleHbonds.s: rif/RifGeneratorSimpleHbonds.cc.s
@@ -328,7 +328,7 @@ rif/RifGeneratorSimpleHbonds.s: rif/RifGeneratorSimpleHbonds.cc.s
 
 # target to generate assembly for a file
 rif/RifGeneratorSimpleHbonds.cc.s:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f apps/rosetta/riflib/CMakeFiles/riflib.dir/build.make apps/rosetta/riflib/CMakeFiles/riflib.dir/rif/RifGeneratorSimpleHbonds.cc.s
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f apps/rosetta/riflib/CMakeFiles/riflib.dir/build.make apps/rosetta/riflib/CMakeFiles/riflib.dir/rif/RifGeneratorSimpleHbonds.cc.s
 .PHONY : rif/RifGeneratorSimpleHbonds.cc.s
 
 rif/RifGeneratorUserHotspots.o: rif/RifGeneratorUserHotspots.cc.o
@@ -337,7 +337,7 @@ rif/RifGeneratorUserHotspots.o: rif/RifGeneratorUserHotspots.cc.o
 
 # target to build an object file
 rif/RifGeneratorUserHotspots.cc.o:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f apps/rosetta/riflib/CMakeFiles/riflib.dir/build.make apps/rosetta/riflib/CMakeFiles/riflib.dir/rif/RifGeneratorUserHotspots.cc.o
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f apps/rosetta/riflib/CMakeFiles/riflib.dir/build.make apps/rosetta/riflib/CMakeFiles/riflib.dir/rif/RifGeneratorUserHotspots.cc.o
 .PHONY : rif/RifGeneratorUserHotspots.cc.o
 
 rif/RifGeneratorUserHotspots.i: rif/RifGeneratorUserHotspots.cc.i
@@ -346,7 +346,7 @@ rif/RifGeneratorUserHotspots.i: rif/RifGeneratorUserHotspots.cc.i
 
 # target to preprocess a source file
 rif/RifGeneratorUserHotspots.cc.i:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f apps/rosetta/riflib/CMakeFiles/riflib.dir/build.make apps/rosetta/riflib/CMakeFiles/riflib.dir/rif/RifGeneratorUserHotspots.cc.i
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f apps/rosetta/riflib/CMakeFiles/riflib.dir/build.make apps/rosetta/riflib/CMakeFiles/riflib.dir/rif/RifGeneratorUserHotspots.cc.i
 .PHONY : rif/RifGeneratorUserHotspots.cc.i
 
 rif/RifGeneratorUserHotspots.s: rif/RifGeneratorUserHotspots.cc.s
@@ -355,7 +355,7 @@ rif/RifGeneratorUserHotspots.s: rif/RifGeneratorUserHotspots.cc.s
 
 # target to generate assembly for a file
 rif/RifGeneratorUserHotspots.cc.s:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f apps/rosetta/riflib/CMakeFiles/riflib.dir/build.make apps/rosetta/riflib/CMakeFiles/riflib.dir/rif/RifGeneratorUserHotspots.cc.s
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f apps/rosetta/riflib/CMakeFiles/riflib.dir/build.make apps/rosetta/riflib/CMakeFiles/riflib.dir/rif/RifGeneratorUserHotspots.cc.s
 .PHONY : rif/RifGeneratorUserHotspots.cc.s
 
 rif/make_hbond_geometries.o: rif/make_hbond_geometries.cc.o
@@ -364,7 +364,7 @@ rif/make_hbond_geometries.o: rif/make_hbond_geometries.cc.o
 
 # target to build an object file
 rif/make_hbond_geometries.cc.o:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f apps/rosetta/riflib/CMakeFiles/riflib.dir/build.make apps/rosetta/riflib/CMakeFiles/riflib.dir/rif/make_hbond_geometries.cc.o
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f apps/rosetta/riflib/CMakeFiles/riflib.dir/build.make apps/rosetta/riflib/CMakeFiles/riflib.dir/rif/make_hbond_geometries.cc.o
 .PHONY : rif/make_hbond_geometries.cc.o
 
 rif/make_hbond_geometries.i: rif/make_hbond_geometries.cc.i
@@ -373,7 +373,7 @@ rif/make_hbond_geometries.i: rif/make_hbond_geometries.cc.i
 
 # target to preprocess a source file
 rif/make_hbond_geometries.cc.i:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f apps/rosetta/riflib/CMakeFiles/riflib.dir/build.make apps/rosetta/riflib/CMakeFiles/riflib.dir/rif/make_hbond_geometries.cc.i
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f apps/rosetta/riflib/CMakeFiles/riflib.dir/build.make apps/rosetta/riflib/CMakeFiles/riflib.dir/rif/make_hbond_geometries.cc.i
 .PHONY : rif/make_hbond_geometries.cc.i
 
 rif/make_hbond_geometries.s: rif/make_hbond_geometries.cc.s
@@ -382,7 +382,7 @@ rif/make_hbond_geometries.s: rif/make_hbond_geometries.cc.s
 
 # target to generate assembly for a file
 rif/make_hbond_geometries.cc.s:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f apps/rosetta/riflib/CMakeFiles/riflib.dir/build.make apps/rosetta/riflib/CMakeFiles/riflib.dir/rif/make_hbond_geometries.cc.s
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f apps/rosetta/riflib/CMakeFiles/riflib.dir/build.make apps/rosetta/riflib/CMakeFiles/riflib.dir/rif/make_hbond_geometries.cc.s
 .PHONY : rif/make_hbond_geometries.cc.s
 
 rosetta_field.o: rosetta_field.cc.o
@@ -391,7 +391,7 @@ rosetta_field.o: rosetta_field.cc.o
 
 # target to build an object file
 rosetta_field.cc.o:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f apps/rosetta/riflib/CMakeFiles/riflib.dir/build.make apps/rosetta/riflib/CMakeFiles/riflib.dir/rosetta_field.cc.o
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f apps/rosetta/riflib/CMakeFiles/riflib.dir/build.make apps/rosetta/riflib/CMakeFiles/riflib.dir/rosetta_field.cc.o
 .PHONY : rosetta_field.cc.o
 
 rosetta_field.i: rosetta_field.cc.i
@@ -400,7 +400,7 @@ rosetta_field.i: rosetta_field.cc.i
 
 # target to preprocess a source file
 rosetta_field.cc.i:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f apps/rosetta/riflib/CMakeFiles/riflib.dir/build.make apps/rosetta/riflib/CMakeFiles/riflib.dir/rosetta_field.cc.i
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f apps/rosetta/riflib/CMakeFiles/riflib.dir/build.make apps/rosetta/riflib/CMakeFiles/riflib.dir/rosetta_field.cc.i
 .PHONY : rosetta_field.cc.i
 
 rosetta_field.s: rosetta_field.cc.s
@@ -409,7 +409,7 @@ rosetta_field.s: rosetta_field.cc.s
 
 # target to generate assembly for a file
 rosetta_field.cc.s:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f apps/rosetta/riflib/CMakeFiles/riflib.dir/build.make apps/rosetta/riflib/CMakeFiles/riflib.dir/rosetta_field.cc.s
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f apps/rosetta/riflib/CMakeFiles/riflib.dir/build.make apps/rosetta/riflib/CMakeFiles/riflib.dir/rosetta_field.cc.s
 .PHONY : rosetta_field.cc.s
 
 rotamer_energy_tables.o: rotamer_energy_tables.cc.o
@@ -418,7 +418,7 @@ rotamer_energy_tables.o: rotamer_energy_tables.cc.o
 
 # target to build an object file
 rotamer_energy_tables.cc.o:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f apps/rosetta/riflib/CMakeFiles/riflib.dir/build.make apps/rosetta/riflib/CMakeFiles/riflib.dir/rotamer_energy_tables.cc.o
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f apps/rosetta/riflib/CMakeFiles/riflib.dir/build.make apps/rosetta/riflib/CMakeFiles/riflib.dir/rotamer_energy_tables.cc.o
 .PHONY : rotamer_energy_tables.cc.o
 
 rotamer_energy_tables.i: rotamer_energy_tables.cc.i
@@ -427,7 +427,7 @@ rotamer_energy_tables.i: rotamer_energy_tables.cc.i
 
 # target to preprocess a source file
 rotamer_energy_tables.cc.i:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f apps/rosetta/riflib/CMakeFiles/riflib.dir/build.make apps/rosetta/riflib/CMakeFiles/riflib.dir/rotamer_energy_tables.cc.i
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f apps/rosetta/riflib/CMakeFiles/riflib.dir/build.make apps/rosetta/riflib/CMakeFiles/riflib.dir/rotamer_energy_tables.cc.i
 .PHONY : rotamer_energy_tables.cc.i
 
 rotamer_energy_tables.s: rotamer_energy_tables.cc.s
@@ -436,7 +436,7 @@ rotamer_energy_tables.s: rotamer_energy_tables.cc.s
 
 # target to generate assembly for a file
 rotamer_energy_tables.cc.s:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f apps/rosetta/riflib/CMakeFiles/riflib.dir/build.make apps/rosetta/riflib/CMakeFiles/riflib.dir/rotamer_energy_tables.cc.s
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f apps/rosetta/riflib/CMakeFiles/riflib.dir/build.make apps/rosetta/riflib/CMakeFiles/riflib.dir/rotamer_energy_tables.cc.s
 .PHONY : rotamer_energy_tables.cc.s
 
 scaffold/Baseline9AScaffoldProvider.o: scaffold/Baseline9AScaffoldProvider.cc.o
@@ -445,7 +445,7 @@ scaffold/Baseline9AScaffoldProvider.o: scaffold/Baseline9AScaffoldProvider.cc.o
 
 # target to build an object file
 scaffold/Baseline9AScaffoldProvider.cc.o:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f apps/rosetta/riflib/CMakeFiles/riflib.dir/build.make apps/rosetta/riflib/CMakeFiles/riflib.dir/scaffold/Baseline9AScaffoldProvider.cc.o
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f apps/rosetta/riflib/CMakeFiles/riflib.dir/build.make apps/rosetta/riflib/CMakeFiles/riflib.dir/scaffold/Baseline9AScaffoldProvider.cc.o
 .PHONY : scaffold/Baseline9AScaffoldProvider.cc.o
 
 scaffold/Baseline9AScaffoldProvider.i: scaffold/Baseline9AScaffoldProvider.cc.i
@@ -454,7 +454,7 @@ scaffold/Baseline9AScaffoldProvider.i: scaffold/Baseline9AScaffoldProvider.cc.i
 
 # target to preprocess a source file
 scaffold/Baseline9AScaffoldProvider.cc.i:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f apps/rosetta/riflib/CMakeFiles/riflib.dir/build.make apps/rosetta/riflib/CMakeFiles/riflib.dir/scaffold/Baseline9AScaffoldProvider.cc.i
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f apps/rosetta/riflib/CMakeFiles/riflib.dir/build.make apps/rosetta/riflib/CMakeFiles/riflib.dir/scaffold/Baseline9AScaffoldProvider.cc.i
 .PHONY : scaffold/Baseline9AScaffoldProvider.cc.i
 
 scaffold/Baseline9AScaffoldProvider.s: scaffold/Baseline9AScaffoldProvider.cc.s
@@ -463,7 +463,7 @@ scaffold/Baseline9AScaffoldProvider.s: scaffold/Baseline9AScaffoldProvider.cc.s
 
 # target to generate assembly for a file
 scaffold/Baseline9AScaffoldProvider.cc.s:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f apps/rosetta/riflib/CMakeFiles/riflib.dir/build.make apps/rosetta/riflib/CMakeFiles/riflib.dir/scaffold/Baseline9AScaffoldProvider.cc.s
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f apps/rosetta/riflib/CMakeFiles/riflib.dir/build.make apps/rosetta/riflib/CMakeFiles/riflib.dir/scaffold/Baseline9AScaffoldProvider.cc.s
 .PHONY : scaffold/Baseline9AScaffoldProvider.cc.s
 
 scaffold/MorphingScaffoldProvider.o: scaffold/MorphingScaffoldProvider.cc.o
@@ -472,7 +472,7 @@ scaffold/MorphingScaffoldProvider.o: scaffold/MorphingScaffoldProvider.cc.o
 
 # target to build an object file
 scaffold/MorphingScaffoldProvider.cc.o:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f apps/rosetta/riflib/CMakeFiles/riflib.dir/build.make apps/rosetta/riflib/CMakeFiles/riflib.dir/scaffold/MorphingScaffoldProvider.cc.o
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f apps/rosetta/riflib/CMakeFiles/riflib.dir/build.make apps/rosetta/riflib/CMakeFiles/riflib.dir/scaffold/MorphingScaffoldProvider.cc.o
 .PHONY : scaffold/MorphingScaffoldProvider.cc.o
 
 scaffold/MorphingScaffoldProvider.i: scaffold/MorphingScaffoldProvider.cc.i
@@ -481,7 +481,7 @@ scaffold/MorphingScaffoldProvider.i: scaffold/MorphingScaffoldProvider.cc.i
 
 # target to preprocess a source file
 scaffold/MorphingScaffoldProvider.cc.i:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f apps/rosetta/riflib/CMakeFiles/riflib.dir/build.make apps/rosetta/riflib/CMakeFiles/riflib.dir/scaffold/MorphingScaffoldProvider.cc.i
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f apps/rosetta/riflib/CMakeFiles/riflib.dir/build.make apps/rosetta/riflib/CMakeFiles/riflib.dir/scaffold/MorphingScaffoldProvider.cc.i
 .PHONY : scaffold/MorphingScaffoldProvider.cc.i
 
 scaffold/MorphingScaffoldProvider.s: scaffold/MorphingScaffoldProvider.cc.s
@@ -490,7 +490,7 @@ scaffold/MorphingScaffoldProvider.s: scaffold/MorphingScaffoldProvider.cc.s
 
 # target to generate assembly for a file
 scaffold/MorphingScaffoldProvider.cc.s:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f apps/rosetta/riflib/CMakeFiles/riflib.dir/build.make apps/rosetta/riflib/CMakeFiles/riflib.dir/scaffold/MorphingScaffoldProvider.cc.s
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f apps/rosetta/riflib/CMakeFiles/riflib.dir/build.make apps/rosetta/riflib/CMakeFiles/riflib.dir/scaffold/MorphingScaffoldProvider.cc.s
 .PHONY : scaffold/MorphingScaffoldProvider.cc.s
 
 scaffold/NineAManager.o: scaffold/NineAManager.cc.o
@@ -499,7 +499,7 @@ scaffold/NineAManager.o: scaffold/NineAManager.cc.o
 
 # target to build an object file
 scaffold/NineAManager.cc.o:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f apps/rosetta/riflib/CMakeFiles/riflib.dir/build.make apps/rosetta/riflib/CMakeFiles/riflib.dir/scaffold/NineAManager.cc.o
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f apps/rosetta/riflib/CMakeFiles/riflib.dir/build.make apps/rosetta/riflib/CMakeFiles/riflib.dir/scaffold/NineAManager.cc.o
 .PHONY : scaffold/NineAManager.cc.o
 
 scaffold/NineAManager.i: scaffold/NineAManager.cc.i
@@ -508,7 +508,7 @@ scaffold/NineAManager.i: scaffold/NineAManager.cc.i
 
 # target to preprocess a source file
 scaffold/NineAManager.cc.i:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f apps/rosetta/riflib/CMakeFiles/riflib.dir/build.make apps/rosetta/riflib/CMakeFiles/riflib.dir/scaffold/NineAManager.cc.i
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f apps/rosetta/riflib/CMakeFiles/riflib.dir/build.make apps/rosetta/riflib/CMakeFiles/riflib.dir/scaffold/NineAManager.cc.i
 .PHONY : scaffold/NineAManager.cc.i
 
 scaffold/NineAManager.s: scaffold/NineAManager.cc.s
@@ -517,7 +517,7 @@ scaffold/NineAManager.s: scaffold/NineAManager.cc.s
 
 # target to generate assembly for a file
 scaffold/NineAManager.cc.s:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f apps/rosetta/riflib/CMakeFiles/riflib.dir/build.make apps/rosetta/riflib/CMakeFiles/riflib.dir/scaffold/NineAManager.cc.s
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f apps/rosetta/riflib/CMakeFiles/riflib.dir/build.make apps/rosetta/riflib/CMakeFiles/riflib.dir/scaffold/NineAManager.cc.s
 .PHONY : scaffold/NineAManager.cc.s
 
 scaffold/SingleFileScaffoldProvider.o: scaffold/SingleFileScaffoldProvider.cc.o
@@ -526,7 +526,7 @@ scaffold/SingleFileScaffoldProvider.o: scaffold/SingleFileScaffoldProvider.cc.o
 
 # target to build an object file
 scaffold/SingleFileScaffoldProvider.cc.o:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f apps/rosetta/riflib/CMakeFiles/riflib.dir/build.make apps/rosetta/riflib/CMakeFiles/riflib.dir/scaffold/SingleFileScaffoldProvider.cc.o
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f apps/rosetta/riflib/CMakeFiles/riflib.dir/build.make apps/rosetta/riflib/CMakeFiles/riflib.dir/scaffold/SingleFileScaffoldProvider.cc.o
 .PHONY : scaffold/SingleFileScaffoldProvider.cc.o
 
 scaffold/SingleFileScaffoldProvider.i: scaffold/SingleFileScaffoldProvider.cc.i
@@ -535,7 +535,7 @@ scaffold/SingleFileScaffoldProvider.i: scaffold/SingleFileScaffoldProvider.cc.i
 
 # target to preprocess a source file
 scaffold/SingleFileScaffoldProvider.cc.i:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f apps/rosetta/riflib/CMakeFiles/riflib.dir/build.make apps/rosetta/riflib/CMakeFiles/riflib.dir/scaffold/SingleFileScaffoldProvider.cc.i
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f apps/rosetta/riflib/CMakeFiles/riflib.dir/build.make apps/rosetta/riflib/CMakeFiles/riflib.dir/scaffold/SingleFileScaffoldProvider.cc.i
 .PHONY : scaffold/SingleFileScaffoldProvider.cc.i
 
 scaffold/SingleFileScaffoldProvider.s: scaffold/SingleFileScaffoldProvider.cc.s
@@ -544,7 +544,7 @@ scaffold/SingleFileScaffoldProvider.s: scaffold/SingleFileScaffoldProvider.cc.s
 
 # target to generate assembly for a file
 scaffold/SingleFileScaffoldProvider.cc.s:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f apps/rosetta/riflib/CMakeFiles/riflib.dir/build.make apps/rosetta/riflib/CMakeFiles/riflib.dir/scaffold/SingleFileScaffoldProvider.cc.s
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f apps/rosetta/riflib/CMakeFiles/riflib.dir/build.make apps/rosetta/riflib/CMakeFiles/riflib.dir/scaffold/SingleFileScaffoldProvider.cc.s
 .PHONY : scaffold/SingleFileScaffoldProvider.cc.s
 
 scaffold/util.o: scaffold/util.cc.o
@@ -553,7 +553,7 @@ scaffold/util.o: scaffold/util.cc.o
 
 # target to build an object file
 scaffold/util.cc.o:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f apps/rosetta/riflib/CMakeFiles/riflib.dir/build.make apps/rosetta/riflib/CMakeFiles/riflib.dir/scaffold/util.cc.o
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f apps/rosetta/riflib/CMakeFiles/riflib.dir/build.make apps/rosetta/riflib/CMakeFiles/riflib.dir/scaffold/util.cc.o
 .PHONY : scaffold/util.cc.o
 
 scaffold/util.i: scaffold/util.cc.i
@@ -562,7 +562,7 @@ scaffold/util.i: scaffold/util.cc.i
 
 # target to preprocess a source file
 scaffold/util.cc.i:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f apps/rosetta/riflib/CMakeFiles/riflib.dir/build.make apps/rosetta/riflib/CMakeFiles/riflib.dir/scaffold/util.cc.i
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f apps/rosetta/riflib/CMakeFiles/riflib.dir/build.make apps/rosetta/riflib/CMakeFiles/riflib.dir/scaffold/util.cc.i
 .PHONY : scaffold/util.cc.i
 
 scaffold/util.s: scaffold/util.cc.s
@@ -571,7 +571,7 @@ scaffold/util.s: scaffold/util.cc.s
 
 # target to generate assembly for a file
 scaffold/util.cc.s:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f apps/rosetta/riflib/CMakeFiles/riflib.dir/build.make apps/rosetta/riflib/CMakeFiles/riflib.dir/scaffold/util.cc.s
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f apps/rosetta/riflib/CMakeFiles/riflib.dir/build.make apps/rosetta/riflib/CMakeFiles/riflib.dir/scaffold/util.cc.s
 .PHONY : scaffold/util.cc.s
 
 util.o: util.cc.o
@@ -580,7 +580,7 @@ util.o: util.cc.o
 
 # target to build an object file
 util.cc.o:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f apps/rosetta/riflib/CMakeFiles/riflib.dir/build.make apps/rosetta/riflib/CMakeFiles/riflib.dir/util.cc.o
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f apps/rosetta/riflib/CMakeFiles/riflib.dir/build.make apps/rosetta/riflib/CMakeFiles/riflib.dir/util.cc.o
 .PHONY : util.cc.o
 
 util.i: util.cc.i
@@ -589,7 +589,7 @@ util.i: util.cc.i
 
 # target to preprocess a source file
 util.cc.i:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f apps/rosetta/riflib/CMakeFiles/riflib.dir/build.make apps/rosetta/riflib/CMakeFiles/riflib.dir/util.cc.i
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f apps/rosetta/riflib/CMakeFiles/riflib.dir/build.make apps/rosetta/riflib/CMakeFiles/riflib.dir/util.cc.i
 .PHONY : util.cc.i
 
 util.s: util.cc.s
@@ -598,7 +598,7 @@ util.s: util.cc.s
 
 # target to generate assembly for a file
 util.cc.s:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f apps/rosetta/riflib/CMakeFiles/riflib.dir/build.make apps/rosetta/riflib/CMakeFiles/riflib.dir/util.cc.s
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f apps/rosetta/riflib/CMakeFiles/riflib.dir/build.make apps/rosetta/riflib/CMakeFiles/riflib.dir/util.cc.s
 .PHONY : util.cc.s
 
 # Help Target
@@ -673,6 +673,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd /home/longxing/devel/rifine/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /home/longxing/devel/rifine-devel/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

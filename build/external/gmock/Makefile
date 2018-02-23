@@ -48,10 +48,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/longxing/devel/rifine
+CMAKE_SOURCE_DIR = /home/longxing/devel/rifine-devel
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/longxing/devel/rifine/build
+CMAKE_BINARY_DIR = /home/longxing/devel/rifine-devel/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -124,14 +124,14 @@ install/local/fast: install/local
 
 # The main all target
 all: cmake_check_build_system
-	cd /home/longxing/devel/rifine/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/longxing/devel/rifine/build/CMakeFiles /home/longxing/devel/rifine/build/external/gmock/CMakeFiles/progress.marks
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f CMakeFiles/Makefile2 external/gmock/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/longxing/devel/rifine/build/CMakeFiles 0
+	cd /home/longxing/devel/rifine-devel/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/longxing/devel/rifine-devel/build/CMakeFiles /home/longxing/devel/rifine-devel/build/external/gmock/CMakeFiles/progress.marks
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f CMakeFiles/Makefile2 external/gmock/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/longxing/devel/rifine-devel/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f CMakeFiles/Makefile2 external/gmock/clean
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f CMakeFiles/Makefile2 external/gmock/clean
 .PHONY : clean
 
 # The main clean target
@@ -141,22 +141,22 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f CMakeFiles/Makefile2 external/gmock/preinstall
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f CMakeFiles/Makefile2 external/gmock/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f CMakeFiles/Makefile2 external/gmock/preinstall
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f CMakeFiles/Makefile2 external/gmock/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd /home/longxing/devel/rifine/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /home/longxing/devel/rifine-devel/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
 # Convenience name for target.
 external/gmock/CMakeFiles/gmock.dir/rule:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f CMakeFiles/Makefile2 external/gmock/CMakeFiles/gmock.dir/rule
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f CMakeFiles/Makefile2 external/gmock/CMakeFiles/gmock.dir/rule
 .PHONY : external/gmock/CMakeFiles/gmock.dir/rule
 
 # Convenience name for target.
@@ -166,12 +166,12 @@ gmock: external/gmock/CMakeFiles/gmock.dir/rule
 
 # fast build rule for target.
 gmock/fast:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f external/gmock/CMakeFiles/gmock.dir/build.make external/gmock/CMakeFiles/gmock.dir/build
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f external/gmock/CMakeFiles/gmock.dir/build.make external/gmock/CMakeFiles/gmock.dir/build
 .PHONY : gmock/fast
 
 # Convenience name for target.
 external/gmock/CMakeFiles/gmock_main.dir/rule:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f CMakeFiles/Makefile2 external/gmock/CMakeFiles/gmock_main.dir/rule
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f CMakeFiles/Makefile2 external/gmock/CMakeFiles/gmock_main.dir/rule
 .PHONY : external/gmock/CMakeFiles/gmock_main.dir/rule
 
 # Convenience name for target.
@@ -181,7 +181,7 @@ gmock_main: external/gmock/CMakeFiles/gmock_main.dir/rule
 
 # fast build rule for target.
 gmock_main/fast:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f external/gmock/CMakeFiles/gmock_main.dir/build.make external/gmock/CMakeFiles/gmock_main.dir/build
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f external/gmock/CMakeFiles/gmock_main.dir/build.make external/gmock/CMakeFiles/gmock_main.dir/build
 .PHONY : gmock_main/fast
 
 gtest/src/gtest-all.o: gtest/src/gtest-all.cc.o
@@ -190,8 +190,8 @@ gtest/src/gtest-all.o: gtest/src/gtest-all.cc.o
 
 # target to build an object file
 gtest/src/gtest-all.cc.o:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f external/gmock/CMakeFiles/gmock.dir/build.make external/gmock/CMakeFiles/gmock.dir/gtest/src/gtest-all.cc.o
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f external/gmock/CMakeFiles/gmock_main.dir/build.make external/gmock/CMakeFiles/gmock_main.dir/gtest/src/gtest-all.cc.o
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f external/gmock/CMakeFiles/gmock.dir/build.make external/gmock/CMakeFiles/gmock.dir/gtest/src/gtest-all.cc.o
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f external/gmock/CMakeFiles/gmock_main.dir/build.make external/gmock/CMakeFiles/gmock_main.dir/gtest/src/gtest-all.cc.o
 .PHONY : gtest/src/gtest-all.cc.o
 
 gtest/src/gtest-all.i: gtest/src/gtest-all.cc.i
@@ -200,8 +200,8 @@ gtest/src/gtest-all.i: gtest/src/gtest-all.cc.i
 
 # target to preprocess a source file
 gtest/src/gtest-all.cc.i:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f external/gmock/CMakeFiles/gmock.dir/build.make external/gmock/CMakeFiles/gmock.dir/gtest/src/gtest-all.cc.i
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f external/gmock/CMakeFiles/gmock_main.dir/build.make external/gmock/CMakeFiles/gmock_main.dir/gtest/src/gtest-all.cc.i
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f external/gmock/CMakeFiles/gmock.dir/build.make external/gmock/CMakeFiles/gmock.dir/gtest/src/gtest-all.cc.i
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f external/gmock/CMakeFiles/gmock_main.dir/build.make external/gmock/CMakeFiles/gmock_main.dir/gtest/src/gtest-all.cc.i
 .PHONY : gtest/src/gtest-all.cc.i
 
 gtest/src/gtest-all.s: gtest/src/gtest-all.cc.s
@@ -210,8 +210,8 @@ gtest/src/gtest-all.s: gtest/src/gtest-all.cc.s
 
 # target to generate assembly for a file
 gtest/src/gtest-all.cc.s:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f external/gmock/CMakeFiles/gmock.dir/build.make external/gmock/CMakeFiles/gmock.dir/gtest/src/gtest-all.cc.s
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f external/gmock/CMakeFiles/gmock_main.dir/build.make external/gmock/CMakeFiles/gmock_main.dir/gtest/src/gtest-all.cc.s
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f external/gmock/CMakeFiles/gmock.dir/build.make external/gmock/CMakeFiles/gmock.dir/gtest/src/gtest-all.cc.s
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f external/gmock/CMakeFiles/gmock_main.dir/build.make external/gmock/CMakeFiles/gmock_main.dir/gtest/src/gtest-all.cc.s
 .PHONY : gtest/src/gtest-all.cc.s
 
 src/gmock-all.o: src/gmock-all.cc.o
@@ -220,8 +220,8 @@ src/gmock-all.o: src/gmock-all.cc.o
 
 # target to build an object file
 src/gmock-all.cc.o:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f external/gmock/CMakeFiles/gmock.dir/build.make external/gmock/CMakeFiles/gmock.dir/src/gmock-all.cc.o
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f external/gmock/CMakeFiles/gmock_main.dir/build.make external/gmock/CMakeFiles/gmock_main.dir/src/gmock-all.cc.o
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f external/gmock/CMakeFiles/gmock.dir/build.make external/gmock/CMakeFiles/gmock.dir/src/gmock-all.cc.o
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f external/gmock/CMakeFiles/gmock_main.dir/build.make external/gmock/CMakeFiles/gmock_main.dir/src/gmock-all.cc.o
 .PHONY : src/gmock-all.cc.o
 
 src/gmock-all.i: src/gmock-all.cc.i
@@ -230,8 +230,8 @@ src/gmock-all.i: src/gmock-all.cc.i
 
 # target to preprocess a source file
 src/gmock-all.cc.i:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f external/gmock/CMakeFiles/gmock.dir/build.make external/gmock/CMakeFiles/gmock.dir/src/gmock-all.cc.i
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f external/gmock/CMakeFiles/gmock_main.dir/build.make external/gmock/CMakeFiles/gmock_main.dir/src/gmock-all.cc.i
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f external/gmock/CMakeFiles/gmock.dir/build.make external/gmock/CMakeFiles/gmock.dir/src/gmock-all.cc.i
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f external/gmock/CMakeFiles/gmock_main.dir/build.make external/gmock/CMakeFiles/gmock_main.dir/src/gmock-all.cc.i
 .PHONY : src/gmock-all.cc.i
 
 src/gmock-all.s: src/gmock-all.cc.s
@@ -240,8 +240,8 @@ src/gmock-all.s: src/gmock-all.cc.s
 
 # target to generate assembly for a file
 src/gmock-all.cc.s:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f external/gmock/CMakeFiles/gmock.dir/build.make external/gmock/CMakeFiles/gmock.dir/src/gmock-all.cc.s
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f external/gmock/CMakeFiles/gmock_main.dir/build.make external/gmock/CMakeFiles/gmock_main.dir/src/gmock-all.cc.s
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f external/gmock/CMakeFiles/gmock.dir/build.make external/gmock/CMakeFiles/gmock.dir/src/gmock-all.cc.s
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f external/gmock/CMakeFiles/gmock_main.dir/build.make external/gmock/CMakeFiles/gmock_main.dir/src/gmock-all.cc.s
 .PHONY : src/gmock-all.cc.s
 
 src/gmock_main.o: src/gmock_main.cc.o
@@ -250,7 +250,7 @@ src/gmock_main.o: src/gmock_main.cc.o
 
 # target to build an object file
 src/gmock_main.cc.o:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f external/gmock/CMakeFiles/gmock_main.dir/build.make external/gmock/CMakeFiles/gmock_main.dir/src/gmock_main.cc.o
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f external/gmock/CMakeFiles/gmock_main.dir/build.make external/gmock/CMakeFiles/gmock_main.dir/src/gmock_main.cc.o
 .PHONY : src/gmock_main.cc.o
 
 src/gmock_main.i: src/gmock_main.cc.i
@@ -259,7 +259,7 @@ src/gmock_main.i: src/gmock_main.cc.i
 
 # target to preprocess a source file
 src/gmock_main.cc.i:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f external/gmock/CMakeFiles/gmock_main.dir/build.make external/gmock/CMakeFiles/gmock_main.dir/src/gmock_main.cc.i
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f external/gmock/CMakeFiles/gmock_main.dir/build.make external/gmock/CMakeFiles/gmock_main.dir/src/gmock_main.cc.i
 .PHONY : src/gmock_main.cc.i
 
 src/gmock_main.s: src/gmock_main.cc.s
@@ -268,7 +268,7 @@ src/gmock_main.s: src/gmock_main.cc.s
 
 # target to generate assembly for a file
 src/gmock_main.cc.s:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f external/gmock/CMakeFiles/gmock_main.dir/build.make external/gmock/CMakeFiles/gmock_main.dir/src/gmock_main.cc.s
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f external/gmock/CMakeFiles/gmock_main.dir/build.make external/gmock/CMakeFiles/gmock_main.dir/src/gmock_main.cc.s
 .PHONY : src/gmock_main.cc.s
 
 # Help Target
@@ -305,6 +305,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd /home/longxing/devel/rifine/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /home/longxing/devel/rifine-devel/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

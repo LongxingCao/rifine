@@ -48,10 +48,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/longxing/devel/rifine
+CMAKE_SOURCE_DIR = /home/longxing/devel/rifine-devel
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/longxing/devel/rifine/build
+CMAKE_BINARY_DIR = /home/longxing/devel/rifine-devel/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -124,9 +124,9 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/longxing/devel/rifine/build/CMakeFiles /home/longxing/devel/rifine/build/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/longxing/devel/rifine-devel/build/CMakeFiles /home/longxing/devel/rifine-devel/build/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/longxing/devel/rifine/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/longxing/devel/rifine-devel/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -337,17 +337,17 @@ debug_longxing/fast:
 .PHONY : debug_longxing/fast
 
 #=============================================================================
-# Target rules for targets named _pysetta_core_import_pose
+# Target rules for targets named _pysetta_devel
 
 # Build rule for target.
-_pysetta_core_import_pose: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 _pysetta_core_import_pose
-.PHONY : _pysetta_core_import_pose
+_pysetta_devel: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 _pysetta_devel
+.PHONY : _pysetta_devel
 
 # fast build rule for target.
-_pysetta_core_import_pose/fast:
-	$(MAKE) -f apps/rosetta/python/pysetta/CMakeFiles/_pysetta_core_import_pose.dir/build.make apps/rosetta/python/pysetta/CMakeFiles/_pysetta_core_import_pose.dir/build
-.PHONY : _pysetta_core_import_pose/fast
+_pysetta_devel/fast:
+	$(MAKE) -f apps/rosetta/python/pysetta/CMakeFiles/_pysetta_devel.dir/build.make apps/rosetta/python/pysetta/CMakeFiles/_pysetta_devel.dir/build
+.PHONY : _pysetta_devel/fast
 
 #=============================================================================
 # Target rules for targets named _pysetta_core_pose
@@ -363,17 +363,17 @@ _pysetta_core_pose/fast:
 .PHONY : _pysetta_core_pose/fast
 
 #=============================================================================
-# Target rules for targets named _pysetta_devel
+# Target rules for targets named _pysetta_core_import_pose
 
 # Build rule for target.
-_pysetta_devel: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 _pysetta_devel
-.PHONY : _pysetta_devel
+_pysetta_core_import_pose: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 _pysetta_core_import_pose
+.PHONY : _pysetta_core_import_pose
 
 # fast build rule for target.
-_pysetta_devel/fast:
-	$(MAKE) -f apps/rosetta/python/pysetta/CMakeFiles/_pysetta_devel.dir/build.make apps/rosetta/python/pysetta/CMakeFiles/_pysetta_devel.dir/build
-.PHONY : _pysetta_devel/fast
+_pysetta_core_import_pose/fast:
+	$(MAKE) -f apps/rosetta/python/pysetta/CMakeFiles/_pysetta_core_import_pose.dir/build.make apps/rosetta/python/pysetta/CMakeFiles/_pysetta_core_import_pose.dir/build
+.PHONY : _pysetta_core_import_pose/fast
 
 #=============================================================================
 # Target rules for targets named test_pybind
@@ -427,9 +427,9 @@ help:
 	@echo "... scheme_make_bounding_grids"
 	@echo "... prepare_scaff"
 	@echo "... debug_longxing"
-	@echo "... _pysetta_core_import_pose"
-	@echo "... _pysetta_core_pose"
 	@echo "... _pysetta_devel"
+	@echo "... _pysetta_core_pose"
+	@echo "... _pysetta_core_import_pose"
 	@echo "... test_pybind"
 	@echo "... riflib"
 .PHONY : help

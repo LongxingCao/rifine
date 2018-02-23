@@ -6,5 +6,5 @@ CXX_FLAGS =  -std=c++11 -w -fno-omit-frame-pointer -Wall -Wextra -Werror -O3 -DN
 
 CXX_DEFINES = -DCXX11
 
-CXX_INCLUDES = -I/home/longxing/devel/rifine/external/eigen3 -I/home/longxing/devel/rifine/external/gmock/include -I/home/longxing/devel/rifine/external/gmock -I/home/longxing/devel/rifine/external/gmock/gtest/include -I/home/longxing/devel/rifine/external/gmock/gtest 
+CXX_INCLUDES = -I/home/longxing/devel/rifine-devel/external/eigen3 -I/home/longxing/devel/rifine-devel/external/gmock/include -I/home/longxing/devel/rifine-devel/external/gmock -I/home/longxing/devel/rifine-devel/external/gmock/gtest/include -I/home/longxing/devel/rifine-devel/external/gmock/gtest 
 

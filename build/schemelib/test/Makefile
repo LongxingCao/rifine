@@ -48,10 +48,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/longxing/devel/rifine
+CMAKE_SOURCE_DIR = /home/longxing/devel/rifine-devel
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/longxing/devel/rifine/build
+CMAKE_BINARY_DIR = /home/longxing/devel/rifine-devel/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -124,14 +124,14 @@ install/strip/fast: install/strip
 
 # The main all target
 all: cmake_check_build_system
-	cd /home/longxing/devel/rifine/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/longxing/devel/rifine/build/CMakeFiles /home/longxing/devel/rifine/build/schemelib/test/CMakeFiles/progress.marks
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f CMakeFiles/Makefile2 schemelib/test/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/longxing/devel/rifine/build/CMakeFiles 0
+	cd /home/longxing/devel/rifine-devel/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/longxing/devel/rifine-devel/build/CMakeFiles /home/longxing/devel/rifine-devel/build/schemelib/test/CMakeFiles/progress.marks
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f CMakeFiles/Makefile2 schemelib/test/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/longxing/devel/rifine-devel/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f CMakeFiles/Makefile2 schemelib/test/clean
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f CMakeFiles/Makefile2 schemelib/test/clean
 .PHONY : clean
 
 # The main clean target
@@ -141,22 +141,22 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f CMakeFiles/Makefile2 schemelib/test/preinstall
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f CMakeFiles/Makefile2 schemelib/test/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f CMakeFiles/Makefile2 schemelib/test/preinstall
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f CMakeFiles/Makefile2 schemelib/test/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd /home/longxing/devel/rifine/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /home/longxing/devel/rifine-devel/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
 # Convenience name for target.
 schemelib/test/CMakeFiles/test_libscheme.dir/rule:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f CMakeFiles/Makefile2 schemelib/test/CMakeFiles/test_libscheme.dir/rule
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f CMakeFiles/Makefile2 schemelib/test/CMakeFiles/test_libscheme.dir/rule
 .PHONY : schemelib/test/CMakeFiles/test_libscheme.dir/rule
 
 # Convenience name for target.
@@ -166,12 +166,12 @@ test_libscheme: schemelib/test/CMakeFiles/test_libscheme.dir/rule
 
 # fast build rule for target.
 test_libscheme/fast:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/build
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/build
 .PHONY : test_libscheme/fast
 
 # Convenience name for target.
 schemelib/test/CMakeFiles/scheme.dir/rule:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f CMakeFiles/Makefile2 schemelib/test/CMakeFiles/scheme.dir/rule
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f CMakeFiles/Makefile2 schemelib/test/CMakeFiles/scheme.dir/rule
 .PHONY : schemelib/test/CMakeFiles/scheme.dir/rule
 
 # Convenience name for target.
@@ -181,12 +181,12 @@ scheme: schemelib/test/CMakeFiles/scheme.dir/rule
 
 # fast build rule for target.
 scheme/fast:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/scheme.dir/build.make schemelib/test/CMakeFiles/scheme.dir/build
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/scheme.dir/build.make schemelib/test/CMakeFiles/scheme.dir/build
 .PHONY : scheme/fast
 
 # Convenience name for target.
 schemelib/test/CMakeFiles/quick_test_libscheme.dir/rule:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f CMakeFiles/Makefile2 schemelib/test/CMakeFiles/quick_test_libscheme.dir/rule
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f CMakeFiles/Makefile2 schemelib/test/CMakeFiles/quick_test_libscheme.dir/rule
 .PHONY : schemelib/test/CMakeFiles/quick_test_libscheme.dir/rule
 
 # Convenience name for target.
@@ -196,7 +196,7 @@ quick_test_libscheme: schemelib/test/CMakeFiles/quick_test_libscheme.dir/rule
 
 # fast build rule for target.
 quick_test_libscheme/fast:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/quick_test_libscheme.dir/build.make schemelib/test/CMakeFiles/quick_test_libscheme.dir/build
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/quick_test_libscheme.dir/build.make schemelib/test/CMakeFiles/quick_test_libscheme.dir/build
 .PHONY : quick_test_libscheme/fast
 
 __/scheme/actor/BackboneActor.gtest.o: __/scheme/actor/BackboneActor.gtest.cc.o
@@ -205,7 +205,7 @@ __/scheme/actor/BackboneActor.gtest.o: __/scheme/actor/BackboneActor.gtest.cc.o
 
 # target to build an object file
 __/scheme/actor/BackboneActor.gtest.cc.o:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/actor/BackboneActor.gtest.cc.o
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/actor/BackboneActor.gtest.cc.o
 .PHONY : __/scheme/actor/BackboneActor.gtest.cc.o
 
 __/scheme/actor/BackboneActor.gtest.i: __/scheme/actor/BackboneActor.gtest.cc.i
@@ -214,7 +214,7 @@ __/scheme/actor/BackboneActor.gtest.i: __/scheme/actor/BackboneActor.gtest.cc.i
 
 # target to preprocess a source file
 __/scheme/actor/BackboneActor.gtest.cc.i:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/actor/BackboneActor.gtest.cc.i
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/actor/BackboneActor.gtest.cc.i
 .PHONY : __/scheme/actor/BackboneActor.gtest.cc.i
 
 __/scheme/actor/BackboneActor.gtest.s: __/scheme/actor/BackboneActor.gtest.cc.s
@@ -223,7 +223,7 @@ __/scheme/actor/BackboneActor.gtest.s: __/scheme/actor/BackboneActor.gtest.cc.s
 
 # target to generate assembly for a file
 __/scheme/actor/BackboneActor.gtest.cc.s:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/actor/BackboneActor.gtest.cc.s
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/actor/BackboneActor.gtest.cc.s
 .PHONY : __/scheme/actor/BackboneActor.gtest.cc.s
 
 __/scheme/chemical/ligand_factory.gtest.o: __/scheme/chemical/ligand_factory.gtest.cc.o
@@ -232,7 +232,7 @@ __/scheme/chemical/ligand_factory.gtest.o: __/scheme/chemical/ligand_factory.gte
 
 # target to build an object file
 __/scheme/chemical/ligand_factory.gtest.cc.o:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/chemical/ligand_factory.gtest.cc.o
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/chemical/ligand_factory.gtest.cc.o
 .PHONY : __/scheme/chemical/ligand_factory.gtest.cc.o
 
 __/scheme/chemical/ligand_factory.gtest.i: __/scheme/chemical/ligand_factory.gtest.cc.i
@@ -241,7 +241,7 @@ __/scheme/chemical/ligand_factory.gtest.i: __/scheme/chemical/ligand_factory.gte
 
 # target to preprocess a source file
 __/scheme/chemical/ligand_factory.gtest.cc.i:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/chemical/ligand_factory.gtest.cc.i
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/chemical/ligand_factory.gtest.cc.i
 .PHONY : __/scheme/chemical/ligand_factory.gtest.cc.i
 
 __/scheme/chemical/ligand_factory.gtest.s: __/scheme/chemical/ligand_factory.gtest.cc.s
@@ -250,7 +250,7 @@ __/scheme/chemical/ligand_factory.gtest.s: __/scheme/chemical/ligand_factory.gte
 
 # target to generate assembly for a file
 __/scheme/chemical/ligand_factory.gtest.cc.s:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/chemical/ligand_factory.gtest.cc.s
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/chemical/ligand_factory.gtest.cc.s
 .PHONY : __/scheme/chemical/ligand_factory.gtest.cc.s
 
 __/scheme/chemical/ligand_factory.lib.o: __/scheme/chemical/ligand_factory.lib.cc.o
@@ -259,8 +259,8 @@ __/scheme/chemical/ligand_factory.lib.o: __/scheme/chemical/ligand_factory.lib.c
 
 # target to build an object file
 __/scheme/chemical/ligand_factory.lib.cc.o:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/chemical/ligand_factory.lib.cc.o
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/scheme.dir/build.make schemelib/test/CMakeFiles/scheme.dir/__/scheme/chemical/ligand_factory.lib.cc.o
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/chemical/ligand_factory.lib.cc.o
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/scheme.dir/build.make schemelib/test/CMakeFiles/scheme.dir/__/scheme/chemical/ligand_factory.lib.cc.o
 .PHONY : __/scheme/chemical/ligand_factory.lib.cc.o
 
 __/scheme/chemical/ligand_factory.lib.i: __/scheme/chemical/ligand_factory.lib.cc.i
@@ -269,8 +269,8 @@ __/scheme/chemical/ligand_factory.lib.i: __/scheme/chemical/ligand_factory.lib.c
 
 # target to preprocess a source file
 __/scheme/chemical/ligand_factory.lib.cc.i:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/chemical/ligand_factory.lib.cc.i
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/scheme.dir/build.make schemelib/test/CMakeFiles/scheme.dir/__/scheme/chemical/ligand_factory.lib.cc.i
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/chemical/ligand_factory.lib.cc.i
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/scheme.dir/build.make schemelib/test/CMakeFiles/scheme.dir/__/scheme/chemical/ligand_factory.lib.cc.i
 .PHONY : __/scheme/chemical/ligand_factory.lib.cc.i
 
 __/scheme/chemical/ligand_factory.lib.s: __/scheme/chemical/ligand_factory.lib.cc.s
@@ -279,8 +279,8 @@ __/scheme/chemical/ligand_factory.lib.s: __/scheme/chemical/ligand_factory.lib.c
 
 # target to generate assembly for a file
 __/scheme/chemical/ligand_factory.lib.cc.s:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/chemical/ligand_factory.lib.cc.s
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/scheme.dir/build.make schemelib/test/CMakeFiles/scheme.dir/__/scheme/chemical/ligand_factory.lib.cc.s
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/chemical/ligand_factory.lib.cc.s
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/scheme.dir/build.make schemelib/test/CMakeFiles/scheme.dir/__/scheme/chemical/ligand_factory.lib.cc.s
 .PHONY : __/scheme/chemical/ligand_factory.lib.cc.s
 
 __/scheme/chemical/stub.gtest.o: __/scheme/chemical/stub.gtest.cc.o
@@ -289,7 +289,7 @@ __/scheme/chemical/stub.gtest.o: __/scheme/chemical/stub.gtest.cc.o
 
 # target to build an object file
 __/scheme/chemical/stub.gtest.cc.o:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/chemical/stub.gtest.cc.o
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/chemical/stub.gtest.cc.o
 .PHONY : __/scheme/chemical/stub.gtest.cc.o
 
 __/scheme/chemical/stub.gtest.i: __/scheme/chemical/stub.gtest.cc.i
@@ -298,7 +298,7 @@ __/scheme/chemical/stub.gtest.i: __/scheme/chemical/stub.gtest.cc.i
 
 # target to preprocess a source file
 __/scheme/chemical/stub.gtest.cc.i:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/chemical/stub.gtest.cc.i
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/chemical/stub.gtest.cc.i
 .PHONY : __/scheme/chemical/stub.gtest.cc.i
 
 __/scheme/chemical/stub.gtest.s: __/scheme/chemical/stub.gtest.cc.s
@@ -307,7 +307,7 @@ __/scheme/chemical/stub.gtest.s: __/scheme/chemical/stub.gtest.cc.s
 
 # target to generate assembly for a file
 __/scheme/chemical/stub.gtest.cc.s:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/chemical/stub.gtest.cc.s
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/chemical/stub.gtest.cc.s
 .PHONY : __/scheme/chemical/stub.gtest.cc.s
 
 __/scheme/io/dump_pdb_atom.gtest.o: __/scheme/io/dump_pdb_atom.gtest.cc.o
@@ -316,7 +316,7 @@ __/scheme/io/dump_pdb_atom.gtest.o: __/scheme/io/dump_pdb_atom.gtest.cc.o
 
 # target to build an object file
 __/scheme/io/dump_pdb_atom.gtest.cc.o:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/io/dump_pdb_atom.gtest.cc.o
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/io/dump_pdb_atom.gtest.cc.o
 .PHONY : __/scheme/io/dump_pdb_atom.gtest.cc.o
 
 __/scheme/io/dump_pdb_atom.gtest.i: __/scheme/io/dump_pdb_atom.gtest.cc.i
@@ -325,7 +325,7 @@ __/scheme/io/dump_pdb_atom.gtest.i: __/scheme/io/dump_pdb_atom.gtest.cc.i
 
 # target to preprocess a source file
 __/scheme/io/dump_pdb_atom.gtest.cc.i:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/io/dump_pdb_atom.gtest.cc.i
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/io/dump_pdb_atom.gtest.cc.i
 .PHONY : __/scheme/io/dump_pdb_atom.gtest.cc.i
 
 __/scheme/io/dump_pdb_atom.gtest.s: __/scheme/io/dump_pdb_atom.gtest.cc.s
@@ -334,7 +334,7 @@ __/scheme/io/dump_pdb_atom.gtest.s: __/scheme/io/dump_pdb_atom.gtest.cc.s
 
 # target to generate assembly for a file
 __/scheme/io/dump_pdb_atom.gtest.cc.s:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/io/dump_pdb_atom.gtest.cc.s
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/io/dump_pdb_atom.gtest.cc.s
 .PHONY : __/scheme/io/dump_pdb_atom.gtest.cc.s
 
 __/scheme/kinematics/Director.gtest.o: __/scheme/kinematics/Director.gtest.cc.o
@@ -343,7 +343,7 @@ __/scheme/kinematics/Director.gtest.o: __/scheme/kinematics/Director.gtest.cc.o
 
 # target to build an object file
 __/scheme/kinematics/Director.gtest.cc.o:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/kinematics/Director.gtest.cc.o
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/kinematics/Director.gtest.cc.o
 .PHONY : __/scheme/kinematics/Director.gtest.cc.o
 
 __/scheme/kinematics/Director.gtest.i: __/scheme/kinematics/Director.gtest.cc.i
@@ -352,7 +352,7 @@ __/scheme/kinematics/Director.gtest.i: __/scheme/kinematics/Director.gtest.cc.i
 
 # target to preprocess a source file
 __/scheme/kinematics/Director.gtest.cc.i:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/kinematics/Director.gtest.cc.i
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/kinematics/Director.gtest.cc.i
 .PHONY : __/scheme/kinematics/Director.gtest.cc.i
 
 __/scheme/kinematics/Director.gtest.s: __/scheme/kinematics/Director.gtest.cc.s
@@ -361,7 +361,7 @@ __/scheme/kinematics/Director.gtest.s: __/scheme/kinematics/Director.gtest.cc.s
 
 # target to generate assembly for a file
 __/scheme/kinematics/Director.gtest.cc.s:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/kinematics/Director.gtest.cc.s
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/kinematics/Director.gtest.cc.s
 .PHONY : __/scheme/kinematics/Director.gtest.cc.s
 
 __/scheme/kinematics/Scene.gtest.o: __/scheme/kinematics/Scene.gtest.cc.o
@@ -370,7 +370,7 @@ __/scheme/kinematics/Scene.gtest.o: __/scheme/kinematics/Scene.gtest.cc.o
 
 # target to build an object file
 __/scheme/kinematics/Scene.gtest.cc.o:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/kinematics/Scene.gtest.cc.o
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/kinematics/Scene.gtest.cc.o
 .PHONY : __/scheme/kinematics/Scene.gtest.cc.o
 
 __/scheme/kinematics/Scene.gtest.i: __/scheme/kinematics/Scene.gtest.cc.i
@@ -379,7 +379,7 @@ __/scheme/kinematics/Scene.gtest.i: __/scheme/kinematics/Scene.gtest.cc.i
 
 # target to preprocess a source file
 __/scheme/kinematics/Scene.gtest.cc.i:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/kinematics/Scene.gtest.cc.i
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/kinematics/Scene.gtest.cc.i
 .PHONY : __/scheme/kinematics/Scene.gtest.cc.i
 
 __/scheme/kinematics/Scene.gtest.s: __/scheme/kinematics/Scene.gtest.cc.s
@@ -388,7 +388,7 @@ __/scheme/kinematics/Scene.gtest.s: __/scheme/kinematics/Scene.gtest.cc.s
 
 # target to generate assembly for a file
 __/scheme/kinematics/Scene.gtest.cc.s:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/kinematics/Scene.gtest.cc.s
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/kinematics/Scene.gtest.cc.s
 .PHONY : __/scheme/kinematics/Scene.gtest.cc.s
 
 __/scheme/kinematics/SceneIterator.gtest.o: __/scheme/kinematics/SceneIterator.gtest.cc.o
@@ -397,7 +397,7 @@ __/scheme/kinematics/SceneIterator.gtest.o: __/scheme/kinematics/SceneIterator.g
 
 # target to build an object file
 __/scheme/kinematics/SceneIterator.gtest.cc.o:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/kinematics/SceneIterator.gtest.cc.o
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/kinematics/SceneIterator.gtest.cc.o
 .PHONY : __/scheme/kinematics/SceneIterator.gtest.cc.o
 
 __/scheme/kinematics/SceneIterator.gtest.i: __/scheme/kinematics/SceneIterator.gtest.cc.i
@@ -406,7 +406,7 @@ __/scheme/kinematics/SceneIterator.gtest.i: __/scheme/kinematics/SceneIterator.g
 
 # target to preprocess a source file
 __/scheme/kinematics/SceneIterator.gtest.cc.i:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/kinematics/SceneIterator.gtest.cc.i
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/kinematics/SceneIterator.gtest.cc.i
 .PHONY : __/scheme/kinematics/SceneIterator.gtest.cc.i
 
 __/scheme/kinematics/SceneIterator.gtest.s: __/scheme/kinematics/SceneIterator.gtest.cc.s
@@ -415,7 +415,7 @@ __/scheme/kinematics/SceneIterator.gtest.s: __/scheme/kinematics/SceneIterator.g
 
 # target to generate assembly for a file
 __/scheme/kinematics/SceneIterator.gtest.cc.s:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/kinematics/SceneIterator.gtest.cc.s
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/kinematics/SceneIterator.gtest.cc.s
 .PHONY : __/scheme/kinematics/SceneIterator.gtest.cc.s
 
 __/scheme/kinematics/Scene_test_eigen.gtest.o: __/scheme/kinematics/Scene_test_eigen.gtest.cc.o
@@ -424,7 +424,7 @@ __/scheme/kinematics/Scene_test_eigen.gtest.o: __/scheme/kinematics/Scene_test_e
 
 # target to build an object file
 __/scheme/kinematics/Scene_test_eigen.gtest.cc.o:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/kinematics/Scene_test_eigen.gtest.cc.o
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/kinematics/Scene_test_eigen.gtest.cc.o
 .PHONY : __/scheme/kinematics/Scene_test_eigen.gtest.cc.o
 
 __/scheme/kinematics/Scene_test_eigen.gtest.i: __/scheme/kinematics/Scene_test_eigen.gtest.cc.i
@@ -433,7 +433,7 @@ __/scheme/kinematics/Scene_test_eigen.gtest.i: __/scheme/kinematics/Scene_test_e
 
 # target to preprocess a source file
 __/scheme/kinematics/Scene_test_eigen.gtest.cc.i:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/kinematics/Scene_test_eigen.gtest.cc.i
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/kinematics/Scene_test_eigen.gtest.cc.i
 .PHONY : __/scheme/kinematics/Scene_test_eigen.gtest.cc.i
 
 __/scheme/kinematics/Scene_test_eigen.gtest.s: __/scheme/kinematics/Scene_test_eigen.gtest.cc.s
@@ -442,7 +442,7 @@ __/scheme/kinematics/Scene_test_eigen.gtest.s: __/scheme/kinematics/Scene_test_e
 
 # target to generate assembly for a file
 __/scheme/kinematics/Scene_test_eigen.gtest.cc.s:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/kinematics/Scene_test_eigen.gtest.cc.s
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/kinematics/Scene_test_eigen.gtest.cc.s
 .PHONY : __/scheme/kinematics/Scene_test_eigen.gtest.cc.s
 
 __/scheme/kinematics/Scene_test_objective.gtest.o: __/scheme/kinematics/Scene_test_objective.gtest.cc.o
@@ -451,7 +451,7 @@ __/scheme/kinematics/Scene_test_objective.gtest.o: __/scheme/kinematics/Scene_te
 
 # target to build an object file
 __/scheme/kinematics/Scene_test_objective.gtest.cc.o:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/kinematics/Scene_test_objective.gtest.cc.o
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/kinematics/Scene_test_objective.gtest.cc.o
 .PHONY : __/scheme/kinematics/Scene_test_objective.gtest.cc.o
 
 __/scheme/kinematics/Scene_test_objective.gtest.i: __/scheme/kinematics/Scene_test_objective.gtest.cc.i
@@ -460,7 +460,7 @@ __/scheme/kinematics/Scene_test_objective.gtest.i: __/scheme/kinematics/Scene_te
 
 # target to preprocess a source file
 __/scheme/kinematics/Scene_test_objective.gtest.cc.i:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/kinematics/Scene_test_objective.gtest.cc.i
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/kinematics/Scene_test_objective.gtest.cc.i
 .PHONY : __/scheme/kinematics/Scene_test_objective.gtest.cc.i
 
 __/scheme/kinematics/Scene_test_objective.gtest.s: __/scheme/kinematics/Scene_test_objective.gtest.cc.s
@@ -469,7 +469,7 @@ __/scheme/kinematics/Scene_test_objective.gtest.s: __/scheme/kinematics/Scene_te
 
 # target to generate assembly for a file
 __/scheme/kinematics/Scene_test_objective.gtest.cc.s:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/kinematics/Scene_test_objective.gtest.cc.s
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/kinematics/Scene_test_objective.gtest.cc.s
 .PHONY : __/scheme/kinematics/Scene_test_objective.gtest.cc.s
 
 __/scheme/nest/MultiNEST.gtest.o: __/scheme/nest/MultiNEST.gtest.cc.o
@@ -478,7 +478,7 @@ __/scheme/nest/MultiNEST.gtest.o: __/scheme/nest/MultiNEST.gtest.cc.o
 
 # target to build an object file
 __/scheme/nest/MultiNEST.gtest.cc.o:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/nest/MultiNEST.gtest.cc.o
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/nest/MultiNEST.gtest.cc.o
 .PHONY : __/scheme/nest/MultiNEST.gtest.cc.o
 
 __/scheme/nest/MultiNEST.gtest.i: __/scheme/nest/MultiNEST.gtest.cc.i
@@ -487,7 +487,7 @@ __/scheme/nest/MultiNEST.gtest.i: __/scheme/nest/MultiNEST.gtest.cc.i
 
 # target to preprocess a source file
 __/scheme/nest/MultiNEST.gtest.cc.i:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/nest/MultiNEST.gtest.cc.i
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/nest/MultiNEST.gtest.cc.i
 .PHONY : __/scheme/nest/MultiNEST.gtest.cc.i
 
 __/scheme/nest/MultiNEST.gtest.s: __/scheme/nest/MultiNEST.gtest.cc.s
@@ -496,7 +496,7 @@ __/scheme/nest/MultiNEST.gtest.s: __/scheme/nest/MultiNEST.gtest.cc.s
 
 # target to generate assembly for a file
 __/scheme/nest/MultiNEST.gtest.cc.s:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/nest/MultiNEST.gtest.cc.s
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/nest/MultiNEST.gtest.cc.s
 .PHONY : __/scheme/nest/MultiNEST.gtest.cc.s
 
 __/scheme/nest/NEST.gtest.o: __/scheme/nest/NEST.gtest.cc.o
@@ -505,7 +505,7 @@ __/scheme/nest/NEST.gtest.o: __/scheme/nest/NEST.gtest.cc.o
 
 # target to build an object file
 __/scheme/nest/NEST.gtest.cc.o:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/nest/NEST.gtest.cc.o
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/nest/NEST.gtest.cc.o
 .PHONY : __/scheme/nest/NEST.gtest.cc.o
 
 __/scheme/nest/NEST.gtest.i: __/scheme/nest/NEST.gtest.cc.i
@@ -514,7 +514,7 @@ __/scheme/nest/NEST.gtest.i: __/scheme/nest/NEST.gtest.cc.i
 
 # target to preprocess a source file
 __/scheme/nest/NEST.gtest.cc.i:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/nest/NEST.gtest.cc.i
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/nest/NEST.gtest.cc.i
 .PHONY : __/scheme/nest/NEST.gtest.cc.i
 
 __/scheme/nest/NEST.gtest.s: __/scheme/nest/NEST.gtest.cc.s
@@ -523,7 +523,7 @@ __/scheme/nest/NEST.gtest.s: __/scheme/nest/NEST.gtest.cc.s
 
 # target to generate assembly for a file
 __/scheme/nest/NEST.gtest.cc.s:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/nest/NEST.gtest.cc.s
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/nest/NEST.gtest.cc.s
 .PHONY : __/scheme/nest/NEST.gtest.cc.s
 
 __/scheme/nest/NEST_neighbor.gtest.o: __/scheme/nest/NEST_neighbor.gtest.cc.o
@@ -532,7 +532,7 @@ __/scheme/nest/NEST_neighbor.gtest.o: __/scheme/nest/NEST_neighbor.gtest.cc.o
 
 # target to build an object file
 __/scheme/nest/NEST_neighbor.gtest.cc.o:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/nest/NEST_neighbor.gtest.cc.o
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/nest/NEST_neighbor.gtest.cc.o
 .PHONY : __/scheme/nest/NEST_neighbor.gtest.cc.o
 
 __/scheme/nest/NEST_neighbor.gtest.i: __/scheme/nest/NEST_neighbor.gtest.cc.i
@@ -541,7 +541,7 @@ __/scheme/nest/NEST_neighbor.gtest.i: __/scheme/nest/NEST_neighbor.gtest.cc.i
 
 # target to preprocess a source file
 __/scheme/nest/NEST_neighbor.gtest.cc.i:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/nest/NEST_neighbor.gtest.cc.i
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/nest/NEST_neighbor.gtest.cc.i
 .PHONY : __/scheme/nest/NEST_neighbor.gtest.cc.i
 
 __/scheme/nest/NEST_neighbor.gtest.s: __/scheme/nest/NEST_neighbor.gtest.cc.s
@@ -550,7 +550,7 @@ __/scheme/nest/NEST_neighbor.gtest.s: __/scheme/nest/NEST_neighbor.gtest.cc.s
 
 # target to generate assembly for a file
 __/scheme/nest/NEST_neighbor.gtest.cc.s:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/nest/NEST_neighbor.gtest.cc.s
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/nest/NEST_neighbor.gtest.cc.s
 .PHONY : __/scheme/nest/NEST_neighbor.gtest.cc.s
 
 __/scheme/nest/pmap/EulerAnglesMap.gtest.o: __/scheme/nest/pmap/EulerAnglesMap.gtest.cc.o
@@ -559,7 +559,7 @@ __/scheme/nest/pmap/EulerAnglesMap.gtest.o: __/scheme/nest/pmap/EulerAnglesMap.g
 
 # target to build an object file
 __/scheme/nest/pmap/EulerAnglesMap.gtest.cc.o:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/nest/pmap/EulerAnglesMap.gtest.cc.o
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/nest/pmap/EulerAnglesMap.gtest.cc.o
 .PHONY : __/scheme/nest/pmap/EulerAnglesMap.gtest.cc.o
 
 __/scheme/nest/pmap/EulerAnglesMap.gtest.i: __/scheme/nest/pmap/EulerAnglesMap.gtest.cc.i
@@ -568,7 +568,7 @@ __/scheme/nest/pmap/EulerAnglesMap.gtest.i: __/scheme/nest/pmap/EulerAnglesMap.g
 
 # target to preprocess a source file
 __/scheme/nest/pmap/EulerAnglesMap.gtest.cc.i:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/nest/pmap/EulerAnglesMap.gtest.cc.i
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/nest/pmap/EulerAnglesMap.gtest.cc.i
 .PHONY : __/scheme/nest/pmap/EulerAnglesMap.gtest.cc.i
 
 __/scheme/nest/pmap/EulerAnglesMap.gtest.s: __/scheme/nest/pmap/EulerAnglesMap.gtest.cc.s
@@ -577,7 +577,7 @@ __/scheme/nest/pmap/EulerAnglesMap.gtest.s: __/scheme/nest/pmap/EulerAnglesMap.g
 
 # target to generate assembly for a file
 __/scheme/nest/pmap/EulerAnglesMap.gtest.cc.s:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/nest/pmap/EulerAnglesMap.gtest.cc.s
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/nest/pmap/EulerAnglesMap.gtest.cc.s
 .PHONY : __/scheme/nest/pmap/EulerAnglesMap.gtest.cc.s
 
 __/scheme/nest/pmap/HecatonicosachoronMap.gtest.o: __/scheme/nest/pmap/HecatonicosachoronMap.gtest.cc.o
@@ -586,7 +586,7 @@ __/scheme/nest/pmap/HecatonicosachoronMap.gtest.o: __/scheme/nest/pmap/Hecatonic
 
 # target to build an object file
 __/scheme/nest/pmap/HecatonicosachoronMap.gtest.cc.o:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/nest/pmap/HecatonicosachoronMap.gtest.cc.o
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/nest/pmap/HecatonicosachoronMap.gtest.cc.o
 .PHONY : __/scheme/nest/pmap/HecatonicosachoronMap.gtest.cc.o
 
 __/scheme/nest/pmap/HecatonicosachoronMap.gtest.i: __/scheme/nest/pmap/HecatonicosachoronMap.gtest.cc.i
@@ -595,7 +595,7 @@ __/scheme/nest/pmap/HecatonicosachoronMap.gtest.i: __/scheme/nest/pmap/Hecatonic
 
 # target to preprocess a source file
 __/scheme/nest/pmap/HecatonicosachoronMap.gtest.cc.i:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/nest/pmap/HecatonicosachoronMap.gtest.cc.i
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/nest/pmap/HecatonicosachoronMap.gtest.cc.i
 .PHONY : __/scheme/nest/pmap/HecatonicosachoronMap.gtest.cc.i
 
 __/scheme/nest/pmap/HecatonicosachoronMap.gtest.s: __/scheme/nest/pmap/HecatonicosachoronMap.gtest.cc.s
@@ -604,7 +604,7 @@ __/scheme/nest/pmap/HecatonicosachoronMap.gtest.s: __/scheme/nest/pmap/Hecatonic
 
 # target to generate assembly for a file
 __/scheme/nest/pmap/HecatonicosachoronMap.gtest.cc.s:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/nest/pmap/HecatonicosachoronMap.gtest.cc.s
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/nest/pmap/HecatonicosachoronMap.gtest.cc.s
 .PHONY : __/scheme/nest/pmap/HecatonicosachoronMap.gtest.cc.s
 
 __/scheme/nest/pmap/OriTransMap.gtest.o: __/scheme/nest/pmap/OriTransMap.gtest.cc.o
@@ -613,7 +613,7 @@ __/scheme/nest/pmap/OriTransMap.gtest.o: __/scheme/nest/pmap/OriTransMap.gtest.c
 
 # target to build an object file
 __/scheme/nest/pmap/OriTransMap.gtest.cc.o:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/nest/pmap/OriTransMap.gtest.cc.o
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/nest/pmap/OriTransMap.gtest.cc.o
 .PHONY : __/scheme/nest/pmap/OriTransMap.gtest.cc.o
 
 __/scheme/nest/pmap/OriTransMap.gtest.i: __/scheme/nest/pmap/OriTransMap.gtest.cc.i
@@ -622,7 +622,7 @@ __/scheme/nest/pmap/OriTransMap.gtest.i: __/scheme/nest/pmap/OriTransMap.gtest.c
 
 # target to preprocess a source file
 __/scheme/nest/pmap/OriTransMap.gtest.cc.i:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/nest/pmap/OriTransMap.gtest.cc.i
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/nest/pmap/OriTransMap.gtest.cc.i
 .PHONY : __/scheme/nest/pmap/OriTransMap.gtest.cc.i
 
 __/scheme/nest/pmap/OriTransMap.gtest.s: __/scheme/nest/pmap/OriTransMap.gtest.cc.s
@@ -631,7 +631,7 @@ __/scheme/nest/pmap/OriTransMap.gtest.s: __/scheme/nest/pmap/OriTransMap.gtest.c
 
 # target to generate assembly for a file
 __/scheme/nest/pmap/OriTransMap.gtest.cc.s:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/nest/pmap/OriTransMap.gtest.cc.s
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/nest/pmap/OriTransMap.gtest.cc.s
 .PHONY : __/scheme/nest/pmap/OriTransMap.gtest.cc.s
 
 __/scheme/nest/pmap/QuaternionMap.gtest.o: __/scheme/nest/pmap/QuaternionMap.gtest.cc.o
@@ -640,7 +640,7 @@ __/scheme/nest/pmap/QuaternionMap.gtest.o: __/scheme/nest/pmap/QuaternionMap.gte
 
 # target to build an object file
 __/scheme/nest/pmap/QuaternionMap.gtest.cc.o:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/nest/pmap/QuaternionMap.gtest.cc.o
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/nest/pmap/QuaternionMap.gtest.cc.o
 .PHONY : __/scheme/nest/pmap/QuaternionMap.gtest.cc.o
 
 __/scheme/nest/pmap/QuaternionMap.gtest.i: __/scheme/nest/pmap/QuaternionMap.gtest.cc.i
@@ -649,7 +649,7 @@ __/scheme/nest/pmap/QuaternionMap.gtest.i: __/scheme/nest/pmap/QuaternionMap.gte
 
 # target to preprocess a source file
 __/scheme/nest/pmap/QuaternionMap.gtest.cc.i:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/nest/pmap/QuaternionMap.gtest.cc.i
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/nest/pmap/QuaternionMap.gtest.cc.i
 .PHONY : __/scheme/nest/pmap/QuaternionMap.gtest.cc.i
 
 __/scheme/nest/pmap/QuaternionMap.gtest.s: __/scheme/nest/pmap/QuaternionMap.gtest.cc.s
@@ -658,7 +658,7 @@ __/scheme/nest/pmap/QuaternionMap.gtest.s: __/scheme/nest/pmap/QuaternionMap.gte
 
 # target to generate assembly for a file
 __/scheme/nest/pmap/QuaternionMap.gtest.cc.s:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/nest/pmap/QuaternionMap.gtest.cc.s
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/nest/pmap/QuaternionMap.gtest.cc.s
 .PHONY : __/scheme/nest/pmap/QuaternionMap.gtest.cc.s
 
 __/scheme/nest/pmap/Rotation1DMap.gtest.o: __/scheme/nest/pmap/Rotation1DMap.gtest.cc.o
@@ -667,7 +667,7 @@ __/scheme/nest/pmap/Rotation1DMap.gtest.o: __/scheme/nest/pmap/Rotation1DMap.gte
 
 # target to build an object file
 __/scheme/nest/pmap/Rotation1DMap.gtest.cc.o:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/nest/pmap/Rotation1DMap.gtest.cc.o
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/nest/pmap/Rotation1DMap.gtest.cc.o
 .PHONY : __/scheme/nest/pmap/Rotation1DMap.gtest.cc.o
 
 __/scheme/nest/pmap/Rotation1DMap.gtest.i: __/scheme/nest/pmap/Rotation1DMap.gtest.cc.i
@@ -676,7 +676,7 @@ __/scheme/nest/pmap/Rotation1DMap.gtest.i: __/scheme/nest/pmap/Rotation1DMap.gte
 
 # target to preprocess a source file
 __/scheme/nest/pmap/Rotation1DMap.gtest.cc.i:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/nest/pmap/Rotation1DMap.gtest.cc.i
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/nest/pmap/Rotation1DMap.gtest.cc.i
 .PHONY : __/scheme/nest/pmap/Rotation1DMap.gtest.cc.i
 
 __/scheme/nest/pmap/Rotation1DMap.gtest.s: __/scheme/nest/pmap/Rotation1DMap.gtest.cc.s
@@ -685,7 +685,7 @@ __/scheme/nest/pmap/Rotation1DMap.gtest.s: __/scheme/nest/pmap/Rotation1DMap.gte
 
 # target to generate assembly for a file
 __/scheme/nest/pmap/Rotation1DMap.gtest.cc.s:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/nest/pmap/Rotation1DMap.gtest.cc.s
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/nest/pmap/Rotation1DMap.gtest.cc.s
 .PHONY : __/scheme/nest/pmap/Rotation1DMap.gtest.cc.s
 
 __/scheme/nest/pmap/SphereDodec.gtest.o: __/scheme/nest/pmap/SphereDodec.gtest.cc.o
@@ -694,7 +694,7 @@ __/scheme/nest/pmap/SphereDodec.gtest.o: __/scheme/nest/pmap/SphereDodec.gtest.c
 
 # target to build an object file
 __/scheme/nest/pmap/SphereDodec.gtest.cc.o:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/nest/pmap/SphereDodec.gtest.cc.o
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/nest/pmap/SphereDodec.gtest.cc.o
 .PHONY : __/scheme/nest/pmap/SphereDodec.gtest.cc.o
 
 __/scheme/nest/pmap/SphereDodec.gtest.i: __/scheme/nest/pmap/SphereDodec.gtest.cc.i
@@ -703,7 +703,7 @@ __/scheme/nest/pmap/SphereDodec.gtest.i: __/scheme/nest/pmap/SphereDodec.gtest.c
 
 # target to preprocess a source file
 __/scheme/nest/pmap/SphereDodec.gtest.cc.i:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/nest/pmap/SphereDodec.gtest.cc.i
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/nest/pmap/SphereDodec.gtest.cc.i
 .PHONY : __/scheme/nest/pmap/SphereDodec.gtest.cc.i
 
 __/scheme/nest/pmap/SphereDodec.gtest.s: __/scheme/nest/pmap/SphereDodec.gtest.cc.s
@@ -712,7 +712,7 @@ __/scheme/nest/pmap/SphereDodec.gtest.s: __/scheme/nest/pmap/SphereDodec.gtest.c
 
 # target to generate assembly for a file
 __/scheme/nest/pmap/SphereDodec.gtest.cc.s:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/nest/pmap/SphereDodec.gtest.cc.s
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/nest/pmap/SphereDodec.gtest.cc.s
 .PHONY : __/scheme/nest/pmap/SphereDodec.gtest.cc.s
 
 __/scheme/nest/pmap/SphereQuad.gtest.o: __/scheme/nest/pmap/SphereQuad.gtest.cc.o
@@ -721,7 +721,7 @@ __/scheme/nest/pmap/SphereQuad.gtest.o: __/scheme/nest/pmap/SphereQuad.gtest.cc.
 
 # target to build an object file
 __/scheme/nest/pmap/SphereQuad.gtest.cc.o:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/nest/pmap/SphereQuad.gtest.cc.o
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/nest/pmap/SphereQuad.gtest.cc.o
 .PHONY : __/scheme/nest/pmap/SphereQuad.gtest.cc.o
 
 __/scheme/nest/pmap/SphereQuad.gtest.i: __/scheme/nest/pmap/SphereQuad.gtest.cc.i
@@ -730,7 +730,7 @@ __/scheme/nest/pmap/SphereQuad.gtest.i: __/scheme/nest/pmap/SphereQuad.gtest.cc.
 
 # target to preprocess a source file
 __/scheme/nest/pmap/SphereQuad.gtest.cc.i:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/nest/pmap/SphereQuad.gtest.cc.i
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/nest/pmap/SphereQuad.gtest.cc.i
 .PHONY : __/scheme/nest/pmap/SphereQuad.gtest.cc.i
 
 __/scheme/nest/pmap/SphereQuad.gtest.s: __/scheme/nest/pmap/SphereQuad.gtest.cc.s
@@ -739,7 +739,7 @@ __/scheme/nest/pmap/SphereQuad.gtest.s: __/scheme/nest/pmap/SphereQuad.gtest.cc.
 
 # target to generate assembly for a file
 __/scheme/nest/pmap/SphereQuad.gtest.cc.s:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/nest/pmap/SphereQuad.gtest.cc.s
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/nest/pmap/SphereQuad.gtest.cc.s
 .PHONY : __/scheme/nest/pmap/SphereQuad.gtest.cc.s
 
 __/scheme/nest/pmap/TetracontoctachoronMap.gtest.o: __/scheme/nest/pmap/TetracontoctachoronMap.gtest.cc.o
@@ -748,7 +748,7 @@ __/scheme/nest/pmap/TetracontoctachoronMap.gtest.o: __/scheme/nest/pmap/Tetracon
 
 # target to build an object file
 __/scheme/nest/pmap/TetracontoctachoronMap.gtest.cc.o:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/nest/pmap/TetracontoctachoronMap.gtest.cc.o
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/nest/pmap/TetracontoctachoronMap.gtest.cc.o
 .PHONY : __/scheme/nest/pmap/TetracontoctachoronMap.gtest.cc.o
 
 __/scheme/nest/pmap/TetracontoctachoronMap.gtest.i: __/scheme/nest/pmap/TetracontoctachoronMap.gtest.cc.i
@@ -757,7 +757,7 @@ __/scheme/nest/pmap/TetracontoctachoronMap.gtest.i: __/scheme/nest/pmap/Tetracon
 
 # target to preprocess a source file
 __/scheme/nest/pmap/TetracontoctachoronMap.gtest.cc.i:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/nest/pmap/TetracontoctachoronMap.gtest.cc.i
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/nest/pmap/TetracontoctachoronMap.gtest.cc.i
 .PHONY : __/scheme/nest/pmap/TetracontoctachoronMap.gtest.cc.i
 
 __/scheme/nest/pmap/TetracontoctachoronMap.gtest.s: __/scheme/nest/pmap/TetracontoctachoronMap.gtest.cc.s
@@ -766,7 +766,7 @@ __/scheme/nest/pmap/TetracontoctachoronMap.gtest.s: __/scheme/nest/pmap/Tetracon
 
 # target to generate assembly for a file
 __/scheme/nest/pmap/TetracontoctachoronMap.gtest.cc.s:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/nest/pmap/TetracontoctachoronMap.gtest.cc.s
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/nest/pmap/TetracontoctachoronMap.gtest.cc.s
 .PHONY : __/scheme/nest/pmap/TetracontoctachoronMap.gtest.cc.s
 
 __/scheme/nest/pmap/parameter_maps.gtest.o: __/scheme/nest/pmap/parameter_maps.gtest.cc.o
@@ -775,7 +775,7 @@ __/scheme/nest/pmap/parameter_maps.gtest.o: __/scheme/nest/pmap/parameter_maps.g
 
 # target to build an object file
 __/scheme/nest/pmap/parameter_maps.gtest.cc.o:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/nest/pmap/parameter_maps.gtest.cc.o
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/nest/pmap/parameter_maps.gtest.cc.o
 .PHONY : __/scheme/nest/pmap/parameter_maps.gtest.cc.o
 
 __/scheme/nest/pmap/parameter_maps.gtest.i: __/scheme/nest/pmap/parameter_maps.gtest.cc.i
@@ -784,7 +784,7 @@ __/scheme/nest/pmap/parameter_maps.gtest.i: __/scheme/nest/pmap/parameter_maps.g
 
 # target to preprocess a source file
 __/scheme/nest/pmap/parameter_maps.gtest.cc.i:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/nest/pmap/parameter_maps.gtest.cc.i
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/nest/pmap/parameter_maps.gtest.cc.i
 .PHONY : __/scheme/nest/pmap/parameter_maps.gtest.cc.i
 
 __/scheme/nest/pmap/parameter_maps.gtest.s: __/scheme/nest/pmap/parameter_maps.gtest.cc.s
@@ -793,7 +793,7 @@ __/scheme/nest/pmap/parameter_maps.gtest.s: __/scheme/nest/pmap/parameter_maps.g
 
 # target to generate assembly for a file
 __/scheme/nest/pmap/parameter_maps.gtest.cc.s:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/nest/pmap/parameter_maps.gtest.cc.s
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/nest/pmap/parameter_maps.gtest.cc.s
 .PHONY : __/scheme/nest/pmap/parameter_maps.gtest.cc.s
 
 __/scheme/nest/pmap/parameter_maps_test_nbrcell.gtest.o: __/scheme/nest/pmap/parameter_maps_test_nbrcell.gtest.cc.o
@@ -802,7 +802,7 @@ __/scheme/nest/pmap/parameter_maps_test_nbrcell.gtest.o: __/scheme/nest/pmap/par
 
 # target to build an object file
 __/scheme/nest/pmap/parameter_maps_test_nbrcell.gtest.cc.o:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/nest/pmap/parameter_maps_test_nbrcell.gtest.cc.o
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/nest/pmap/parameter_maps_test_nbrcell.gtest.cc.o
 .PHONY : __/scheme/nest/pmap/parameter_maps_test_nbrcell.gtest.cc.o
 
 __/scheme/nest/pmap/parameter_maps_test_nbrcell.gtest.i: __/scheme/nest/pmap/parameter_maps_test_nbrcell.gtest.cc.i
@@ -811,7 +811,7 @@ __/scheme/nest/pmap/parameter_maps_test_nbrcell.gtest.i: __/scheme/nest/pmap/par
 
 # target to preprocess a source file
 __/scheme/nest/pmap/parameter_maps_test_nbrcell.gtest.cc.i:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/nest/pmap/parameter_maps_test_nbrcell.gtest.cc.i
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/nest/pmap/parameter_maps_test_nbrcell.gtest.cc.i
 .PHONY : __/scheme/nest/pmap/parameter_maps_test_nbrcell.gtest.cc.i
 
 __/scheme/nest/pmap/parameter_maps_test_nbrcell.gtest.s: __/scheme/nest/pmap/parameter_maps_test_nbrcell.gtest.cc.s
@@ -820,7 +820,7 @@ __/scheme/nest/pmap/parameter_maps_test_nbrcell.gtest.s: __/scheme/nest/pmap/par
 
 # target to generate assembly for a file
 __/scheme/nest/pmap/parameter_maps_test_nbrcell.gtest.cc.s:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/nest/pmap/parameter_maps_test_nbrcell.gtest.cc.s
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/nest/pmap/parameter_maps_test_nbrcell.gtest.cc.s
 .PHONY : __/scheme/nest/pmap/parameter_maps_test_nbrcell.gtest.cc.s
 
 __/scheme/numeric/FixedPoint.gtest.o: __/scheme/numeric/FixedPoint.gtest.cc.o
@@ -829,7 +829,7 @@ __/scheme/numeric/FixedPoint.gtest.o: __/scheme/numeric/FixedPoint.gtest.cc.o
 
 # target to build an object file
 __/scheme/numeric/FixedPoint.gtest.cc.o:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/numeric/FixedPoint.gtest.cc.o
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/numeric/FixedPoint.gtest.cc.o
 .PHONY : __/scheme/numeric/FixedPoint.gtest.cc.o
 
 __/scheme/numeric/FixedPoint.gtest.i: __/scheme/numeric/FixedPoint.gtest.cc.i
@@ -838,7 +838,7 @@ __/scheme/numeric/FixedPoint.gtest.i: __/scheme/numeric/FixedPoint.gtest.cc.i
 
 # target to preprocess a source file
 __/scheme/numeric/FixedPoint.gtest.cc.i:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/numeric/FixedPoint.gtest.cc.i
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/numeric/FixedPoint.gtest.cc.i
 .PHONY : __/scheme/numeric/FixedPoint.gtest.cc.i
 
 __/scheme/numeric/FixedPoint.gtest.s: __/scheme/numeric/FixedPoint.gtest.cc.s
@@ -847,7 +847,7 @@ __/scheme/numeric/FixedPoint.gtest.s: __/scheme/numeric/FixedPoint.gtest.cc.s
 
 # target to generate assembly for a file
 __/scheme/numeric/FixedPoint.gtest.cc.s:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/numeric/FixedPoint.gtest.cc.s
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/numeric/FixedPoint.gtest.cc.s
 .PHONY : __/scheme/numeric/FixedPoint.gtest.cc.s
 
 __/scheme/numeric/bcc_lattice.gtest.o: __/scheme/numeric/bcc_lattice.gtest.cc.o
@@ -856,7 +856,7 @@ __/scheme/numeric/bcc_lattice.gtest.o: __/scheme/numeric/bcc_lattice.gtest.cc.o
 
 # target to build an object file
 __/scheme/numeric/bcc_lattice.gtest.cc.o:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/numeric/bcc_lattice.gtest.cc.o
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/numeric/bcc_lattice.gtest.cc.o
 .PHONY : __/scheme/numeric/bcc_lattice.gtest.cc.o
 
 __/scheme/numeric/bcc_lattice.gtest.i: __/scheme/numeric/bcc_lattice.gtest.cc.i
@@ -865,7 +865,7 @@ __/scheme/numeric/bcc_lattice.gtest.i: __/scheme/numeric/bcc_lattice.gtest.cc.i
 
 # target to preprocess a source file
 __/scheme/numeric/bcc_lattice.gtest.cc.i:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/numeric/bcc_lattice.gtest.cc.i
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/numeric/bcc_lattice.gtest.cc.i
 .PHONY : __/scheme/numeric/bcc_lattice.gtest.cc.i
 
 __/scheme/numeric/bcc_lattice.gtest.s: __/scheme/numeric/bcc_lattice.gtest.cc.s
@@ -874,7 +874,7 @@ __/scheme/numeric/bcc_lattice.gtest.s: __/scheme/numeric/bcc_lattice.gtest.cc.s
 
 # target to generate assembly for a file
 __/scheme/numeric/bcc_lattice.gtest.cc.s:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/numeric/bcc_lattice.gtest.cc.s
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/numeric/bcc_lattice.gtest.cc.s
 .PHONY : __/scheme/numeric/bcc_lattice.gtest.cc.s
 
 __/scheme/numeric/bcc_lattice_orientation.gtest.o: __/scheme/numeric/bcc_lattice_orientation.gtest.cc.o
@@ -883,7 +883,7 @@ __/scheme/numeric/bcc_lattice_orientation.gtest.o: __/scheme/numeric/bcc_lattice
 
 # target to build an object file
 __/scheme/numeric/bcc_lattice_orientation.gtest.cc.o:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/numeric/bcc_lattice_orientation.gtest.cc.o
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/numeric/bcc_lattice_orientation.gtest.cc.o
 .PHONY : __/scheme/numeric/bcc_lattice_orientation.gtest.cc.o
 
 __/scheme/numeric/bcc_lattice_orientation.gtest.i: __/scheme/numeric/bcc_lattice_orientation.gtest.cc.i
@@ -892,7 +892,7 @@ __/scheme/numeric/bcc_lattice_orientation.gtest.i: __/scheme/numeric/bcc_lattice
 
 # target to preprocess a source file
 __/scheme/numeric/bcc_lattice_orientation.gtest.cc.i:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/numeric/bcc_lattice_orientation.gtest.cc.i
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/numeric/bcc_lattice_orientation.gtest.cc.i
 .PHONY : __/scheme/numeric/bcc_lattice_orientation.gtest.cc.i
 
 __/scheme/numeric/bcc_lattice_orientation.gtest.s: __/scheme/numeric/bcc_lattice_orientation.gtest.cc.s
@@ -901,7 +901,7 @@ __/scheme/numeric/bcc_lattice_orientation.gtest.s: __/scheme/numeric/bcc_lattice
 
 # target to generate assembly for a file
 __/scheme/numeric/bcc_lattice_orientation.gtest.cc.s:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/numeric/bcc_lattice_orientation.gtest.cc.s
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/numeric/bcc_lattice_orientation.gtest.cc.s
 .PHONY : __/scheme/numeric/bcc_lattice_orientation.gtest.cc.s
 
 __/scheme/numeric/cube_to_sphere.gtest.o: __/scheme/numeric/cube_to_sphere.gtest.cc.o
@@ -910,7 +910,7 @@ __/scheme/numeric/cube_to_sphere.gtest.o: __/scheme/numeric/cube_to_sphere.gtest
 
 # target to build an object file
 __/scheme/numeric/cube_to_sphere.gtest.cc.o:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/numeric/cube_to_sphere.gtest.cc.o
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/numeric/cube_to_sphere.gtest.cc.o
 .PHONY : __/scheme/numeric/cube_to_sphere.gtest.cc.o
 
 __/scheme/numeric/cube_to_sphere.gtest.i: __/scheme/numeric/cube_to_sphere.gtest.cc.i
@@ -919,7 +919,7 @@ __/scheme/numeric/cube_to_sphere.gtest.i: __/scheme/numeric/cube_to_sphere.gtest
 
 # target to preprocess a source file
 __/scheme/numeric/cube_to_sphere.gtest.cc.i:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/numeric/cube_to_sphere.gtest.cc.i
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/numeric/cube_to_sphere.gtest.cc.i
 .PHONY : __/scheme/numeric/cube_to_sphere.gtest.cc.i
 
 __/scheme/numeric/cube_to_sphere.gtest.s: __/scheme/numeric/cube_to_sphere.gtest.cc.s
@@ -928,7 +928,7 @@ __/scheme/numeric/cube_to_sphere.gtest.s: __/scheme/numeric/cube_to_sphere.gtest
 
 # target to generate assembly for a file
 __/scheme/numeric/cube_to_sphere.gtest.cc.s:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/numeric/cube_to_sphere.gtest.cc.s
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/numeric/cube_to_sphere.gtest.cc.s
 .PHONY : __/scheme/numeric/cube_to_sphere.gtest.cc.s
 
 __/scheme/numeric/euler_angles.gtest.o: __/scheme/numeric/euler_angles.gtest.cc.o
@@ -937,7 +937,7 @@ __/scheme/numeric/euler_angles.gtest.o: __/scheme/numeric/euler_angles.gtest.cc.
 
 # target to build an object file
 __/scheme/numeric/euler_angles.gtest.cc.o:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/numeric/euler_angles.gtest.cc.o
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/numeric/euler_angles.gtest.cc.o
 .PHONY : __/scheme/numeric/euler_angles.gtest.cc.o
 
 __/scheme/numeric/euler_angles.gtest.i: __/scheme/numeric/euler_angles.gtest.cc.i
@@ -946,7 +946,7 @@ __/scheme/numeric/euler_angles.gtest.i: __/scheme/numeric/euler_angles.gtest.cc.
 
 # target to preprocess a source file
 __/scheme/numeric/euler_angles.gtest.cc.i:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/numeric/euler_angles.gtest.cc.i
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/numeric/euler_angles.gtest.cc.i
 .PHONY : __/scheme/numeric/euler_angles.gtest.cc.i
 
 __/scheme/numeric/euler_angles.gtest.s: __/scheme/numeric/euler_angles.gtest.cc.s
@@ -955,7 +955,7 @@ __/scheme/numeric/euler_angles.gtest.s: __/scheme/numeric/euler_angles.gtest.cc.
 
 # target to generate assembly for a file
 __/scheme/numeric/euler_angles.gtest.cc.s:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/numeric/euler_angles.gtest.cc.s
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/numeric/euler_angles.gtest.cc.s
 .PHONY : __/scheme/numeric/euler_angles.gtest.cc.s
 
 __/scheme/numeric/geom_4d.gtest.o: __/scheme/numeric/geom_4d.gtest.cc.o
@@ -964,7 +964,7 @@ __/scheme/numeric/geom_4d.gtest.o: __/scheme/numeric/geom_4d.gtest.cc.o
 
 # target to build an object file
 __/scheme/numeric/geom_4d.gtest.cc.o:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/numeric/geom_4d.gtest.cc.o
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/numeric/geom_4d.gtest.cc.o
 .PHONY : __/scheme/numeric/geom_4d.gtest.cc.o
 
 __/scheme/numeric/geom_4d.gtest.i: __/scheme/numeric/geom_4d.gtest.cc.i
@@ -973,7 +973,7 @@ __/scheme/numeric/geom_4d.gtest.i: __/scheme/numeric/geom_4d.gtest.cc.i
 
 # target to preprocess a source file
 __/scheme/numeric/geom_4d.gtest.cc.i:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/numeric/geom_4d.gtest.cc.i
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/numeric/geom_4d.gtest.cc.i
 .PHONY : __/scheme/numeric/geom_4d.gtest.cc.i
 
 __/scheme/numeric/geom_4d.gtest.s: __/scheme/numeric/geom_4d.gtest.cc.s
@@ -982,7 +982,7 @@ __/scheme/numeric/geom_4d.gtest.s: __/scheme/numeric/geom_4d.gtest.cc.s
 
 # target to generate assembly for a file
 __/scheme/numeric/geom_4d.gtest.cc.s:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/numeric/geom_4d.gtest.cc.s
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/numeric/geom_4d.gtest.cc.s
 .PHONY : __/scheme/numeric/geom_4d.gtest.cc.s
 
 __/scheme/numeric/rand_xform.gtest.o: __/scheme/numeric/rand_xform.gtest.cc.o
@@ -991,7 +991,7 @@ __/scheme/numeric/rand_xform.gtest.o: __/scheme/numeric/rand_xform.gtest.cc.o
 
 # target to build an object file
 __/scheme/numeric/rand_xform.gtest.cc.o:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/numeric/rand_xform.gtest.cc.o
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/numeric/rand_xform.gtest.cc.o
 .PHONY : __/scheme/numeric/rand_xform.gtest.cc.o
 
 __/scheme/numeric/rand_xform.gtest.i: __/scheme/numeric/rand_xform.gtest.cc.i
@@ -1000,7 +1000,7 @@ __/scheme/numeric/rand_xform.gtest.i: __/scheme/numeric/rand_xform.gtest.cc.i
 
 # target to preprocess a source file
 __/scheme/numeric/rand_xform.gtest.cc.i:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/numeric/rand_xform.gtest.cc.i
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/numeric/rand_xform.gtest.cc.i
 .PHONY : __/scheme/numeric/rand_xform.gtest.cc.i
 
 __/scheme/numeric/rand_xform.gtest.s: __/scheme/numeric/rand_xform.gtest.cc.s
@@ -1009,7 +1009,7 @@ __/scheme/numeric/rand_xform.gtest.s: __/scheme/numeric/rand_xform.gtest.cc.s
 
 # target to generate assembly for a file
 __/scheme/numeric/rand_xform.gtest.cc.s:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/numeric/rand_xform.gtest.cc.s
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/numeric/rand_xform.gtest.cc.s
 .PHONY : __/scheme/numeric/rand_xform.gtest.cc.s
 
 __/scheme/numeric/xform_perf.gtest.o: __/scheme/numeric/xform_perf.gtest.cc.o
@@ -1018,7 +1018,7 @@ __/scheme/numeric/xform_perf.gtest.o: __/scheme/numeric/xform_perf.gtest.cc.o
 
 # target to build an object file
 __/scheme/numeric/xform_perf.gtest.cc.o:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/numeric/xform_perf.gtest.cc.o
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/numeric/xform_perf.gtest.cc.o
 .PHONY : __/scheme/numeric/xform_perf.gtest.cc.o
 
 __/scheme/numeric/xform_perf.gtest.i: __/scheme/numeric/xform_perf.gtest.cc.i
@@ -1027,7 +1027,7 @@ __/scheme/numeric/xform_perf.gtest.i: __/scheme/numeric/xform_perf.gtest.cc.i
 
 # target to preprocess a source file
 __/scheme/numeric/xform_perf.gtest.cc.i:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/numeric/xform_perf.gtest.cc.i
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/numeric/xform_perf.gtest.cc.i
 .PHONY : __/scheme/numeric/xform_perf.gtest.cc.i
 
 __/scheme/numeric/xform_perf.gtest.s: __/scheme/numeric/xform_perf.gtest.cc.s
@@ -1036,7 +1036,7 @@ __/scheme/numeric/xform_perf.gtest.s: __/scheme/numeric/xform_perf.gtest.cc.s
 
 # target to generate assembly for a file
 __/scheme/numeric/xform_perf.gtest.cc.s:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/numeric/xform_perf.gtest.cc.s
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/numeric/xform_perf.gtest.cc.s
 .PHONY : __/scheme/numeric/xform_perf.gtest.cc.s
 
 __/scheme/objective/ObjectiveFunction.gtest.o: __/scheme/objective/ObjectiveFunction.gtest.cc.o
@@ -1045,7 +1045,7 @@ __/scheme/objective/ObjectiveFunction.gtest.o: __/scheme/objective/ObjectiveFunc
 
 # target to build an object file
 __/scheme/objective/ObjectiveFunction.gtest.cc.o:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/objective/ObjectiveFunction.gtest.cc.o
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/objective/ObjectiveFunction.gtest.cc.o
 .PHONY : __/scheme/objective/ObjectiveFunction.gtest.cc.o
 
 __/scheme/objective/ObjectiveFunction.gtest.i: __/scheme/objective/ObjectiveFunction.gtest.cc.i
@@ -1054,7 +1054,7 @@ __/scheme/objective/ObjectiveFunction.gtest.i: __/scheme/objective/ObjectiveFunc
 
 # target to preprocess a source file
 __/scheme/objective/ObjectiveFunction.gtest.cc.i:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/objective/ObjectiveFunction.gtest.cc.i
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/objective/ObjectiveFunction.gtest.cc.i
 .PHONY : __/scheme/objective/ObjectiveFunction.gtest.cc.i
 
 __/scheme/objective/ObjectiveFunction.gtest.s: __/scheme/objective/ObjectiveFunction.gtest.cc.s
@@ -1063,7 +1063,7 @@ __/scheme/objective/ObjectiveFunction.gtest.s: __/scheme/objective/ObjectiveFunc
 
 # target to generate assembly for a file
 __/scheme/objective/ObjectiveFunction.gtest.cc.s:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/objective/ObjectiveFunction.gtest.cc.s
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/objective/ObjectiveFunction.gtest.cc.s
 .PHONY : __/scheme/objective/ObjectiveFunction.gtest.cc.s
 
 __/scheme/objective/hash/XformHash.gtest.o: __/scheme/objective/hash/XformHash.gtest.cc.o
@@ -1072,7 +1072,7 @@ __/scheme/objective/hash/XformHash.gtest.o: __/scheme/objective/hash/XformHash.g
 
 # target to build an object file
 __/scheme/objective/hash/XformHash.gtest.cc.o:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/objective/hash/XformHash.gtest.cc.o
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/objective/hash/XformHash.gtest.cc.o
 .PHONY : __/scheme/objective/hash/XformHash.gtest.cc.o
 
 __/scheme/objective/hash/XformHash.gtest.i: __/scheme/objective/hash/XformHash.gtest.cc.i
@@ -1081,7 +1081,7 @@ __/scheme/objective/hash/XformHash.gtest.i: __/scheme/objective/hash/XformHash.g
 
 # target to preprocess a source file
 __/scheme/objective/hash/XformHash.gtest.cc.i:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/objective/hash/XformHash.gtest.cc.i
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/objective/hash/XformHash.gtest.cc.i
 .PHONY : __/scheme/objective/hash/XformHash.gtest.cc.i
 
 __/scheme/objective/hash/XformHash.gtest.s: __/scheme/objective/hash/XformHash.gtest.cc.s
@@ -1090,7 +1090,7 @@ __/scheme/objective/hash/XformHash.gtest.s: __/scheme/objective/hash/XformHash.g
 
 # target to generate assembly for a file
 __/scheme/objective/hash/XformHash.gtest.cc.s:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/objective/hash/XformHash.gtest.cc.s
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/objective/hash/XformHash.gtest.cc.s
 .PHONY : __/scheme/objective/hash/XformHash.gtest.cc.s
 
 __/scheme/objective/hash/XformHashFromNest.gtest.o: __/scheme/objective/hash/XformHashFromNest.gtest.cc.o
@@ -1099,7 +1099,7 @@ __/scheme/objective/hash/XformHashFromNest.gtest.o: __/scheme/objective/hash/Xfo
 
 # target to build an object file
 __/scheme/objective/hash/XformHashFromNest.gtest.cc.o:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/objective/hash/XformHashFromNest.gtest.cc.o
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/objective/hash/XformHashFromNest.gtest.cc.o
 .PHONY : __/scheme/objective/hash/XformHashFromNest.gtest.cc.o
 
 __/scheme/objective/hash/XformHashFromNest.gtest.i: __/scheme/objective/hash/XformHashFromNest.gtest.cc.i
@@ -1108,7 +1108,7 @@ __/scheme/objective/hash/XformHashFromNest.gtest.i: __/scheme/objective/hash/Xfo
 
 # target to preprocess a source file
 __/scheme/objective/hash/XformHashFromNest.gtest.cc.i:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/objective/hash/XformHashFromNest.gtest.cc.i
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/objective/hash/XformHashFromNest.gtest.cc.i
 .PHONY : __/scheme/objective/hash/XformHashFromNest.gtest.cc.i
 
 __/scheme/objective/hash/XformHashFromNest.gtest.s: __/scheme/objective/hash/XformHashFromNest.gtest.cc.s
@@ -1117,7 +1117,7 @@ __/scheme/objective/hash/XformHashFromNest.gtest.s: __/scheme/objective/hash/Xfo
 
 # target to generate assembly for a file
 __/scheme/objective/hash/XformHashFromNest.gtest.cc.s:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/objective/hash/XformHashFromNest.gtest.cc.s
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/objective/hash/XformHashFromNest.gtest.cc.s
 .PHONY : __/scheme/objective/hash/XformHashFromNest.gtest.cc.s
 
 __/scheme/objective/hash/XformHashNeighbors.gtest.o: __/scheme/objective/hash/XformHashNeighbors.gtest.cc.o
@@ -1126,7 +1126,7 @@ __/scheme/objective/hash/XformHashNeighbors.gtest.o: __/scheme/objective/hash/Xf
 
 # target to build an object file
 __/scheme/objective/hash/XformHashNeighbors.gtest.cc.o:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/objective/hash/XformHashNeighbors.gtest.cc.o
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/objective/hash/XformHashNeighbors.gtest.cc.o
 .PHONY : __/scheme/objective/hash/XformHashNeighbors.gtest.cc.o
 
 __/scheme/objective/hash/XformHashNeighbors.gtest.i: __/scheme/objective/hash/XformHashNeighbors.gtest.cc.i
@@ -1135,7 +1135,7 @@ __/scheme/objective/hash/XformHashNeighbors.gtest.i: __/scheme/objective/hash/Xf
 
 # target to preprocess a source file
 __/scheme/objective/hash/XformHashNeighbors.gtest.cc.i:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/objective/hash/XformHashNeighbors.gtest.cc.i
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/objective/hash/XformHashNeighbors.gtest.cc.i
 .PHONY : __/scheme/objective/hash/XformHashNeighbors.gtest.cc.i
 
 __/scheme/objective/hash/XformHashNeighbors.gtest.s: __/scheme/objective/hash/XformHashNeighbors.gtest.cc.s
@@ -1144,7 +1144,7 @@ __/scheme/objective/hash/XformHashNeighbors.gtest.s: __/scheme/objective/hash/Xf
 
 # target to generate assembly for a file
 __/scheme/objective/hash/XformHashNeighbors.gtest.cc.s:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/objective/hash/XformHashNeighbors.gtest.cc.s
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/objective/hash/XformHashNeighbors.gtest.cc.s
 .PHONY : __/scheme/objective/hash/XformHashNeighbors.gtest.cc.s
 
 __/scheme/objective/hash/XformMap.gtest.o: __/scheme/objective/hash/XformMap.gtest.cc.o
@@ -1153,7 +1153,7 @@ __/scheme/objective/hash/XformMap.gtest.o: __/scheme/objective/hash/XformMap.gte
 
 # target to build an object file
 __/scheme/objective/hash/XformMap.gtest.cc.o:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/objective/hash/XformMap.gtest.cc.o
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/objective/hash/XformMap.gtest.cc.o
 .PHONY : __/scheme/objective/hash/XformMap.gtest.cc.o
 
 __/scheme/objective/hash/XformMap.gtest.i: __/scheme/objective/hash/XformMap.gtest.cc.i
@@ -1162,7 +1162,7 @@ __/scheme/objective/hash/XformMap.gtest.i: __/scheme/objective/hash/XformMap.gte
 
 # target to preprocess a source file
 __/scheme/objective/hash/XformMap.gtest.cc.i:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/objective/hash/XformMap.gtest.cc.i
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/objective/hash/XformMap.gtest.cc.i
 .PHONY : __/scheme/objective/hash/XformMap.gtest.cc.i
 
 __/scheme/objective/hash/XformMap.gtest.s: __/scheme/objective/hash/XformMap.gtest.cc.s
@@ -1171,7 +1171,7 @@ __/scheme/objective/hash/XformMap.gtest.s: __/scheme/objective/hash/XformMap.gte
 
 # target to generate assembly for a file
 __/scheme/objective/hash/XformMap.gtest.cc.s:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/objective/hash/XformMap.gtest.cc.s
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/objective/hash/XformMap.gtest.cc.s
 .PHONY : __/scheme/objective/hash/XformMap.gtest.cc.s
 
 __/scheme/objective/integration/SceneObjective.gtest.o: __/scheme/objective/integration/SceneObjective.gtest.cc.o
@@ -1180,7 +1180,7 @@ __/scheme/objective/integration/SceneObjective.gtest.o: __/scheme/objective/inte
 
 # target to build an object file
 __/scheme/objective/integration/SceneObjective.gtest.cc.o:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/objective/integration/SceneObjective.gtest.cc.o
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/objective/integration/SceneObjective.gtest.cc.o
 .PHONY : __/scheme/objective/integration/SceneObjective.gtest.cc.o
 
 __/scheme/objective/integration/SceneObjective.gtest.i: __/scheme/objective/integration/SceneObjective.gtest.cc.i
@@ -1189,7 +1189,7 @@ __/scheme/objective/integration/SceneObjective.gtest.i: __/scheme/objective/inte
 
 # target to preprocess a source file
 __/scheme/objective/integration/SceneObjective.gtest.cc.i:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/objective/integration/SceneObjective.gtest.cc.i
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/objective/integration/SceneObjective.gtest.cc.i
 .PHONY : __/scheme/objective/integration/SceneObjective.gtest.cc.i
 
 __/scheme/objective/integration/SceneObjective.gtest.s: __/scheme/objective/integration/SceneObjective.gtest.cc.s
@@ -1198,7 +1198,7 @@ __/scheme/objective/integration/SceneObjective.gtest.s: __/scheme/objective/inte
 
 # target to generate assembly for a file
 __/scheme/objective/integration/SceneObjective.gtest.cc.s:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/objective/integration/SceneObjective.gtest.cc.s
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/objective/integration/SceneObjective.gtest.cc.s
 .PHONY : __/scheme/objective/integration/SceneObjective.gtest.cc.s
 
 __/scheme/objective/methods/hbond_5dof.gtest.o: __/scheme/objective/methods/hbond_5dof.gtest.cc.o
@@ -1207,7 +1207,7 @@ __/scheme/objective/methods/hbond_5dof.gtest.o: __/scheme/objective/methods/hbon
 
 # target to build an object file
 __/scheme/objective/methods/hbond_5dof.gtest.cc.o:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/objective/methods/hbond_5dof.gtest.cc.o
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/objective/methods/hbond_5dof.gtest.cc.o
 .PHONY : __/scheme/objective/methods/hbond_5dof.gtest.cc.o
 
 __/scheme/objective/methods/hbond_5dof.gtest.i: __/scheme/objective/methods/hbond_5dof.gtest.cc.i
@@ -1216,7 +1216,7 @@ __/scheme/objective/methods/hbond_5dof.gtest.i: __/scheme/objective/methods/hbon
 
 # target to preprocess a source file
 __/scheme/objective/methods/hbond_5dof.gtest.cc.i:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/objective/methods/hbond_5dof.gtest.cc.i
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/objective/methods/hbond_5dof.gtest.cc.i
 .PHONY : __/scheme/objective/methods/hbond_5dof.gtest.cc.i
 
 __/scheme/objective/methods/hbond_5dof.gtest.s: __/scheme/objective/methods/hbond_5dof.gtest.cc.s
@@ -1225,7 +1225,7 @@ __/scheme/objective/methods/hbond_5dof.gtest.s: __/scheme/objective/methods/hbon
 
 # target to generate assembly for a file
 __/scheme/objective/methods/hbond_5dof.gtest.cc.s:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/objective/methods/hbond_5dof.gtest.cc.s
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/objective/methods/hbond_5dof.gtest.cc.s
 .PHONY : __/scheme/objective/methods/hbond_5dof.gtest.cc.s
 
 __/scheme/objective/storage/RotamerScores.gtest.o: __/scheme/objective/storage/RotamerScores.gtest.cc.o
@@ -1234,7 +1234,7 @@ __/scheme/objective/storage/RotamerScores.gtest.o: __/scheme/objective/storage/R
 
 # target to build an object file
 __/scheme/objective/storage/RotamerScores.gtest.cc.o:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/objective/storage/RotamerScores.gtest.cc.o
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/objective/storage/RotamerScores.gtest.cc.o
 .PHONY : __/scheme/objective/storage/RotamerScores.gtest.cc.o
 
 __/scheme/objective/storage/RotamerScores.gtest.i: __/scheme/objective/storage/RotamerScores.gtest.cc.i
@@ -1243,7 +1243,7 @@ __/scheme/objective/storage/RotamerScores.gtest.i: __/scheme/objective/storage/R
 
 # target to preprocess a source file
 __/scheme/objective/storage/RotamerScores.gtest.cc.i:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/objective/storage/RotamerScores.gtest.cc.i
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/objective/storage/RotamerScores.gtest.cc.i
 .PHONY : __/scheme/objective/storage/RotamerScores.gtest.cc.i
 
 __/scheme/objective/storage/RotamerScores.gtest.s: __/scheme/objective/storage/RotamerScores.gtest.cc.s
@@ -1252,7 +1252,7 @@ __/scheme/objective/storage/RotamerScores.gtest.s: __/scheme/objective/storage/R
 
 # target to generate assembly for a file
 __/scheme/objective/storage/RotamerScores.gtest.cc.s:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/objective/storage/RotamerScores.gtest.cc.s
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/objective/storage/RotamerScores.gtest.cc.s
 .PHONY : __/scheme/objective/storage/RotamerScores.gtest.cc.s
 
 __/scheme/objective/storage/TwoBodyTable.gtest.o: __/scheme/objective/storage/TwoBodyTable.gtest.cc.o
@@ -1261,7 +1261,7 @@ __/scheme/objective/storage/TwoBodyTable.gtest.o: __/scheme/objective/storage/Tw
 
 # target to build an object file
 __/scheme/objective/storage/TwoBodyTable.gtest.cc.o:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/objective/storage/TwoBodyTable.gtest.cc.o
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/objective/storage/TwoBodyTable.gtest.cc.o
 .PHONY : __/scheme/objective/storage/TwoBodyTable.gtest.cc.o
 
 __/scheme/objective/storage/TwoBodyTable.gtest.i: __/scheme/objective/storage/TwoBodyTable.gtest.cc.i
@@ -1270,7 +1270,7 @@ __/scheme/objective/storage/TwoBodyTable.gtest.i: __/scheme/objective/storage/Tw
 
 # target to preprocess a source file
 __/scheme/objective/storage/TwoBodyTable.gtest.cc.i:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/objective/storage/TwoBodyTable.gtest.cc.i
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/objective/storage/TwoBodyTable.gtest.cc.i
 .PHONY : __/scheme/objective/storage/TwoBodyTable.gtest.cc.i
 
 __/scheme/objective/storage/TwoBodyTable.gtest.s: __/scheme/objective/storage/TwoBodyTable.gtest.cc.s
@@ -1279,7 +1279,7 @@ __/scheme/objective/storage/TwoBodyTable.gtest.s: __/scheme/objective/storage/Tw
 
 # target to generate assembly for a file
 __/scheme/objective/storage/TwoBodyTable.gtest.cc.s:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/objective/storage/TwoBodyTable.gtest.cc.s
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/objective/storage/TwoBodyTable.gtest.cc.s
 .PHONY : __/scheme/objective/storage/TwoBodyTable.gtest.cc.s
 
 __/scheme/objective/voxel/FieldCache.gtest.o: __/scheme/objective/voxel/FieldCache.gtest.cc.o
@@ -1288,7 +1288,7 @@ __/scheme/objective/voxel/FieldCache.gtest.o: __/scheme/objective/voxel/FieldCac
 
 # target to build an object file
 __/scheme/objective/voxel/FieldCache.gtest.cc.o:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/objective/voxel/FieldCache.gtest.cc.o
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/objective/voxel/FieldCache.gtest.cc.o
 .PHONY : __/scheme/objective/voxel/FieldCache.gtest.cc.o
 
 __/scheme/objective/voxel/FieldCache.gtest.i: __/scheme/objective/voxel/FieldCache.gtest.cc.i
@@ -1297,7 +1297,7 @@ __/scheme/objective/voxel/FieldCache.gtest.i: __/scheme/objective/voxel/FieldCac
 
 # target to preprocess a source file
 __/scheme/objective/voxel/FieldCache.gtest.cc.i:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/objective/voxel/FieldCache.gtest.cc.i
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/objective/voxel/FieldCache.gtest.cc.i
 .PHONY : __/scheme/objective/voxel/FieldCache.gtest.cc.i
 
 __/scheme/objective/voxel/FieldCache.gtest.s: __/scheme/objective/voxel/FieldCache.gtest.cc.s
@@ -1306,7 +1306,7 @@ __/scheme/objective/voxel/FieldCache.gtest.s: __/scheme/objective/voxel/FieldCac
 
 # target to generate assembly for a file
 __/scheme/objective/voxel/FieldCache.gtest.cc.s:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/objective/voxel/FieldCache.gtest.cc.s
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/objective/voxel/FieldCache.gtest.cc.s
 .PHONY : __/scheme/objective/voxel/FieldCache.gtest.cc.s
 
 __/scheme/objective/voxel/VoxelArray.gtest.o: __/scheme/objective/voxel/VoxelArray.gtest.cc.o
@@ -1315,7 +1315,7 @@ __/scheme/objective/voxel/VoxelArray.gtest.o: __/scheme/objective/voxel/VoxelArr
 
 # target to build an object file
 __/scheme/objective/voxel/VoxelArray.gtest.cc.o:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/objective/voxel/VoxelArray.gtest.cc.o
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/objective/voxel/VoxelArray.gtest.cc.o
 .PHONY : __/scheme/objective/voxel/VoxelArray.gtest.cc.o
 
 __/scheme/objective/voxel/VoxelArray.gtest.i: __/scheme/objective/voxel/VoxelArray.gtest.cc.i
@@ -1324,7 +1324,7 @@ __/scheme/objective/voxel/VoxelArray.gtest.i: __/scheme/objective/voxel/VoxelArr
 
 # target to preprocess a source file
 __/scheme/objective/voxel/VoxelArray.gtest.cc.i:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/objective/voxel/VoxelArray.gtest.cc.i
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/objective/voxel/VoxelArray.gtest.cc.i
 .PHONY : __/scheme/objective/voxel/VoxelArray.gtest.cc.i
 
 __/scheme/objective/voxel/VoxelArray.gtest.s: __/scheme/objective/voxel/VoxelArray.gtest.cc.s
@@ -1333,7 +1333,7 @@ __/scheme/objective/voxel/VoxelArray.gtest.s: __/scheme/objective/voxel/VoxelArr
 
 # target to generate assembly for a file
 __/scheme/objective/voxel/VoxelArray.gtest.cc.s:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/objective/voxel/VoxelArray.gtest.cc.s
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/objective/voxel/VoxelArray.gtest.cc.s
 .PHONY : __/scheme/objective/voxel/VoxelArray.gtest.cc.s
 
 __/scheme/rosetta/atype_map.lib.o: __/scheme/rosetta/atype_map.lib.cc.o
@@ -1342,8 +1342,8 @@ __/scheme/rosetta/atype_map.lib.o: __/scheme/rosetta/atype_map.lib.cc.o
 
 # target to build an object file
 __/scheme/rosetta/atype_map.lib.cc.o:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/rosetta/atype_map.lib.cc.o
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/scheme.dir/build.make schemelib/test/CMakeFiles/scheme.dir/__/scheme/rosetta/atype_map.lib.cc.o
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/rosetta/atype_map.lib.cc.o
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/scheme.dir/build.make schemelib/test/CMakeFiles/scheme.dir/__/scheme/rosetta/atype_map.lib.cc.o
 .PHONY : __/scheme/rosetta/atype_map.lib.cc.o
 
 __/scheme/rosetta/atype_map.lib.i: __/scheme/rosetta/atype_map.lib.cc.i
@@ -1352,8 +1352,8 @@ __/scheme/rosetta/atype_map.lib.i: __/scheme/rosetta/atype_map.lib.cc.i
 
 # target to preprocess a source file
 __/scheme/rosetta/atype_map.lib.cc.i:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/rosetta/atype_map.lib.cc.i
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/scheme.dir/build.make schemelib/test/CMakeFiles/scheme.dir/__/scheme/rosetta/atype_map.lib.cc.i
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/rosetta/atype_map.lib.cc.i
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/scheme.dir/build.make schemelib/test/CMakeFiles/scheme.dir/__/scheme/rosetta/atype_map.lib.cc.i
 .PHONY : __/scheme/rosetta/atype_map.lib.cc.i
 
 __/scheme/rosetta/atype_map.lib.s: __/scheme/rosetta/atype_map.lib.cc.s
@@ -1362,8 +1362,8 @@ __/scheme/rosetta/atype_map.lib.s: __/scheme/rosetta/atype_map.lib.cc.s
 
 # target to generate assembly for a file
 __/scheme/rosetta/atype_map.lib.cc.s:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/rosetta/atype_map.lib.cc.s
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/scheme.dir/build.make schemelib/test/CMakeFiles/scheme.dir/__/scheme/rosetta/atype_map.lib.cc.s
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/rosetta/atype_map.lib.cc.s
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/scheme.dir/build.make schemelib/test/CMakeFiles/scheme.dir/__/scheme/rosetta/atype_map.lib.cc.s
 .PHONY : __/scheme/rosetta/atype_map.lib.cc.s
 
 __/scheme/rosetta/score/AnalyticEvaluation.gtest.o: __/scheme/rosetta/score/AnalyticEvaluation.gtest.cc.o
@@ -1372,7 +1372,7 @@ __/scheme/rosetta/score/AnalyticEvaluation.gtest.o: __/scheme/rosetta/score/Anal
 
 # target to build an object file
 __/scheme/rosetta/score/AnalyticEvaluation.gtest.cc.o:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/rosetta/score/AnalyticEvaluation.gtest.cc.o
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/rosetta/score/AnalyticEvaluation.gtest.cc.o
 .PHONY : __/scheme/rosetta/score/AnalyticEvaluation.gtest.cc.o
 
 __/scheme/rosetta/score/AnalyticEvaluation.gtest.i: __/scheme/rosetta/score/AnalyticEvaluation.gtest.cc.i
@@ -1381,7 +1381,7 @@ __/scheme/rosetta/score/AnalyticEvaluation.gtest.i: __/scheme/rosetta/score/Anal
 
 # target to preprocess a source file
 __/scheme/rosetta/score/AnalyticEvaluation.gtest.cc.i:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/rosetta/score/AnalyticEvaluation.gtest.cc.i
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/rosetta/score/AnalyticEvaluation.gtest.cc.i
 .PHONY : __/scheme/rosetta/score/AnalyticEvaluation.gtest.cc.i
 
 __/scheme/rosetta/score/AnalyticEvaluation.gtest.s: __/scheme/rosetta/score/AnalyticEvaluation.gtest.cc.s
@@ -1390,7 +1390,7 @@ __/scheme/rosetta/score/AnalyticEvaluation.gtest.s: __/scheme/rosetta/score/Anal
 
 # target to generate assembly for a file
 __/scheme/rosetta/score/AnalyticEvaluation.gtest.cc.s:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/rosetta/score/AnalyticEvaluation.gtest.cc.s
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/rosetta/score/AnalyticEvaluation.gtest.cc.s
 .PHONY : __/scheme/rosetta/score/AnalyticEvaluation.gtest.cc.s
 
 __/scheme/rosetta/score/EtableParams_init.lib.o: __/scheme/rosetta/score/EtableParams_init.lib.cc.o
@@ -1399,8 +1399,8 @@ __/scheme/rosetta/score/EtableParams_init.lib.o: __/scheme/rosetta/score/EtableP
 
 # target to build an object file
 __/scheme/rosetta/score/EtableParams_init.lib.cc.o:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/rosetta/score/EtableParams_init.lib.cc.o
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/scheme.dir/build.make schemelib/test/CMakeFiles/scheme.dir/__/scheme/rosetta/score/EtableParams_init.lib.cc.o
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/rosetta/score/EtableParams_init.lib.cc.o
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/scheme.dir/build.make schemelib/test/CMakeFiles/scheme.dir/__/scheme/rosetta/score/EtableParams_init.lib.cc.o
 .PHONY : __/scheme/rosetta/score/EtableParams_init.lib.cc.o
 
 __/scheme/rosetta/score/EtableParams_init.lib.i: __/scheme/rosetta/score/EtableParams_init.lib.cc.i
@@ -1409,8 +1409,8 @@ __/scheme/rosetta/score/EtableParams_init.lib.i: __/scheme/rosetta/score/EtableP
 
 # target to preprocess a source file
 __/scheme/rosetta/score/EtableParams_init.lib.cc.i:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/rosetta/score/EtableParams_init.lib.cc.i
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/scheme.dir/build.make schemelib/test/CMakeFiles/scheme.dir/__/scheme/rosetta/score/EtableParams_init.lib.cc.i
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/rosetta/score/EtableParams_init.lib.cc.i
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/scheme.dir/build.make schemelib/test/CMakeFiles/scheme.dir/__/scheme/rosetta/score/EtableParams_init.lib.cc.i
 .PHONY : __/scheme/rosetta/score/EtableParams_init.lib.cc.i
 
 __/scheme/rosetta/score/EtableParams_init.lib.s: __/scheme/rosetta/score/EtableParams_init.lib.cc.s
@@ -1419,8 +1419,8 @@ __/scheme/rosetta/score/EtableParams_init.lib.s: __/scheme/rosetta/score/EtableP
 
 # target to generate assembly for a file
 __/scheme/rosetta/score/EtableParams_init.lib.cc.s:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/rosetta/score/EtableParams_init.lib.cc.s
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/scheme.dir/build.make schemelib/test/CMakeFiles/scheme.dir/__/scheme/rosetta/score/EtableParams_init.lib.cc.s
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/rosetta/score/EtableParams_init.lib.cc.s
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/scheme.dir/build.make schemelib/test/CMakeFiles/scheme.dir/__/scheme/rosetta/score/EtableParams_init.lib.cc.s
 .PHONY : __/scheme/rosetta/score/EtableParams_init.lib.cc.s
 
 __/scheme/rosetta/score/RosettaField.gtest.o: __/scheme/rosetta/score/RosettaField.gtest.cc.o
@@ -1429,7 +1429,7 @@ __/scheme/rosetta/score/RosettaField.gtest.o: __/scheme/rosetta/score/RosettaFie
 
 # target to build an object file
 __/scheme/rosetta/score/RosettaField.gtest.cc.o:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/rosetta/score/RosettaField.gtest.cc.o
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/rosetta/score/RosettaField.gtest.cc.o
 .PHONY : __/scheme/rosetta/score/RosettaField.gtest.cc.o
 
 __/scheme/rosetta/score/RosettaField.gtest.i: __/scheme/rosetta/score/RosettaField.gtest.cc.i
@@ -1438,7 +1438,7 @@ __/scheme/rosetta/score/RosettaField.gtest.i: __/scheme/rosetta/score/RosettaFie
 
 # target to preprocess a source file
 __/scheme/rosetta/score/RosettaField.gtest.cc.i:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/rosetta/score/RosettaField.gtest.cc.i
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/rosetta/score/RosettaField.gtest.cc.i
 .PHONY : __/scheme/rosetta/score/RosettaField.gtest.cc.i
 
 __/scheme/rosetta/score/RosettaField.gtest.s: __/scheme/rosetta/score/RosettaField.gtest.cc.s
@@ -1447,7 +1447,7 @@ __/scheme/rosetta/score/RosettaField.gtest.s: __/scheme/rosetta/score/RosettaFie
 
 # target to generate assembly for a file
 __/scheme/rosetta/score/RosettaField.gtest.cc.s:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/rosetta/score/RosettaField.gtest.cc.s
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/rosetta/score/RosettaField.gtest.cc.s
 .PHONY : __/scheme/rosetta/score/RosettaField.gtest.cc.s
 
 __/scheme/search/HackPack.gtest.o: __/scheme/search/HackPack.gtest.cc.o
@@ -1456,7 +1456,7 @@ __/scheme/search/HackPack.gtest.o: __/scheme/search/HackPack.gtest.cc.o
 
 # target to build an object file
 __/scheme/search/HackPack.gtest.cc.o:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/search/HackPack.gtest.cc.o
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/search/HackPack.gtest.cc.o
 .PHONY : __/scheme/search/HackPack.gtest.cc.o
 
 __/scheme/search/HackPack.gtest.i: __/scheme/search/HackPack.gtest.cc.i
@@ -1465,7 +1465,7 @@ __/scheme/search/HackPack.gtest.i: __/scheme/search/HackPack.gtest.cc.i
 
 # target to preprocess a source file
 __/scheme/search/HackPack.gtest.cc.i:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/search/HackPack.gtest.cc.i
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/search/HackPack.gtest.cc.i
 .PHONY : __/scheme/search/HackPack.gtest.cc.i
 
 __/scheme/search/HackPack.gtest.s: __/scheme/search/HackPack.gtest.cc.s
@@ -1474,7 +1474,7 @@ __/scheme/search/HackPack.gtest.s: __/scheme/search/HackPack.gtest.cc.s
 
 # target to generate assembly for a file
 __/scheme/search/HackPack.gtest.cc.s:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/search/HackPack.gtest.cc.s
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/search/HackPack.gtest.cc.s
 .PHONY : __/scheme/search/HackPack.gtest.cc.s
 
 __/scheme/search/SpatialBandB.gtest.o: __/scheme/search/SpatialBandB.gtest.cc.o
@@ -1483,7 +1483,7 @@ __/scheme/search/SpatialBandB.gtest.o: __/scheme/search/SpatialBandB.gtest.cc.o
 
 # target to build an object file
 __/scheme/search/SpatialBandB.gtest.cc.o:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/search/SpatialBandB.gtest.cc.o
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/search/SpatialBandB.gtest.cc.o
 .PHONY : __/scheme/search/SpatialBandB.gtest.cc.o
 
 __/scheme/search/SpatialBandB.gtest.i: __/scheme/search/SpatialBandB.gtest.cc.i
@@ -1492,7 +1492,7 @@ __/scheme/search/SpatialBandB.gtest.i: __/scheme/search/SpatialBandB.gtest.cc.i
 
 # target to preprocess a source file
 __/scheme/search/SpatialBandB.gtest.cc.i:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/search/SpatialBandB.gtest.cc.i
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/search/SpatialBandB.gtest.cc.i
 .PHONY : __/scheme/search/SpatialBandB.gtest.cc.i
 
 __/scheme/search/SpatialBandB.gtest.s: __/scheme/search/SpatialBandB.gtest.cc.s
@@ -1501,7 +1501,7 @@ __/scheme/search/SpatialBandB.gtest.s: __/scheme/search/SpatialBandB.gtest.cc.s
 
 # target to generate assembly for a file
 __/scheme/search/SpatialBandB.gtest.cc.s:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/search/SpatialBandB.gtest.cc.s
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/search/SpatialBandB.gtest.cc.s
 .PHONY : __/scheme/search/SpatialBandB.gtest.cc.s
 
 __/scheme/util/SimpleArray.gtest.o: __/scheme/util/SimpleArray.gtest.cc.o
@@ -1510,7 +1510,7 @@ __/scheme/util/SimpleArray.gtest.o: __/scheme/util/SimpleArray.gtest.cc.o
 
 # target to build an object file
 __/scheme/util/SimpleArray.gtest.cc.o:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/util/SimpleArray.gtest.cc.o
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/util/SimpleArray.gtest.cc.o
 .PHONY : __/scheme/util/SimpleArray.gtest.cc.o
 
 __/scheme/util/SimpleArray.gtest.i: __/scheme/util/SimpleArray.gtest.cc.i
@@ -1519,7 +1519,7 @@ __/scheme/util/SimpleArray.gtest.i: __/scheme/util/SimpleArray.gtest.cc.i
 
 # target to preprocess a source file
 __/scheme/util/SimpleArray.gtest.cc.i:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/util/SimpleArray.gtest.cc.i
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/util/SimpleArray.gtest.cc.i
 .PHONY : __/scheme/util/SimpleArray.gtest.cc.i
 
 __/scheme/util/SimpleArray.gtest.s: __/scheme/util/SimpleArray.gtest.cc.s
@@ -1528,7 +1528,7 @@ __/scheme/util/SimpleArray.gtest.s: __/scheme/util/SimpleArray.gtest.cc.s
 
 # target to generate assembly for a file
 __/scheme/util/SimpleArray.gtest.cc.s:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/util/SimpleArray.gtest.cc.s
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/util/SimpleArray.gtest.cc.s
 .PHONY : __/scheme/util/SimpleArray.gtest.cc.s
 
 __/scheme/util/StoragePolicy.gtest.o: __/scheme/util/StoragePolicy.gtest.cc.o
@@ -1537,7 +1537,7 @@ __/scheme/util/StoragePolicy.gtest.o: __/scheme/util/StoragePolicy.gtest.cc.o
 
 # target to build an object file
 __/scheme/util/StoragePolicy.gtest.cc.o:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/util/StoragePolicy.gtest.cc.o
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/util/StoragePolicy.gtest.cc.o
 .PHONY : __/scheme/util/StoragePolicy.gtest.cc.o
 
 __/scheme/util/StoragePolicy.gtest.i: __/scheme/util/StoragePolicy.gtest.cc.i
@@ -1546,7 +1546,7 @@ __/scheme/util/StoragePolicy.gtest.i: __/scheme/util/StoragePolicy.gtest.cc.i
 
 # target to preprocess a source file
 __/scheme/util/StoragePolicy.gtest.cc.i:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/util/StoragePolicy.gtest.cc.i
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/util/StoragePolicy.gtest.cc.i
 .PHONY : __/scheme/util/StoragePolicy.gtest.cc.i
 
 __/scheme/util/StoragePolicy.gtest.s: __/scheme/util/StoragePolicy.gtest.cc.s
@@ -1555,7 +1555,7 @@ __/scheme/util/StoragePolicy.gtest.s: __/scheme/util/StoragePolicy.gtest.cc.s
 
 # target to generate assembly for a file
 __/scheme/util/StoragePolicy.gtest.cc.s:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/util/StoragePolicy.gtest.cc.s
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/util/StoragePolicy.gtest.cc.s
 .PHONY : __/scheme/util/StoragePolicy.gtest.cc.s
 
 __/scheme/util/bloom.gtest.o: __/scheme/util/bloom.gtest.cc.o
@@ -1564,7 +1564,7 @@ __/scheme/util/bloom.gtest.o: __/scheme/util/bloom.gtest.cc.o
 
 # target to build an object file
 __/scheme/util/bloom.gtest.cc.o:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/util/bloom.gtest.cc.o
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/util/bloom.gtest.cc.o
 .PHONY : __/scheme/util/bloom.gtest.cc.o
 
 __/scheme/util/bloom.gtest.i: __/scheme/util/bloom.gtest.cc.i
@@ -1573,7 +1573,7 @@ __/scheme/util/bloom.gtest.i: __/scheme/util/bloom.gtest.cc.i
 
 # target to preprocess a source file
 __/scheme/util/bloom.gtest.cc.i:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/util/bloom.gtest.cc.i
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/util/bloom.gtest.cc.i
 .PHONY : __/scheme/util/bloom.gtest.cc.i
 
 __/scheme/util/bloom.gtest.s: __/scheme/util/bloom.gtest.cc.s
@@ -1582,7 +1582,7 @@ __/scheme/util/bloom.gtest.s: __/scheme/util/bloom.gtest.cc.s
 
 # target to generate assembly for a file
 __/scheme/util/bloom.gtest.cc.s:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/util/bloom.gtest.cc.s
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/util/bloom.gtest.cc.s
 .PHONY : __/scheme/util/bloom.gtest.cc.s
 
 __/scheme/util/container/ContainerInteractions.gtest.o: __/scheme/util/container/ContainerInteractions.gtest.cc.o
@@ -1591,7 +1591,7 @@ __/scheme/util/container/ContainerInteractions.gtest.o: __/scheme/util/container
 
 # target to build an object file
 __/scheme/util/container/ContainerInteractions.gtest.cc.o:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/util/container/ContainerInteractions.gtest.cc.o
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/util/container/ContainerInteractions.gtest.cc.o
 .PHONY : __/scheme/util/container/ContainerInteractions.gtest.cc.o
 
 __/scheme/util/container/ContainerInteractions.gtest.i: __/scheme/util/container/ContainerInteractions.gtest.cc.i
@@ -1600,7 +1600,7 @@ __/scheme/util/container/ContainerInteractions.gtest.i: __/scheme/util/container
 
 # target to preprocess a source file
 __/scheme/util/container/ContainerInteractions.gtest.cc.i:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/util/container/ContainerInteractions.gtest.cc.i
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/util/container/ContainerInteractions.gtest.cc.i
 .PHONY : __/scheme/util/container/ContainerInteractions.gtest.cc.i
 
 __/scheme/util/container/ContainerInteractions.gtest.s: __/scheme/util/container/ContainerInteractions.gtest.cc.s
@@ -1609,7 +1609,7 @@ __/scheme/util/container/ContainerInteractions.gtest.s: __/scheme/util/container
 
 # target to generate assembly for a file
 __/scheme/util/container/ContainerInteractions.gtest.cc.s:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/util/container/ContainerInteractions.gtest.cc.s
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/util/container/ContainerInteractions.gtest.cc.s
 .PHONY : __/scheme/util/container/ContainerInteractions.gtest.cc.s
 
 __/scheme/util/dilated_int.gtest.o: __/scheme/util/dilated_int.gtest.cc.o
@@ -1618,7 +1618,7 @@ __/scheme/util/dilated_int.gtest.o: __/scheme/util/dilated_int.gtest.cc.o
 
 # target to build an object file
 __/scheme/util/dilated_int.gtest.cc.o:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/util/dilated_int.gtest.cc.o
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/util/dilated_int.gtest.cc.o
 .PHONY : __/scheme/util/dilated_int.gtest.cc.o
 
 __/scheme/util/dilated_int.gtest.i: __/scheme/util/dilated_int.gtest.cc.i
@@ -1627,7 +1627,7 @@ __/scheme/util/dilated_int.gtest.i: __/scheme/util/dilated_int.gtest.cc.i
 
 # target to preprocess a source file
 __/scheme/util/dilated_int.gtest.cc.i:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/util/dilated_int.gtest.cc.i
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/util/dilated_int.gtest.cc.i
 .PHONY : __/scheme/util/dilated_int.gtest.cc.i
 
 __/scheme/util/dilated_int.gtest.s: __/scheme/util/dilated_int.gtest.cc.s
@@ -1636,7 +1636,7 @@ __/scheme/util/dilated_int.gtest.s: __/scheme/util/dilated_int.gtest.cc.s
 
 # target to generate assembly for a file
 __/scheme/util/dilated_int.gtest.cc.s:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/util/dilated_int.gtest.cc.s
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/util/dilated_int.gtest.cc.s
 .PHONY : __/scheme/util/dilated_int.gtest.cc.s
 
 __/scheme/util/hash.gtest.o: __/scheme/util/hash.gtest.cc.o
@@ -1645,7 +1645,7 @@ __/scheme/util/hash.gtest.o: __/scheme/util/hash.gtest.cc.o
 
 # target to build an object file
 __/scheme/util/hash.gtest.cc.o:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/util/hash.gtest.cc.o
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/util/hash.gtest.cc.o
 .PHONY : __/scheme/util/hash.gtest.cc.o
 
 __/scheme/util/hash.gtest.i: __/scheme/util/hash.gtest.cc.i
@@ -1654,7 +1654,7 @@ __/scheme/util/hash.gtest.i: __/scheme/util/hash.gtest.cc.i
 
 # target to preprocess a source file
 __/scheme/util/hash.gtest.cc.i:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/util/hash.gtest.cc.i
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/util/hash.gtest.cc.i
 .PHONY : __/scheme/util/hash.gtest.cc.i
 
 __/scheme/util/hash.gtest.s: __/scheme/util/hash.gtest.cc.s
@@ -1663,7 +1663,7 @@ __/scheme/util/hash.gtest.s: __/scheme/util/hash.gtest.cc.s
 
 # target to generate assembly for a file
 __/scheme/util/hash.gtest.cc.s:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/util/hash.gtest.cc.s
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/util/hash.gtest.cc.s
 .PHONY : __/scheme/util/hash.gtest.cc.s
 
 __/scheme/util/hash_thread.gtest.o: __/scheme/util/hash_thread.gtest.cc.o
@@ -1672,7 +1672,7 @@ __/scheme/util/hash_thread.gtest.o: __/scheme/util/hash_thread.gtest.cc.o
 
 # target to build an object file
 __/scheme/util/hash_thread.gtest.cc.o:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/util/hash_thread.gtest.cc.o
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/util/hash_thread.gtest.cc.o
 .PHONY : __/scheme/util/hash_thread.gtest.cc.o
 
 __/scheme/util/hash_thread.gtest.i: __/scheme/util/hash_thread.gtest.cc.i
@@ -1681,7 +1681,7 @@ __/scheme/util/hash_thread.gtest.i: __/scheme/util/hash_thread.gtest.cc.i
 
 # target to preprocess a source file
 __/scheme/util/hash_thread.gtest.cc.i:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/util/hash_thread.gtest.cc.i
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/util/hash_thread.gtest.cc.i
 .PHONY : __/scheme/util/hash_thread.gtest.cc.i
 
 __/scheme/util/hash_thread.gtest.s: __/scheme/util/hash_thread.gtest.cc.s
@@ -1690,7 +1690,7 @@ __/scheme/util/hash_thread.gtest.s: __/scheme/util/hash_thread.gtest.cc.s
 
 # target to generate assembly for a file
 __/scheme/util/hash_thread.gtest.cc.s:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/util/hash_thread.gtest.cc.s
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/util/hash_thread.gtest.cc.s
 .PHONY : __/scheme/util/hash_thread.gtest.cc.s
 
 __/scheme/util/meta/InstanceMap.gtest.o: __/scheme/util/meta/InstanceMap.gtest.cc.o
@@ -1699,7 +1699,7 @@ __/scheme/util/meta/InstanceMap.gtest.o: __/scheme/util/meta/InstanceMap.gtest.c
 
 # target to build an object file
 __/scheme/util/meta/InstanceMap.gtest.cc.o:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/util/meta/InstanceMap.gtest.cc.o
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/util/meta/InstanceMap.gtest.cc.o
 .PHONY : __/scheme/util/meta/InstanceMap.gtest.cc.o
 
 __/scheme/util/meta/InstanceMap.gtest.i: __/scheme/util/meta/InstanceMap.gtest.cc.i
@@ -1708,7 +1708,7 @@ __/scheme/util/meta/InstanceMap.gtest.i: __/scheme/util/meta/InstanceMap.gtest.c
 
 # target to preprocess a source file
 __/scheme/util/meta/InstanceMap.gtest.cc.i:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/util/meta/InstanceMap.gtest.cc.i
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/util/meta/InstanceMap.gtest.cc.i
 .PHONY : __/scheme/util/meta/InstanceMap.gtest.cc.i
 
 __/scheme/util/meta/InstanceMap.gtest.s: __/scheme/util/meta/InstanceMap.gtest.cc.s
@@ -1717,7 +1717,7 @@ __/scheme/util/meta/InstanceMap.gtest.s: __/scheme/util/meta/InstanceMap.gtest.c
 
 # target to generate assembly for a file
 __/scheme/util/meta/InstanceMap.gtest.cc.s:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/util/meta/InstanceMap.gtest.cc.s
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/util/meta/InstanceMap.gtest.cc.s
 .PHONY : __/scheme/util/meta/InstanceMap.gtest.cc.s
 
 __/scheme/util/meta/InstanceMap_container.gtest.o: __/scheme/util/meta/InstanceMap_container.gtest.cc.o
@@ -1726,7 +1726,7 @@ __/scheme/util/meta/InstanceMap_container.gtest.o: __/scheme/util/meta/InstanceM
 
 # target to build an object file
 __/scheme/util/meta/InstanceMap_container.gtest.cc.o:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/util/meta/InstanceMap_container.gtest.cc.o
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/util/meta/InstanceMap_container.gtest.cc.o
 .PHONY : __/scheme/util/meta/InstanceMap_container.gtest.cc.o
 
 __/scheme/util/meta/InstanceMap_container.gtest.i: __/scheme/util/meta/InstanceMap_container.gtest.cc.i
@@ -1735,7 +1735,7 @@ __/scheme/util/meta/InstanceMap_container.gtest.i: __/scheme/util/meta/InstanceM
 
 # target to preprocess a source file
 __/scheme/util/meta/InstanceMap_container.gtest.cc.i:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/util/meta/InstanceMap_container.gtest.cc.i
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/util/meta/InstanceMap_container.gtest.cc.i
 .PHONY : __/scheme/util/meta/InstanceMap_container.gtest.cc.i
 
 __/scheme/util/meta/InstanceMap_container.gtest.s: __/scheme/util/meta/InstanceMap_container.gtest.cc.s
@@ -1744,7 +1744,7 @@ __/scheme/util/meta/InstanceMap_container.gtest.s: __/scheme/util/meta/InstanceM
 
 # target to generate assembly for a file
 __/scheme/util/meta/InstanceMap_container.gtest.cc.s:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/util/meta/InstanceMap_container.gtest.cc.s
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/util/meta/InstanceMap_container.gtest.cc.s
 .PHONY : __/scheme/util/meta/InstanceMap_container.gtest.cc.s
 
 __/scheme/util/meta/InstanceMap_numeric.gtest.o: __/scheme/util/meta/InstanceMap_numeric.gtest.cc.o
@@ -1753,7 +1753,7 @@ __/scheme/util/meta/InstanceMap_numeric.gtest.o: __/scheme/util/meta/InstanceMap
 
 # target to build an object file
 __/scheme/util/meta/InstanceMap_numeric.gtest.cc.o:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/util/meta/InstanceMap_numeric.gtest.cc.o
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/util/meta/InstanceMap_numeric.gtest.cc.o
 .PHONY : __/scheme/util/meta/InstanceMap_numeric.gtest.cc.o
 
 __/scheme/util/meta/InstanceMap_numeric.gtest.i: __/scheme/util/meta/InstanceMap_numeric.gtest.cc.i
@@ -1762,7 +1762,7 @@ __/scheme/util/meta/InstanceMap_numeric.gtest.i: __/scheme/util/meta/InstanceMap
 
 # target to preprocess a source file
 __/scheme/util/meta/InstanceMap_numeric.gtest.cc.i:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/util/meta/InstanceMap_numeric.gtest.cc.i
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/util/meta/InstanceMap_numeric.gtest.cc.i
 .PHONY : __/scheme/util/meta/InstanceMap_numeric.gtest.cc.i
 
 __/scheme/util/meta/InstanceMap_numeric.gtest.s: __/scheme/util/meta/InstanceMap_numeric.gtest.cc.s
@@ -1771,7 +1771,7 @@ __/scheme/util/meta/InstanceMap_numeric.gtest.s: __/scheme/util/meta/InstanceMap
 
 # target to generate assembly for a file
 __/scheme/util/meta/InstanceMap_numeric.gtest.cc.s:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/util/meta/InstanceMap_numeric.gtest.cc.s
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/util/meta/InstanceMap_numeric.gtest.cc.s
 .PHONY : __/scheme/util/meta/InstanceMap_numeric.gtest.cc.s
 
 __/scheme/util/meta/util.gtest.o: __/scheme/util/meta/util.gtest.cc.o
@@ -1780,7 +1780,7 @@ __/scheme/util/meta/util.gtest.o: __/scheme/util/meta/util.gtest.cc.o
 
 # target to build an object file
 __/scheme/util/meta/util.gtest.cc.o:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/util/meta/util.gtest.cc.o
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/util/meta/util.gtest.cc.o
 .PHONY : __/scheme/util/meta/util.gtest.cc.o
 
 __/scheme/util/meta/util.gtest.i: __/scheme/util/meta/util.gtest.cc.i
@@ -1789,7 +1789,7 @@ __/scheme/util/meta/util.gtest.i: __/scheme/util/meta/util.gtest.cc.i
 
 # target to preprocess a source file
 __/scheme/util/meta/util.gtest.cc.i:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/util/meta/util.gtest.cc.i
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/util/meta/util.gtest.cc.i
 .PHONY : __/scheme/util/meta/util.gtest.cc.i
 
 __/scheme/util/meta/util.gtest.s: __/scheme/util/meta/util.gtest.cc.s
@@ -1798,7 +1798,7 @@ __/scheme/util/meta/util.gtest.s: __/scheme/util/meta/util.gtest.cc.s
 
 # target to generate assembly for a file
 __/scheme/util/meta/util.gtest.cc.s:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/util/meta/util.gtest.cc.s
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/util/meta/util.gtest.cc.s
 .PHONY : __/scheme/util/meta/util.gtest.cc.s
 
 __/scheme/util/template_loop.gtest.o: __/scheme/util/template_loop.gtest.cc.o
@@ -1807,7 +1807,7 @@ __/scheme/util/template_loop.gtest.o: __/scheme/util/template_loop.gtest.cc.o
 
 # target to build an object file
 __/scheme/util/template_loop.gtest.cc.o:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/util/template_loop.gtest.cc.o
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/util/template_loop.gtest.cc.o
 .PHONY : __/scheme/util/template_loop.gtest.cc.o
 
 __/scheme/util/template_loop.gtest.i: __/scheme/util/template_loop.gtest.cc.i
@@ -1816,7 +1816,7 @@ __/scheme/util/template_loop.gtest.i: __/scheme/util/template_loop.gtest.cc.i
 
 # target to preprocess a source file
 __/scheme/util/template_loop.gtest.cc.i:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/util/template_loop.gtest.cc.i
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/util/template_loop.gtest.cc.i
 .PHONY : __/scheme/util/template_loop.gtest.cc.i
 
 __/scheme/util/template_loop.gtest.s: __/scheme/util/template_loop.gtest.cc.s
@@ -1825,7 +1825,7 @@ __/scheme/util/template_loop.gtest.s: __/scheme/util/template_loop.gtest.cc.s
 
 # target to generate assembly for a file
 __/scheme/util/template_loop.gtest.cc.s:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/util/template_loop.gtest.cc.s
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/util/template_loop.gtest.cc.s
 .PHONY : __/scheme/util/template_loop.gtest.cc.s
 
 main_test.o: main_test.cc.o
@@ -1834,7 +1834,7 @@ main_test.o: main_test.cc.o
 
 # target to build an object file
 main_test.cc.o:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/main_test.cc.o
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/main_test.cc.o
 .PHONY : main_test.cc.o
 
 main_test.i: main_test.cc.i
@@ -1843,7 +1843,7 @@ main_test.i: main_test.cc.i
 
 # target to preprocess a source file
 main_test.cc.i:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/main_test.cc.i
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/main_test.cc.i
 .PHONY : main_test.cc.i
 
 main_test.s: main_test.cc.s
@@ -1852,7 +1852,7 @@ main_test.s: main_test.cc.s
 
 # target to generate assembly for a file
 main_test.cc.s:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/main_test.cc.s
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/test_libscheme.dir/build.make schemelib/test/CMakeFiles/test_libscheme.dir/main_test.cc.s
 .PHONY : main_test.cc.s
 
 quick_test.o: quick_test.cc.o
@@ -1861,7 +1861,7 @@ quick_test.o: quick_test.cc.o
 
 # target to build an object file
 quick_test.cc.o:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/quick_test_libscheme.dir/build.make schemelib/test/CMakeFiles/quick_test_libscheme.dir/quick_test.cc.o
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/quick_test_libscheme.dir/build.make schemelib/test/CMakeFiles/quick_test_libscheme.dir/quick_test.cc.o
 .PHONY : quick_test.cc.o
 
 quick_test.i: quick_test.cc.i
@@ -1870,7 +1870,7 @@ quick_test.i: quick_test.cc.i
 
 # target to preprocess a source file
 quick_test.cc.i:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/quick_test_libscheme.dir/build.make schemelib/test/CMakeFiles/quick_test_libscheme.dir/quick_test.cc.i
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/quick_test_libscheme.dir/build.make schemelib/test/CMakeFiles/quick_test_libscheme.dir/quick_test.cc.i
 .PHONY : quick_test.cc.i
 
 quick_test.s: quick_test.cc.s
@@ -1879,7 +1879,7 @@ quick_test.s: quick_test.cc.s
 
 # target to generate assembly for a file
 quick_test.cc.s:
-	cd /home/longxing/devel/rifine/build && $(MAKE) -f schemelib/test/CMakeFiles/quick_test_libscheme.dir/build.make schemelib/test/CMakeFiles/quick_test_libscheme.dir/quick_test.cc.s
+	cd /home/longxing/devel/rifine-devel/build && $(MAKE) -f schemelib/test/CMakeFiles/quick_test_libscheme.dir/build.make schemelib/test/CMakeFiles/quick_test_libscheme.dir/quick_test.cc.s
 .PHONY : quick_test.cc.s
 
 # Help Target
@@ -2094,6 +2094,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd /home/longxing/devel/rifine/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /home/longxing/devel/rifine-devel/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

@@ -1,4 +1,4 @@
-# Install script for directory: /home/longxing/devel/rifine/schemelib/test
+# Install script for directory: /home/longxing/devel/rifine-devel/schemelib/test
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

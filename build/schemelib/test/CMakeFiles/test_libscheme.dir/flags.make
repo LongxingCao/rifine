@@ -6,7 +6,7 @@ CXX_FLAGS =  -std=c++11 -w -fno-omit-frame-pointer -Wall -Wextra -Werror -O3 -DN
 
 CXX_DEFINES = -DCXX11
 
-CXX_INCLUDES = -I/home/longxing/devel/rifine/external/eigen3 -I/home/longxing/devel/rifine/external/gmock/gtest/include -I/home/longxing/devel/rifine/external/gmock/include -I/home/longxing/devel/rifine/external/include -I/home/longxing/devel/rifine/schemelib -I/usr/local/include -I/home/longxing/devel/rifine/schemelib/test/. 
+CXX_INCLUDES = -I/home/longxing/devel/rifine-devel/external/eigen3 -I/home/longxing/devel/rifine-devel/external/gmock/gtest/include -I/home/longxing/devel/rifine-devel/external/gmock/include -I/home/longxing/devel/rifine-devel/external/include -I/home/longxing/devel/rifine-devel/schemelib -I/usr/local/include -I/home/longxing/devel/rifine-devel/schemelib/test/. 
 
 # Custom flags: schemelib/test/CMakeFiles/test_libscheme.dir/__/scheme/rosetta/atype_map.lib.cc.o_FLAGS = -O0
 

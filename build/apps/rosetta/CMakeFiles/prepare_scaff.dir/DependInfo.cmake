@@ -4,7 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/longxing/devel/rifine/apps/rosetta/prepare_scaff.cc" "/home/longxing/devel/rifine/build/apps/rosetta/CMakeFiles/prepare_scaff.dir/prepare_scaff.cc.o"
+  "/home/longxing/devel/rifine-devel/apps/rosetta/prepare_scaff.cc" "/home/longxing/devel/rifine-devel/build/apps/rosetta/CMakeFiles/prepare_scaff.dir/prepare_scaff.cc.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 
@@ -31,7 +31,7 @@ set(CMAKE_CXX_TARGET_INCLUDE_PATH
 
 # Targets to which this target links.
 set(CMAKE_TARGET_LINKED_INFO_FILES
-  "/home/longxing/devel/rifine/build/apps/rosetta/riflib/CMakeFiles/riflib.dir/DependInfo.cmake"
+  "/home/longxing/devel/rifine-devel/build/apps/rosetta/riflib/CMakeFiles/riflib.dir/DependInfo.cmake"
   )
 
 # Fortran module output directory.

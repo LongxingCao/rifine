@@ -43,10 +43,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/longxing/devel/rifine
+CMAKE_SOURCE_DIR = /home/longxing/devel/rifine-devel
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/longxing/devel/rifine/build
+CMAKE_BINARY_DIR = /home/longxing/devel/rifine-devel/build
 
 # Include any dependencies generated for this target.
 include external/gmock/CMakeFiles/gmock_main.dir/depend.make
@@ -59,16 +59,16 @@ include external/gmock/CMakeFiles/gmock_main.dir/flags.make
 
 external/gmock/CMakeFiles/gmock_main.dir/gtest/src/gtest-all.cc.o: external/gmock/CMakeFiles/gmock_main.dir/flags.make
 external/gmock/CMakeFiles/gmock_main.dir/gtest/src/gtest-all.cc.o: ../external/gmock/gtest/src/gtest-all.cc
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/longxing/devel/rifine/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object external/gmock/CMakeFiles/gmock_main.dir/gtest/src/gtest-all.cc.o"
-	cd /home/longxing/devel/rifine/build/external/gmock && /usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/gmock_main.dir/gtest/src/gtest-all.cc.o -c /home/longxing/devel/rifine/external/gmock/gtest/src/gtest-all.cc
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/longxing/devel/rifine-devel/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object external/gmock/CMakeFiles/gmock_main.dir/gtest/src/gtest-all.cc.o"
+	cd /home/longxing/devel/rifine-devel/build/external/gmock && /usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/gmock_main.dir/gtest/src/gtest-all.cc.o -c /home/longxing/devel/rifine-devel/external/gmock/gtest/src/gtest-all.cc
 
 external/gmock/CMakeFiles/gmock_main.dir/gtest/src/gtest-all.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/gmock_main.dir/gtest/src/gtest-all.cc.i"
-	cd /home/longxing/devel/rifine/build/external/gmock && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/longxing/devel/rifine/external/gmock/gtest/src/gtest-all.cc > CMakeFiles/gmock_main.dir/gtest/src/gtest-all.cc.i
+	cd /home/longxing/devel/rifine-devel/build/external/gmock && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/longxing/devel/rifine-devel/external/gmock/gtest/src/gtest-all.cc > CMakeFiles/gmock_main.dir/gtest/src/gtest-all.cc.i
 
 external/gmock/CMakeFiles/gmock_main.dir/gtest/src/gtest-all.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/gmock_main.dir/gtest/src/gtest-all.cc.s"
-	cd /home/longxing/devel/rifine/build/external/gmock && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/longxing/devel/rifine/external/gmock/gtest/src/gtest-all.cc -o CMakeFiles/gmock_main.dir/gtest/src/gtest-all.cc.s
+	cd /home/longxing/devel/rifine-devel/build/external/gmock && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/longxing/devel/rifine-devel/external/gmock/gtest/src/gtest-all.cc -o CMakeFiles/gmock_main.dir/gtest/src/gtest-all.cc.s
 
 external/gmock/CMakeFiles/gmock_main.dir/gtest/src/gtest-all.cc.o.requires:
 
@@ -83,16 +83,16 @@ external/gmock/CMakeFiles/gmock_main.dir/gtest/src/gtest-all.cc.o.provides.build
 
 external/gmock/CMakeFiles/gmock_main.dir/src/gmock-all.cc.o: external/gmock/CMakeFiles/gmock_main.dir/flags.make
 external/gmock/CMakeFiles/gmock_main.dir/src/gmock-all.cc.o: ../external/gmock/src/gmock-all.cc
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/longxing/devel/rifine/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object external/gmock/CMakeFiles/gmock_main.dir/src/gmock-all.cc.o"
-	cd /home/longxing/devel/rifine/build/external/gmock && /usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/gmock_main.dir/src/gmock-all.cc.o -c /home/longxing/devel/rifine/external/gmock/src/gmock-all.cc
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/longxing/devel/rifine-devel/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object external/gmock/CMakeFiles/gmock_main.dir/src/gmock-all.cc.o"
+	cd /home/longxing/devel/rifine-devel/build/external/gmock && /usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/gmock_main.dir/src/gmock-all.cc.o -c /home/longxing/devel/rifine-devel/external/gmock/src/gmock-all.cc
 
 external/gmock/CMakeFiles/gmock_main.dir/src/gmock-all.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/gmock_main.dir/src/gmock-all.cc.i"
-	cd /home/longxing/devel/rifine/build/external/gmock && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/longxing/devel/rifine/external/gmock/src/gmock-all.cc > CMakeFiles/gmock_main.dir/src/gmock-all.cc.i
+	cd /home/longxing/devel/rifine-devel/build/external/gmock && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/longxing/devel/rifine-devel/external/gmock/src/gmock-all.cc > CMakeFiles/gmock_main.dir/src/gmock-all.cc.i
 
 external/gmock/CMakeFiles/gmock_main.dir/src/gmock-all.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/gmock_main.dir/src/gmock-all.cc.s"
-	cd /home/longxing/devel/rifine/build/external/gmock && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/longxing/devel/rifine/external/gmock/src/gmock-all.cc -o CMakeFiles/gmock_main.dir/src/gmock-all.cc.s
+	cd /home/longxing/devel/rifine-devel/build/external/gmock && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/longxing/devel/rifine-devel/external/gmock/src/gmock-all.cc -o CMakeFiles/gmock_main.dir/src/gmock-all.cc.s
 
 external/gmock/CMakeFiles/gmock_main.dir/src/gmock-all.cc.o.requires:
 
@@ -107,16 +107,16 @@ external/gmock/CMakeFiles/gmock_main.dir/src/gmock-all.cc.o.provides.build: exte
 
 external/gmock/CMakeFiles/gmock_main.dir/src/gmock_main.cc.o: external/gmock/CMakeFiles/gmock_main.dir/flags.make
 external/gmock/CMakeFiles/gmock_main.dir/src/gmock_main.cc.o: ../external/gmock/src/gmock_main.cc
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/longxing/devel/rifine/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object external/gmock/CMakeFiles/gmock_main.dir/src/gmock_main.cc.o"
-	cd /home/longxing/devel/rifine/build/external/gmock && /usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/gmock_main.dir/src/gmock_main.cc.o -c /home/longxing/devel/rifine/external/gmock/src/gmock_main.cc
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/longxing/devel/rifine-devel/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object external/gmock/CMakeFiles/gmock_main.dir/src/gmock_main.cc.o"
+	cd /home/longxing/devel/rifine-devel/build/external/gmock && /usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/gmock_main.dir/src/gmock_main.cc.o -c /home/longxing/devel/rifine-devel/external/gmock/src/gmock_main.cc
 
 external/gmock/CMakeFiles/gmock_main.dir/src/gmock_main.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/gmock_main.dir/src/gmock_main.cc.i"
-	cd /home/longxing/devel/rifine/build/external/gmock && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/longxing/devel/rifine/external/gmock/src/gmock_main.cc > CMakeFiles/gmock_main.dir/src/gmock_main.cc.i
+	cd /home/longxing/devel/rifine-devel/build/external/gmock && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/longxing/devel/rifine-devel/external/gmock/src/gmock_main.cc > CMakeFiles/gmock_main.dir/src/gmock_main.cc.i
 
 external/gmock/CMakeFiles/gmock_main.dir/src/gmock_main.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/gmock_main.dir/src/gmock_main.cc.s"
-	cd /home/longxing/devel/rifine/build/external/gmock && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/longxing/devel/rifine/external/gmock/src/gmock_main.cc -o CMakeFiles/gmock_main.dir/src/gmock_main.cc.s
+	cd /home/longxing/devel/rifine-devel/build/external/gmock && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/longxing/devel/rifine-devel/external/gmock/src/gmock_main.cc -o CMakeFiles/gmock_main.dir/src/gmock_main.cc.s
 
 external/gmock/CMakeFiles/gmock_main.dir/src/gmock_main.cc.o.requires:
 
@@ -143,9 +143,9 @@ external/gmock/libgmock_main.a: external/gmock/CMakeFiles/gmock_main.dir/src/gmo
 external/gmock/libgmock_main.a: external/gmock/CMakeFiles/gmock_main.dir/src/gmock_main.cc.o
 external/gmock/libgmock_main.a: external/gmock/CMakeFiles/gmock_main.dir/build.make
 external/gmock/libgmock_main.a: external/gmock/CMakeFiles/gmock_main.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/longxing/devel/rifine/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Linking CXX static library libgmock_main.a"
-	cd /home/longxing/devel/rifine/build/external/gmock && $(CMAKE_COMMAND) -P CMakeFiles/gmock_main.dir/cmake_clean_target.cmake
-	cd /home/longxing/devel/rifine/build/external/gmock && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/gmock_main.dir/link.txt --verbose=$(VERBOSE)
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/longxing/devel/rifine-devel/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Linking CXX static library libgmock_main.a"
+	cd /home/longxing/devel/rifine-devel/build/external/gmock && $(CMAKE_COMMAND) -P CMakeFiles/gmock_main.dir/cmake_clean_target.cmake
+	cd /home/longxing/devel/rifine-devel/build/external/gmock && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/gmock_main.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
 external/gmock/CMakeFiles/gmock_main.dir/build: external/gmock/libgmock_main.a
@@ -159,10 +159,10 @@ external/gmock/CMakeFiles/gmock_main.dir/requires: external/gmock/CMakeFiles/gmo
 .PHONY : external/gmock/CMakeFiles/gmock_main.dir/requires
 
 external/gmock/CMakeFiles/gmock_main.dir/clean:
-	cd /home/longxing/devel/rifine/build/external/gmock && $(CMAKE_COMMAND) -P CMakeFiles/gmock_main.dir/cmake_clean.cmake
+	cd /home/longxing/devel/rifine-devel/build/external/gmock && $(CMAKE_COMMAND) -P CMakeFiles/gmock_main.dir/cmake_clean.cmake
 .PHONY : external/gmock/CMakeFiles/gmock_main.dir/clean
 
 external/gmock/CMakeFiles/gmock_main.dir/depend:
-	cd /home/longxing/devel/rifine/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/longxing/devel/rifine /home/longxing/devel/rifine/external/gmock /home/longxing/devel/rifine/build /home/longxing/devel/rifine/build/external/gmock /home/longxing/devel/rifine/build/external/gmock/CMakeFiles/gmock_main.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/longxing/devel/rifine-devel/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/longxing/devel/rifine-devel /home/longxing/devel/rifine-devel/external/gmock /home/longxing/devel/rifine-devel/build /home/longxing/devel/rifine-devel/build/external/gmock /home/longxing/devel/rifine-devel/build/external/gmock/CMakeFiles/gmock_main.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : external/gmock/CMakeFiles/gmock_main.dir/depend
 
