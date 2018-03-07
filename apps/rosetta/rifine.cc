@@ -732,7 +732,7 @@ int main( int argc, char *argv[] )
                     }  else {
                         utility_exit_with_message( "-seeding_files list not same length as -scaffolds list" );
                     }
-                    runtime_assert_msg(parse_seeding_file(seeding_fname, seeding_positions), "Faild to parse the seeding file!!!");
+                    runtime_assert_msg(parse_seeding_file(seeding_fname, seeding_positions, opt.seeding_file_patchdock_format), "Faild to parse the seeding file!!!");
                     use_seeding = true;
                 }else {
                     use_seeding = false;
@@ -1143,7 +1143,7 @@ int main( int argc, char *argv[] )
                     std::vector<protocols::minimization_packing::MinMoverOP> minmover_pt( omp_max_threads() );
                     std::vector<core::scoring::ScoreFunctionOP> scorefunc_pt( omp_max_threads() );
                     std::vector<core::pose::Pose> work_pose_pt        ( omp_max_threads() );
-                    std::vector<core::pose::Pose> both_per_thread     (omp_max_threads());
+                    std::vector<core::pose::Pose> both_per_thread     ( omp_max_threads() );
                     for ( int i = 0; i < omp_max_threads(); ++i ) {
                         // both_full_per_thread[i] = both_full_pose;
                         if( opt.replace_orig_scaffold_res ){
@@ -1211,6 +1211,7 @@ int main( int argc, char *argv[] )
                             } else {
                                 total_score_min = num_to_min;
                             }
+                            
                             
                             out_interval = total_score_min / 109;
                             out_interval = out_interval > 0 ? out_interval : 1;
@@ -1378,7 +1379,7 @@ int main( int argc, char *argv[] )
                             }
                             
                             // store the results?
-                            if( (minimizing+1 == do_min)     && rifine_results[i_samp].score < opt.rosetta_score_cut ){
+                            if( (minimizing+1 == do_min)     && rifine_results[i_samp].score <= opt.rosetta_score_cut && !opt.only_dump_scaffold /*only dump scaffold*/ ){
                                 rifine_results[i_samp].pose_ = core::pose::PoseOP( new core::pose::Pose(pose_to_min) );
                                 for(int ir : rifres){
                                     rifine_results[i_samp].pose_->pdb_info()->add_reslabel(ir, "RIFRES" );
@@ -1386,6 +1387,16 @@ int main( int argc, char *argv[] )
                                 for(int ir : replaced_scaffold_res){
                                     rifine_results[i_samp].pose_->pdb_info()->add_reslabel(ir, "PRUNED" );
                                 }
+                            } else if ( (minimizing+2 == do_min) && opt.only_dump_scaffold ) {
+                                rifine_results[i_samp].pose_ = pose_to_min.split_by_chain(1);
+                                for(int ir : rifres){
+                                    rifine_results[i_samp].pose_->pdb_info()->add_reslabel(ir, "RIFRES" );
+                                }
+                                for(int ir : replaced_scaffold_res){
+                                    rifine_results[i_samp].pose_->pdb_info()->add_reslabel(ir, "PRUNED" );
+                                }
+                            } else {
+                                //
                             }
                             
                         } // end loop of each sample in each seeding position.
@@ -1406,8 +1417,10 @@ int main( int argc, char *argv[] )
             // there is no need to cluster the results ........
             {
                 print_header("compile and output results");
+                
+                
                 for (int64_t i_samp = 0; i_samp < rifine_results.size(); ++i_samp) {
-                    if ( i_samp > opt.n_pdb_out || rifine_results[i_samp].pose_ == nullptr ) {
+                    if ( i_samp > opt.n_pdb_out || rifine_results[i_samp].score > opt.rosetta_score_cut || rifine_results[i_samp].pose_ == nullptr ) {
                         break;
                     }
                     

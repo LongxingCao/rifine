@@ -123,7 +123,7 @@ add_pdbinfo_if_missing( core::pose::Pose & pose ) {
     
     
 
-bool parse_seeding_file(std::string fname, std::vector<devel::scheme::EigenXform> & seeding_positions)
+bool parse_seeding_file(std::string fname, std::vector<devel::scheme::EigenXform> & seeding_positions, bool seeding_file_patch)
 {
         
     // the seeding

@@ -170,11 +170,13 @@ OPT_1GRP_KEY(     StringVector , rif_dock, scaffolds )
     // constrain file
 	OPT_1GRP_KEY(  StringVector, rif_dock, cst_files )
 	OPT_1GRP_KEY(  StringVector, rif_dock, seeding_pos )
+	OPT_1GRP_KEY(  Boolean     , rif_dock, seeding_file_patchdock_format )
 	OPT_1GRP_KEY(  String      , rif_dock, xform_pos )
 	OPT_1GRP_KEY(  Boolean     , rif_dock, test_longxing )
     OPT_1GRP_KEY(  Integer     , rif_dock, rosetta_score_each_seeding_at_least )
     OPT_1GRP_KEY(  Real        , rif_dock, cluster_score_cut )
     OPT_1GRP_KEY(  Real        , rif_dock, keep_top_clusters_frac )
+	OPT_1GRP_KEY(  Boolean     , rif_dock, only_dump_scaffold )
 
 
 
@@ -343,11 +345,13 @@ OPT_1GRP_KEY(     StringVector , rif_dock, scaffolds )
 	        // constrain file names
 			NEW_OPT(  rif_dock::cst_files, "" , utility::vector1<std::string>() );
 			NEW_OPT(  rif_dock::seeding_pos, "" , utility::vector1<std::string>() );
+			NEW_OPT(  rif_dock::seeding_file_patchdock_format, "The format of seeding file can be either Rosetta Xform or raw patchdock outputs", true );
 			NEW_OPT(  rif_dock::xform_pos, "" , "" );
 			NEW_OPT(  rif_dock::test_longxing, "" , false );
             NEW_OPT(  rif_dock::rosetta_score_each_seeding_at_least, "", -1 );
             NEW_OPT(  rif_dock::cluster_score_cut, "", 0);
             NEW_OPT(  rif_dock::keep_top_clusters_frac, "", 0.5);
+			NEW_OPT(  rif_dock::only_dump_scaffold, "" , true );
 
 		}
 	#endif
@@ -505,6 +509,8 @@ struct RifDockOpt
     float       rosetta_score_each_seeding_at_least  ;
     float       cluster_score_cut                    ;
     float       keep_top_clusters_frac               ;
+    bool        only_dump_scaffold                   ;
+	bool        seeding_file_patchdock_format        ;
 
 
     void init_from_cli();
@@ -725,11 +731,13 @@ struct RifDockOpt
         // constrain file names
 		for( std::string s : option[rif_dock::cst_files                                                ]() )     cst_fnames.push_back(s);
 		for( std::string s : option[rif_dock::seeding_pos                                              ]() ) seeding_fnames.push_back(s);
+		seeding_file_patchdock_format           = option[rif_dock::seeding_file_patchdock_format       ]();
 		xform_fname                             = option[rif_dock::xform_pos                           ]();
         test_longxing                           = option[rif_dock::test_longxing                       ]();
         rosetta_score_each_seeding_at_least     = option[rif_dock::rosetta_score_each_seeding_at_least ]();
         cluster_score_cut                       = option[rif_dock::cluster_score_cut                   ]();
-        keep_top_clusters_frac                  = option[rif_dock::keep_top_clusters_frac               ]();
+        keep_top_clusters_frac                  = option[rif_dock::keep_top_clusters_frac              ]();
+		only_dump_scaffold                      = option[rif_dock::only_dump_scaffold                  ]();
 
 
 
