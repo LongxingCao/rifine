@@ -220,7 +220,8 @@ int main( int argc, char *argv[] )
     std::vector< std::vector< VoxelArrayPtr > > target_bounding_by_atype;
     {
         // target field by atype
-        target_bounding_by_atype.resize( RESLS.size() );
+        // there is no need to resize the vector here, as the loading function will resize the vector.
+        //target_bounding_by_atype.resize( RESLS.size() );
         devel::scheme::RosettaFieldOptions rfopts;
         rfopts.data_dir = "DUMMY_DATA_DIR_FIXME";
         rfopts.oversample = opt.target_rf_oversample;
@@ -239,7 +240,6 @@ int main( int argc, char *argv[] )
             target_field_by_atype,
             false
             );
-        
         // std::cout << "using target bounding grids, generating (or loading) them" << std::endl;
         if ( true ) {
             devel::scheme::RosettaFieldOptions rfopts;
@@ -250,17 +250,25 @@ int main( int argc, char *argv[] )
             rfopts.max_bounding_ratio = opt.max_rf_bounding_ratio;
             rfopts.fail_if_no_cached_data = true;
             rfopts.repulsive_only_boundary = true; // default
+
+            // actuall
+            std::vector< float > RESLS_fake(1, 0.5);
+            std::vector< std::vector< VoxelArrayPtr > > target_bounding_by_atype_fake;
             devel::scheme::get_rosetta_bounding_fields_from_fba(
-                RESLS,
+                RESLS_fake,
                 opt.target_pdb,
                 target,
                 target_res,
                 rfopts,
                 target_field_by_atype,
-                target_bounding_by_atype,
+                target_bounding_by_atype_fake,
                 false,
                 cache_prefix
             );
+
+            target_bounding_by_atype.resize( RESLS.size() );
+            target_bounding_by_atype.at( RESLS.size()-1 ) = target_bounding_by_atype.at(0);
+
             runtime_assert( target_bounding_by_atype.size() == RESLS.size() );
             // now scale down the any positive component by 1/RESL if RESL > 1
             if ( opt.downscale_atr_by_hierarchy ) {
@@ -313,7 +321,13 @@ int main( int argc, char *argv[] )
                 std::string const & rif_file = opt.rif_files[i_readmap];
                 std::string & rif_decr = rif_descriptions[i_readmap];
                 shared_ptr<RifBase> & rif_ptr = rif_ptrs[i_readmap];
-                rif_ptr = rif_factory->create_rif_from_file( rif_file, rif_decr );
+                // ideas from Brian, just pass a nullptr
+                if ( i_readmap == opt.rif_files.size() - 1 ){
+                    rif_ptr = rif_factory->create_rif_from_file( rif_file, rif_decr );
+                } else {
+                    continue;
+                }
+                // hack the normal loading process
                 runtime_assert_msg( rif_ptrs[i_readmap] , "rif creation from file failed! " + rif_file );
                 if( opt.VERBOSE ){
                     #ifdef USE_OPENMP
@@ -720,6 +734,7 @@ int main( int argc, char *argv[] )
             conformation_full_mutable->cache_data_ = cache_full;
             
             
+
             // parse the seeding files.
             std::string seeding_fname = "";
             shared_ptr<std::vector<EigenXform> > seeding_positions_p = make_shared<std::vector<EigenXform> >();
@@ -732,13 +747,17 @@ int main( int argc, char *argv[] )
                     }  else {
                         utility_exit_with_message( "-seeding_files list not same length as -scaffolds list" );
                     }
-                    runtime_assert_msg(parse_seeding_file(seeding_fname, seeding_positions, opt.seeding_file_patchdock_format), "Faild to parse the seeding file!!!");
+                    runtime_assert_msg(parse_seeding_file(seeding_fname, seeding_positions, opt.seeding_by_patchdock), "Faild to parse the seeding file!!!");
+                    
+                    EigenXform x(EigenXform::Identity());
+                    x.translation() = scaffold_center;
+                    for( auto & t : seeding_positions ) t = t * x;
+
                     use_seeding = true;
                 }else {
                     use_seeding = false;
                 }
             }
-            
             
             // scores for the initial positions.
             if ( opt.test_longxing )
@@ -786,15 +805,33 @@ int main( int argc, char *argv[] )
                 // I think this fit perfect with the rif resolution.
                 //double resl0 = 1;
                 // It should be 1 to match the hight resolution rif, and I set it to 2 to test.
-                double resl0 = 1;
-                
+
+                /*
+                // the old code here
+                F3 target_center = pose_center( target );
                 float const body_radius = std::min( scaff_radius, rif_radius );
-                double const cart_grid = resl0*opt.hsearch_scale_factor/sqrt(3); // 1.5 is a big hack here.... 2 would be more "correct"
-                double const hackysin = std::min( 1.0, resl0*opt.hsearch_scale_factor/2.0/ body_radius );
+                double const cart_grid = opt.resl0*opt.hsearch_scale_factor/sqrt(3); 
+                double const hacksin = std::min( 1.0, opt.resl0*hsearch_scale_factor/2.0/body_radius );
+                runtime_assert( hackysin > 0.0 );
+                double const rot_resl_deg0 = asin( hacksin ) * 180.0 / M_PI;
+                int nside = std::ceil( opt.search_diameter / cart_grid );
+                */
+
+
+
+                // I don't want to do this, but it seem currently the best way is to hardcode the  bodie radius.
+                // I think 15 is a reasonable number.'
+                double const resl0 = 1;
+                double const hsearch_scale_factor = 1.2;
+                double const body_radius = 15.0;
+                double const search_diameter = 4.0;
+
+                double const cart_grid = resl0*hsearch_scale_factor/sqrt(3); // 1.5 is a big hack here.... 2 would be more "correct"
+                double const hackysin = std::min( 1.0, resl0*hsearch_scale_factor/2.0/ body_radius );
                 runtime_assert( hackysin > 0.0 );
                 double const rot_resl_deg0 = asin( hackysin ) * 180.0 / M_PI;
-                int nside = std::ceil( opt.search_diameter / cart_grid );
-                std::cout << "search dia.    : " << opt.search_diameter << std::endl;
+                int nside = std::ceil( search_diameter / cart_grid );
+                std::cout << "search dia.    : " << search_diameter << std::endl;
                 std::cout << "nside          : " << nside        << std::endl;
                 std::cout << "resl0:           " << resl0 << std::endl;
                 std::cout << "body_radius:     " << body_radius << std::endl;
@@ -825,11 +862,43 @@ int main( int argc, char *argv[] )
                 n_director = nest_director;
                 
             }
+
+            // dump the transforms 
+            if ( false )
+            {
+                //  dump all the transforms to .....
+                utility::io::ozstream xform_pos( "xform_pos_ang_all.x" );
+
+
+                RifDockIndex rdi;
+                int64_t nest_size = n_director->size(0, RifDockIndex()).nest_index;
+                for (int i = 0; i < nest_size; ++i) {
+                    rdi.seeding_index = 1;
+                    rdi.nest_index = i;
+
+                
+                    bool director_success = n_director->set_scene( rdi, 0, *scene_minimal );
+                
+                    if ( director_success ) {
+                        EigenXform p = scene_minimal->position(1);
+                        double ang = Eigen::AngleAxisf( p.rotation() ).angle();
+                        xform_pos << "SP" << " " << i << " " << ang << " "
+                                  << p.linear().row(0) << " " << p.linear().row(1)<< " " << p.linear().row(2) << " "
+                                  << p.translation().x() << " " << p.translation().y() << " " << p.translation().z() << std::endl;
+                    }
+                }
+
+                xform_pos.close();
+
+                return 0;
+            }
             
+
+
             // parse and read in the exhausitive searching positions.
             std::vector< std::pair< int64_t, EigenXform > > xform_positions;
             {
-                runtime_assert_msg(parse_exhausitive_searching_file(opt.xform_fname, xform_positions, 10), "Faild to parse the xform file!!!");
+                runtime_assert_msg(parse_exhausitive_searching_file(opt.xform_fname, xform_positions /*, 10*/), "Faild to parse the xform file!!!");
             }
             
             // nowo I have ererything (seeding positions and exhausitive searching positions ), I can just do the calcusition without the director!!
