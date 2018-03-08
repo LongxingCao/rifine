@@ -252,22 +252,17 @@ int main( int argc, char *argv[] )
             rfopts.repulsive_only_boundary = true; // default
 
             // actuall
-            std::vector< float > RESLS_fake(1, 0.5);
-            std::vector< std::vector< VoxelArrayPtr > > target_bounding_by_atype_fake;
             devel::scheme::get_rosetta_bounding_fields_from_fba(
-                RESLS_fake,
+                RESLS,
                 opt.target_pdb,
                 target,
                 target_res,
                 rfopts,
                 target_field_by_atype,
-                target_bounding_by_atype_fake,
+                target_bounding_by_atype,
                 false,
                 cache_prefix
             );
-
-            target_bounding_by_atype.resize( RESLS.size() );
-            target_bounding_by_atype.at( RESLS.size()-1 ) = target_bounding_by_atype.at(0);
 
             runtime_assert( target_bounding_by_atype.size() == RESLS.size() );
             // now scale down the any positive component by 1/RESL if RESL > 1
@@ -322,11 +317,7 @@ int main( int argc, char *argv[] )
                 std::string & rif_decr = rif_descriptions[i_readmap];
                 shared_ptr<RifBase> & rif_ptr = rif_ptrs[i_readmap];
                 // ideas from Brian, just pass a nullptr
-                if ( i_readmap == opt.rif_files.size() - 1 ){
-                    rif_ptr = rif_factory->create_rif_from_file( rif_file, rif_decr );
-                } else {
-                    continue;
-                }
+                rif_ptr = rif_factory->create_rif_from_file( rif_file, rif_decr );
                 // hack the normal loading process
                 runtime_assert_msg( rif_ptrs[i_readmap] , "rif creation from file failed! " + rif_file );
                 if( opt.VERBOSE ){
