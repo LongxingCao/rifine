@@ -4,7 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/longxing/devel/rifine-devel/apps/rosetta/rif_dock_test.cc" "/home/longxing/devel/rifine-devel/build/apps/rosetta/CMakeFiles/rif_dock_test.dir/rif_dock_test.cc.o"
+  "/home/longxing/rosetta_gitclone/rifine/apps/rosetta/rif_dock_test.cc" "/home/longxing/rosetta_gitclone/rifine/build/apps/rosetta/CMakeFiles/rif_dock_test.dir/rif_dock_test.cc.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 
@@ -21,17 +21,17 @@ set(CMAKE_CXX_TARGET_INCLUDE_PATH
   "../external/include"
   "../schemelib"
   "/usr/local/include"
-  "/home/longxing/rosetta-master/source/src"
-  "/home/longxing/rosetta-master/source/external/include"
-  "/home/longxing/rosetta-master/source/external/dbio"
-  "/home/longxing/rosetta-master/source/external/boost_1_55_0"
-  "/home/longxing/rosetta-master/source/src/platform/linux"
+  "/software/rosetta-master/source/src"
+  "/software/rosetta-master/source/external/include"
+  "/software/rosetta-master/source/external/dbio"
+  "/software/rosetta-master/source/external/boost_1_55_0"
+  "/software/rosetta-master/source/src/platform/linux"
   "../apps/rosetta/."
   )
 
 # Targets to which this target links.
 set(CMAKE_TARGET_LINKED_INFO_FILES
-  "/home/longxing/devel/rifine-devel/build/apps/rosetta/riflib/CMakeFiles/riflib.dir/DependInfo.cmake"
+  "/home/longxing/rosetta_gitclone/rifine/build/apps/rosetta/riflib/CMakeFiles/riflib.dir/DependInfo.cmake"
   )
 
 # Fortran module output directory.

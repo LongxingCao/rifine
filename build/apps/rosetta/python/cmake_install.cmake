@@ -1,4 +1,4 @@
-# Install script for directory: /home/longxing/devel/rifine-devel/apps/rosetta/python
+# Install script for directory: /home/longxing/rosetta_gitclone/rifine/apps/rosetta/python
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -29,17 +29,22 @@ endif()
 
 # Install shared libraries without execute permission?
 if(NOT DEFINED CMAKE_INSTALL_SO_NO_EXE)
-  set(CMAKE_INSTALL_SO_NO_EXE "1")
+  set(CMAKE_INSTALL_SO_NO_EXE "0")
 endif()
 
-if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/python3/pysetta" TYPE DIRECTORY FILES "/home/longxing/devel/rifine-devel/apps/rosetta/python/pysetta/" FILES_MATCHING REGEX "/[^/]*\\.py$")
+# Is this installation the result of a crosscompile?
+if(NOT DEFINED CMAKE_CROSSCOMPILING)
+  set(CMAKE_CROSSCOMPILING "FALSE")
+endif()
+
+if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/python3/pysetta" TYPE DIRECTORY FILES "/home/longxing/rosetta_gitclone/rifine/apps/rosetta/python/pysetta/" FILES_MATCHING REGEX "/[^/]*\\.py$")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  include("/home/longxing/devel/rifine-devel/build/apps/rosetta/python/pysetta/cmake_install.cmake")
-  include("/home/longxing/devel/rifine-devel/build/apps/rosetta/python/test/cmake_install.cmake")
+  include("/home/longxing/rosetta_gitclone/rifine/build/apps/rosetta/python/pysetta/cmake_install.cmake")
+  include("/home/longxing/rosetta_gitclone/rifine/build/apps/rosetta/python/test/cmake_install.cmake")
 
 endif()
 

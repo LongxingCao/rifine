@@ -4,9 +4,9 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/longxing/devel/rifine-devel/schemelib/scheme/chemical/ligand_factory.lib.cc" "/home/longxing/devel/rifine-devel/build/schemelib/test/CMakeFiles/scheme.dir/__/scheme/chemical/ligand_factory.lib.cc.o"
-  "/home/longxing/devel/rifine-devel/schemelib/scheme/rosetta/atype_map.lib.cc" "/home/longxing/devel/rifine-devel/build/schemelib/test/CMakeFiles/scheme.dir/__/scheme/rosetta/atype_map.lib.cc.o"
-  "/home/longxing/devel/rifine-devel/schemelib/scheme/rosetta/score/EtableParams_init.lib.cc" "/home/longxing/devel/rifine-devel/build/schemelib/test/CMakeFiles/scheme.dir/__/scheme/rosetta/score/EtableParams_init.lib.cc.o"
+  "/home/longxing/rosetta_gitclone/rifine/schemelib/scheme/chemical/ligand_factory.lib.cc" "/home/longxing/rosetta_gitclone/rifine/build/schemelib/test/CMakeFiles/scheme.dir/__/scheme/chemical/ligand_factory.lib.cc.o"
+  "/home/longxing/rosetta_gitclone/rifine/schemelib/scheme/rosetta/atype_map.lib.cc" "/home/longxing/rosetta_gitclone/rifine/build/schemelib/test/CMakeFiles/scheme.dir/__/scheme/rosetta/atype_map.lib.cc.o"
+  "/home/longxing/rosetta_gitclone/rifine/schemelib/scheme/rosetta/score/EtableParams_init.lib.cc" "/home/longxing/rosetta_gitclone/rifine/build/schemelib/test/CMakeFiles/scheme.dir/__/scheme/rosetta/score/EtableParams_init.lib.cc.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 
