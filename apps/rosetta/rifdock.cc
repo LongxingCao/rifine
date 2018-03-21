@@ -286,7 +286,7 @@ int main(int argc, char *argv[]) {
 
 		MakeTwobodyOpts make2bopts;
 		// hacked by brian             VVVV
-		make2bopts.onebody_threshold = 30.0;
+		make2bopts.onebody_threshold = 4.0;
 		make2bopts.distance_cut = 15.0;
 		make2bopts.hbond_weight = packopts.hbond_weight;
 		make2bopts.favorable_2body_multiplier = opt.favorable_2body_multiplier;
