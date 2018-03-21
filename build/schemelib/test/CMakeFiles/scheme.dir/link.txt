@@ -1,2 +1,0 @@
-/usr/bin/ar qc libscheme.a  CMakeFiles/scheme.dir/__/scheme/rosetta/score/EtableParams_init.lib.cc.o CMakeFiles/scheme.dir/__/scheme/rosetta/atype_map.lib.cc.o CMakeFiles/scheme.dir/__/scheme/chemical/ligand_factory.lib.cc.o
-/usr/bin/ranlib libscheme.a

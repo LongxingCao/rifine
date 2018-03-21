@@ -1,1 +1,0 @@
-/usr/local/bin/g++   -std=c++11 -w -fno-omit-frame-pointer -Wall -Wextra -Werror -O3 -DNDEBUG  -rdynamic CMakeFiles/quick_test_libscheme.dir/quick_test.cc.o  -o quick_test_libscheme libscheme.a ../../external/gmock/libgmock.a -lboost_system -lpthread 
