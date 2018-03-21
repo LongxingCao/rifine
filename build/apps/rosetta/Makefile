@@ -172,19 +172,19 @@ test_librosetta/fast:
 .PHONY : test_librosetta/fast
 
 # Convenience name for target.
-apps/rosetta/CMakeFiles/rifgen.dir/rule:
-	cd /home/longxing/rosetta_gitclone/rifine/build && $(MAKE) -f CMakeFiles/Makefile2 apps/rosetta/CMakeFiles/rifgen.dir/rule
-.PHONY : apps/rosetta/CMakeFiles/rifgen.dir/rule
+apps/rosetta/CMakeFiles/rifine.dir/rule:
+	cd /home/longxing/rosetta_gitclone/rifine/build && $(MAKE) -f CMakeFiles/Makefile2 apps/rosetta/CMakeFiles/rifine.dir/rule
+.PHONY : apps/rosetta/CMakeFiles/rifine.dir/rule
 
 # Convenience name for target.
-rifgen: apps/rosetta/CMakeFiles/rifgen.dir/rule
+rifine: apps/rosetta/CMakeFiles/rifine.dir/rule
 
-.PHONY : rifgen
+.PHONY : rifine
 
 # fast build rule for target.
-rifgen/fast:
-	cd /home/longxing/rosetta_gitclone/rifine/build && $(MAKE) -f apps/rosetta/CMakeFiles/rifgen.dir/build.make apps/rosetta/CMakeFiles/rifgen.dir/build
-.PHONY : rifgen/fast
+rifine/fast:
+	cd /home/longxing/rosetta_gitclone/rifine/build && $(MAKE) -f apps/rosetta/CMakeFiles/rifine.dir/build.make apps/rosetta/CMakeFiles/rifine.dir/build
+.PHONY : rifine/fast
 
 # Convenience name for target.
 apps/rosetta/CMakeFiles/scheme_make_bounding_grids.dir/rule:
@@ -202,34 +202,34 @@ scheme_make_bounding_grids/fast:
 .PHONY : scheme_make_bounding_grids/fast
 
 # Convenience name for target.
-apps/rosetta/CMakeFiles/rifine.dir/rule:
-	cd /home/longxing/rosetta_gitclone/rifine/build && $(MAKE) -f CMakeFiles/Makefile2 apps/rosetta/CMakeFiles/rifine.dir/rule
-.PHONY : apps/rosetta/CMakeFiles/rifine.dir/rule
+apps/rosetta/CMakeFiles/rifgen.dir/rule:
+	cd /home/longxing/rosetta_gitclone/rifine/build && $(MAKE) -f CMakeFiles/Makefile2 apps/rosetta/CMakeFiles/rifgen.dir/rule
+.PHONY : apps/rosetta/CMakeFiles/rifgen.dir/rule
 
 # Convenience name for target.
-rifine: apps/rosetta/CMakeFiles/rifine.dir/rule
+rifgen: apps/rosetta/CMakeFiles/rifgen.dir/rule
 
-.PHONY : rifine
+.PHONY : rifgen
 
 # fast build rule for target.
-rifine/fast:
-	cd /home/longxing/rosetta_gitclone/rifine/build && $(MAKE) -f apps/rosetta/CMakeFiles/rifine.dir/build.make apps/rosetta/CMakeFiles/rifine.dir/build
-.PHONY : rifine/fast
+rifgen/fast:
+	cd /home/longxing/rosetta_gitclone/rifine/build && $(MAKE) -f apps/rosetta/CMakeFiles/rifgen.dir/build.make apps/rosetta/CMakeFiles/rifgen.dir/build
+.PHONY : rifgen/fast
 
 # Convenience name for target.
-apps/rosetta/CMakeFiles/rif_dock_test.dir/rule:
-	cd /home/longxing/rosetta_gitclone/rifine/build && $(MAKE) -f CMakeFiles/Makefile2 apps/rosetta/CMakeFiles/rif_dock_test.dir/rule
-.PHONY : apps/rosetta/CMakeFiles/rif_dock_test.dir/rule
+apps/rosetta/CMakeFiles/rifdock.dir/rule:
+	cd /home/longxing/rosetta_gitclone/rifine/build && $(MAKE) -f CMakeFiles/Makefile2 apps/rosetta/CMakeFiles/rifdock.dir/rule
+.PHONY : apps/rosetta/CMakeFiles/rifdock.dir/rule
 
 # Convenience name for target.
-rif_dock_test: apps/rosetta/CMakeFiles/rif_dock_test.dir/rule
+rifdock: apps/rosetta/CMakeFiles/rifdock.dir/rule
 
-.PHONY : rif_dock_test
+.PHONY : rifdock
 
 # fast build rule for target.
-rif_dock_test/fast:
-	cd /home/longxing/rosetta_gitclone/rifine/build && $(MAKE) -f apps/rosetta/CMakeFiles/rif_dock_test.dir/build.make apps/rosetta/CMakeFiles/rif_dock_test.dir/build
-.PHONY : rif_dock_test/fast
+rifdock/fast:
+	cd /home/longxing/rosetta_gitclone/rifine/build && $(MAKE) -f apps/rosetta/CMakeFiles/rifdock.dir/build.make apps/rosetta/CMakeFiles/rifdock.dir/build
+.PHONY : rifdock/fast
 
 # Convenience name for target.
 apps/rosetta/CMakeFiles/prepare_scaff.dir/rule:
@@ -315,32 +315,32 @@ prepare_scaff.cc.s:
 	cd /home/longxing/rosetta_gitclone/rifine/build && $(MAKE) -f apps/rosetta/CMakeFiles/prepare_scaff.dir/build.make apps/rosetta/CMakeFiles/prepare_scaff.dir/prepare_scaff.cc.s
 .PHONY : prepare_scaff.cc.s
 
-rif_dock_test.o: rif_dock_test.cc.o
+rifdock.o: rifdock.cc.o
 
-.PHONY : rif_dock_test.o
+.PHONY : rifdock.o
 
 # target to build an object file
-rif_dock_test.cc.o:
-	cd /home/longxing/rosetta_gitclone/rifine/build && $(MAKE) -f apps/rosetta/CMakeFiles/rif_dock_test.dir/build.make apps/rosetta/CMakeFiles/rif_dock_test.dir/rif_dock_test.cc.o
-.PHONY : rif_dock_test.cc.o
+rifdock.cc.o:
+	cd /home/longxing/rosetta_gitclone/rifine/build && $(MAKE) -f apps/rosetta/CMakeFiles/rifdock.dir/build.make apps/rosetta/CMakeFiles/rifdock.dir/rifdock.cc.o
+.PHONY : rifdock.cc.o
 
-rif_dock_test.i: rif_dock_test.cc.i
+rifdock.i: rifdock.cc.i
 
-.PHONY : rif_dock_test.i
+.PHONY : rifdock.i
 
 # target to preprocess a source file
-rif_dock_test.cc.i:
-	cd /home/longxing/rosetta_gitclone/rifine/build && $(MAKE) -f apps/rosetta/CMakeFiles/rif_dock_test.dir/build.make apps/rosetta/CMakeFiles/rif_dock_test.dir/rif_dock_test.cc.i
-.PHONY : rif_dock_test.cc.i
+rifdock.cc.i:
+	cd /home/longxing/rosetta_gitclone/rifine/build && $(MAKE) -f apps/rosetta/CMakeFiles/rifdock.dir/build.make apps/rosetta/CMakeFiles/rifdock.dir/rifdock.cc.i
+.PHONY : rifdock.cc.i
 
-rif_dock_test.s: rif_dock_test.cc.s
+rifdock.s: rifdock.cc.s
 
-.PHONY : rif_dock_test.s
+.PHONY : rifdock.s
 
 # target to generate assembly for a file
-rif_dock_test.cc.s:
-	cd /home/longxing/rosetta_gitclone/rifine/build && $(MAKE) -f apps/rosetta/CMakeFiles/rif_dock_test.dir/build.make apps/rosetta/CMakeFiles/rif_dock_test.dir/rif_dock_test.cc.s
-.PHONY : rif_dock_test.cc.s
+rifdock.cc.s:
+	cd /home/longxing/rosetta_gitclone/rifine/build && $(MAKE) -f apps/rosetta/CMakeFiles/rifdock.dir/build.make apps/rosetta/CMakeFiles/rifdock.dir/rifdock.cc.s
+.PHONY : rifdock.cc.s
 
 rifgen.o: rifgen.cc.o
 
@@ -459,10 +459,10 @@ help:
 	@echo "... install/local"
 	@echo "... install"
 	@echo "... test_librosetta"
-	@echo "... rifgen"
-	@echo "... scheme_make_bounding_grids"
 	@echo "... rifine"
-	@echo "... rif_dock_test"
+	@echo "... scheme_make_bounding_grids"
+	@echo "... rifgen"
+	@echo "... rifdock"
 	@echo "... edit_cache"
 	@echo "... prepare_scaff"
 	@echo "... debug_longxing"
@@ -475,9 +475,9 @@ help:
 	@echo "... prepare_scaff.o"
 	@echo "... prepare_scaff.i"
 	@echo "... prepare_scaff.s"
-	@echo "... rif_dock_test.o"
-	@echo "... rif_dock_test.i"
-	@echo "... rif_dock_test.s"
+	@echo "... rifdock.o"
+	@echo "... rifdock.i"
+	@echo "... rifdock.s"
 	@echo "... rifgen.o"
 	@echo "... rifgen.i"
 	@echo "... rifgen.s"

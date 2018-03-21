@@ -60,15 +60,15 @@ include apps/rosetta/CMakeFiles/rifine.dir/flags.make
 apps/rosetta/CMakeFiles/rifine.dir/rifine.cc.o: apps/rosetta/CMakeFiles/rifine.dir/flags.make
 apps/rosetta/CMakeFiles/rifine.dir/rifine.cc.o: ../apps/rosetta/rifine.cc
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/longxing/rosetta_gitclone/rifine/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object apps/rosetta/CMakeFiles/rifine.dir/rifine.cc.o"
-	cd /home/longxing/rosetta_gitclone/rifine/build/apps/rosetta && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/rifine.dir/rifine.cc.o -c /home/longxing/rosetta_gitclone/rifine/apps/rosetta/rifine.cc
+	cd /home/longxing/rosetta_gitclone/rifine/build/apps/rosetta && /usr/local/bin/g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/rifine.dir/rifine.cc.o -c /home/longxing/rosetta_gitclone/rifine/apps/rosetta/rifine.cc
 
 apps/rosetta/CMakeFiles/rifine.dir/rifine.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/rifine.dir/rifine.cc.i"
-	cd /home/longxing/rosetta_gitclone/rifine/build/apps/rosetta && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/longxing/rosetta_gitclone/rifine/apps/rosetta/rifine.cc > CMakeFiles/rifine.dir/rifine.cc.i
+	cd /home/longxing/rosetta_gitclone/rifine/build/apps/rosetta && /usr/local/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/longxing/rosetta_gitclone/rifine/apps/rosetta/rifine.cc > CMakeFiles/rifine.dir/rifine.cc.i
 
 apps/rosetta/CMakeFiles/rifine.dir/rifine.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/rifine.dir/rifine.cc.s"
-	cd /home/longxing/rosetta_gitclone/rifine/build/apps/rosetta && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/longxing/rosetta_gitclone/rifine/apps/rosetta/rifine.cc -o CMakeFiles/rifine.dir/rifine.cc.s
+	cd /home/longxing/rosetta_gitclone/rifine/build/apps/rosetta && /usr/local/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/longxing/rosetta_gitclone/rifine/apps/rosetta/rifine.cc -o CMakeFiles/rifine.dir/rifine.cc.s
 
 apps/rosetta/CMakeFiles/rifine.dir/rifine.cc.o.requires:
 

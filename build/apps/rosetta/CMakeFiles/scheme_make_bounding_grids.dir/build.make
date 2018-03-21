@@ -60,15 +60,15 @@ include apps/rosetta/CMakeFiles/scheme_make_bounding_grids.dir/flags.make
 apps/rosetta/CMakeFiles/scheme_make_bounding_grids.dir/scheme_make_bounding_grids.cc.o: apps/rosetta/CMakeFiles/scheme_make_bounding_grids.dir/flags.make
 apps/rosetta/CMakeFiles/scheme_make_bounding_grids.dir/scheme_make_bounding_grids.cc.o: ../apps/rosetta/scheme_make_bounding_grids.cc
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/longxing/rosetta_gitclone/rifine/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object apps/rosetta/CMakeFiles/scheme_make_bounding_grids.dir/scheme_make_bounding_grids.cc.o"
-	cd /home/longxing/rosetta_gitclone/rifine/build/apps/rosetta && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/scheme_make_bounding_grids.dir/scheme_make_bounding_grids.cc.o -c /home/longxing/rosetta_gitclone/rifine/apps/rosetta/scheme_make_bounding_grids.cc
+	cd /home/longxing/rosetta_gitclone/rifine/build/apps/rosetta && /usr/local/bin/g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/scheme_make_bounding_grids.dir/scheme_make_bounding_grids.cc.o -c /home/longxing/rosetta_gitclone/rifine/apps/rosetta/scheme_make_bounding_grids.cc
 
 apps/rosetta/CMakeFiles/scheme_make_bounding_grids.dir/scheme_make_bounding_grids.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/scheme_make_bounding_grids.dir/scheme_make_bounding_grids.cc.i"
-	cd /home/longxing/rosetta_gitclone/rifine/build/apps/rosetta && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/longxing/rosetta_gitclone/rifine/apps/rosetta/scheme_make_bounding_grids.cc > CMakeFiles/scheme_make_bounding_grids.dir/scheme_make_bounding_grids.cc.i
+	cd /home/longxing/rosetta_gitclone/rifine/build/apps/rosetta && /usr/local/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/longxing/rosetta_gitclone/rifine/apps/rosetta/scheme_make_bounding_grids.cc > CMakeFiles/scheme_make_bounding_grids.dir/scheme_make_bounding_grids.cc.i
 
 apps/rosetta/CMakeFiles/scheme_make_bounding_grids.dir/scheme_make_bounding_grids.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/scheme_make_bounding_grids.dir/scheme_make_bounding_grids.cc.s"
-	cd /home/longxing/rosetta_gitclone/rifine/build/apps/rosetta && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/longxing/rosetta_gitclone/rifine/apps/rosetta/scheme_make_bounding_grids.cc -o CMakeFiles/scheme_make_bounding_grids.dir/scheme_make_bounding_grids.cc.s
+	cd /home/longxing/rosetta_gitclone/rifine/build/apps/rosetta && /usr/local/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/longxing/rosetta_gitclone/rifine/apps/rosetta/scheme_make_bounding_grids.cc -o CMakeFiles/scheme_make_bounding_grids.dir/scheme_make_bounding_grids.cc.s
 
 apps/rosetta/CMakeFiles/scheme_make_bounding_grids.dir/scheme_make_bounding_grids.cc.o.requires:
 

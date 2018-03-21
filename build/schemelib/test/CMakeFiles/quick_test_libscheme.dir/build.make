@@ -60,15 +60,15 @@ include schemelib/test/CMakeFiles/quick_test_libscheme.dir/flags.make
 schemelib/test/CMakeFiles/quick_test_libscheme.dir/quick_test.cc.o: schemelib/test/CMakeFiles/quick_test_libscheme.dir/flags.make
 schemelib/test/CMakeFiles/quick_test_libscheme.dir/quick_test.cc.o: ../schemelib/test/quick_test.cc
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/longxing/rosetta_gitclone/rifine/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object schemelib/test/CMakeFiles/quick_test_libscheme.dir/quick_test.cc.o"
-	cd /home/longxing/rosetta_gitclone/rifine/build/schemelib/test && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/quick_test_libscheme.dir/quick_test.cc.o -c /home/longxing/rosetta_gitclone/rifine/schemelib/test/quick_test.cc
+	cd /home/longxing/rosetta_gitclone/rifine/build/schemelib/test && /usr/local/bin/g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/quick_test_libscheme.dir/quick_test.cc.o -c /home/longxing/rosetta_gitclone/rifine/schemelib/test/quick_test.cc
 
 schemelib/test/CMakeFiles/quick_test_libscheme.dir/quick_test.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/quick_test_libscheme.dir/quick_test.cc.i"
-	cd /home/longxing/rosetta_gitclone/rifine/build/schemelib/test && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/longxing/rosetta_gitclone/rifine/schemelib/test/quick_test.cc > CMakeFiles/quick_test_libscheme.dir/quick_test.cc.i
+	cd /home/longxing/rosetta_gitclone/rifine/build/schemelib/test && /usr/local/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/longxing/rosetta_gitclone/rifine/schemelib/test/quick_test.cc > CMakeFiles/quick_test_libscheme.dir/quick_test.cc.i
 
 schemelib/test/CMakeFiles/quick_test_libscheme.dir/quick_test.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/quick_test_libscheme.dir/quick_test.cc.s"
-	cd /home/longxing/rosetta_gitclone/rifine/build/schemelib/test && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/longxing/rosetta_gitclone/rifine/schemelib/test/quick_test.cc -o CMakeFiles/quick_test_libscheme.dir/quick_test.cc.s
+	cd /home/longxing/rosetta_gitclone/rifine/build/schemelib/test && /usr/local/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/longxing/rosetta_gitclone/rifine/schemelib/test/quick_test.cc -o CMakeFiles/quick_test_libscheme.dir/quick_test.cc.s
 
 schemelib/test/CMakeFiles/quick_test_libscheme.dir/quick_test.cc.o.requires:
 

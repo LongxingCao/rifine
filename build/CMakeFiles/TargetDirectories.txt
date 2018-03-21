@@ -44,10 +44,10 @@
 /home/longxing/rosetta_gitclone/rifine/build/apps/rosetta/CMakeFiles/install/local.dir
 /home/longxing/rosetta_gitclone/rifine/build/apps/rosetta/CMakeFiles/install.dir
 /home/longxing/rosetta_gitclone/rifine/build/apps/rosetta/CMakeFiles/test_librosetta.dir
-/home/longxing/rosetta_gitclone/rifine/build/apps/rosetta/CMakeFiles/rifgen.dir
-/home/longxing/rosetta_gitclone/rifine/build/apps/rosetta/CMakeFiles/scheme_make_bounding_grids.dir
 /home/longxing/rosetta_gitclone/rifine/build/apps/rosetta/CMakeFiles/rifine.dir
-/home/longxing/rosetta_gitclone/rifine/build/apps/rosetta/CMakeFiles/rif_dock_test.dir
+/home/longxing/rosetta_gitclone/rifine/build/apps/rosetta/CMakeFiles/scheme_make_bounding_grids.dir
+/home/longxing/rosetta_gitclone/rifine/build/apps/rosetta/CMakeFiles/rifgen.dir
+/home/longxing/rosetta_gitclone/rifine/build/apps/rosetta/CMakeFiles/rifdock.dir
 /home/longxing/rosetta_gitclone/rifine/build/apps/rosetta/CMakeFiles/edit_cache.dir
 /home/longxing/rosetta_gitclone/rifine/build/apps/rosetta/CMakeFiles/prepare_scaff.dir
 /home/longxing/rosetta_gitclone/rifine/build/apps/rosetta/CMakeFiles/debug_longxing.dir

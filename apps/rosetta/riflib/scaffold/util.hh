@@ -12,7 +12,7 @@
 
 #include <riflib/types.hh>
 #include <riflib/rifdock_typedefs.hh>
-#include <rif_dock_test.hh>
+#include <rifdock.hh>
 #include <riflib/HSearchConstraints.hh>
 #include <riflib/scaffold/morph_util.hh>
 

@@ -261,17 +261,17 @@ test_librosetta/fast:
 .PHONY : test_librosetta/fast
 
 #=============================================================================
-# Target rules for targets named rifgen
+# Target rules for targets named rifine
 
 # Build rule for target.
-rifgen: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 rifgen
-.PHONY : rifgen
+rifine: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 rifine
+.PHONY : rifine
 
 # fast build rule for target.
-rifgen/fast:
-	$(MAKE) -f apps/rosetta/CMakeFiles/rifgen.dir/build.make apps/rosetta/CMakeFiles/rifgen.dir/build
-.PHONY : rifgen/fast
+rifine/fast:
+	$(MAKE) -f apps/rosetta/CMakeFiles/rifine.dir/build.make apps/rosetta/CMakeFiles/rifine.dir/build
+.PHONY : rifine/fast
 
 #=============================================================================
 # Target rules for targets named scheme_make_bounding_grids
@@ -287,30 +287,30 @@ scheme_make_bounding_grids/fast:
 .PHONY : scheme_make_bounding_grids/fast
 
 #=============================================================================
-# Target rules for targets named rifine
+# Target rules for targets named rifgen
 
 # Build rule for target.
-rifine: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 rifine
-.PHONY : rifine
+rifgen: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 rifgen
+.PHONY : rifgen
 
 # fast build rule for target.
-rifine/fast:
-	$(MAKE) -f apps/rosetta/CMakeFiles/rifine.dir/build.make apps/rosetta/CMakeFiles/rifine.dir/build
-.PHONY : rifine/fast
+rifgen/fast:
+	$(MAKE) -f apps/rosetta/CMakeFiles/rifgen.dir/build.make apps/rosetta/CMakeFiles/rifgen.dir/build
+.PHONY : rifgen/fast
 
 #=============================================================================
-# Target rules for targets named rif_dock_test
+# Target rules for targets named rifdock
 
 # Build rule for target.
-rif_dock_test: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 rif_dock_test
-.PHONY : rif_dock_test
+rifdock: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 rifdock
+.PHONY : rifdock
 
 # fast build rule for target.
-rif_dock_test/fast:
-	$(MAKE) -f apps/rosetta/CMakeFiles/rif_dock_test.dir/build.make apps/rosetta/CMakeFiles/rif_dock_test.dir/build
-.PHONY : rif_dock_test/fast
+rifdock/fast:
+	$(MAKE) -f apps/rosetta/CMakeFiles/rifdock.dir/build.make apps/rosetta/CMakeFiles/rifdock.dir/build
+.PHONY : rifdock/fast
 
 #=============================================================================
 # Target rules for targets named prepare_scaff
@@ -423,10 +423,10 @@ help:
 	@echo "... quick_test_libscheme"
 	@echo "... scheme"
 	@echo "... test_librosetta"
-	@echo "... rifgen"
-	@echo "... scheme_make_bounding_grids"
 	@echo "... rifine"
-	@echo "... rif_dock_test"
+	@echo "... scheme_make_bounding_grids"
+	@echo "... rifgen"
+	@echo "... rifdock"
 	@echo "... prepare_scaff"
 	@echo "... debug_longxing"
 	@echo "... _pysetta_devel"

@@ -425,10 +425,10 @@ apps/preinstall: apps/rosetta/preinstall
 
 # Convenience name for "all" pass in the directory.
 apps/rosetta/all: apps/rosetta/CMakeFiles/test_librosetta.dir/all
-apps/rosetta/all: apps/rosetta/CMakeFiles/rifgen.dir/all
-apps/rosetta/all: apps/rosetta/CMakeFiles/scheme_make_bounding_grids.dir/all
 apps/rosetta/all: apps/rosetta/CMakeFiles/rifine.dir/all
-apps/rosetta/all: apps/rosetta/CMakeFiles/rif_dock_test.dir/all
+apps/rosetta/all: apps/rosetta/CMakeFiles/scheme_make_bounding_grids.dir/all
+apps/rosetta/all: apps/rosetta/CMakeFiles/rifgen.dir/all
+apps/rosetta/all: apps/rosetta/CMakeFiles/rifdock.dir/all
 apps/rosetta/all: apps/rosetta/CMakeFiles/prepare_scaff.dir/all
 apps/rosetta/all: apps/rosetta/CMakeFiles/debug_longxing.dir/all
 apps/rosetta/all: apps/rosetta/python/all
@@ -438,10 +438,10 @@ apps/rosetta/all: apps/rosetta/riflib/all
 
 # Convenience name for "clean" pass in the directory.
 apps/rosetta/clean: apps/rosetta/CMakeFiles/test_librosetta.dir/clean
-apps/rosetta/clean: apps/rosetta/CMakeFiles/rifgen.dir/clean
-apps/rosetta/clean: apps/rosetta/CMakeFiles/scheme_make_bounding_grids.dir/clean
 apps/rosetta/clean: apps/rosetta/CMakeFiles/rifine.dir/clean
-apps/rosetta/clean: apps/rosetta/CMakeFiles/rif_dock_test.dir/clean
+apps/rosetta/clean: apps/rosetta/CMakeFiles/scheme_make_bounding_grids.dir/clean
+apps/rosetta/clean: apps/rosetta/CMakeFiles/rifgen.dir/clean
+apps/rosetta/clean: apps/rosetta/CMakeFiles/rifdock.dir/clean
 apps/rosetta/clean: apps/rosetta/CMakeFiles/prepare_scaff.dir/clean
 apps/rosetta/clean: apps/rosetta/CMakeFiles/debug_longxing.dir/clean
 apps/rosetta/clean: apps/rosetta/python/clean
@@ -493,39 +493,39 @@ clean: apps/rosetta/CMakeFiles/test_librosetta.dir/clean
 .PHONY : clean
 
 #=============================================================================
-# Target rules for target apps/rosetta/CMakeFiles/rifgen.dir
+# Target rules for target apps/rosetta/CMakeFiles/rifine.dir
 
 # All Build rule for target.
-apps/rosetta/CMakeFiles/rifgen.dir/all: apps/rosetta/riflib/CMakeFiles/riflib.dir/all
-	$(MAKE) -f apps/rosetta/CMakeFiles/rifgen.dir/build.make apps/rosetta/CMakeFiles/rifgen.dir/depend
-	$(MAKE) -f apps/rosetta/CMakeFiles/rifgen.dir/build.make apps/rosetta/CMakeFiles/rifgen.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/longxing/rosetta_gitclone/rifine/build/CMakeFiles --progress-num=22 "Built target rifgen"
-.PHONY : apps/rosetta/CMakeFiles/rifgen.dir/all
+apps/rosetta/CMakeFiles/rifine.dir/all: apps/rosetta/riflib/CMakeFiles/riflib.dir/all
+	$(MAKE) -f apps/rosetta/CMakeFiles/rifine.dir/build.make apps/rosetta/CMakeFiles/rifine.dir/depend
+	$(MAKE) -f apps/rosetta/CMakeFiles/rifine.dir/build.make apps/rosetta/CMakeFiles/rifine.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/longxing/rosetta_gitclone/rifine/build/CMakeFiles --progress-num=23,24 "Built target rifine"
+.PHONY : apps/rosetta/CMakeFiles/rifine.dir/all
 
 # Include target in all.
-all: apps/rosetta/CMakeFiles/rifgen.dir/all
+all: apps/rosetta/CMakeFiles/rifine.dir/all
 
 .PHONY : all
 
 # Build rule for subdir invocation for target.
-apps/rosetta/CMakeFiles/rifgen.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/longxing/rosetta_gitclone/rifine/build/CMakeFiles 15
-	$(MAKE) -f CMakeFiles/Makefile2 apps/rosetta/CMakeFiles/rifgen.dir/all
+apps/rosetta/CMakeFiles/rifine.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/longxing/rosetta_gitclone/rifine/build/CMakeFiles 16
+	$(MAKE) -f CMakeFiles/Makefile2 apps/rosetta/CMakeFiles/rifine.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/longxing/rosetta_gitclone/rifine/build/CMakeFiles 0
-.PHONY : apps/rosetta/CMakeFiles/rifgen.dir/rule
+.PHONY : apps/rosetta/CMakeFiles/rifine.dir/rule
 
 # Convenience name for target.
-rifgen: apps/rosetta/CMakeFiles/rifgen.dir/rule
+rifine: apps/rosetta/CMakeFiles/rifine.dir/rule
 
-.PHONY : rifgen
-
-# clean rule for target.
-apps/rosetta/CMakeFiles/rifgen.dir/clean:
-	$(MAKE) -f apps/rosetta/CMakeFiles/rifgen.dir/build.make apps/rosetta/CMakeFiles/rifgen.dir/clean
-.PHONY : apps/rosetta/CMakeFiles/rifgen.dir/clean
+.PHONY : rifine
 
 # clean rule for target.
-clean: apps/rosetta/CMakeFiles/rifgen.dir/clean
+apps/rosetta/CMakeFiles/rifine.dir/clean:
+	$(MAKE) -f apps/rosetta/CMakeFiles/rifine.dir/build.make apps/rosetta/CMakeFiles/rifine.dir/clean
+.PHONY : apps/rosetta/CMakeFiles/rifine.dir/clean
+
+# clean rule for target.
+clean: apps/rosetta/CMakeFiles/rifine.dir/clean
 
 .PHONY : clean
 
@@ -567,76 +567,76 @@ clean: apps/rosetta/CMakeFiles/scheme_make_bounding_grids.dir/clean
 .PHONY : clean
 
 #=============================================================================
-# Target rules for target apps/rosetta/CMakeFiles/rifine.dir
+# Target rules for target apps/rosetta/CMakeFiles/rifgen.dir
 
 # All Build rule for target.
-apps/rosetta/CMakeFiles/rifine.dir/all: apps/rosetta/riflib/CMakeFiles/riflib.dir/all
-	$(MAKE) -f apps/rosetta/CMakeFiles/rifine.dir/build.make apps/rosetta/CMakeFiles/rifine.dir/depend
-	$(MAKE) -f apps/rosetta/CMakeFiles/rifine.dir/build.make apps/rosetta/CMakeFiles/rifine.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/longxing/rosetta_gitclone/rifine/build/CMakeFiles --progress-num=23,24 "Built target rifine"
-.PHONY : apps/rosetta/CMakeFiles/rifine.dir/all
+apps/rosetta/CMakeFiles/rifgen.dir/all: apps/rosetta/riflib/CMakeFiles/riflib.dir/all
+	$(MAKE) -f apps/rosetta/CMakeFiles/rifgen.dir/build.make apps/rosetta/CMakeFiles/rifgen.dir/depend
+	$(MAKE) -f apps/rosetta/CMakeFiles/rifgen.dir/build.make apps/rosetta/CMakeFiles/rifgen.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/longxing/rosetta_gitclone/rifine/build/CMakeFiles --progress-num=22 "Built target rifgen"
+.PHONY : apps/rosetta/CMakeFiles/rifgen.dir/all
 
 # Include target in all.
-all: apps/rosetta/CMakeFiles/rifine.dir/all
+all: apps/rosetta/CMakeFiles/rifgen.dir/all
 
 .PHONY : all
 
 # Build rule for subdir invocation for target.
-apps/rosetta/CMakeFiles/rifine.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/longxing/rosetta_gitclone/rifine/build/CMakeFiles 16
-	$(MAKE) -f CMakeFiles/Makefile2 apps/rosetta/CMakeFiles/rifine.dir/all
+apps/rosetta/CMakeFiles/rifgen.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/longxing/rosetta_gitclone/rifine/build/CMakeFiles 15
+	$(MAKE) -f CMakeFiles/Makefile2 apps/rosetta/CMakeFiles/rifgen.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/longxing/rosetta_gitclone/rifine/build/CMakeFiles 0
-.PHONY : apps/rosetta/CMakeFiles/rifine.dir/rule
+.PHONY : apps/rosetta/CMakeFiles/rifgen.dir/rule
 
 # Convenience name for target.
-rifine: apps/rosetta/CMakeFiles/rifine.dir/rule
+rifgen: apps/rosetta/CMakeFiles/rifgen.dir/rule
 
-.PHONY : rifine
-
-# clean rule for target.
-apps/rosetta/CMakeFiles/rifine.dir/clean:
-	$(MAKE) -f apps/rosetta/CMakeFiles/rifine.dir/build.make apps/rosetta/CMakeFiles/rifine.dir/clean
-.PHONY : apps/rosetta/CMakeFiles/rifine.dir/clean
+.PHONY : rifgen
 
 # clean rule for target.
-clean: apps/rosetta/CMakeFiles/rifine.dir/clean
+apps/rosetta/CMakeFiles/rifgen.dir/clean:
+	$(MAKE) -f apps/rosetta/CMakeFiles/rifgen.dir/build.make apps/rosetta/CMakeFiles/rifgen.dir/clean
+.PHONY : apps/rosetta/CMakeFiles/rifgen.dir/clean
+
+# clean rule for target.
+clean: apps/rosetta/CMakeFiles/rifgen.dir/clean
 
 .PHONY : clean
 
 #=============================================================================
-# Target rules for target apps/rosetta/CMakeFiles/rif_dock_test.dir
+# Target rules for target apps/rosetta/CMakeFiles/rifdock.dir
 
 # All Build rule for target.
-apps/rosetta/CMakeFiles/rif_dock_test.dir/all: apps/rosetta/riflib/CMakeFiles/riflib.dir/all
-	$(MAKE) -f apps/rosetta/CMakeFiles/rif_dock_test.dir/build.make apps/rosetta/CMakeFiles/rif_dock_test.dir/depend
-	$(MAKE) -f apps/rosetta/CMakeFiles/rif_dock_test.dir/build.make apps/rosetta/CMakeFiles/rif_dock_test.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/longxing/rosetta_gitclone/rifine/build/CMakeFiles --progress-num=20,21 "Built target rif_dock_test"
-.PHONY : apps/rosetta/CMakeFiles/rif_dock_test.dir/all
+apps/rosetta/CMakeFiles/rifdock.dir/all: apps/rosetta/riflib/CMakeFiles/riflib.dir/all
+	$(MAKE) -f apps/rosetta/CMakeFiles/rifdock.dir/build.make apps/rosetta/CMakeFiles/rifdock.dir/depend
+	$(MAKE) -f apps/rosetta/CMakeFiles/rifdock.dir/build.make apps/rosetta/CMakeFiles/rifdock.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/longxing/rosetta_gitclone/rifine/build/CMakeFiles --progress-num=20,21 "Built target rifdock"
+.PHONY : apps/rosetta/CMakeFiles/rifdock.dir/all
 
 # Include target in all.
-all: apps/rosetta/CMakeFiles/rif_dock_test.dir/all
+all: apps/rosetta/CMakeFiles/rifdock.dir/all
 
 .PHONY : all
 
 # Build rule for subdir invocation for target.
-apps/rosetta/CMakeFiles/rif_dock_test.dir/rule: cmake_check_build_system
+apps/rosetta/CMakeFiles/rifdock.dir/rule: cmake_check_build_system
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/longxing/rosetta_gitclone/rifine/build/CMakeFiles 16
-	$(MAKE) -f CMakeFiles/Makefile2 apps/rosetta/CMakeFiles/rif_dock_test.dir/all
+	$(MAKE) -f CMakeFiles/Makefile2 apps/rosetta/CMakeFiles/rifdock.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/longxing/rosetta_gitclone/rifine/build/CMakeFiles 0
-.PHONY : apps/rosetta/CMakeFiles/rif_dock_test.dir/rule
+.PHONY : apps/rosetta/CMakeFiles/rifdock.dir/rule
 
 # Convenience name for target.
-rif_dock_test: apps/rosetta/CMakeFiles/rif_dock_test.dir/rule
+rifdock: apps/rosetta/CMakeFiles/rifdock.dir/rule
 
-.PHONY : rif_dock_test
-
-# clean rule for target.
-apps/rosetta/CMakeFiles/rif_dock_test.dir/clean:
-	$(MAKE) -f apps/rosetta/CMakeFiles/rif_dock_test.dir/build.make apps/rosetta/CMakeFiles/rif_dock_test.dir/clean
-.PHONY : apps/rosetta/CMakeFiles/rif_dock_test.dir/clean
+.PHONY : rifdock
 
 # clean rule for target.
-clean: apps/rosetta/CMakeFiles/rif_dock_test.dir/clean
+apps/rosetta/CMakeFiles/rifdock.dir/clean:
+	$(MAKE) -f apps/rosetta/CMakeFiles/rifdock.dir/build.make apps/rosetta/CMakeFiles/rifdock.dir/clean
+.PHONY : apps/rosetta/CMakeFiles/rifdock.dir/clean
+
+# clean rule for target.
+clean: apps/rosetta/CMakeFiles/rifdock.dir/clean
 
 .PHONY : clean
 

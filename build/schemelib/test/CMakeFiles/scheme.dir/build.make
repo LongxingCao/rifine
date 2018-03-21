@@ -60,15 +60,15 @@ include schemelib/test/CMakeFiles/scheme.dir/flags.make
 schemelib/test/CMakeFiles/scheme.dir/__/scheme/rosetta/score/EtableParams_init.lib.cc.o: schemelib/test/CMakeFiles/scheme.dir/flags.make
 schemelib/test/CMakeFiles/scheme.dir/__/scheme/rosetta/score/EtableParams_init.lib.cc.o: ../schemelib/scheme/rosetta/score/EtableParams_init.lib.cc
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/longxing/rosetta_gitclone/rifine/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object schemelib/test/CMakeFiles/scheme.dir/__/scheme/rosetta/score/EtableParams_init.lib.cc.o"
-	cd /home/longxing/rosetta_gitclone/rifine/build/schemelib/test && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -O0 -o CMakeFiles/scheme.dir/__/scheme/rosetta/score/EtableParams_init.lib.cc.o -c /home/longxing/rosetta_gitclone/rifine/schemelib/scheme/rosetta/score/EtableParams_init.lib.cc
+	cd /home/longxing/rosetta_gitclone/rifine/build/schemelib/test && /usr/local/bin/g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -O0 -o CMakeFiles/scheme.dir/__/scheme/rosetta/score/EtableParams_init.lib.cc.o -c /home/longxing/rosetta_gitclone/rifine/schemelib/scheme/rosetta/score/EtableParams_init.lib.cc
 
 schemelib/test/CMakeFiles/scheme.dir/__/scheme/rosetta/score/EtableParams_init.lib.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/scheme.dir/__/scheme/rosetta/score/EtableParams_init.lib.cc.i"
-	cd /home/longxing/rosetta_gitclone/rifine/build/schemelib/test && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -O0 -E /home/longxing/rosetta_gitclone/rifine/schemelib/scheme/rosetta/score/EtableParams_init.lib.cc > CMakeFiles/scheme.dir/__/scheme/rosetta/score/EtableParams_init.lib.cc.i
+	cd /home/longxing/rosetta_gitclone/rifine/build/schemelib/test && /usr/local/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -O0 -E /home/longxing/rosetta_gitclone/rifine/schemelib/scheme/rosetta/score/EtableParams_init.lib.cc > CMakeFiles/scheme.dir/__/scheme/rosetta/score/EtableParams_init.lib.cc.i
 
 schemelib/test/CMakeFiles/scheme.dir/__/scheme/rosetta/score/EtableParams_init.lib.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/scheme.dir/__/scheme/rosetta/score/EtableParams_init.lib.cc.s"
-	cd /home/longxing/rosetta_gitclone/rifine/build/schemelib/test && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -O0 -S /home/longxing/rosetta_gitclone/rifine/schemelib/scheme/rosetta/score/EtableParams_init.lib.cc -o CMakeFiles/scheme.dir/__/scheme/rosetta/score/EtableParams_init.lib.cc.s
+	cd /home/longxing/rosetta_gitclone/rifine/build/schemelib/test && /usr/local/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -O0 -S /home/longxing/rosetta_gitclone/rifine/schemelib/scheme/rosetta/score/EtableParams_init.lib.cc -o CMakeFiles/scheme.dir/__/scheme/rosetta/score/EtableParams_init.lib.cc.s
 
 schemelib/test/CMakeFiles/scheme.dir/__/scheme/rosetta/score/EtableParams_init.lib.cc.o.requires:
 
@@ -84,15 +84,15 @@ schemelib/test/CMakeFiles/scheme.dir/__/scheme/rosetta/score/EtableParams_init.l
 schemelib/test/CMakeFiles/scheme.dir/__/scheme/rosetta/atype_map.lib.cc.o: schemelib/test/CMakeFiles/scheme.dir/flags.make
 schemelib/test/CMakeFiles/scheme.dir/__/scheme/rosetta/atype_map.lib.cc.o: ../schemelib/scheme/rosetta/atype_map.lib.cc
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/longxing/rosetta_gitclone/rifine/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object schemelib/test/CMakeFiles/scheme.dir/__/scheme/rosetta/atype_map.lib.cc.o"
-	cd /home/longxing/rosetta_gitclone/rifine/build/schemelib/test && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -O0 -o CMakeFiles/scheme.dir/__/scheme/rosetta/atype_map.lib.cc.o -c /home/longxing/rosetta_gitclone/rifine/schemelib/scheme/rosetta/atype_map.lib.cc
+	cd /home/longxing/rosetta_gitclone/rifine/build/schemelib/test && /usr/local/bin/g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -O0 -o CMakeFiles/scheme.dir/__/scheme/rosetta/atype_map.lib.cc.o -c /home/longxing/rosetta_gitclone/rifine/schemelib/scheme/rosetta/atype_map.lib.cc
 
 schemelib/test/CMakeFiles/scheme.dir/__/scheme/rosetta/atype_map.lib.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/scheme.dir/__/scheme/rosetta/atype_map.lib.cc.i"
-	cd /home/longxing/rosetta_gitclone/rifine/build/schemelib/test && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -O0 -E /home/longxing/rosetta_gitclone/rifine/schemelib/scheme/rosetta/atype_map.lib.cc > CMakeFiles/scheme.dir/__/scheme/rosetta/atype_map.lib.cc.i
+	cd /home/longxing/rosetta_gitclone/rifine/build/schemelib/test && /usr/local/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -O0 -E /home/longxing/rosetta_gitclone/rifine/schemelib/scheme/rosetta/atype_map.lib.cc > CMakeFiles/scheme.dir/__/scheme/rosetta/atype_map.lib.cc.i
 
 schemelib/test/CMakeFiles/scheme.dir/__/scheme/rosetta/atype_map.lib.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/scheme.dir/__/scheme/rosetta/atype_map.lib.cc.s"
-	cd /home/longxing/rosetta_gitclone/rifine/build/schemelib/test && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -O0 -S /home/longxing/rosetta_gitclone/rifine/schemelib/scheme/rosetta/atype_map.lib.cc -o CMakeFiles/scheme.dir/__/scheme/rosetta/atype_map.lib.cc.s
+	cd /home/longxing/rosetta_gitclone/rifine/build/schemelib/test && /usr/local/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -O0 -S /home/longxing/rosetta_gitclone/rifine/schemelib/scheme/rosetta/atype_map.lib.cc -o CMakeFiles/scheme.dir/__/scheme/rosetta/atype_map.lib.cc.s
 
 schemelib/test/CMakeFiles/scheme.dir/__/scheme/rosetta/atype_map.lib.cc.o.requires:
 
@@ -108,15 +108,15 @@ schemelib/test/CMakeFiles/scheme.dir/__/scheme/rosetta/atype_map.lib.cc.o.provid
 schemelib/test/CMakeFiles/scheme.dir/__/scheme/chemical/ligand_factory.lib.cc.o: schemelib/test/CMakeFiles/scheme.dir/flags.make
 schemelib/test/CMakeFiles/scheme.dir/__/scheme/chemical/ligand_factory.lib.cc.o: ../schemelib/scheme/chemical/ligand_factory.lib.cc
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/longxing/rosetta_gitclone/rifine/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object schemelib/test/CMakeFiles/scheme.dir/__/scheme/chemical/ligand_factory.lib.cc.o"
-	cd /home/longxing/rosetta_gitclone/rifine/build/schemelib/test && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -O0 -o CMakeFiles/scheme.dir/__/scheme/chemical/ligand_factory.lib.cc.o -c /home/longxing/rosetta_gitclone/rifine/schemelib/scheme/chemical/ligand_factory.lib.cc
+	cd /home/longxing/rosetta_gitclone/rifine/build/schemelib/test && /usr/local/bin/g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -O0 -o CMakeFiles/scheme.dir/__/scheme/chemical/ligand_factory.lib.cc.o -c /home/longxing/rosetta_gitclone/rifine/schemelib/scheme/chemical/ligand_factory.lib.cc
 
 schemelib/test/CMakeFiles/scheme.dir/__/scheme/chemical/ligand_factory.lib.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/scheme.dir/__/scheme/chemical/ligand_factory.lib.cc.i"
-	cd /home/longxing/rosetta_gitclone/rifine/build/schemelib/test && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -O0 -E /home/longxing/rosetta_gitclone/rifine/schemelib/scheme/chemical/ligand_factory.lib.cc > CMakeFiles/scheme.dir/__/scheme/chemical/ligand_factory.lib.cc.i
+	cd /home/longxing/rosetta_gitclone/rifine/build/schemelib/test && /usr/local/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -O0 -E /home/longxing/rosetta_gitclone/rifine/schemelib/scheme/chemical/ligand_factory.lib.cc > CMakeFiles/scheme.dir/__/scheme/chemical/ligand_factory.lib.cc.i
 
 schemelib/test/CMakeFiles/scheme.dir/__/scheme/chemical/ligand_factory.lib.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/scheme.dir/__/scheme/chemical/ligand_factory.lib.cc.s"
-	cd /home/longxing/rosetta_gitclone/rifine/build/schemelib/test && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -O0 -S /home/longxing/rosetta_gitclone/rifine/schemelib/scheme/chemical/ligand_factory.lib.cc -o CMakeFiles/scheme.dir/__/scheme/chemical/ligand_factory.lib.cc.s
+	cd /home/longxing/rosetta_gitclone/rifine/build/schemelib/test && /usr/local/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -O0 -S /home/longxing/rosetta_gitclone/rifine/schemelib/scheme/chemical/ligand_factory.lib.cc -o CMakeFiles/scheme.dir/__/scheme/chemical/ligand_factory.lib.cc.s
 
 schemelib/test/CMakeFiles/scheme.dir/__/scheme/chemical/ligand_factory.lib.cc.o.requires:
 

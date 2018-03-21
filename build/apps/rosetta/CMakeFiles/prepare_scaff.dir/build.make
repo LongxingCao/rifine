@@ -60,15 +60,15 @@ include apps/rosetta/CMakeFiles/prepare_scaff.dir/flags.make
 apps/rosetta/CMakeFiles/prepare_scaff.dir/prepare_scaff.cc.o: apps/rosetta/CMakeFiles/prepare_scaff.dir/flags.make
 apps/rosetta/CMakeFiles/prepare_scaff.dir/prepare_scaff.cc.o: ../apps/rosetta/prepare_scaff.cc
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/longxing/rosetta_gitclone/rifine/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object apps/rosetta/CMakeFiles/prepare_scaff.dir/prepare_scaff.cc.o"
-	cd /home/longxing/rosetta_gitclone/rifine/build/apps/rosetta && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/prepare_scaff.dir/prepare_scaff.cc.o -c /home/longxing/rosetta_gitclone/rifine/apps/rosetta/prepare_scaff.cc
+	cd /home/longxing/rosetta_gitclone/rifine/build/apps/rosetta && /usr/local/bin/g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/prepare_scaff.dir/prepare_scaff.cc.o -c /home/longxing/rosetta_gitclone/rifine/apps/rosetta/prepare_scaff.cc
 
 apps/rosetta/CMakeFiles/prepare_scaff.dir/prepare_scaff.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/prepare_scaff.dir/prepare_scaff.cc.i"
-	cd /home/longxing/rosetta_gitclone/rifine/build/apps/rosetta && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/longxing/rosetta_gitclone/rifine/apps/rosetta/prepare_scaff.cc > CMakeFiles/prepare_scaff.dir/prepare_scaff.cc.i
+	cd /home/longxing/rosetta_gitclone/rifine/build/apps/rosetta && /usr/local/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/longxing/rosetta_gitclone/rifine/apps/rosetta/prepare_scaff.cc > CMakeFiles/prepare_scaff.dir/prepare_scaff.cc.i
 
 apps/rosetta/CMakeFiles/prepare_scaff.dir/prepare_scaff.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/prepare_scaff.dir/prepare_scaff.cc.s"
-	cd /home/longxing/rosetta_gitclone/rifine/build/apps/rosetta && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/longxing/rosetta_gitclone/rifine/apps/rosetta/prepare_scaff.cc -o CMakeFiles/prepare_scaff.dir/prepare_scaff.cc.s
+	cd /home/longxing/rosetta_gitclone/rifine/build/apps/rosetta && /usr/local/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/longxing/rosetta_gitclone/rifine/apps/rosetta/prepare_scaff.cc -o CMakeFiles/prepare_scaff.dir/prepare_scaff.cc.s
 
 apps/rosetta/CMakeFiles/prepare_scaff.dir/prepare_scaff.cc.o.requires:
 

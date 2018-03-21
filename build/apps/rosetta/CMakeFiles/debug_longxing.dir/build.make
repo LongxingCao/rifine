@@ -60,15 +60,15 @@ include apps/rosetta/CMakeFiles/debug_longxing.dir/flags.make
 apps/rosetta/CMakeFiles/debug_longxing.dir/debug_longxing.cc.o: apps/rosetta/CMakeFiles/debug_longxing.dir/flags.make
 apps/rosetta/CMakeFiles/debug_longxing.dir/debug_longxing.cc.o: ../apps/rosetta/debug_longxing.cc
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/longxing/rosetta_gitclone/rifine/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object apps/rosetta/CMakeFiles/debug_longxing.dir/debug_longxing.cc.o"
-	cd /home/longxing/rosetta_gitclone/rifine/build/apps/rosetta && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/debug_longxing.dir/debug_longxing.cc.o -c /home/longxing/rosetta_gitclone/rifine/apps/rosetta/debug_longxing.cc
+	cd /home/longxing/rosetta_gitclone/rifine/build/apps/rosetta && /usr/local/bin/g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/debug_longxing.dir/debug_longxing.cc.o -c /home/longxing/rosetta_gitclone/rifine/apps/rosetta/debug_longxing.cc
 
 apps/rosetta/CMakeFiles/debug_longxing.dir/debug_longxing.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/debug_longxing.dir/debug_longxing.cc.i"
-	cd /home/longxing/rosetta_gitclone/rifine/build/apps/rosetta && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/longxing/rosetta_gitclone/rifine/apps/rosetta/debug_longxing.cc > CMakeFiles/debug_longxing.dir/debug_longxing.cc.i
+	cd /home/longxing/rosetta_gitclone/rifine/build/apps/rosetta && /usr/local/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/longxing/rosetta_gitclone/rifine/apps/rosetta/debug_longxing.cc > CMakeFiles/debug_longxing.dir/debug_longxing.cc.i
 
 apps/rosetta/CMakeFiles/debug_longxing.dir/debug_longxing.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/debug_longxing.dir/debug_longxing.cc.s"
-	cd /home/longxing/rosetta_gitclone/rifine/build/apps/rosetta && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/longxing/rosetta_gitclone/rifine/apps/rosetta/debug_longxing.cc -o CMakeFiles/debug_longxing.dir/debug_longxing.cc.s
+	cd /home/longxing/rosetta_gitclone/rifine/build/apps/rosetta && /usr/local/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/longxing/rosetta_gitclone/rifine/apps/rosetta/debug_longxing.cc -o CMakeFiles/debug_longxing.dir/debug_longxing.cc.s
 
 apps/rosetta/CMakeFiles/debug_longxing.dir/debug_longxing.cc.o.requires:
 

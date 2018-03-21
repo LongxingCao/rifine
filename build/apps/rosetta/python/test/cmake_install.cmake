@@ -42,15 +42,15 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
      NOT IS_SYMLINK "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/python2/test_pybind.so")
     file(RPATH_CHECK
          FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/python2/test_pybind.so"
-         RPATH "/usr/local/lib:/usr/local/lib64:/software/rosetta-master/source/cmake/build_cxx11_omp")
+         RPATH "/usr/local/lib:/software/rosetta-master/source/cmake/build_cxx11_omp")
   endif()
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/python2" TYPE SHARED_LIBRARY FILES "/home/longxing/rosetta_gitclone/rifine/build/apps/rosetta/python/test/test_pybind.so")
   if(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/python2/test_pybind.so" AND
      NOT IS_SYMLINK "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/python2/test_pybind.so")
     file(RPATH_CHANGE
          FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/python2/test_pybind.so"
-         OLD_RPATH "/usr/local/lib:/usr/local/lib64:/software/rosetta-master/source/cmake/build_cxx11_omp:"
-         NEW_RPATH "/usr/local/lib:/usr/local/lib64:/software/rosetta-master/source/cmake/build_cxx11_omp")
+         OLD_RPATH "/software/rosetta-master/source/cmake/build_cxx11_omp:::::::::::::::"
+         NEW_RPATH "/usr/local/lib:/software/rosetta-master/source/cmake/build_cxx11_omp")
     if(CMAKE_INSTALL_DO_STRIP)
       execute_process(COMMAND "/usr/bin/strip" "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/python2/test_pybind.so")
     endif()

@@ -60,15 +60,15 @@ include external/gmock/gtest/CMakeFiles/gtest_main.dir/flags.make
 external/gmock/gtest/CMakeFiles/gtest_main.dir/src/gtest_main.cc.o: external/gmock/gtest/CMakeFiles/gtest_main.dir/flags.make
 external/gmock/gtest/CMakeFiles/gtest_main.dir/src/gtest_main.cc.o: ../external/gmock/gtest/src/gtest_main.cc
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/longxing/rosetta_gitclone/rifine/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object external/gmock/gtest/CMakeFiles/gtest_main.dir/src/gtest_main.cc.o"
-	cd /home/longxing/rosetta_gitclone/rifine/build/external/gmock/gtest && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/gtest_main.dir/src/gtest_main.cc.o -c /home/longxing/rosetta_gitclone/rifine/external/gmock/gtest/src/gtest_main.cc
+	cd /home/longxing/rosetta_gitclone/rifine/build/external/gmock/gtest && /usr/local/bin/g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/gtest_main.dir/src/gtest_main.cc.o -c /home/longxing/rosetta_gitclone/rifine/external/gmock/gtest/src/gtest_main.cc
 
 external/gmock/gtest/CMakeFiles/gtest_main.dir/src/gtest_main.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/gtest_main.dir/src/gtest_main.cc.i"
-	cd /home/longxing/rosetta_gitclone/rifine/build/external/gmock/gtest && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/longxing/rosetta_gitclone/rifine/external/gmock/gtest/src/gtest_main.cc > CMakeFiles/gtest_main.dir/src/gtest_main.cc.i
+	cd /home/longxing/rosetta_gitclone/rifine/build/external/gmock/gtest && /usr/local/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/longxing/rosetta_gitclone/rifine/external/gmock/gtest/src/gtest_main.cc > CMakeFiles/gtest_main.dir/src/gtest_main.cc.i
 
 external/gmock/gtest/CMakeFiles/gtest_main.dir/src/gtest_main.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/gtest_main.dir/src/gtest_main.cc.s"
-	cd /home/longxing/rosetta_gitclone/rifine/build/external/gmock/gtest && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/longxing/rosetta_gitclone/rifine/external/gmock/gtest/src/gtest_main.cc -o CMakeFiles/gtest_main.dir/src/gtest_main.cc.s
+	cd /home/longxing/rosetta_gitclone/rifine/build/external/gmock/gtest && /usr/local/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/longxing/rosetta_gitclone/rifine/external/gmock/gtest/src/gtest_main.cc -o CMakeFiles/gtest_main.dir/src/gtest_main.cc.s
 
 external/gmock/gtest/CMakeFiles/gtest_main.dir/src/gtest_main.cc.o.requires:
 

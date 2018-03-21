@@ -60,15 +60,15 @@ include apps/rosetta/python/pysetta/CMakeFiles/_pysetta_core_pose.dir/flags.make
 apps/rosetta/python/pysetta/CMakeFiles/_pysetta_core_pose.dir/_pysetta_core_pose.cc.o: apps/rosetta/python/pysetta/CMakeFiles/_pysetta_core_pose.dir/flags.make
 apps/rosetta/python/pysetta/CMakeFiles/_pysetta_core_pose.dir/_pysetta_core_pose.cc.o: ../apps/rosetta/python/pysetta/_pysetta_core_pose.cc
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/longxing/rosetta_gitclone/rifine/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object apps/rosetta/python/pysetta/CMakeFiles/_pysetta_core_pose.dir/_pysetta_core_pose.cc.o"
-	cd /home/longxing/rosetta_gitclone/rifine/build/apps/rosetta/python/pysetta && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/_pysetta_core_pose.dir/_pysetta_core_pose.cc.o -c /home/longxing/rosetta_gitclone/rifine/apps/rosetta/python/pysetta/_pysetta_core_pose.cc
+	cd /home/longxing/rosetta_gitclone/rifine/build/apps/rosetta/python/pysetta && /usr/local/bin/g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/_pysetta_core_pose.dir/_pysetta_core_pose.cc.o -c /home/longxing/rosetta_gitclone/rifine/apps/rosetta/python/pysetta/_pysetta_core_pose.cc
 
 apps/rosetta/python/pysetta/CMakeFiles/_pysetta_core_pose.dir/_pysetta_core_pose.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/_pysetta_core_pose.dir/_pysetta_core_pose.cc.i"
-	cd /home/longxing/rosetta_gitclone/rifine/build/apps/rosetta/python/pysetta && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/longxing/rosetta_gitclone/rifine/apps/rosetta/python/pysetta/_pysetta_core_pose.cc > CMakeFiles/_pysetta_core_pose.dir/_pysetta_core_pose.cc.i
+	cd /home/longxing/rosetta_gitclone/rifine/build/apps/rosetta/python/pysetta && /usr/local/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/longxing/rosetta_gitclone/rifine/apps/rosetta/python/pysetta/_pysetta_core_pose.cc > CMakeFiles/_pysetta_core_pose.dir/_pysetta_core_pose.cc.i
 
 apps/rosetta/python/pysetta/CMakeFiles/_pysetta_core_pose.dir/_pysetta_core_pose.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/_pysetta_core_pose.dir/_pysetta_core_pose.cc.s"
-	cd /home/longxing/rosetta_gitclone/rifine/build/apps/rosetta/python/pysetta && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/longxing/rosetta_gitclone/rifine/apps/rosetta/python/pysetta/_pysetta_core_pose.cc -o CMakeFiles/_pysetta_core_pose.dir/_pysetta_core_pose.cc.s
+	cd /home/longxing/rosetta_gitclone/rifine/build/apps/rosetta/python/pysetta && /usr/local/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/longxing/rosetta_gitclone/rifine/apps/rosetta/python/pysetta/_pysetta_core_pose.cc -o CMakeFiles/_pysetta_core_pose.dir/_pysetta_core_pose.cc.s
 
 apps/rosetta/python/pysetta/CMakeFiles/_pysetta_core_pose.dir/_pysetta_core_pose.cc.o.requires:
 

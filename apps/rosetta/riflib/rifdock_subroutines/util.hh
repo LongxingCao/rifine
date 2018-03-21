@@ -19,7 +19,7 @@
 #include <scheme/search/HackPack.hh>
 #include <riflib/util.hh>
 
-#include <rif_dock_test.hh>
+#include <rifdock.hh>
 #include <riflib/rotamer_energy_tables.hh>
 #include <riflib/RifFactory.hh>
 

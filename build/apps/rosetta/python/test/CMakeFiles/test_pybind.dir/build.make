@@ -60,15 +60,15 @@ include apps/rosetta/python/test/CMakeFiles/test_pybind.dir/flags.make
 apps/rosetta/python/test/CMakeFiles/test_pybind.dir/test_pybind.cc.o: apps/rosetta/python/test/CMakeFiles/test_pybind.dir/flags.make
 apps/rosetta/python/test/CMakeFiles/test_pybind.dir/test_pybind.cc.o: ../apps/rosetta/python/test/test_pybind.cc
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/longxing/rosetta_gitclone/rifine/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object apps/rosetta/python/test/CMakeFiles/test_pybind.dir/test_pybind.cc.o"
-	cd /home/longxing/rosetta_gitclone/rifine/build/apps/rosetta/python/test && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/test_pybind.dir/test_pybind.cc.o -c /home/longxing/rosetta_gitclone/rifine/apps/rosetta/python/test/test_pybind.cc
+	cd /home/longxing/rosetta_gitclone/rifine/build/apps/rosetta/python/test && /usr/local/bin/g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/test_pybind.dir/test_pybind.cc.o -c /home/longxing/rosetta_gitclone/rifine/apps/rosetta/python/test/test_pybind.cc
 
 apps/rosetta/python/test/CMakeFiles/test_pybind.dir/test_pybind.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/test_pybind.dir/test_pybind.cc.i"
-	cd /home/longxing/rosetta_gitclone/rifine/build/apps/rosetta/python/test && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/longxing/rosetta_gitclone/rifine/apps/rosetta/python/test/test_pybind.cc > CMakeFiles/test_pybind.dir/test_pybind.cc.i
+	cd /home/longxing/rosetta_gitclone/rifine/build/apps/rosetta/python/test && /usr/local/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/longxing/rosetta_gitclone/rifine/apps/rosetta/python/test/test_pybind.cc > CMakeFiles/test_pybind.dir/test_pybind.cc.i
 
 apps/rosetta/python/test/CMakeFiles/test_pybind.dir/test_pybind.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/test_pybind.dir/test_pybind.cc.s"
-	cd /home/longxing/rosetta_gitclone/rifine/build/apps/rosetta/python/test && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/longxing/rosetta_gitclone/rifine/apps/rosetta/python/test/test_pybind.cc -o CMakeFiles/test_pybind.dir/test_pybind.cc.s
+	cd /home/longxing/rosetta_gitclone/rifine/build/apps/rosetta/python/test && /usr/local/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/longxing/rosetta_gitclone/rifine/apps/rosetta/python/test/test_pybind.cc -o CMakeFiles/test_pybind.dir/test_pybind.cc.s
 
 apps/rosetta/python/test/CMakeFiles/test_pybind.dir/test_pybind.cc.o.requires:
 

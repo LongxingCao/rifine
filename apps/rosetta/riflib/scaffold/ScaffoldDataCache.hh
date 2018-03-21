@@ -21,7 +21,7 @@
 #include <riflib/rosetta_field.hh>
 #include <riflib/RotamerGenerator.hh>
 #include <riflib/util.hh>
-#include <rif_dock_test.hh>
+#include <rifdock.hh>
 #include <riflib/rotamer_energy_tables.hh>
 #include <riflib/scaffold/MultithreadPoseCloner.hh>
 #include <riflib/scaffold/util.hh>
@@ -324,6 +324,16 @@ struct ScaffoldDataCache {
                 }
             }
         }
+
+				if ( opt.favorable_1body_multiplier != 1 ) {
+            for( int ir = 0; ir < scaffold_onebody_glob0_p->size(); ++ir ){
+                for( int irot = 0; irot < rot_index_p->size(); ++irot ){
+                    if ( (*scaffold_onebody_glob0_p)[ir][irot] <= opt.favorable_1body_multiplier_cutoff ) {
+                        (*scaffold_onebody_glob0_p)[ir][irot] *= opt.favorable_1body_multiplier;
+                    }
+                }
+            }
+				}
 
         local_onebody_p = make_shared<std::vector<std::vector<float> > >();
         for( int i = 0; i < scaffres_l2g_p->size(); ++i ){

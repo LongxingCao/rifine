@@ -60,15 +60,15 @@ include external/gmock/CMakeFiles/gmock.dir/flags.make
 external/gmock/CMakeFiles/gmock.dir/gtest/src/gtest-all.cc.o: external/gmock/CMakeFiles/gmock.dir/flags.make
 external/gmock/CMakeFiles/gmock.dir/gtest/src/gtest-all.cc.o: ../external/gmock/gtest/src/gtest-all.cc
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/longxing/rosetta_gitclone/rifine/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object external/gmock/CMakeFiles/gmock.dir/gtest/src/gtest-all.cc.o"
-	cd /home/longxing/rosetta_gitclone/rifine/build/external/gmock && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/gmock.dir/gtest/src/gtest-all.cc.o -c /home/longxing/rosetta_gitclone/rifine/external/gmock/gtest/src/gtest-all.cc
+	cd /home/longxing/rosetta_gitclone/rifine/build/external/gmock && /usr/local/bin/g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/gmock.dir/gtest/src/gtest-all.cc.o -c /home/longxing/rosetta_gitclone/rifine/external/gmock/gtest/src/gtest-all.cc
 
 external/gmock/CMakeFiles/gmock.dir/gtest/src/gtest-all.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/gmock.dir/gtest/src/gtest-all.cc.i"
-	cd /home/longxing/rosetta_gitclone/rifine/build/external/gmock && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/longxing/rosetta_gitclone/rifine/external/gmock/gtest/src/gtest-all.cc > CMakeFiles/gmock.dir/gtest/src/gtest-all.cc.i
+	cd /home/longxing/rosetta_gitclone/rifine/build/external/gmock && /usr/local/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/longxing/rosetta_gitclone/rifine/external/gmock/gtest/src/gtest-all.cc > CMakeFiles/gmock.dir/gtest/src/gtest-all.cc.i
 
 external/gmock/CMakeFiles/gmock.dir/gtest/src/gtest-all.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/gmock.dir/gtest/src/gtest-all.cc.s"
-	cd /home/longxing/rosetta_gitclone/rifine/build/external/gmock && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/longxing/rosetta_gitclone/rifine/external/gmock/gtest/src/gtest-all.cc -o CMakeFiles/gmock.dir/gtest/src/gtest-all.cc.s
+	cd /home/longxing/rosetta_gitclone/rifine/build/external/gmock && /usr/local/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/longxing/rosetta_gitclone/rifine/external/gmock/gtest/src/gtest-all.cc -o CMakeFiles/gmock.dir/gtest/src/gtest-all.cc.s
 
 external/gmock/CMakeFiles/gmock.dir/gtest/src/gtest-all.cc.o.requires:
 
@@ -84,15 +84,15 @@ external/gmock/CMakeFiles/gmock.dir/gtest/src/gtest-all.cc.o.provides.build: ext
 external/gmock/CMakeFiles/gmock.dir/src/gmock-all.cc.o: external/gmock/CMakeFiles/gmock.dir/flags.make
 external/gmock/CMakeFiles/gmock.dir/src/gmock-all.cc.o: ../external/gmock/src/gmock-all.cc
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/longxing/rosetta_gitclone/rifine/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object external/gmock/CMakeFiles/gmock.dir/src/gmock-all.cc.o"
-	cd /home/longxing/rosetta_gitclone/rifine/build/external/gmock && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/gmock.dir/src/gmock-all.cc.o -c /home/longxing/rosetta_gitclone/rifine/external/gmock/src/gmock-all.cc
+	cd /home/longxing/rosetta_gitclone/rifine/build/external/gmock && /usr/local/bin/g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/gmock.dir/src/gmock-all.cc.o -c /home/longxing/rosetta_gitclone/rifine/external/gmock/src/gmock-all.cc
 
 external/gmock/CMakeFiles/gmock.dir/src/gmock-all.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/gmock.dir/src/gmock-all.cc.i"
-	cd /home/longxing/rosetta_gitclone/rifine/build/external/gmock && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/longxing/rosetta_gitclone/rifine/external/gmock/src/gmock-all.cc > CMakeFiles/gmock.dir/src/gmock-all.cc.i
+	cd /home/longxing/rosetta_gitclone/rifine/build/external/gmock && /usr/local/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/longxing/rosetta_gitclone/rifine/external/gmock/src/gmock-all.cc > CMakeFiles/gmock.dir/src/gmock-all.cc.i
 
 external/gmock/CMakeFiles/gmock.dir/src/gmock-all.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/gmock.dir/src/gmock-all.cc.s"
-	cd /home/longxing/rosetta_gitclone/rifine/build/external/gmock && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/longxing/rosetta_gitclone/rifine/external/gmock/src/gmock-all.cc -o CMakeFiles/gmock.dir/src/gmock-all.cc.s
+	cd /home/longxing/rosetta_gitclone/rifine/build/external/gmock && /usr/local/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/longxing/rosetta_gitclone/rifine/external/gmock/src/gmock-all.cc -o CMakeFiles/gmock.dir/src/gmock-all.cc.s
 
 external/gmock/CMakeFiles/gmock.dir/src/gmock-all.cc.o.requires:
 

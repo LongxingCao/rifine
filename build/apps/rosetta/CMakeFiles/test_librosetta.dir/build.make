@@ -60,15 +60,15 @@ include apps/rosetta/CMakeFiles/test_librosetta.dir/flags.make
 apps/rosetta/CMakeFiles/test_librosetta.dir/test_librosetta.cc.o: apps/rosetta/CMakeFiles/test_librosetta.dir/flags.make
 apps/rosetta/CMakeFiles/test_librosetta.dir/test_librosetta.cc.o: ../apps/rosetta/test_librosetta.cc
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/longxing/rosetta_gitclone/rifine/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object apps/rosetta/CMakeFiles/test_librosetta.dir/test_librosetta.cc.o"
-	cd /home/longxing/rosetta_gitclone/rifine/build/apps/rosetta && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/test_librosetta.dir/test_librosetta.cc.o -c /home/longxing/rosetta_gitclone/rifine/apps/rosetta/test_librosetta.cc
+	cd /home/longxing/rosetta_gitclone/rifine/build/apps/rosetta && /usr/local/bin/g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/test_librosetta.dir/test_librosetta.cc.o -c /home/longxing/rosetta_gitclone/rifine/apps/rosetta/test_librosetta.cc
 
 apps/rosetta/CMakeFiles/test_librosetta.dir/test_librosetta.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/test_librosetta.dir/test_librosetta.cc.i"
-	cd /home/longxing/rosetta_gitclone/rifine/build/apps/rosetta && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/longxing/rosetta_gitclone/rifine/apps/rosetta/test_librosetta.cc > CMakeFiles/test_librosetta.dir/test_librosetta.cc.i
+	cd /home/longxing/rosetta_gitclone/rifine/build/apps/rosetta && /usr/local/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/longxing/rosetta_gitclone/rifine/apps/rosetta/test_librosetta.cc > CMakeFiles/test_librosetta.dir/test_librosetta.cc.i
 
 apps/rosetta/CMakeFiles/test_librosetta.dir/test_librosetta.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/test_librosetta.dir/test_librosetta.cc.s"
-	cd /home/longxing/rosetta_gitclone/rifine/build/apps/rosetta && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/longxing/rosetta_gitclone/rifine/apps/rosetta/test_librosetta.cc -o CMakeFiles/test_librosetta.dir/test_librosetta.cc.s
+	cd /home/longxing/rosetta_gitclone/rifine/build/apps/rosetta && /usr/local/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/longxing/rosetta_gitclone/rifine/apps/rosetta/test_librosetta.cc -o CMakeFiles/test_librosetta.dir/test_librosetta.cc.s
 
 apps/rosetta/CMakeFiles/test_librosetta.dir/test_librosetta.cc.o.requires:
 
