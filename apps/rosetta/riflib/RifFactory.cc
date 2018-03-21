@@ -665,7 +665,8 @@ std::string get_rif_type_from_file( std::string fname )
 				}
 			}
 
-			bestsc = std::min( bestsc, rotscores.score(Nrots-1) ); // in case not all rots stored...
+		  // it doesn't make any sense here, so may be I should Just delete it!!!!'
+			//bestsc = std::min( bestsc, rotscores.score(Nrots-1) ); // in case not all rots stored...
 			return bestsc;
 		}
 
@@ -696,7 +697,9 @@ std::string get_rif_type_from_file( std::string fname )
 
 			}
 
-			if( n_sat_groups_ > 0 && !packing_ ){
+			// This is very slow, as each time the vector is refilled. So maybe I should change n_sat_groups to require_satisfication
+			//if( n_sat_groups_ > 0 && !packing_ ){
+			if( n_sat_groups_ > 0  ){
 				int nsat = 0;
 				
 				for( int i = 0; i < n_sat_groups_; ++i ){
