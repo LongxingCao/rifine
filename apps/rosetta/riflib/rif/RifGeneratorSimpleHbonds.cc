@@ -179,6 +179,7 @@ struct HBJob {
 			}
 		}
 		std::vector< ::scheme::chemical::HBondRay > target_donors, target_acceptors;
+		params->hbopt.satisfied_atoms = ::devel::scheme::get_satisfied_atoms( target );
 		for( auto ir : target_res ){
 			::devel::scheme::get_donor_rays   ( target, ir, params->hbopt, target_donors );
 			::devel::scheme::get_acceptor_rays( target, ir, params->hbopt, target_acceptors );
