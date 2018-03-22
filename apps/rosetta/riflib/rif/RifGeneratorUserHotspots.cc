@@ -390,6 +390,7 @@ namespace rif {
 									BBActor bbact( atom_N, atom_CA, atom_C);
 									EigenXform new_x_position = bbact.position();
 
+									// the hydrogen bond satisfication and the hotspot satisfication are totally mixed, so what is the best way to label a hotspot??
 									accumulator->insert( new_x_position, positioned_rotamer_score-4, irot, 
 										this -> opts.single_file_hotspots_insertion ? i_hspot_res : i_hotspot_group,
 										 -1 );

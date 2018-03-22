@@ -221,7 +221,7 @@ struct CompositeDirector
         
         SeedingDirector(SeedingPositionsOP sp) : ibody_(1),seeding_positions_(sp), maximum_allowed_rotation_ang_ ( -1.0 ) {}
         // I thinks this ho
-        SeedingDirector(SeedingPositionsOP sp, Index ibody, double max_ang_degree ) : ibody_(ibody),seeding_positions_(sp), maximum_allowed_rotation_ang_ (max_ang_degree / 180 * 3.14)  {}
+        SeedingDirector(SeedingPositionsOP sp, Index ibody, double max_ang_degree = -180 /* arbitraty number to get a negative number */  ) : ibody_(ibody),seeding_positions_(sp), maximum_allowed_rotation_ang_ (max_ang_degree / 180 * 3.14)  {}
         
         
         virtual

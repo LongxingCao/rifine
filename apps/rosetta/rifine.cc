@@ -842,7 +842,7 @@ int main( int argc, char *argv[] )
                 std::cout << "nest size:    " << float(nest_director->size(0, RifDockIndex()).nest_index) << std::endl;
                 std::cout << "size of search space: ~" << float(nest_director->size(0, RifDockIndex()).nest_index) << " grid points" << std::endl;
                 
-                shared_ptr<RifDockSeedingDirector> seeding_director = make_shared<RifDockSeedingDirector>(seeding_positions_p, 1, -1 /*maximum allowed ang*/);
+                shared_ptr<RifDockSeedingDirector> seeding_director = make_shared<RifDockSeedingDirector>(seeding_positions_p, 1);
                 
                 std::vector<DirectorBase> director_list;
                 director_list.push_back( nest_director );  // Nest director must come first!!!!
