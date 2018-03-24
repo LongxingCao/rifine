@@ -21,9 +21,12 @@
 
 	#include <boost/random/mersenne_twister.hpp>
 	#include <boost/random/uniform_real.hpp>
+  // this is for the conversion of string.... to lower case
+  #include <boost/algorithm/string.hpp>
 
 	#include <core/id/AtomID.hh>
 	#include <core/pose/Pose.hh>
+  #include <core/pose/PDBInfo.hh>
 	#include <core/scoring/motif/util.hh>
 	#include <core/import_pose/import_pose.hh>
 
@@ -216,6 +219,19 @@ namespace rif {
 			// read in pdb files # i_hotspot_group
 			for( int i_hspot_res = 1; i_hspot_res <= pose.size(); ++i_hspot_res ){
 
+				// check the PDBinfo_LABEL so that I can specify the cart_bound and angle_bound specifically for each hot spot.
+				float radius_bound_hs = radius_bound;
+				float degrees_bound_hs = degrees_bound;
+				utility::vector1< std::string > labels = pose.pdb_info()->get_reslabels( i_hspot_res );
+				for ( std::string s : labels)
+				{
+						utility::vector1< std::string > tmp = utility::string_split_simple(s, ':');
+						if( !tmp.empty() && boost::to_lower_copy<std::string>( tmp[1] ) == "cart_bound" ) { radius_bound_hs = utility::string2float( tmp[2] ); }
+						if( !tmp.empty() && boost::to_lower_copy<std::string>( tmp[1] ) == "angle_bound" ) { degrees_bound_hs = utility::string2float( tmp[2] ); }
+				}
+				//std::cout << "cart_bound: " << radius_bound_hs << " angle_bound: " << degrees_bound_hs << std::endl;
+				float radians_bound_hs = degrees_bound_hs * M_PI / 180;
+
 				std::cout << i_hspot_res << " " << std::flush; // No endl here!!!!
 
 				int input_nheavy = pose.residue(i_hspot_res).nheavyatoms();
@@ -354,7 +370,7 @@ namespace rif {
 
 							for(int a = 0; a < NSAMP; ++a){							
 								EigenXform x_perturb;
-								::scheme::numeric::rand_xform_sphere(rng,x_perturb,radius_bound,radians_bound);
+								::scheme::numeric::rand_xform_sphere(rng,x_perturb,radius_bound_hs,radians_bound_hs);
 
 								EigenXform building_x_position = impose * x_orig_position;
 								if ( pass == 1 ) {
