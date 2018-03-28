@@ -121,6 +121,7 @@ OPT_1GRP_KEY( StringVector, rifgen, donres )
 	OPT_1GRP_KEY( RealVector        , rifgen, lever_radii      )
 	OPT_1GRP_KEY( RealVector        , rifgen, lever_bounds     )
 
+	OPT_1GRP_KEY( String        , rifgen, tuning_file )
 
 	void register_options() {
 		using namespace basic::options;
@@ -181,6 +182,9 @@ OPT_1GRP_KEY( StringVector, rifgen, donres )
 		NEW_OPT( rifgen::hash_ang_resls,  "ang reslolution(s) of hash table(s) in degrees", utility::vector1<double>() );
 		NEW_OPT( rifgen::lever_radii      , ""                                      , utility::vector1<double>() );
 		NEW_OPT( rifgen::lever_bounds     , ""                                      , utility::vector1<double>() );
+
+
+		NEW_OPT(  rifgen::tuning_file                          , "" , "precisely control how rifgen and rifdock work" );
 	}
 
 
@@ -664,6 +668,8 @@ int main(int argc, char *argv[]) {
 		params->rot_index_p = rot_index_p;
 		params->cache_data_path = cache_data_path;
 		params->field_by_atype = field_by_atype;
+		// pass the tuning file here, so it can be applied to all the rifgen process.
+		params->tuning_file = option[rifgen::tuning_file]();
 
 		for( int igen = 0; igen < generators.size(); ++igen )
 		{

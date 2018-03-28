@@ -49,6 +49,8 @@ struct RifGenParams {
   	core::pose::PoseOP             target = nullptr;
 	std::string                    target_tag;
 	std::string                    output_prefix="./default_";
+	// set the fine-tuning file here, so it can control the rifgen processes of polar, apolar and hotspots.
+	std::string										 tuning_file="";
 	utility::vector1<int>          target_res;
 	//shared_ptr<RotamerIndex const> rot_index_p = nullptr;
 	shared_ptr<RotamerIndex> rot_index_p = nullptr;

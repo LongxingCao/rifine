@@ -74,6 +74,44 @@ struct HBJob {
 };
 
 
+// reture the hbond definitions from a tuning file.
+std::vector< HBondDefinition > get_hbond_definitions( std::string tuning_file )
+{
+		std::vector< HBondDefinition > hbs;
+		HBondDefinition hb_temp;
+
+		if ( tuning_file == "" )
+		{
+				return hbs;
+		}
+		runtime_assert_msg(utility::file::file_exists( tuning_file ), "tunning file does not exits: " + tuning_file );
+		std::ifstream in;
+		std::string s;
+		in.open( tuning_file , std::ios::in );
+		std::vector<std::string> lines;
+		bool flag = false;
+		while ( std::getline(in, s)){
+				if (s.empty() || s.find("#") == 0) continue;
+				if (s.find("HBOND_DEFINITION") != std::string::npos ) { flag = true; continue; }
+				else if (s.find("END_HBOND_DEFINITION") != std::string::npos ) { flag = false; continue; }
+
+				if ( flag )
+				{
+						utility::vector1<std::string> splt = utility::quoted_split( s );
+						runtime_assert_msg(splt.size() >=2, "something is wrong with the hbond definition block, please check the tuning file." );
+						hb_temp.atom_name = splt[1];
+						hb_temp.res_num = utility::string2int( splt[2] );
+						hb_temp.allowed_rot_names.clear();
+						for(int ii = 3; ii <= splt.size(); ++ii )
+						{
+								hb_temp.allowed_rot_names.push_back( splt[ii] );
+						}
+						hbs.push_back(hb_temp);
+				}
+		}
+		return hbs;
+}
+
 	void
 	RifGeneratorSimpleHbonds::generate_rif(
 		RifAccumulatorP accumulator,
@@ -88,6 +126,7 @@ struct HBJob {
 		std::vector< VoxelArray* > & field_by_atype = params->field_by_atype;
 
 		// typedef Eigen::Transform<float,3,Eigen::AffineCompact> EigenXform;
+		std::string tuning_file = params->tuning_file;
 
 		using core::id::AtomID;
 		using std::cout;
@@ -111,6 +150,9 @@ struct HBJob {
 			std::cout << "RifGeneratorSimpleHbonds, cache data path: " << dir << std::endl;
 		}
 
+		std::vector< HBondDefinition > hbond_definitions = get_hbond_definitions( tuning_file );
+		bool const use_hbond_definitions = !( hbond_definitions.empty() );
+    std::vector<std::pair<int, std::string> > target_bonder_names;
 
 		RotamerIndex const & rot_index( *rot_index_p );
 
@@ -181,8 +223,13 @@ struct HBJob {
 		std::vector< ::scheme::chemical::HBondRay > target_donors, target_acceptors;
 		params->hbopt.satisfied_atoms = ::devel::scheme::get_satisfied_atoms( target );
 		for( auto ir : target_res ){
+		  // pull out the name, so I can know the corrent donor or acceptor atom
+			/*
 			::devel::scheme::get_donor_rays   ( target, ir, params->hbopt, target_donors );
 			::devel::scheme::get_acceptor_rays( target, ir, params->hbopt, target_acceptors );
+			*/
+			::devel::scheme::get_donor_rays   ( target, ir, params->hbopt, target_donors, target_bonder_names );
+			::devel::scheme::get_acceptor_rays( target, ir, params->hbopt, target_acceptors, target_bonder_names );
 		}
 		{
 			if( target_donors.size() ){
@@ -631,6 +678,36 @@ struct HBJob {
 						int sat1=-1, sat2=-1;
 						float positioned_rotamer_score = rot_tgt_scorer.score_rotamer_v_target_sat( irot, bbactor.position_, sat1, sat2, 10.0, 0 );
 						if( positioned_rotamer_score > opts.score_threshold ) continue;
+						if ( use_hbond_definitions )
+						{
+								bool pass = true;
+								std::string const & irot_name = rot_index.rotamers_[irot].resname_;
+								if (sat1 != -1)
+								{
+										std::pair< int, std::string> const & bonder_name = target_bonder_names[sat1];
+										for ( HBondDefinition & hb : hbond_definitions )
+										{
+												if ( hb.res_num == bonder_name.first && hb.atom_name == bonder_name.second )
+												{
+														pass = false;
+														if ( std::find(hb.allowed_rot_names.begin(), hb.allowed_rot_names.end(), irot_name ) != hb.allowed_rot_names.end() ) { pass = true; break; }
+												}
+										}
+								}
+								if ( pass && sat2 != -1 )
+								{
+										std::pair< int, std::string> const & bonder_name = target_bonder_names[sat2];
+										for ( HBondDefinition & hb : hbond_definitions )
+										{
+												if ( hb.res_num == bonder_name.first && hb.atom_name == bonder_name.second )
+												{
+														pass = false;
+														if ( std::find(hb.allowed_rot_names.begin(), hb.allowed_rot_names.end(), irot_name ) != hb.allowed_rot_names.end() ) { pass = true; break; }
+												}
+										}
+								}
+								if (! pass ) continue;
+						}
 
 						if( n_sat_groups > 0 ){
 							runtime_assert( sat1 < n_sat_groups && sat2 < n_sat_groups );
