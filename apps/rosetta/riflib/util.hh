@@ -257,7 +257,7 @@ sqr( Float const & x ) { return x*x; }
 // 	return score;
 // }
 
-
+/*
 
 template< class HBondRay >
 float score_hbond_rays(
@@ -280,7 +280,34 @@ float score_hbond_rays(
 	score = ( 1.0 - nds )*( score * dirscore ) + nds * score;
 	return score;
 }
+ 
+ */
 
+    template< class HBondRay >
+    float score_hbond_rays(
+                           HBondRay const & don,
+                           HBondRay const & acc,
+                           float non_directional_fraction = 0.0 // 0.0 - 1.0
+    ){
+        float const ORBLEN = 0.61;
+        const Eigen::Vector3f accep_O = acc.horb_cen - acc.direction*ORBLEN;
+        float diff = ( (don.horb_cen-accep_O).norm() - 2.00 );
+        diff = diff < 0 ? diff*1.5 : diff; // increase dis pen if too close
+        float const max_diff = 0.8;
+        diff = diff >  max_diff ?  max_diff : diff;
+        diff = diff < -max_diff ? -max_diff : diff;
+        // if( diff > max_diff ) return 0.0;
+        // sigmoid -like shape on distance score
+        float score = sqr( 1.0 - sqr( diff/max_diff ) ) * -1.0;
+        assert( score <= 0.0 );
+        float dirscore = -don.direction.dot( acc.direction );
+        dirscore = dirscore < 0 ? 0.0 : dirscore; // is positive
+        float const nds = non_directional_fraction;
+        score = ( 1.0 - nds )*( score * dirscore ) + nds * score;
+        
+        return score;
+    }
+    
 template< class VoxelArrayPtr, class HBondRay, class RotamerIndex >
 struct ScoreRotamerVsTarget {
 	::scheme::shared_ptr< RotamerIndex const > rot_index_p_ = nullptr;
@@ -377,6 +404,7 @@ struct ScoreRotamerVsTarget {
 						HBondRay const & hr_tgt_acc = target_acceptors_.at(i_hr_tgt_acc);
 						float const thishb = score_hbond_rays( hr_rot_don, hr_tgt_acc );
 						hbscore += thishb * hbond_weight_;
+						// printout the score of the hbond_weight.
 						if( thishb < this->min_hb_quality_for_satisfaction_ ){
 							if(      sat1==-1 ) sat1 = i_hr_tgt_acc + target_donors_.size();
 							else if( sat2==-1 ) sat2 = i_hr_tgt_acc + target_donors_.size();

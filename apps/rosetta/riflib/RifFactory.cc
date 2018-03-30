@@ -35,6 +35,8 @@
 #include <riflib/scaffold/ScaffoldDataCache.hh>
 #include <complex>
 
+#include <random>
+#include <boost/random/uniform_real.hpp>
 
 namespace devel {
 namespace scheme {
@@ -240,6 +242,55 @@ public:
         return RifBaseKeyRange(RifBaseKeyIter(b), RifBaseKeyIter(e));
     }
 
+
+
+		bool random_dump_rotamers( std::vector< std::string > res_names, std::string const file_name, float score_cut ,float dump_fraction, shared_ptr<RotamerIndex> rot_index_p ) const override
+		{
+				std::mt19937 rng(time(0));
+				boost::uniform_real<> uniform;
+				bool dump_all = false;
+				if ( std::find( res_names.begin(), res_names.end(), "*" ) != res_names.end() ) dump_all = true;
+
+				const RifBase * base = this;
+				shared_ptr<XMap const> from;
+				base->get_xmap_const_ptr( from );
+
+
+				utility::io::ozstream fout( file_name );
+				int64_t count = 1;
+				for (auto const & v : from->map_ )
+				{
+						// this is the position of this grid, will not be used here.
+						EigenXform x = from->hasher_.get_center( v.first );
+						typename XMap::Value const & rotscores = v.second;
+						static int const Nrots = XMap::Value::N;
+						for( int i_rs = 0; i_rs < Nrots; ++i_rs )
+						{
+								if( rotscores.empty(i_rs) ) {
+										break;
+								}
+								int irot = rotscores.rotamer(i_rs);
+								float score = rotscores.score(i_rs);
+								if ( (score <= score_cut) && (dump_all || std::find(res_names.begin(), res_names.end(), rot_index_p->rotamers_[irot].resname_) != res_names.end()) )
+								{
+										if ( uniform(rng) <= dump_fraction )
+										{
+												fout << std::string("MODEL") << " " << boost::str(boost::format("%.3f")%score) << std::endl;
+												BOOST_FOREACH( SchemeAtom a, rot_index_p->rotamers_.at( irot ).atoms_ ){
+														a.set_position( x * a.position() ); 
+														a.nonconst_data().resnum = count;
+														a.nonconst_data().chain = 'A';
+														::scheme::actor::write_pdb( fout, a, nullptr );
+												}
+												fout << std::string("ENDMDL") << std::endl;
+												++count;
+										}
+								}
+						}
+				}
+				fout.close();
+
+		}
 
     // This looks for rifgen rotamers that have their N, CA, CB, and last atom within dump_dist of the residue given
     bool dump_rotamers_near_res( core::conformation::Residue const & res, std::string const & file_name, 

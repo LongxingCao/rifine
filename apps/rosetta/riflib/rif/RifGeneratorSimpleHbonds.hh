@@ -40,12 +40,13 @@ struct HBondDefinition {
 
 struct BidentateDefinition {
 		std::string atom1_name = "";
-		int res1_name = -1;
+		int res1_num = -1;
 		std::string atom2_name = "";
-		int res2_name = -1;
+		int res2_num = -1;
 };
 
 std::vector< HBondDefinition > get_hbond_definitions( std::string tuning_file );
+std::vector< BidentateDefinition > get_bidentate_definitions( std::string tuning_file );
 
 struct RifGeneratorSimpleHbonds : public RifGenerator {
 

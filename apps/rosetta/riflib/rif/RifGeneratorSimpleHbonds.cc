@@ -66,51 +66,84 @@ namespace scheme {
 namespace rif {
 
 
-struct HBJob {
-	std::string don, acc, don_or_acc;
-	int nrots;
-	int ires;
-	bool operator<( HBJob const & other ) const { return nrots > other.nrots; }
-};
+    struct HBJob {
+        std::string don, acc, don_or_acc;
+        int nrots;
+        int ires;
+        bool operator<( HBJob const & other ) const { return nrots > other.nrots; }
+    };
 
 
-// reture the hbond definitions from a tuning file.
-std::vector< HBondDefinition > get_hbond_definitions( std::string tuning_file )
-{
-		std::vector< HBondDefinition > hbs;
-		HBondDefinition hb_temp;
-
-		if ( tuning_file == "" )
-		{
-				return hbs;
-		}
-		runtime_assert_msg(utility::file::file_exists( tuning_file ), "tunning file does not exits: " + tuning_file );
-		std::ifstream in;
-		std::string s;
-		in.open( tuning_file , std::ios::in );
-		std::vector<std::string> lines;
-		bool flag = false;
-		while ( std::getline(in, s)){
-				if (s.empty() || s.find("#") == 0) continue;
-				if (s.find("HBOND_DEFINITION") != std::string::npos ) { flag = true; continue; }
-				else if (s.find("END_HBOND_DEFINITION") != std::string::npos ) { flag = false; continue; }
-
-				if ( flag )
-				{
-						utility::vector1<std::string> splt = utility::quoted_split( s );
-						runtime_assert_msg(splt.size() >=2, "something is wrong with the hbond definition block, please check the tuning file." );
-						hb_temp.atom_name = splt[1];
-						hb_temp.res_num = utility::string2int( splt[2] );
-						hb_temp.allowed_rot_names.clear();
-						for(int ii = 3; ii <= splt.size(); ++ii )
-						{
-								hb_temp.allowed_rot_names.push_back( splt[ii] );
-						}
-						hbs.push_back(hb_temp);
-				}
-		}
-		return hbs;
-}
+    // reture the hbond definitions from a tuning file.
+    std::vector< HBondDefinition > get_hbond_definitions( std::string tuning_file )
+    {
+        std::vector< HBondDefinition > hbs;
+        HBondDefinition hb_temp;
+        
+        if ( tuning_file == "" )
+        {
+            return hbs;
+        }
+        runtime_assert_msg(utility::file::file_exists( tuning_file ), "tunning file does not exits: " + tuning_file );
+        std::ifstream in;
+        std::string s;
+        in.open( tuning_file , std::ios::in );
+        std::vector<std::string> lines;
+        bool flag = false;
+        while ( std::getline(in, s) ){
+            if (s.empty() || s.find("#") == 0) continue;
+            if (s.find("HBOND_DEFINITION") != std::string::npos && s.find("END_HBOND_DEFINITION") == std::string::npos ) { flag = true; continue; }
+            else if (s.find("END_HBOND_DEFINITION") != std::string::npos ) { flag = false; break; }
+            
+            if ( flag )
+            {
+                utility::vector1<std::string> splt = utility::quoted_split( s );
+                runtime_assert_msg(splt.size() >=2, "something is wrong with the hbond definition block, please check the tuning file." );
+                hb_temp.atom_name = splt[1];
+                hb_temp.res_num = utility::string2int( splt[2] );
+                hb_temp.allowed_rot_names.clear();
+                for(int ii = 3; ii <= splt.size(); ++ii )
+                {
+                    hb_temp.allowed_rot_names.push_back( splt[ii] );
+                }
+                hbs.push_back(hb_temp);
+            }
+        }
+        return hbs;
+    }
+    
+    std::vector< BidentateDefinition > get_bidentate_definitions( std::string tuning_file )
+    {
+        std::vector< BidentateDefinition > bdhbs;
+        BidentateDefinition bdhb_temp;
+        
+        if ( tuning_file == "" ) {
+            return bdhbs;
+        }
+        runtime_assert_msg(utility::file::file_exists( tuning_file ), "tunning file does not exits: " + tuning_file );
+        std::ifstream in;
+        std::string s;
+        in.open( tuning_file , std::ios::in );
+        std::vector<std::string> lines;
+        bool flag = false;
+        while ( std::getline(in, s) ){
+            if (s.empty() || s.find("#") == 0) continue;
+            if (s.find("BIDENTATE_DEFINITION") != std::string::npos && s.find("END_BIDENTATE_DEFINITION") == std::string::npos ) { flag = true; continue; }
+            else if (s.find("END_BIDENTATE_DEFINITION") != std::string::npos ) { flag = false; break; }
+            
+            if ( flag )
+            {
+                utility::vector1<std::string> splt = utility::quoted_split( s );
+                runtime_assert_msg(splt.size() == 4, "something is wrong with the bidentate hydrogen bonds definition block, please check the tuning file." );
+                bdhb_temp.atom1_name = splt[1];
+                bdhb_temp.res1_num = utility::string2int( splt[2] );
+                bdhb_temp.atom2_name = splt[3];
+                bdhb_temp.res2_num = utility::string2int( splt[4] );
+                bdhbs.push_back(bdhb_temp);
+            }
+        }
+        return bdhbs;
+    }
 
 	void
 	RifGeneratorSimpleHbonds::generate_rif(
@@ -126,7 +159,6 @@ std::vector< HBondDefinition > get_hbond_definitions( std::string tuning_file )
 		std::vector< VoxelArray* > & field_by_atype = params->field_by_atype;
 
 		// typedef Eigen::Transform<float,3,Eigen::AffineCompact> EigenXform;
-		std::string tuning_file = params->tuning_file;
 
 		using core::id::AtomID;
 		using std::cout;
@@ -150,9 +182,17 @@ std::vector< HBondDefinition > get_hbond_definitions( std::string tuning_file )
 			std::cout << "RifGeneratorSimpleHbonds, cache data path: " << dir << std::endl;
 		}
 
-		std::vector< HBondDefinition > hbond_definitions = get_hbond_definitions( tuning_file );
-		bool const use_hbond_definitions = !( hbond_definitions.empty() );
-    std::vector<std::pair<int, std::string> > target_bonder_names;
+		// the hbond definition stuff
+		std::string tuning_file = params->tuning_file;
+		std::vector< HBondDefinition > const hbond_definitions = get_hbond_definitions( tuning_file );
+		bool const use_hbond_definition = !( hbond_definitions.empty() );
+		std::vector< int > use_hbond_definition_rays;
+		std::vector< std::vector< std::string > > allowed_rotamers_rays;
+        std::vector<std::pair<int, std::string> > target_bonder_names;
+        // the bidentate hydrogen bond definition stuff
+        std::vector< BidentateDefinition > bidentate_definitions = get_bidentate_definitions( tuning_file );
+        bool const use_bidentate_definition = !( bidentate_definitions.empty() );
+        std::vector< int > use_bidentate_definition_rays;
 
 		RotamerIndex const & rot_index( *rot_index_p );
 
@@ -231,6 +271,52 @@ std::vector< HBondDefinition > get_hbond_definitions( std::string tuning_file )
 			::devel::scheme::get_donor_rays   ( target, ir, params->hbopt, target_donors, target_bonder_names );
 			::devel::scheme::get_acceptor_rays( target, ir, params->hbopt, target_acceptors, target_bonder_names );
 		}
+        // this is to fill the allowed_rotamers_rays
+        {
+            // remove the space in the atoms
+            for ( auto  & x : target_bonder_names )
+                x.second = utility::strip( x.second, ' ');
+            
+            if ( use_hbond_definition ){
+                use_hbond_definition_rays.resize( target_bonder_names.size() );
+                allowed_rotamers_rays.resize( 0 );
+                for ( int ii = 0; ii < target_bonder_names.size(); ++ii ){
+                    use_hbond_definition_rays[ii] = -1;
+                    for ( HBondDefinition const & hb : hbond_definitions )
+                    {
+                        if ( hb.res_num == target_bonder_names[ii].first && hb.atom_name == target_bonder_names[ii].second )
+                        {
+                            allowed_rotamers_rays.push_back( hb.allowed_rot_names );
+                            use_hbond_definition_rays[ ii ] = allowed_rotamers_rays.size() -1;
+                        }
+                    }
+                }
+            }
+            if ( use_bidentate_definition ) {
+                use_bidentate_definition_rays.resize( target_bonder_names.size() );
+                for (int ii = 0; ii < use_bidentate_definition_rays.size(); ++ii ) {
+                    use_bidentate_definition_rays[ii] = -1;
+                }
+                int count = 0;
+                for ( auto const & bdhb : bidentate_definitions) {
+                    for ( int ii = 0; ii < target_bonder_names.size(); ++ii ){
+                        if ( ( bdhb.res1_num == target_bonder_names[ii].first && bdhb.atom1_name == target_bonder_names[ii].second ) || ( bdhb.res2_num == target_bonder_names[ii].first && bdhb.atom2_name == target_bonder_names[ii].second ) ) {
+                            use_bidentate_definition_rays[ii] = count;
+                        }
+                    }
+                    ++count;
+                }
+            }
+            /*
+             for ( auto const & x : target_bonder_names ) std::cout << x.first << " " << x.second << std::endl;
+             for ( auto const & x : use_hbond_definition_rays ) std::cout << x << std::endl;
+             for ( auto const & x : allowed_rotamers_rays ) {
+             for ( auto const & y : x )
+             std::cout << y << " ";
+             std::cout << std::endl;
+             }
+             */
+        }
 		{
 			if( target_donors.size() ){
 				utility::io::ozstream donout(params->output_prefix+"donors.pdb.gz");
@@ -265,6 +351,7 @@ std::vector< HBondDefinition > get_hbond_definitions( std::string tuning_file )
 			rot_tgt_scorer.hbond_weight_ = opts.hbond_weight;
 			rot_tgt_scorer.upweight_multi_hbond_ = opts.upweight_multi_hbond;
 			rot_tgt_scorer.upweight_iface_ = 1.0;
+			rot_tgt_scorer.min_hb_quality_for_satisfaction_ = -0.1;
 
 		}
 
@@ -676,38 +763,46 @@ std::vector< HBondDefinition > get_hbond_definitions( std::string tuning_file )
 
 
 						int sat1=-1, sat2=-1;
+
 						float positioned_rotamer_score = rot_tgt_scorer.score_rotamer_v_target_sat( irot, bbactor.position_, sat1, sat2, 10.0, 0 );
 						if( positioned_rotamer_score > opts.score_threshold ) continue;
-						if ( use_hbond_definitions )
+						if ( use_hbond_definition )
 						{
+                            if ( sat1 == -1 && sat2 == -1 ) continue;
+                            
 								bool pass = true;
 								std::string const & irot_name = rot_index.rotamers_[irot].resname_;
-								if (sat1 != -1)
+								if ( sat1 != -1 && use_hbond_definition_rays[sat1] != -1 )
 								{
-										std::pair< int, std::string> const & bonder_name = target_bonder_names[sat1];
-										for ( HBondDefinition & hb : hbond_definitions )
+										pass = false;
+										if ( std::find( allowed_rotamers_rays[ use_hbond_definition_rays[ sat1 ] ].begin(), allowed_rotamers_rays[ use_hbond_definition_rays[ sat1 ] ].end(), irot_name ) != allowed_rotamers_rays[ use_hbond_definition_rays[ sat1 ] ].end() )
 										{
-												if ( hb.res_num == bonder_name.first && hb.atom_name == bonder_name.second )
-												{
-														pass = false;
-														if ( std::find(hb.allowed_rot_names.begin(), hb.allowed_rot_names.end(), irot_name ) != hb.allowed_rot_names.end() ) { pass = true; break; }
-												}
+												pass = true;
 										}
 								}
-								if ( pass && sat2 != -1 )
+								if (false &&  pass && sat2 != -1 && use_hbond_definition_rays[sat2] != -1 )
 								{
-										std::pair< int, std::string> const & bonder_name = target_bonder_names[sat2];
-										for ( HBondDefinition & hb : hbond_definitions )
+										pass = false;
+										if ( std::find( allowed_rotamers_rays[ use_hbond_definition_rays[ sat2 ] ].begin(), allowed_rotamers_rays[ use_hbond_definition_rays[ sat2 ] ].end(), irot_name ) != allowed_rotamers_rays[ use_hbond_definition_rays[ sat2 ] ].end() )
 										{
-												if ( hb.res_num == bonder_name.first && hb.atom_name == bonder_name.second )
-												{
-														pass = false;
-														if ( std::find(hb.allowed_rot_names.begin(), hb.allowed_rot_names.end(), irot_name ) != hb.allowed_rot_names.end() ) { pass = true; break; }
-												}
+												pass = true;
 										}
 								}
-								if (! pass ) continue;
+								if ( !pass ) continue;
 						}
+                        if ( use_bidentate_definition ) {
+                            if ( sat1 == -1 && sat2 == -1 ) {
+                                // what should I do? A bad rif residue?
+                                // just for the test case ...
+                                continue;
+                            } else if ( sat1 != -1 && sat2 == -1 ) {
+                                if ( use_bidentate_definition_rays[sat1] != -1 ) continue;
+                            } else if ( sat1 == -1 && sat2 != -1 ) {
+                                if ( use_bidentate_definition_rays[sat2] != -1 ) continue;
+                            } else {
+                                if ( use_bidentate_definition_rays[sat2] !=  use_bidentate_definition_rays[sat1] ) continue;
+                            }
+                        }
 
 						if( n_sat_groups > 0 ){
 							runtime_assert( sat1 < n_sat_groups && sat2 < n_sat_groups );
