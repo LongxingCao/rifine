@@ -184,7 +184,7 @@ OPT_1GRP_KEY( StringVector, rifgen, donres )
 		NEW_OPT( rifgen::lever_bounds     , ""                                      , utility::vector1<double>() );
 
 
-		NEW_OPT(  rifgen::tuning_file                          , "" , "precisely control how rifgen and rifdock work" );
+		NEW_OPT(  rifgen::tuning_file                          , "precisely control how rifgen and rifdock work" , "" );
 	}
 
 
