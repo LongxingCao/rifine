@@ -44,9 +44,16 @@ struct BidentateDefinition {
 		std::string atom2_name = "";
 		int res2_num = -1;
 };
+    
+struct RequirementDefinition {
+    int req_num;
+    std::string require;
+    std::string definition;
+};
 
 std::vector< HBondDefinition > get_hbond_definitions( std::string tuning_file );
 std::vector< BidentateDefinition > get_bidentate_definitions( std::string tuning_file );
+std::vector< RequirementDefinition > get_requirement_definitions( std::string tuning_file );
 
 struct RifGeneratorSimpleHbonds : public RifGenerator {
 

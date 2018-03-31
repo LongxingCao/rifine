@@ -145,6 +145,38 @@ namespace rif {
         return bdhbs;
     }
 
+    std::vector< RequirementDefinition > get_requirement_definitions( std::string tuning_file )
+    {
+        std::vector< RequirementDefinition > reqs;
+        RequirementDefinition req_temp;
+        
+        if ( tuning_file == "" ) {
+            return reqs;
+        }
+        runtime_assert_msg(utility::file::file_exists( tuning_file ), "tunning file does not exits: " + tuning_file );
+        std::ifstream in;
+        std::string s;
+        in.open( tuning_file , std::ios::in );
+        std::vector<std::string> lines;
+        bool flag = false;
+        while ( std::getline(in, s) ){
+            if (s.empty() || s.find("#") == 0) continue;
+            if (s.find("REQUIREMENT_DEFINITION") != std::string::npos && s.find("END_REQUIREMENT_DEFINITION") == std::string::npos ) { flag = true; continue; }
+            else if (s.find("END_REQUIREMENT_DEFINITION") != std::string::npos ) { flag = false; break; }
+            
+            if ( flag )
+            {
+                utility::vector1<std::string> splt = utility::quoted_split( s );
+                runtime_assert_msg(splt.size() >= 3, "something is wrong with the requirement definition block, please check the tuning file." );
+                req_temp.req_num = utility::string2int( splt[1] );
+                req_temp.require = splt[2];
+                req_temp.definition = splt[3];
+                reqs.push_back(req_temp);
+            }
+        }
+        return reqs;
+    }
+    
 	void
 	RifGeneratorSimpleHbonds::generate_rif(
 		RifAccumulatorP accumulator,
@@ -193,6 +225,11 @@ namespace rif {
         std::vector< BidentateDefinition > bidentate_definitions = get_bidentate_definitions( tuning_file );
         bool const use_bidentate_definition = !( bidentate_definitions.empty() );
         std::vector< int > use_bidentate_definition_rays;
+        // the requirement definition stuff
+        std::vector< RequirementDefinition > requirement_definitions = get_requirement_definitions( tuning_file );
+        bool const use_requirement_definition = !( requirement_definitions.empty() );;
+        std::vector< int > hbond_requirement_labels;
+        std::vector< int > bidentate_requirement_labels;
 
 		RotamerIndex const & rot_index( *rot_index_p );
 
@@ -305,6 +342,37 @@ namespace rif {
                         }
                     }
                     ++count;
+                }
+            }
+            if ( use_requirement_definition ) {
+                hbond_requirement_labels.resize( target_bonder_names.size() );
+                bidentate_requirement_labels.resize( target_bonder_names.size() );
+                for (int ii = 0; ii < target_bonder_names.size(); ++ii) {
+                    hbond_requirement_labels[ii] = -1;
+                    bidentate_requirement_labels[ii] = -1;
+                }
+                // fill the hbond definitions
+                for ( auto const & x : requirement_definitions ) {
+                    runtime_assert_msg(x.req_num >= 0, "the requirement number must be a positive integer!");
+                    if ( x.require == "HBOND" ) {
+                        utility::vector1<std::string> splt = utility::quoted_split( s );
+                        for (int ii = 0; ii < target_bonder_names.size(); ++ii) {
+                            if ( target_bonder_names[ii].first == utility::string2int(splt[2]) && target_bonder_names[ii].second == splt[1] ) {
+                                hbond_requirement_labels[ii] == x.req_num;
+                            }
+                        }
+                    } else if ( x.require == "BIDENTATE" ) {
+                        utility::vector1<std::string> splt = utility::quoted_split( s );
+                        for (int ii = 0; ii < target_bonder_names.size(); ++ii) {
+                            if ( ( utility::string2int(splt[1]) == target_bonder_names[ii].first && splt[2] == target_bonder_names[ii].second ) || ( utility::string2int(splt[3]) == target_bonder_names[ii].first && splt[4] == target_bonder_names[ii].second ) ) {
+                                bidentate_requirement_labels[ii] == x.req_num;
+                            }
+                        }
+                    } else if ( x.require == "HOTSPOT" ) {
+                        
+                    } else {
+                        std::cout << "Unknown requirement definition, maybe you should define more." << std::endl;
+                    }
                 }
             }
             /*
@@ -801,6 +869,47 @@ namespace rif {
                                 if ( use_bidentate_definition_rays[sat2] != -1 ) continue;
                             } else {
                                 if ( use_bidentate_definition_rays[sat2] !=  use_bidentate_definition_rays[sat1] ) continue;
+                            }
+                        }
+                        
+                        if ( use_requirement_definition ) {
+                            // don't define overlap
+                            if ( sat1 == -1 && sat2 == -1 ) {
+                                // what should I do here??
+                            } else if ( sat1 != -1 && sat2 == -1 ) {
+                                if ( hbond_requirement_labels[sat1] != -1 ) {
+                                    sat1 = hbond_requirement_labels[sat1];
+                                    sat2 = -1;
+                                } else {
+                                    sat1 = -1;
+                                    sat2 = -1;
+                                }
+                            } else if ( sat1 ==-1 && sat2 != -1 ) {
+                                // this will never happen.
+                                if ( hbond_requirement_labels[sat2] != -1 ) {
+                                    sat1 = hbond_requirement_labels[sat2];
+                                    sat2 = -1;
+                                } else {
+                                    sat1 = -1;
+                                    sat2 = -1;
+                                }
+                            } else {
+                                if ( hbond_requirement_labels[sat1] != -1 && hbond_requirement_labels[sat2] != -1 ) {
+                                    utility_exit_with_message("I satisfied two polar, maybe you want to define a bidentate hydrogen bond?? I don't know how to do it, ask Longxing about this.");
+                                } else if ( hbond_requirement_labels[sat1] != -1 && hbond_requirement_labels[sat2] == -1 ) {
+                                    sat1 = hbond_requirement_labels[sat1];
+                                    sat2 = -1;
+                                } else if ( hbond_requirement_labels[sat1] == -1 && hbond_requirement_labels[sat2] != -1 ) {
+                                    sat1 = hbond_requirement_labels[sat2];
+                                    sat2 = -1;
+                                } else {
+                                    // normal ...
+                                }
+                                
+                                if ( bidentate_requirement_labels[sat1] != -1 && bidentate_requirement_labels[sat1] == bidentate_requirement_labels[sat2] ) {
+                                    sat1 = bidentate_requirement_labels[sat1];
+                                    sat2 = -1;
+                                }
                             }
                         }
 
