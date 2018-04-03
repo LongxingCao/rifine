@@ -142,14 +142,12 @@ namespace rif {
             }
             // fill the hotspot definitions
             for ( auto const & x : requirement_definitions ) {
-                runtime_assert_msg(x.req_num >= 0, "the requirement number must be a positive integer!");
                 if ( x.require == "HBOND" ) {
                     //
                 } else if ( x.require == "BIDENTATE" ) {
                     //
                 } else if ( x.require == "HOTSPOT" ) {
-                    utility::vector1<std::string> splt = utility::quoted_split( x.definition );
-                    int hotspot_num = utility::string2int( splt[1] );
+                    int hotspot_num = utility::string2int( x.definition[0] );
                     hotspot_requirement_labels[ hotspot_num ] = x.req_num;
                 } else {
                     std::cout << "Unknown requirement definition, maybe you should define more." << std::endl;

@@ -214,6 +214,7 @@ namespace rif {
             for ( auto  & x : target_bonder_names )
                 x.second = utility::strip( x.second, ' ');
             
+
             if ( use_hbond_definition ){
                 use_hbond_definition_rays.resize( target_bonder_names.size() );
                 allowed_rotamers_rays.resize( 0 );
@@ -253,18 +254,15 @@ namespace rif {
                 }
                 // fill the hbond definitions
                 for ( auto const & x : requirement_definitions ) {
-                    runtime_assert_msg(x.req_num >= 0, "the requirement number must be a positive integer!");
                     if ( x.require == "HBOND" ) {
-                        utility::vector1<std::string> splt = utility::quoted_split( x.definition );
                         for (int ii = 0; ii < target_bonder_names.size(); ++ii) {
-                            if ( target_bonder_names[ii].first == utility::string2int(splt[2]) && target_bonder_names[ii].second == splt[1] ) {
+                            if ( target_bonder_names[ii].first == utility::string2int(x.definition[1]) && target_bonder_names[ii].second == x.definition[0] ) {
                                 hbond_requirement_labels[ii] == x.req_num;
                             }
                         }
                     } else if ( x.require == "BIDENTATE" ) {
-                        utility::vector1<std::string> splt = utility::quoted_split( x.definition );
                         for (int ii = 0; ii < target_bonder_names.size(); ++ii) {
-                            if ( ( utility::string2int(splt[1]) == target_bonder_names[ii].first && splt[2] == target_bonder_names[ii].second ) || ( utility::string2int(splt[3]) == target_bonder_names[ii].first && splt[4] == target_bonder_names[ii].second ) ) {
+                            if ( ( utility::string2int(x.definition[1]) == target_bonder_names[ii].first && x.definition[0] == target_bonder_names[ii].second ) || ( utility::string2int(x.definition[3]) == target_bonder_names[ii].first && x.definition[2] == target_bonder_names[ii].second ) ) {
                                 bidentate_requirement_labels[ii] == x.req_num;
                             }
                         }

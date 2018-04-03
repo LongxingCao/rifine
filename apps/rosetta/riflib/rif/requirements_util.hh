@@ -36,7 +36,7 @@ struct BidentateDefinition {
 struct RequirementDefinition {
     int req_num;
     std::string require;
-    std::string definition;
+    std::vector< std::string > definition;
 };
 
 std::vector< HBondDefinition > get_hbond_definitions( std::string tuning_file );

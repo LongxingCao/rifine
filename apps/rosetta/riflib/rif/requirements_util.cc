@@ -26,7 +26,6 @@ namespace rif {
     std::vector< HBondDefinition > get_hbond_definitions( std::string tuning_file )
     {
         std::vector< HBondDefinition > hbs;
-        HBondDefinition hb_temp;
         
         if ( tuning_file == "" )
         {
@@ -45,6 +44,7 @@ namespace rif {
             
             if ( flag )
             {
+                HBondDefinition hb_temp;
                 utility::vector1<std::string> splt = utility::quoted_split( s );
                 runtime_assert_msg(splt.size() >=2, "something is wrong with the hbond definition block, please check the tuning file." );
                 hb_temp.atom_name = splt[1];
@@ -96,7 +96,6 @@ namespace rif {
     std::vector< RequirementDefinition > get_requirement_definitions( std::string tuning_file )
     {
         std::vector< RequirementDefinition > reqs;
-        RequirementDefinition req_temp;
         
         if ( tuning_file == "" ) {
             return reqs;
@@ -114,11 +113,29 @@ namespace rif {
             
             if ( flag )
             {
+                RequirementDefinition req_temp;
                 utility::vector1<std::string> splt = utility::quoted_split( s );
-                runtime_assert_msg(splt.size() >= 3, "something is wrong with the requirement definition block, please check the tuning file." );
+                runtime_assert_msg( utility::string2int( splt[1] ) >=0, "The requirement number must be a positive integer!" );
                 req_temp.req_num = utility::string2int( splt[1] );
                 req_temp.require = splt[2];
-                req_temp.definition = splt[3];
+                for (int ii = 3; ii <= splt.size(); ++ii) {
+                    req_temp.definition.push_back( splt[ii] );
+                }
+                
+                
+                //std::cout << req_temp.req_num << std::endl;
+                
+                
+                if ( req_temp.require == "HBOND" ) {
+                    runtime_assert_msg( req_temp.definition.size() == 2, "something is wrong with the HBOND requirement definition!" );
+                } else if ( req_temp.require == "BIDENTATE" ) {
+                    runtime_assert_msg( req_temp.definition.size() == 4, "something is wrong with the BIDENTATE requirement definition!" );
+                } else if ( req_temp.require == "HOTSPOT" ) {
+                    runtime_assert_msg( req_temp.definition.size() == 1, "something is wrong with the HOTSPOT requirement definition!" );
+                } else {
+                    utility_exit_with_message("Unknown requirement definition: " + std::string(req_temp.require) );
+                }
+                
                 reqs.push_back(req_temp);
             }
         }
