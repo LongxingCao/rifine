@@ -102,7 +102,7 @@ struct RifBase
     virtual RifBaseKeyRange key_range() const = 0;
 
 	// Longxing, to randomly dump some rotamers
-	virtual bool random_dump_rotamers( std::vector< std::string > res_names_dump, std::string const file_name, float score_cut, float dump_fraction, shared_ptr<RotamerIndex> rot_index_p ) const = 0;
+	virtual bool random_dump_rotamers( std::vector< std::string > res_names, std::string const file_name, shared_ptr<RotamerIndex> rot_index_p, float dump_fraction = 0.0001, float score_cut = 99999, int require_num = -1 ) const = 0;
 
     virtual bool dump_rotamers_near_res( core::conformation::Residue const & res, std::string const & file_name, 
                                            float dump_dist, float dump_frac, shared_ptr<RotamerIndex> rot_index_p ) const = 0;

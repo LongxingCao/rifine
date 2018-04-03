@@ -168,6 +168,8 @@ OPT_1GRP_KEY(     StringVector , rif_dock, scaffolds )
     // constrain file
 	OPT_1GRP_KEY(  StringVector, rif_dock, cst_files )
 
+    OPT_1GRP_KEY(  IntegerVector, rif_dock, requirements )
+
 
 
 
@@ -332,6 +334,8 @@ OPT_1GRP_KEY(     StringVector , rif_dock, scaffolds )
 			NEW_OPT(  rif_dock::rot_spec_fname,"rot_spec_fname","NOT SPECIFIED");
 	        // constrain file names
 			NEW_OPT(  rif_dock::cst_files, "" , utility::vector1<std::string>() );
+            
+            NEW_OPT(  rif_dock::requirements,        "which rif residue should be in the final output", utility::vector1< int >());
 
 		}
 	#endif
@@ -481,6 +485,8 @@ struct RifDockOpt
     std::string rot_spec_fname                       ;
     // constrain file names
 	std::vector<std::string> cst_fnames              ;
+    
+    std::vector<int> requirements;
 
 
     void init_from_cli();
@@ -698,6 +704,9 @@ struct RifDockOpt
 
         // constrain file names
 		for( std::string s : option[rif_dock::cst_files  ]() ) cst_fnames.push_back(s);
+        
+        
+        for( int req : option[rif_dock::requirements]() ) requirements.push_back(req);
 
 
 

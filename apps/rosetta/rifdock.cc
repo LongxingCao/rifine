@@ -600,6 +600,8 @@ int main(int argc, char *argv[]) {
 				rso_config.n_sat_groups = opt.require_satisfaction == 0 ? 0 : 1000;//target_donors.size() + target_acceptors.size();
 				rso_config.require_satisfaction = opt.require_satisfaction;
 				rso_config.require_n_rifres = opt.require_n_rifres;
+            
+                rso_config.requirements = opt.requirements;
 
 			
 			ScenePtr scene_prototype;

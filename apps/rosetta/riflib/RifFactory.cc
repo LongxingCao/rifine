@@ -244,7 +244,7 @@ public:
 
 
 
-		bool random_dump_rotamers( std::vector< std::string > res_names, std::string const file_name, float score_cut ,float dump_fraction, shared_ptr<RotamerIndex> rot_index_p ) const override
+		bool random_dump_rotamers( std::vector< std::string > res_names, std::string const file_name, shared_ptr<RotamerIndex> rot_index_p, float dump_fraction = 0.0001, float score_cut = 99999, int require_num = -1 ) const override
 		{
 				std::mt19937 rng(time(0));
 				boost::uniform_real<> uniform;
@@ -271,7 +271,7 @@ public:
 								}
 								int irot = rotscores.rotamer(i_rs);
 								float score = rotscores.score(i_rs);
-								if ( (score <= score_cut) && (dump_all || std::find(res_names.begin(), res_names.end(), rot_index_p->rotamers_[irot].resname_) != res_names.end()) )
+								if ( (score <= score_cut) && (dump_all || std::find(res_names.begin(), res_names.end(), rot_index_p->rotamers_[irot].resname_) != res_names.end()) && ( require_num == -1 || require_num == rotscores.get_requirement_num(i_rs) ) )
 								{
 										if ( uniform(rng) <= dump_fraction )
 										{

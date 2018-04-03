@@ -540,7 +540,7 @@ int main(int argc, char *argv[]) {
 		to_dump.push_back("HIS");
 		to_dump.push_back("HIS_D");
 		to_dump.push_back("TRP");
-		rif_ptrs.back()->random_dump_rotamers( to_dump, "random_rotamers.pdb", 10.0, 0.001, rot_index_p );
+		rif_ptrs.back()->random_dump_rotamers( to_dump, "random_rotamers.pdb", rot_index_p, 0.0001, 99999, -1 );
 		exit(0);
 	}
 

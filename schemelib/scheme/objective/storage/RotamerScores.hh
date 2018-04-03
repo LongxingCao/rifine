@@ -176,7 +176,7 @@ struct RotamerScoreSat : public RotamerScore<_Data,_RotamerBits,_Divisor> {
 
     int get_requirement_num( ) const {
         if( NSat >= 1 && sat_data_[0].not_empty() ){
-            return sat_data_[0];
+            return sat_data_[0].target_sat_num();
         } else {
             return -1;
         }
