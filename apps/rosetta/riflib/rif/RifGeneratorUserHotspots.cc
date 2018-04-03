@@ -51,6 +51,8 @@
 	#include <scheme/actor/BackboneActor.hh>
 
 
+    #include <riflib/rif/requirements_util.hh>
+
 namespace devel {
 namespace scheme {
 namespace rif {
@@ -126,6 +128,38 @@ namespace rif {
 
 		typedef ::Eigen::Matrix<float,3,1> Pos;
 	
+        
+        
+        // requirements definitions
+        std::vector< RequirementDefinition > requirement_definitions = get_requirement_definitions( params->tuning_file );
+        bool const use_requirement_definition = !( requirement_definitions.empty() );
+        std::vector< int > hotspot_requirement_labels;
+        if ( use_requirement_definition ) {
+            // 20 is an arbitrary number, as I don't think there would be more than 20 hotspots.
+            hotspot_requirement_labels.resize( 20 );
+            for (int ii = 0; ii < hotspot_requirement_labels.size(); ++ii) {
+                hotspot_requirement_labels[ii] = -1;
+            }
+            // fill the hotspot definitions
+            for ( auto const & x : requirement_definitions ) {
+                runtime_assert_msg(x.req_num >= 0, "the requirement number must be a positive integer!");
+                if ( x.require == "HBOND" ) {
+                    //
+                } else if ( x.require == "BIDENTATE" ) {
+                    //
+                } else if ( x.require == "HOTSPOT" ) {
+                    utility::vector1<std::string> splt = utility::quoted_split( x.definition );
+                    int hotspot_num = utility::string2int( splt[1] );
+                    hotspot_requirement_labels[ hotspot_num ] = x.req_num;
+                } else {
+                    std::cout << "Unknown requirement definition, maybe you should define more." << std::endl;
+                }
+            }
+        }
+        
+        
+        
+        
 		// some sanity checks
 		int const n_hspot_groups = this->opts.hotspot_files.size();
 		runtime_assert_msg( n_hspot_groups, "no hotspot group files specified!!" );
@@ -407,9 +441,18 @@ namespace rif {
 									EigenXform new_x_position = bbact.position();
 
 									// the hydrogen bond satisfication and the hotspot satisfication are totally mixed, so what is the best way to label a hotspot??
-									accumulator->insert( new_x_position, positioned_rotamer_score-4, irot, 
-										this -> opts.single_file_hotspots_insertion ? i_hspot_res : i_hotspot_group,
-										 -1 );
+                                    
+                                    
+                                    // the old one, and I don't exactly know how this works. single_file_hotspots_insertion? I don't think there is any need to do keep such flag.
+                                    int sat1 = this -> opts.single_file_hotspots_insertion ? i_hspot_res : i_hotspot_group;
+                                    int sat2 =-1;
+                                    if ( use_requirement_definition ) {
+                                        sat1 = hotspot_requirement_labels[i_hspot_res];
+                                    }
+                                    accumulator->insert( new_x_position, positioned_rotamer_score, irot, sat1, sat2);
+									//accumulator->insert( new_x_position, positioned_rotamer_score-4, irot,
+									//	this -> opts.single_file_hotspots_insertion ? i_hspot_res : i_hotspot_group,
+									//	 -1 );
 
 								 	if (opts.dump_hotspot_samples>=NSAMP){
 								 		hotspot_dump_file <<"MODEL        "<<irot<<a<<"                                                                  \n";

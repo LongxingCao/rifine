@@ -300,7 +300,14 @@ float score_hbond_rays(
         // sigmoid -like shape on distance score
         float score = sqr( 1.0 - sqr( diff/max_diff ) ) * -1.0;
         assert( score <= 0.0 );
-        float dirscore = -don.direction.dot( acc.direction );
+        
+        const Eigen::Vector3f h_to_a = ( accep_O - don.horb_cen ).normalized();
+        float const h_dirscore = std::max<float>( 0, don.direction.dot( h_to_a ) );
+        float const a_dirscore = std::max<float>( 0, acc.direction.dot( h_to_a ) * -1.0 );
+        
+        float dirscore = h_dirscore * h_dirscore * a_dirscore;
+        
+        // float dirscore = -don.direction.dot( acc.direction );
         dirscore = dirscore < 0 ? 0.0 : dirscore; // is positive
         float const nds = non_directional_fraction;
         score = ( 1.0 - nds )*( score * dirscore ) + nds * score;
@@ -377,21 +384,29 @@ struct ScoreRotamerVsTarget {
 					Eigen::Vector3f dirpos = hr_rot_acc.horb_cen + hr_rot_acc.direction;
 					hr_rot_acc.horb_cen  = rbpos * hr_rot_acc.horb_cen;
 					hr_rot_acc.direction = rbpos * dirpos - hr_rot_acc.horb_cen;
-					for( int i_hr_tgt_don = 0; i_hr_tgt_don < target_donors_.size(); ++i_hr_tgt_don )
-					{
-						HBondRay const & hr_tgt_don = target_donors_.at(i_hr_tgt_don);
-						float const thishb = score_hbond_rays( hr_tgt_don, hr_rot_acc );
-						hbscore += thishb * hbond_weight_;
-						if( thishb < this->min_hb_quality_for_satisfaction_ ){
-							if(      sat1==-1 ) sat1 = i_hr_tgt_don;
-							else if( sat2==-1 ) sat2 = i_hr_tgt_don;
-						}
-						if( upweight_multi_hbond_ && thishb < min_hb_quality_for_multi_ ){
-							if( !used_tgt_donor[i_hr_tgt_don] && !used_rot_acceptor[i_hr_rot_acc] ) ++hbcount;
-							used_tgt_donor   [i_hr_tgt_don] = true;
-							used_rot_acceptor[i_hr_rot_acc] = true;
-						}
-					}
+                    
+                    float best_score = 100;
+                    int best_sat = -1;
+                    for( int i_hr_tgt_don = 0; i_hr_tgt_don < target_donors_.size(); ++i_hr_tgt_don )
+                    {
+                        HBondRay const & hr_tgt_don = target_donors_.at(i_hr_tgt_don);
+                        float const thishb = score_hbond_rays( hr_tgt_don, hr_rot_acc );
+                        if ( thishb < best_score ) {
+                            best_score = thishb;
+                            best_sat = i_hr_tgt_don;
+                        }
+                    }
+                    if ( best_sat > -1 ) {
+                        hbscore += best_score * hbond_weight_;
+                        if( best_score < this->min_hb_quality_for_satisfaction_ ){
+                            if(      sat1==-1 ) sat1 = best_sat;
+                            else if( sat2==-1 ) sat2 = best_sat;
+                        }
+                        if( upweight_multi_hbond_ && best_score < min_hb_quality_for_multi_ ){
+                            if( !used_tgt_donor[best_sat] ) ++hbcount;
+                            used_tgt_donor   [best_sat] = true;
+                        }
+                    }
 				}
 				for( int i_hr_rot_don = 0; i_hr_rot_don < rot_index_p_->rotamer(irot).donors_.size(); ++i_hr_rot_don )
 				{
@@ -399,22 +414,29 @@ struct ScoreRotamerVsTarget {
 					Eigen::Vector3f dirpos = hr_rot_don.horb_cen + hr_rot_don.direction;
 					hr_rot_don.horb_cen  = rbpos * hr_rot_don.horb_cen;
 					hr_rot_don.direction = rbpos * dirpos - hr_rot_don.horb_cen;
-					for( int i_hr_tgt_acc = 0; i_hr_tgt_acc < target_acceptors_.size(); ++i_hr_tgt_acc )
-					{
-						HBondRay const & hr_tgt_acc = target_acceptors_.at(i_hr_tgt_acc);
-						float const thishb = score_hbond_rays( hr_rot_don, hr_tgt_acc );
-						hbscore += thishb * hbond_weight_;
-						// printout the score of the hbond_weight.
-						if( thishb < this->min_hb_quality_for_satisfaction_ ){
-							if(      sat1==-1 ) sat1 = i_hr_tgt_acc + target_donors_.size();
-							else if( sat2==-1 ) sat2 = i_hr_tgt_acc + target_donors_.size();
-						}
-						if( upweight_multi_hbond_ && thishb < min_hb_quality_for_multi_ ){
-							if( !used_rot_donor[i_hr_rot_don] && !used_tgt_acceptor[i_hr_tgt_acc] ) ++hbcount;
-							used_tgt_acceptor[i_hr_tgt_acc] = true;
-							used_rot_donor[i_hr_rot_don] = true;
-						}
-					}
+                    
+                    float best_score = 100;
+                    int best_sat = -1;
+                    for( int i_hr_tgt_acc = 0; i_hr_tgt_acc < target_acceptors_.size(); ++i_hr_tgt_acc )
+                    {
+                        HBondRay const & hr_tgt_acc = target_acceptors_.at(i_hr_tgt_acc);
+                        float const thishb = score_hbond_rays( hr_rot_don, hr_tgt_acc );
+                        if ( thishb < best_score ) {
+                            best_score = thishb;
+                            best_sat = i_hr_tgt_acc;
+                        }
+                    }
+                    if ( best_sat > -1 ) {
+                        hbscore += best_score * hbond_weight_;
+                        if( best_score < this->min_hb_quality_for_satisfaction_ ){
+                            if(      sat1==-1 ) sat1 = best_sat + target_donors_.size();
+                            else if( sat2==-1 ) sat2 = best_sat + target_donors_.size();
+                        }
+                        if( upweight_multi_hbond_ && best_score < min_hb_quality_for_multi_ ){
+                            if( !used_tgt_acceptor[best_sat] ) ++hbcount;
+                            used_tgt_acceptor[best_sat] = true;
+                        }
+                    }
 				}
 
 			}

@@ -61,6 +61,8 @@
 	#include <boost/random/mersenne_twister.hpp>
 	#include <boost/random/uniform_real.hpp>
 
+    #include <riflib/rif/requirements_util.hh>
+
 namespace devel {
 namespace scheme {
 namespace rif {
@@ -74,108 +76,6 @@ namespace rif {
     };
 
 
-    // reture the hbond definitions from a tuning file.
-    std::vector< HBondDefinition > get_hbond_definitions( std::string tuning_file )
-    {
-        std::vector< HBondDefinition > hbs;
-        HBondDefinition hb_temp;
-        
-        if ( tuning_file == "" )
-        {
-            return hbs;
-        }
-        runtime_assert_msg(utility::file::file_exists( tuning_file ), "tunning file does not exits: " + tuning_file );
-        std::ifstream in;
-        std::string s;
-        in.open( tuning_file , std::ios::in );
-        std::vector<std::string> lines;
-        bool flag = false;
-        while ( std::getline(in, s) ){
-            if (s.empty() || s.find("#") == 0) continue;
-            if (s.find("HBOND_DEFINITION") != std::string::npos && s.find("END_HBOND_DEFINITION") == std::string::npos ) { flag = true; continue; }
-            else if (s.find("END_HBOND_DEFINITION") != std::string::npos ) { flag = false; break; }
-            
-            if ( flag )
-            {
-                utility::vector1<std::string> splt = utility::quoted_split( s );
-                runtime_assert_msg(splt.size() >=2, "something is wrong with the hbond definition block, please check the tuning file." );
-                hb_temp.atom_name = splt[1];
-                hb_temp.res_num = utility::string2int( splt[2] );
-                hb_temp.allowed_rot_names.clear();
-                for(int ii = 3; ii <= splt.size(); ++ii )
-                {
-                    hb_temp.allowed_rot_names.push_back( splt[ii] );
-                }
-                hbs.push_back(hb_temp);
-            }
-        }
-        return hbs;
-    }
-    
-    std::vector< BidentateDefinition > get_bidentate_definitions( std::string tuning_file )
-    {
-        std::vector< BidentateDefinition > bdhbs;
-        BidentateDefinition bdhb_temp;
-        
-        if ( tuning_file == "" ) {
-            return bdhbs;
-        }
-        runtime_assert_msg(utility::file::file_exists( tuning_file ), "tunning file does not exits: " + tuning_file );
-        std::ifstream in;
-        std::string s;
-        in.open( tuning_file , std::ios::in );
-        std::vector<std::string> lines;
-        bool flag = false;
-        while ( std::getline(in, s) ){
-            if (s.empty() || s.find("#") == 0) continue;
-            if (s.find("BIDENTATE_DEFINITION") != std::string::npos && s.find("END_BIDENTATE_DEFINITION") == std::string::npos ) { flag = true; continue; }
-            else if (s.find("END_BIDENTATE_DEFINITION") != std::string::npos ) { flag = false; break; }
-            
-            if ( flag )
-            {
-                utility::vector1<std::string> splt = utility::quoted_split( s );
-                runtime_assert_msg(splt.size() == 4, "something is wrong with the bidentate hydrogen bonds definition block, please check the tuning file." );
-                bdhb_temp.atom1_name = splt[1];
-                bdhb_temp.res1_num = utility::string2int( splt[2] );
-                bdhb_temp.atom2_name = splt[3];
-                bdhb_temp.res2_num = utility::string2int( splt[4] );
-                bdhbs.push_back(bdhb_temp);
-            }
-        }
-        return bdhbs;
-    }
-
-    std::vector< RequirementDefinition > get_requirement_definitions( std::string tuning_file )
-    {
-        std::vector< RequirementDefinition > reqs;
-        RequirementDefinition req_temp;
-        
-        if ( tuning_file == "" ) {
-            return reqs;
-        }
-        runtime_assert_msg(utility::file::file_exists( tuning_file ), "tunning file does not exits: " + tuning_file );
-        std::ifstream in;
-        std::string s;
-        in.open( tuning_file , std::ios::in );
-        std::vector<std::string> lines;
-        bool flag = false;
-        while ( std::getline(in, s) ){
-            if (s.empty() || s.find("#") == 0) continue;
-            if (s.find("REQUIREMENT_DEFINITION") != std::string::npos && s.find("END_REQUIREMENT_DEFINITION") == std::string::npos ) { flag = true; continue; }
-            else if (s.find("END_REQUIREMENT_DEFINITION") != std::string::npos ) { flag = false; break; }
-            
-            if ( flag )
-            {
-                utility::vector1<std::string> splt = utility::quoted_split( s );
-                runtime_assert_msg(splt.size() >= 3, "something is wrong with the requirement definition block, please check the tuning file." );
-                req_temp.req_num = utility::string2int( splt[1] );
-                req_temp.require = splt[2];
-                req_temp.definition = splt[3];
-                reqs.push_back(req_temp);
-            }
-        }
-        return reqs;
-    }
     
 	void
 	RifGeneratorSimpleHbonds::generate_rif(
@@ -227,7 +127,7 @@ namespace rif {
         std::vector< int > use_bidentate_definition_rays;
         // the requirement definition stuff
         std::vector< RequirementDefinition > requirement_definitions = get_requirement_definitions( tuning_file );
-        bool const use_requirement_definition = !( requirement_definitions.empty() );;
+        bool const use_requirement_definition = !( requirement_definitions.empty() );
         std::vector< int > hbond_requirement_labels;
         std::vector< int > bidentate_requirement_labels;
 
@@ -355,14 +255,14 @@ namespace rif {
                 for ( auto const & x : requirement_definitions ) {
                     runtime_assert_msg(x.req_num >= 0, "the requirement number must be a positive integer!");
                     if ( x.require == "HBOND" ) {
-                        utility::vector1<std::string> splt = utility::quoted_split( s );
+                        utility::vector1<std::string> splt = utility::quoted_split( x.definition );
                         for (int ii = 0; ii < target_bonder_names.size(); ++ii) {
                             if ( target_bonder_names[ii].first == utility::string2int(splt[2]) && target_bonder_names[ii].second == splt[1] ) {
                                 hbond_requirement_labels[ii] == x.req_num;
                             }
                         }
                     } else if ( x.require == "BIDENTATE" ) {
-                        utility::vector1<std::string> splt = utility::quoted_split( s );
+                        utility::vector1<std::string> splt = utility::quoted_split( x.definition );
                         for (int ii = 0; ii < target_bonder_names.size(); ++ii) {
                             if ( ( utility::string2int(splt[1]) == target_bonder_names[ii].first && splt[2] == target_bonder_names[ii].second ) || ( utility::string2int(splt[3]) == target_bonder_names[ii].first && splt[4] == target_bonder_names[ii].second ) ) {
                                 bidentate_requirement_labels[ii] == x.req_num;

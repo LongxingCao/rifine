@@ -177,6 +177,7 @@ OPT_1GRP_KEY(     StringVector , rif_dock, scaffolds )
     OPT_1GRP_KEY(  Real        , rif_dock, cluster_score_cut )
     OPT_1GRP_KEY(  Real        , rif_dock, keep_top_clusters_frac )
 	OPT_1GRP_KEY(  Boolean     , rif_dock, only_dump_scaffold )
+	OPT_1GRP_KEY(  IntegerVector, rif_dock, requirements )
 
 
 
@@ -352,6 +353,7 @@ OPT_1GRP_KEY(     StringVector , rif_dock, scaffolds )
             NEW_OPT(  rif_dock::cluster_score_cut, "", 0);
             NEW_OPT(  rif_dock::keep_top_clusters_frac, "", 0.5);
 			NEW_OPT(  rif_dock::only_dump_scaffold, "" , true );
+            NEW_OPT(  rif_dock::requirements,        "which rif residue should be in the final output", utility::vector1< int >());
 
 		}
 	#endif
@@ -512,6 +514,7 @@ struct RifDockOpt
     bool        only_dump_scaffold                   ;
 	bool        seeding_by_patchdock                 ;
 
+	std::vector<int> requirements;
 
     void init_from_cli();
 
@@ -739,6 +742,7 @@ struct RifDockOpt
         keep_top_clusters_frac                  = option[rif_dock::keep_top_clusters_frac              ]();
 		only_dump_scaffold                      = option[rif_dock::only_dump_scaffold                  ]();
 
+		for( int req : option[rif_dock::requirements]() ) requirements.push_back(req);
 
 
 	}

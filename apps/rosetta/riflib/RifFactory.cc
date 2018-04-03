@@ -506,6 +506,7 @@ std::string get_rif_type_from_file( std::string fname )
 		shared_ptr< ::scheme::search::HackPack> hackpack_;
 		std::vector<bool> is_satisfied_;
 		std::vector<bool> has_rifrot_;
+		std::vector<bool> requirements_satisfied_;
         std::vector<std::vector<float> > const * rotamer_energies_1b_ = nullptr;
         std::vector< std::pair<int,int> > const * scaffold_rotamers_ = nullptr;
 		// sat group vector goes here
@@ -524,6 +525,8 @@ std::string get_rif_type_from_file( std::string fname )
 		::scheme::search::HackPackOpts packopts_;
 		int n_sat_groups_ = 0, require_satisfaction_ = 0, require_n_rifres_ = 0;
 		std::vector< shared_ptr< ::scheme::search::HackPack> > packperthread_;
+		// the requirements code
+		std::vector< int > requirements_;
 	private:
 		shared_ptr<RIF const> rif_ = nullptr;
 	public:
@@ -606,8 +609,17 @@ std::string get_rif_type_from_file( std::string fname )
 				//scratch.is_satisfied_score_.resize(n_sat_groups_,0.0);
 				//for( int i = 0; i < n_sat_groups_; ++i ) scratch.is_satisfied_score_[i] = 0;
 			}
-			scratch.has_rifrot_.resize(scratch.rotamer_energies_1b_->size(), false);
-			for ( int i = 0; i < scratch.has_rifrot_.size(); i++ ) scratch.has_rifrot_[i] = false;
+			if ( requirements_.size() > 0 )
+			{
+				int64_t max = -9e9;
+				for( auto val : requirements_ ){ if (val > max ) max = val; }
+				scratch.requirements_satisfied_.resize(max+1);
+				for( int i = 0; i <= max; ++i ) scratch.requirements_satisfied_[i] = false;
+			}
+			if ( require_n_rifres_ > 0 ){
+				scratch.has_rifrot_.resize(scratch.rotamer_energies_1b_->size(), false);
+				for ( int i = 0; i < scratch.has_rifrot_.size(); i++ ) scratch.has_rifrot_[i] = false;
+			}
 			if( !packing_ ) return;
 
 			// Added by brian ////////////////////////
@@ -682,10 +694,15 @@ std::string get_rif_type_from_file( std::string fname )
 				if( n_sat_groups_ > 0 && score_rot_tot < 5.0 ){
 					rotscores.mark_sat_groups( i_rs, scratch.is_satisfied_ );
 				}
-                if ( score_rot_tot < 0.0 ) {
-                    // std::cout << "Adding " << ires << std::endl;
-                    scratch.has_rifrot_[ires] = true;
-                }
+        if ( require_n_rifres_ > 0 && score_rot_tot < 0.0 ) {
+            // std::cout << "Adding " << ires << std::endl;
+            scratch.has_rifrot_[ires] = true;
+        }
+				// an arbitrary cutoff value.
+				if( requirements_.size() > 0 && score_rot_tot < 0.5 )
+				{
+                    rotscores.mark_sat_groups( i_rs, scratch.requirements_satisfied_ );
+				}
 
 				bestsc = std::min( score_rot_tot , bestsc );
 				//}
@@ -810,6 +827,14 @@ std::string get_rif_type_from_file( std::string fname )
 					}
 				}
 			}
+            
+            if ( requirements_.size() > 0 )
+            {
+                bool pass = true;
+                for( bool const & f : scratch.requirements_satisfied_ ) pass &= f;
+                if ( !pass ) result.val_ = 9e9;
+            }
+            
 
 				// #ifdef USE_OPENMP
 				// #pragma omp critical
@@ -998,6 +1023,11 @@ struct RifFactoryImpl :
 			dynamic_cast<MySceneObjectiveRIF&>(*packing_objective).objective.template
 				get_objective<MyScoreBBActorRIF>().require_satisfaction_ = config.require_satisfaction;
 		}
+		// the requirement code.
+		if( config.requirements.size() > 0 ){
+			dynamic_cast<MySceneObjectiveRIF&>(*packing_objective).objective.template
+				get_objective<MyScoreBBActorRIF>().requirements_ = config.requirements;
+		}
 
 
 		for( auto op : objectives ){
@@ -1009,6 +1039,10 @@ struct RifFactoryImpl :
 			}
 			if (config.require_n_rifres > 0 ) {
 				dynamic_cast<MySceneObjectiveRIF&>(*op).objective.template get_objective<MyScoreBBActorRIF>().require_n_rifres_ = config.require_n_rifres;
+			}
+			// the requirement code.
+			if ( config.requirements.size() > 0 ){
+				dynamic_cast<MySceneObjectiveRIF&>(*op).objective.template get_objective<MyScoreBBActorRIF>().requirements_ = config.requirements;
 			}
 		}
 		// dynamic_cast<MySceneObjectiveRIF&>(*packing_objective).objective.template get_objective<MyScoreBBActorRIF>().rotamer_energies_1b_ = config.local_onebody;
@@ -1093,6 +1127,22 @@ create_rif_factory( RifFactoryConfig const & config )
 
 		return make_shared< RifFactoryImpl<crfXMap> >( config );
 	}
+    else if ( config.rif_type == "RotScoreReq" )
+    {
+        using SatDatum = ::scheme::objective::storage::SatisfactionDatum<uint8_t>;
+        typedef ::scheme::objective::storage::RotamerScoreSat<
+                    uint16_t, 9, -13, SatDatum, 1> crfRotScore;
+        typedef ::scheme::objective::storage::RotamerScores< 28, crfRotScore > crfXMapValue;
+        BOOST_STATIC_ASSERT( sizeof( crfXMapValue ) == 84 );
+        typedef ::scheme::objective::hash::XformMap<
+                EigenXform,
+                crfXMapValue,
+                ::scheme::objective::hash::XformHash_bt24_BCC6
+            > crfXMap;
+        BOOST_STATIC_ASSERT( sizeof( crfXMap::Map::value_type ) == 96 );
+        
+        return make_shared< RifFactoryImpl<crfXMap> >( config );
+    }
 	else if( config.rif_type == "RotScoreSat_1x16" )
 	{
 		using SatDatum = ::scheme::objective::storage::SatisfactionDatum<uint16_t>;

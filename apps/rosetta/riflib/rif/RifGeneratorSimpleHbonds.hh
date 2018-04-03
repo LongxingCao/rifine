@@ -32,29 +32,6 @@ struct RifGeneratorSimpleHbondsOpts {
 	bool debug = false;
 };
 
-struct HBondDefinition {
-		std::string atom_name = "";
-		int			    res_num = -1;
-		std::vector< std::string > allowed_rot_names;  
-};
-
-struct BidentateDefinition {
-		std::string atom1_name = "";
-		int res1_num = -1;
-		std::string atom2_name = "";
-		int res2_num = -1;
-};
-    
-struct RequirementDefinition {
-    int req_num;
-    std::string require;
-    std::string definition;
-};
-
-std::vector< HBondDefinition > get_hbond_definitions( std::string tuning_file );
-std::vector< BidentateDefinition > get_bidentate_definitions( std::string tuning_file );
-std::vector< RequirementDefinition > get_requirement_definitions( std::string tuning_file );
-
 struct RifGeneratorSimpleHbonds : public RifGenerator {
 
 	utility::vector1<std::string> donresn_user;

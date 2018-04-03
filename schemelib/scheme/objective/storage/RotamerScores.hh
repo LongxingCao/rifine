@@ -174,7 +174,12 @@ struct RotamerScoreSat : public RotamerScore<_Data,_RotamerBits,_Divisor> {
 			if( sat_data_[isat].not_empty() ){
 				int val = sat_data_[isat].target_sat_num();
 				if (val < 0 || val >= sat_groups_mask.size()) {
+                    // it seems something is wrong is here. return here??????????????????????????
 					std::cout << "Sat" << val << std::endl;
+                    // It seems this will never happen!!!
+                    // added by Longxing, as it seems it will mess up the satisfication.
+                    // c++ vector will not ckeck the overflow of index, so be careful here!!!
+                    return;
 				}
 				sat_groups_mask[ sat_data_[isat].target_sat_num() ] = true;
 			}
