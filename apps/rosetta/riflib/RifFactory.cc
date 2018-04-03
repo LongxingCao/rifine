@@ -666,7 +666,17 @@ std::string get_rif_type_from_file( std::string fname )
 						      score_rot_v_target          < packopts_.rotamer_inclusion_threshold ) || rotamer_satisfies){
 
 							float sat_bonus = 0;
+
+
 							if (rotamer_satisfies) {
+								// add a constant bonus for the rif residues that can satisfy the requirements.
+								// If these rotamers can survive in the hackpack stage
+								// How about the two body tables????
+								// Will this number affect the two body table choice??
+								// What is the best number for this bonus??
+								if ( requirements_.size() > 0 ) sat_bonus += -10.0;
+
+
 								sat_bonus = packopts_.user_rotamer_bonus_per_chi * rot_tgt_scorer_.rot_index_p_->nchi(irot) +
 								            packopts_.user_rotamer_bonus_constant;
 								// std::cout << "ires " << ires << " cdirot " << irot << std::endl;
@@ -745,21 +755,44 @@ std::string get_rif_type_from_file( std::string fname )
 
 				::scheme::search::HackPack & packer( *scratch.hackpack_ );
 				result.val_ = packer.pack( result.rotamers_ );
-				if( n_sat_groups_ > 0 ) for( int i = 0; i < n_sat_groups_; ++i ) scratch.is_satisfied_[i] = false;
-				//std::vector< std::pair<intRot,intRot> > selected_rotamers;
-				for( int i = 0; i < result.rotamers_.size(); ++i ){
-					BBActor const & bb = scene.template get_actor<BBActor>( 1, result.rotamers_[i].first );
-					int sat1=-1, sat2=-1;
-					float const recalc_rot_v_tgt = rot_tgt_scorer_.score_rotamer_v_target_sat(
-									result.rotamers_[i].second, bb.position(), sat1, sat2, 10.0, 4 );
-					// todo: should do extra selection here?
-					// if( recalc_rot_v_tgt < -1.0 ){
-					// 	selected_rotamers.push_back( result.rotamers_[i] );
-					// }
-					if( n_sat_groups_ > 0 ){
-						if( sat1 >= 0 ) scratch.is_satisfied_[ sat1 ] = true;
-						if( sat2 >= 0 ) scratch.is_satisfied_[ sat2 ] = true;
-					}
+				if( n_sat_groups_ > 0 )
+				{
+						for( int i = 0; i < n_sat_groups_; ++i ) scratch.is_satisfied_[i] = false;
+
+						//std::vector< std::pair<intRot,intRot> > selected_rotamers;
+						for( int i = 0; i < result.rotamers_.size(); ++i ){
+								BBActor const & bb = scene.template get_actor<BBActor>( 1, result.rotamers_[i].first );
+								int sat1=-1, sat2=-1;
+								float const recalc_rot_v_tgt = rot_tgt_scorer_.score_rotamer_v_target_sat(
+										result.rotamers_[i].second, bb.position(), sat1, sat2, 10.0, 4 );
+								// todo: should do extra selection here?
+								// if( recalc_rot_v_tgt < -1.0 ){
+								// 	selected_rotamers.push_back( result.rotamers_[i] );
+								// }
+								if( n_sat_groups_ > 0 ){
+										if( sat1 >= 0 ) scratch.is_satisfied_[ sat1 ] = true;
+										if( sat2 >= 0 ) scratch.is_satisfied_[ sat2 ] = true;
+								}
+						}
+				}
+
+
+				// OK! Now check the requirements satisfication here!!!!!!!!!
+				if ( requirements_.size() > 0 )
+				{
+						for( int ii = 0; ii < scratch.requirements_satisfied_.size(); ++ii ) scratch.requirements_satisfied_[ii] = false;
+
+						for( int i = 0; i < result.rotamers_.size(); ++i ){
+								BBActor const & bb = scene.template get_actor<BBActor>( 1, result.rotamers_[i].first );
+								typename RIF::Value const & rotscores = rif_->operator[]( bb.position() );
+								static int const Nrots = RIF::Value::N;
+								for( int i_rs = 0; i_rs < Nrots; ++i_rs ){
+										if( rotscores.rotamer(i_rs) == result.rotamers_[i_rs].second ){
+												rotscores.mark_sat_groups( i_rs, scratch.requirements_satisfied_ );
+												break;
+										}
+								}
+						}
 				}
 				// result.rotamers_ = selected_rotamers;
 
@@ -831,7 +864,7 @@ std::string get_rif_type_from_file( std::string fname )
             if ( requirements_.size() > 0 )
             {
                 bool pass = true;
-                for( bool const & f : scratch.requirements_satisfied_ ) pass &= f;
+								for ( auto const & x : requirements_ ) pass &= scratch.requirements_satisfied_[x];
                 if ( !pass ) result.val_ = 9e9;
             }
             
