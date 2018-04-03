@@ -379,7 +379,9 @@ struct HackPack
 		result_rots.clear();
 		for( int i = 0; i < nres_; ++i ){
 			int32_t iresglobal = res_rots_.at(i).first;
-			int32_t irottwob   = res_rots_.at(i).second.at( current_rots_.at(i) ).first;
+            // in the original code, this is a bug here!
+			//int32_t irottwob   = res_rots_.at(i).second.at( current_rots_.at(i) ).first;
+			int32_t irottwob   = res_rots_.at(i).second.at( global_best_rots_.at(i) ).first;
 			ALWAYS_ASSERT( 0 <= iresglobal && iresglobal < twob_->sel2all_.shape()[0] );
 			if( irottwob < 0 ){
 				#ifdef USE_OPENMP
@@ -414,6 +416,7 @@ struct HackPack
 			if( nchoices > 1000000000000000ull ) break;
 		}
 		if( nchoices == 1 ){
+            global_best_rots_ = current_rots_;
 			fill_result_rots( result_rots );
 			score_ = compute_energy_full( current_rots_ );
 			return score_;
