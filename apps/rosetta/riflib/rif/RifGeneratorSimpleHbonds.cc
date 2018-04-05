@@ -120,6 +120,8 @@ namespace rif {
 		bool const use_hbond_definition = !( hbond_definitions.empty() );
 		std::vector< int > use_hbond_definition_rays;
 		std::vector< std::vector< std::string > > allowed_rotamers_rays;
+        std::vector<std::pair<int, std::string> > target_donor_names;
+        std::vector<std::pair<int, std::string> > target_acceptor_names;
         std::vector<std::pair<int, std::string> > target_bonder_names;
         // the bidentate hydrogen bond definition stuff
         std::vector< BidentateDefinition > bidentate_definitions = get_bidentate_definitions( tuning_file );
@@ -205,11 +207,16 @@ namespace rif {
 			::devel::scheme::get_donor_rays   ( target, ir, params->hbopt, target_donors );
 			::devel::scheme::get_acceptor_rays( target, ir, params->hbopt, target_acceptors );
 			*/
-			::devel::scheme::get_donor_rays   ( target, ir, params->hbopt, target_donors, target_bonder_names );
-			::devel::scheme::get_acceptor_rays( target, ir, params->hbopt, target_acceptors, target_bonder_names );
+			::devel::scheme::get_donor_rays   ( target, ir, params->hbopt, target_donors, target_donor_names );
+			::devel::scheme::get_acceptor_rays( target, ir, params->hbopt, target_acceptors, target_acceptor_names );
 		}
+        
         // this is to fill the allowed_rotamers_rays
         {
+            
+            target_bonder_names = target_donor_names;
+            for ( auto const & x : target_acceptor_names ) target_bonder_names.push_back( x );
+            
             // remove the space in the atoms
             for ( auto  & x : target_bonder_names )
                 x.second = utility::strip( x.second, ' ');
@@ -257,13 +264,13 @@ namespace rif {
                     if ( x.require == "HBOND" ) {
                         for (int ii = 0; ii < target_bonder_names.size(); ++ii) {
                             if ( target_bonder_names[ii].first == utility::string2int(x.definition[1]) && target_bonder_names[ii].second == x.definition[0] ) {
-                                hbond_requirement_labels[ii] == x.req_num;
+                                hbond_requirement_labels[ii] = x.req_num;
                             }
                         }
                     } else if ( x.require == "BIDENTATE" ) {
                         for (int ii = 0; ii < target_bonder_names.size(); ++ii) {
                             if ( ( utility::string2int(x.definition[1]) == target_bonder_names[ii].first && x.definition[0] == target_bonder_names[ii].second ) || ( utility::string2int(x.definition[3]) == target_bonder_names[ii].first && x.definition[2] == target_bonder_names[ii].second ) ) {
-                                bidentate_requirement_labels[ii] == x.req_num;
+                                bidentate_requirement_labels[ii] = x.req_num;
                             }
                         }
                     } else if ( x.require == "HOTSPOT" ) {
@@ -272,6 +279,20 @@ namespace rif {
                         std::cout << "Unknown requirement definition, maybe you should define more." << std::endl;
                     }
                 }
+                
+                
+                // debuging code here
+                /*
+                for (int ii = 0; ii < target_bonder_names.size(); ++ii) {
+                    std::cout << "########" << ii << "########" << std::endl;
+                    std::cout << target_bonder_names[ii].first << " " << target_bonder_names[ii].second << std::endl;
+                    std::cout << "BidentateLabels: " << bidentate_requirement_labels[ii] << std::endl;
+                    std::cout << "HbondDefinitionLabels:" << hbond_requirement_labels[ii] << std::endl;
+                    std::cout << "#############END#############" << std::endl;
+                }
+                exit(0);
+                */
+                
             }
             /*
              for ( auto const & x : target_bonder_names ) std::cout << x.first << " " << x.second << std::endl;
@@ -731,6 +752,10 @@ namespace rif {
 						int sat1=-1, sat2=-1;
 
 						float positioned_rotamer_score = rot_tgt_scorer.score_rotamer_v_target_sat( irot, bbactor.position_, sat1, sat2, 10.0, 0 );
+
+                        
+
+
 						if( positioned_rotamer_score > opts.score_threshold ) continue;
 						if ( use_hbond_definition )
 						{
@@ -771,6 +796,7 @@ namespace rif {
                         }
                         
                         if ( use_requirement_definition ) {
+                            
                             // don't define overlap
                             if ( sat1 == -1 && sat2 == -1 ) {
                                 // what should I do here??
@@ -801,12 +827,14 @@ namespace rif {
                                     sat1 = hbond_requirement_labels[sat2];
                                     sat2 = -1;
                                 } else {
-                                    // normal ...
-                                }
-                                
-                                if ( bidentate_requirement_labels[sat1] != -1 && bidentate_requirement_labels[sat1] == bidentate_requirement_labels[sat2] ) {
-                                    sat1 = bidentate_requirement_labels[sat1];
-                                    sat2 = -1;
+                                    // normal
+                                    if ( bidentate_requirement_labels[sat1] != -1 && bidentate_requirement_labels[sat1] == bidentate_requirement_labels[sat2] ) {
+                                        sat1 = bidentate_requirement_labels[sat1];
+                                        sat2 = -1;
+                                    } else {
+                                        sat1 = -1;
+                                        sat2 = -1;
+                                    }
                                 }
                             }
                         }

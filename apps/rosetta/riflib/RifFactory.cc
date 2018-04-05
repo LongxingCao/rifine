@@ -674,7 +674,9 @@ std::string get_rif_type_from_file( std::string fname )
 								// How about the two body tables????
 								// Will this number affect the two body table choice??
 								// What is the best number for this bonus??
-								if ( requirements_.size() > 0 ) sat_bonus += -10.0;
+                                // A bug here, as I only need to add bonus to the ones that are defined in the requirements array.
+                                if ( requirements_.size() > 0 && std::find( requirements_.begin(), requirements_.end(), rotscores.get_requirement_num(i_rs) ) != requirements_.end() ) sat_bonus += -10.0;
+								//if ( requirements_.size() > 0 ) sat_bonus += -10.0;
 
 
 								sat_bonus = packopts_.user_rotamer_bonus_per_chi * rot_tgt_scorer_.rot_index_p_->nchi(irot) +

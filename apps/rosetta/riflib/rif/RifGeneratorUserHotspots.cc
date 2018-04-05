@@ -155,6 +155,14 @@ namespace rif {
             }
         }
         
+        /*
+        // debuging code here
+        for (int ii = 0; ii < hotspot_requirement_labels.size(); ++ii) {
+            std::cout << ii << " " << hotspot_requirement_labels[ii] << std::endl;
+        }
+        exit(0);
+        */
+        
         
         
         
@@ -440,12 +448,14 @@ namespace rif {
 
 									// the hydrogen bond satisfication and the hotspot satisfication are totally mixed, so what is the best way to label a hotspot??
                                     
+                                    //std::cout << pose.residue(1).name3() << ": " << i_hotspot_group + 1 << " " << hotspot_requirement_labels[i_hotspot_group + 1] << std::endl;
                                     
                                     // the old one, and I don't exactly know how this works. single_file_hotspots_insertion? I don't think there is any need to do keep such flag.
                                     int sat1 = this -> opts.single_file_hotspots_insertion ? i_hspot_res : i_hotspot_group;
                                     int sat2 =-1;
                                     if ( use_requirement_definition ) {
-                                        sat1 = hotspot_requirement_labels[i_hspot_res];
+                                        // as the numbering of i_hotspot_group starts from 0.
+                                        sat1 = hotspot_requirement_labels[ i_hotspot_group + 1 ];
                                     }
                                     accumulator->insert( new_x_position, positioned_rotamer_score, irot, sat1, sat2);
 									//accumulator->insert( new_x_position, positioned_rotamer_score-4, irot,

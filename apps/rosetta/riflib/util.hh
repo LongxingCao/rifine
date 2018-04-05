@@ -369,14 +369,14 @@ struct ScoreRotamerVsTarget {
 				rot_index_p_->rotamer(irot).donors_   .size() > 0 )
 			{
 				// alloca style stack bump... dangerous... don't piss memory here...
-				bool used_tgt_donor   [target_donors_   .size()];
-				bool used_tgt_acceptor[target_acceptors_.size()];
-				bool used_rot_donor   [rot_index_p_->rotamer(irot).donors_   .size()];
-				bool used_rot_acceptor[rot_index_p_->rotamer(irot).acceptors_.size()];
-				for( int i = 0; i < target_donors_   .size(); ++i ) used_tgt_donor   [i] = false;
-				for( int i = 0; i < target_acceptors_.size(); ++i ) used_tgt_acceptor[i] = false;
-				for( int i = 0; i < rot_index_p_->rotamer(irot).donors_   .size(); ++i ) used_rot_donor   [i] = false;
-				for( int i = 0; i < rot_index_p_->rotamer(irot).acceptors_.size(); ++i ) used_rot_acceptor[i] = false;
+				float used_tgt_donor   [target_donors_   .size()];
+				float used_tgt_acceptor[target_acceptors_.size()];
+				//bool used_rot_donor   [rot_index_p_->rotamer(irot).donors_   .size()];
+				//bool used_rot_acceptor[rot_index_p_->rotamer(irot).acceptors_.size()];
+				for( int i = 0; i < target_donors_   .size(); ++i ) used_tgt_donor   [i] = 9e9;
+				for( int i = 0; i < target_acceptors_.size(); ++i ) used_tgt_acceptor[i] = 9e9;
+				//for( int i = 0; i < rot_index_p_->rotamer(irot).donors_   .size(); ++i ) used_rot_donor   [i] = false;
+				//for( int i = 0; i < rot_index_p_->rotamer(irot).acceptors_.size(); ++i ) used_rot_acceptor[i] = false;
 
 				for( int i_hr_rot_acc = 0; i_hr_rot_acc < rot_index_p_->rotamer(irot).acceptors_.size(); ++i_hr_rot_acc )
 				{
@@ -396,24 +396,36 @@ struct ScoreRotamerVsTarget {
                             best_sat = i_hr_tgt_don;
                         }
                     }
-                    if ( best_sat > -1 ) {
-                        hbscore += best_score * hbond_weight_;
-                        if( best_score < this->min_hb_quality_for_satisfaction_ ){
+                    if ( best_sat > -1 && used_tgt_donor[best_sat] > best_score ) {
+                        // I don't think there is any need to use if ... else ..., but to make things more clear.
+                        if ( used_tgt_donor[ best_sat ] < this->min_hb_quality_for_satisfaction_ ){
+                            if ( sat1 == -1 || sat1 == best_sat ){
+                                sat1 = best_sat;
+                            } else if ( sat2 == -1 || sat2 == best_sat) {
+                                sat2 = best_sat;
+                            }
+                        } else if ( best_score < this->min_hb_quality_for_satisfaction_ ) {
                             if(      sat1==-1 ) sat1 = best_sat;
                             else if( sat2==-1 ) sat2 = best_sat;
                         }
                         if( upweight_multi_hbond_ && best_score < min_hb_quality_for_multi_ ){
-                            if( !used_tgt_donor[best_sat] ) ++hbcount;
-                            used_tgt_donor   [best_sat] = true;
+                            if( used_tgt_donor[best_sat] >= min_hb_quality_for_multi_ ) ++hbcount;
                         }
+                        // remove the double counting of hbond??? Do I need to do this, or ..........
+                        if ( used_tgt_donor[ best_sat ] <= 9e5 ){
+                            hbscore += ( best_score - used_tgt_donor[best_sat] ) * hbond_weight_;
+                        } else {
+                            hbscore += best_score * hbond_weight_;
+                        }
+                        used_tgt_donor[ best_sat ] = best_score;
                     }
 				}
 				for( int i_hr_rot_don = 0; i_hr_rot_don < rot_index_p_->rotamer(irot).donors_.size(); ++i_hr_rot_don )
 				{
-					HBondRay hr_rot_don = rot_index_p_->rotamer(irot).donors_.at(i_hr_rot_don);
-					Eigen::Vector3f dirpos = hr_rot_don.horb_cen + hr_rot_don.direction;
-					hr_rot_don.horb_cen  = rbpos * hr_rot_don.horb_cen;
-					hr_rot_don.direction = rbpos * dirpos - hr_rot_don.horb_cen;
+                    HBondRay hr_rot_don = rot_index_p_->rotamer(irot).donors_.at(i_hr_rot_don);
+                    Eigen::Vector3f dirpos = hr_rot_don.horb_cen + hr_rot_don.direction;
+                    hr_rot_don.horb_cen  = rbpos * hr_rot_don.horb_cen;
+                    hr_rot_don.direction = rbpos * dirpos - hr_rot_don.horb_cen;
                     
                     float best_score = 100;
                     int best_sat = -1;
@@ -426,18 +438,31 @@ struct ScoreRotamerVsTarget {
                             best_sat = i_hr_tgt_acc;
                         }
                     }
-                    if ( best_sat > -1 ) {
-                        hbscore += best_score * hbond_weight_;
-                        if( best_score < this->min_hb_quality_for_satisfaction_ ){
-                            if(      sat1==-1 ) sat1 = best_sat + target_donors_.size();
-                            else if( sat2==-1 ) sat2 = best_sat + target_donors_.size();
+                    if ( best_sat > -1 && used_tgt_acceptor[best_sat] > best_score ) {
+                        // I don't think there is any need to use if ... else ..., but to make things more clear.
+                        if ( used_tgt_acceptor[ best_sat ] < this->min_hb_quality_for_satisfaction_ ){
+                            if ( sat1 == -1 || sat1 == ( best_sat+target_donors_.size() ) ){
+                                sat1 = best_sat+target_donors_.size();
+                            } else if ( sat2 == -1 || sat2 == ( best_sat+target_donors_.size() ) ) {
+                                sat2 = best_sat+target_donors_.size();
+                            }
+                        } else if ( best_score < this->min_hb_quality_for_satisfaction_ ) {
+                            if(      sat1==-1 ) sat1 = best_sat+target_donors_.size();
+                            else if( sat2==-1 ) sat2 = best_sat+target_donors_.size();
                         }
                         if( upweight_multi_hbond_ && best_score < min_hb_quality_for_multi_ ){
-                            if( !used_tgt_acceptor[best_sat] ) ++hbcount;
-                            used_tgt_acceptor[best_sat] = true;
+                            if( used_tgt_acceptor[best_sat] >= min_hb_quality_for_multi_ ) ++hbcount;
                         }
+                        // remove the double counting of hbond??? Do I need to do this, or ..........
+                        if ( used_tgt_acceptor[ best_sat ] <= 9e5 ){
+                            hbscore += ( best_score - used_tgt_acceptor[best_sat] ) * hbond_weight_;
+                        } else {
+                            hbscore += best_score * hbond_weight_;
+                        }
+                        used_tgt_acceptor[ best_sat ] = best_score;
                     }
-				}
+                    
+                }
 
 			}
 			// oh god, fix me..... what should the logic be??? probably "softer" thresh on thishb to count
