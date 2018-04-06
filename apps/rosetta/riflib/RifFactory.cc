@@ -675,7 +675,9 @@ std::string get_rif_type_from_file( std::string fname )
 								// Will this number affect the two body table choice??
 								// What is the best number for this bonus??
                                 // A bug here, as I only need to add bonus to the ones that are defined in the requirements array.
-                                if ( requirements_.size() > 0 && std::find( requirements_.begin(), requirements_.end(), rotscores.get_requirement_num(i_rs) ) != requirements_.end() ) sat_bonus += -10.0;
+                                if ( requirements_.size() > 0 && std::find( requirements_.begin(), requirements_.end(), rotscores.get_requirement_num(i_rs) ) != requirements_.end() ) {
+																		sat_bonus -= 10.0;
+																}
 								//if ( requirements_.size() > 0 ) sat_bonus += -10.0;
 
 
@@ -711,7 +713,7 @@ std::string get_rif_type_from_file( std::string fname )
             scratch.has_rifrot_[ires] = true;
         }
 				// an arbitrary cutoff value.
-				if( requirements_.size() > 0 && score_rot_tot < 0.5 )
+				if( requirements_.size() > 0 && score_rot_tot < 2 )
 				{
                     rotscores.mark_sat_groups( i_rs, scratch.requirements_satisfied_ );
 				}
@@ -784,15 +786,15 @@ std::string get_rif_type_from_file( std::string fname )
 				{
 						for( int ii = 0; ii < scratch.requirements_satisfied_.size(); ++ii ) scratch.requirements_satisfied_[ii] = false;
 
-						for( int i = 0; i < result.rotamers_.size(); ++i ){
-								BBActor const & bb = scene.template get_actor<BBActor>( 1, result.rotamers_[i].first );
+						for( int ii = 0; ii < result.rotamers_.size(); ++ii ){
+								BBActor const & bb = scene.template get_actor<BBActor>( 1, result.rotamers_[ii].first );
 								typename RIF::Value const & rotscores = rif_->operator[]( bb.position() );
 								static int const Nrots = RIF::Value::N;
 								for( int i_rs = 0; i_rs < Nrots; ++i_rs ){
-										if( rotscores.rotamer(i_rs) == result.rotamers_[i_rs].second ){
+										if( rotscores.rotamer(i_rs) == result.rotamers_[ii].second ){
 												rotscores.mark_sat_groups( i_rs, scratch.requirements_satisfied_ );
 												break;
-										}
+									  }
 								}
 						}
 				}

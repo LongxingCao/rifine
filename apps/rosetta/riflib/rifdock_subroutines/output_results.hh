@@ -168,6 +168,8 @@ dump_rif_result(
     expdb << "rif_residues ";
 
 
+
+    //selected_result.rotamers();
     sanity_check_hackpack( rdd, selected_result.scene_index, selected_result.rotamers_, rdd.scene_pt.front());
 
     std::vector<int> needs_RIFRES;
