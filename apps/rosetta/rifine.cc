@@ -1106,6 +1106,13 @@ int main( int argc, char *argv[] )
                 
                 std::vector<int> cluster_score_nth;
                 for ( auto a : cluster_score ) if(a > 0) cluster_score_nth.push_back(a);
+                
+                // I almost forgot the logic of the complex code here, ohhh, my god .................
+                // fix the bug, segment fault
+                if ( cluster_score_nth.size() == 0 ) {
+                    throw "No valid seeding positions found!!!";
+                }
+                
                 int c_score_cut = int( std::floor ( (1 - opt.keep_top_clusters_frac) * cluster_score_nth.size() ) );
                 std::nth_element( cluster_score_nth.begin(), cluster_score_nth.begin()+c_score_cut, cluster_score_nth.end() );
                 int cutoff_of_num = cluster_score_nth[c_score_cut];

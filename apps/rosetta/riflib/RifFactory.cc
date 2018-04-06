@@ -866,7 +866,7 @@ std::string get_rif_type_from_file( std::string fname )
             if ( requirements_.size() > 0 )
             {
                 bool pass = true;
-								for ( auto const & x : requirements_ ) pass &= scratch.requirements_satisfied_[x];
+                for ( auto const & x : requirements_ ) pass &= scratch.requirements_satisfied_[x];
                 if ( !pass ) result.val_ = 9e9;
             }
             
