@@ -317,6 +317,13 @@ int main( int argc, char *argv[] )
                 std::string & rif_decr = rif_descriptions[i_readmap];
                 shared_ptr<RifBase> & rif_ptr = rif_ptrs[i_readmap];
                 // ideas from Brian, just pass a nullptr
+                // here try to only load the highest resolution rif.
+                if ( i_readmap < ( opt.rif_files.size() - 1 ) ){
+                    rif_ptr = nullptr;
+                    continue;
+                }
+                //
+                //
                 rif_ptr = rif_factory->create_rif_from_file( rif_file, rif_decr );
                 // hack the normal loading process
                 runtime_assert_msg( rif_ptrs[i_readmap] , "rif creation from file failed! " + rif_file );

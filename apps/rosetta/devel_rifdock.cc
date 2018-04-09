@@ -101,8 +101,9 @@ int main( int argc, char *argv[] )
     RifDockOpt opt;
     opt.init_from_cli();
     
-    
-    
+    // test the options
+    std::cout << opt.outdir << std::endl;
+    exit(0);
     
     for ( int iscaff = 0; iscaff < opt.scaffold_fnames.size(); ++iscaff )
     {

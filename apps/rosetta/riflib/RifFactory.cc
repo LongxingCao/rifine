@@ -1032,6 +1032,10 @@ struct RifFactoryImpl :
 	) const {
 
 		for( int i_so = 0; i_so < config.rif_ptrs.size(); ++i_so ){
+
+				// check whether the rifptr is a nullptr, so that in rifine, I can only load the highest resolution rif.
+				if ( nullptr == config.rif_ptrs[i_so] ) continue;
+
 			if( i_so <= config.rif_ptrs.size()-1 ){
 				shared_ptr< MySceneObjectiveRIF> objective = make_shared<MySceneObjectiveRIF>();
 				objective->objective.template get_objective< MyScoreBBActorRIF >().set_rif( config.rif_ptrs[i_so] );
