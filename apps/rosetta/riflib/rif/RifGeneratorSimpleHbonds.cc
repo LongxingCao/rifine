@@ -818,18 +818,24 @@ namespace rif {
                                     sat2 = -1;
                                 }
                             } else {
-                                if ( hbond_requirement_labels[sat1] != -1 && hbond_requirement_labels[sat2] != -1 ) {
-                                    utility_exit_with_message("I satisfied two polar, maybe you want to define a bidentate hydrogen bond?? I don't know how to do it, ask Longxing about this.");
-                                } else if ( hbond_requirement_labels[sat1] != -1 && hbond_requirement_labels[sat2] == -1 ) {
-                                    sat1 = hbond_requirement_labels[sat1];
-                                    sat2 = -1;
-                                } else if ( hbond_requirement_labels[sat1] == -1 && hbond_requirement_labels[sat2] != -1 ) {
-                                    sat1 = hbond_requirement_labels[sat2];
+                                
+                                // I think here the priority of bidentate hydrogen bonds should be higher.
+                                if ( bidentate_requirement_labels[sat1] != -1 && bidentate_requirement_labels[sat1] == bidentate_requirement_labels[sat2] ) {
+                                    sat1 = bidentate_requirement_labels[sat1];
                                     sat2 = -1;
                                 } else {
-                                    // normal
-                                    if ( bidentate_requirement_labels[sat1] != -1 && bidentate_requirement_labels[sat1] == bidentate_requirement_labels[sat2] ) {
-                                        sat1 = bidentate_requirement_labels[sat1];
+                                    if ( hbond_requirement_labels[sat1] != -1 && hbond_requirement_labels[sat2] != -1 ) {
+                                        if ( hbond_requirement_labels[sat1] != hbond_requirement_labels[sat2] ){
+                                            utility_exit_with_message("I am confused, I don't know which requirement num should I belong to.");
+                                        } else {
+                                            sat1 = hbond_requirement_labels[sat1];
+                                            sat2 = -1;
+                                        }
+                                    } else if ( hbond_requirement_labels[sat1] != -1 && hbond_requirement_labels[sat2] == -1 ) {
+                                        sat1 = hbond_requirement_labels[sat1];
+                                        sat2 = -1;
+                                    } else if ( hbond_requirement_labels[sat1] == -1 && hbond_requirement_labels[sat2] != -1 ) {
+                                        sat1 = hbond_requirement_labels[sat2];
                                         sat2 = -1;
                                     } else {
                                         sat1 = -1;
