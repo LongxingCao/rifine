@@ -123,7 +123,7 @@ add_pdbinfo_if_missing( core::pose::Pose & pose ) {
     
     
 
-bool parse_seeding_file(std::string fname, std::vector<devel::scheme::EigenXform> & seeding_positions, bool seeding_by_patchdock)
+bool parse_seeding_file(std::string fname, std::vector<devel::scheme::EigenXform> & seeding_positions, bool seeding_by_patchdock = true, float patchdock_min_sasa = -1000.0)
 {
         
     // the seeding
@@ -152,6 +152,9 @@ bool parse_seeding_file(std::string fname, std::vector<devel::scheme::EigenXform
 						}
 
 						if(!flag) continue;
+
+						// remove bad patchdock seeding pos based on the sasa
+						if ( utility::string2float(splt[7]) < patchdock_min_sasa ) continue;
 
 						float cx = cos(utility::string2float(splt[25]));
 						float cy = cos(utility::string2float(splt[26]));

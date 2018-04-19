@@ -282,7 +282,7 @@ namespace rif {
                 
                 
                 // debuging code here
-                /*
+               /* 
                 for (int ii = 0; ii < target_bonder_names.size(); ++ii) {
                     std::cout << "########" << ii << "########" << std::endl;
                     std::cout << target_bonder_names[ii].first << " " << target_bonder_names[ii].second << std::endl;

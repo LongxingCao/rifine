@@ -746,7 +746,7 @@ int main( int argc, char *argv[] )
                     }  else {
                         utility_exit_with_message( "-seeding_files list not same length as -scaffolds list" );
                     }
-                    runtime_assert_msg(parse_seeding_file(seeding_fname, seeding_positions, opt.seeding_by_patchdock), "Faild to parse the seeding file!!!");
+                    runtime_assert_msg(parse_seeding_file(seeding_fname, seeding_positions, opt.seeding_by_patchdock, opt.patchdock_min_sasa), "Faild to parse the seeding file!!!");
                     
                     EigenXform x(EigenXform::Identity());
                     x.translation() = scaffold_center;
@@ -939,6 +939,7 @@ int main( int argc, char *argv[] )
                         
                         ScenePtr tscene( scene_pt[omp_get_thread_num()] );
                         
+                        // TODO: only the index is enough, I think.
                         EigenXform p(EigenXform::Identity());
                         p.rotate( xform_positions[i_samp].second.rotation() * seeding_positions[i_seed].rotation() );
                         p.translation() = xform_positions[i_samp].second.translation() + seeding_positions[i_seed].translation();
