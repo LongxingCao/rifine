@@ -300,8 +300,8 @@ OPT_1GRP_KEY(     StringVector , rif_dock, scaffolds )
 	        NEW_OPT(  rif_dock::nfold_symmetry, "", 1 );
 	        NEW_OPT(  rif_dock::symmetry_axis, "", utility::vector1<double>() );
 
-	        NEW_OPT(  rif_dock::user_rotamer_bonus_constant, "", -2 );
-			NEW_OPT(  rif_dock::user_rotamer_bonus_per_chi, "", -2 );
+	        NEW_OPT(  rif_dock::user_rotamer_bonus_constant, "", 0.0 );
+			NEW_OPT(  rif_dock::user_rotamer_bonus_per_chi, "", 0.0 );
 
 			NEW_OPT(  rif_dock::resl0, "", 16 );
 			NEW_OPT(  rif_dock::dump_x_frames_per_resl, "Use this to make a movie", 0 );
