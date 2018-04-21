@@ -245,36 +245,6 @@ int main(int argc, char *argv[]) {
 		shared_ptr< RotamerIndex > rot_index_p = ::devel::scheme::get_rotamer_index( rot_index_spec_file );
 		RotamerIndex & rot_index( *rot_index_p );
 
-
-		// {
-		// 	utility::io::ozstream out("test.rotidx.gz",std::ios_base::binary);
-		// 	rot_index.save(out);
-		// 	out.close();
-		// }
-		// {
-		// 	RotamerIndex ri2;
-		// 	utility::io::izstream in("test.rotidx.gz",std::ios_base::binary);
-		// 	ri2.load(in);
-		// 	in.close();
-
-		// 	std::cout << rot_index << std::endl;
-		// 	std::cout << std::endl;
-		// 	std::cout << ri2 << std::endl;
-
-		// 	runtime_assert( ri2 == rot_index );
-		// 	utility_exit_with_message("test rot index load/save");
-		// }
-
-		// std::cout << "================ RotamerIndex ===================" << std::endl;
-		// std::cout << rot_index.size() << " " << rot_index.n_primary_rotamers() << std::endl;
-		// std::cout << rot_index << std::endl;
-		// {
-		// 	utility::io::ozstream out("rot_index.pdb");
-		// 	rot_index.dump_pdb( out );
-		// 	utility_exit_with_message("ortsdn");
-		// }
-		// std::cout << "=================================================" << std::endl;
-
 		RotamerRFOpts rotrfopts;
 		rotrfopts.oversample     = opt.rotrf_oversample;
 		rotrfopts.field_resl     = opt.rotrf_resl;
@@ -337,35 +307,6 @@ int main(int argc, char *argv[]) {
 			::devel::scheme::get_acceptor_rays( target, ir, hbopt, target_acceptors );
 		}
 		std::cout << "target_donors.size() " << target_donors.size() << " target_acceptors.size() " << target_acceptors.size() << std::endl;
-		// {
-		// 	{
-		// 		std::vector<HBondRay> tmpdon, tmpacc, tmpacclk;
-		// 		::devel::scheme::HBRayOpts hbopt;
-		// 		hbopt.lkball = false;
-		// 		hbopt.withbb = true;
-		// 		hbopt.add_acceptor_mid = true;
-		// 		hbopt.satisfied_atoms = ::devel::scheme::get_satisfied_atoms(target);
-		// 		BOOST_FOREACH( core::Size ir, target_res ){
-		// 			::devel::scheme::get_donor_rays   ( target, ir, hbopt, tmpdon );
-		// 			::devel::scheme::get_acceptor_rays( target, ir, hbopt, tmpacc );
-		// 		}
-		// 		hbopt.lkball = true;
-		// 		BOOST_FOREACH( core::Size ir, target_res ){
-		// 			::devel::scheme::get_acceptor_rays( target, ir, hbopt, tmpacclk );
-		// 		}
-		// 		target.dump_pdb("target.pdb");
-		// 		utility::io::ozstream donout(utility::file_basename(opt.target_pdb)+"_donors.pdb");
-		// 		::devel::scheme::dump_hbond_rays( donout, tmpdon, true );
-		// 		donout.close();
-		// 		utility::io::ozstream accout(utility::file_basename(opt.target_pdb)+"_orb_acceptors.pdb");
-		// 		::devel::scheme::dump_hbond_rays( accout, tmpacc, false );
-		// 		accout.close();
-		// 		utility::io::ozstream accoutlk(utility::file_basename(opt.target_pdb)+"_lkb_acceptors.pdb");
-		// 		::devel::scheme::dump_hbond_rays( accoutlk, tmpacclk, false );
-		// 		accoutlk.close();
-		// 		utility_exit_with_message("testing lkball replace orbs");
-		// 	}
-		// }
 	}
 	std::vector< VoxelArrayPtr > target_field_by_atype;
 	std::vector< std::vector< VoxelArrayPtr > > target_bounding_by_atype;
