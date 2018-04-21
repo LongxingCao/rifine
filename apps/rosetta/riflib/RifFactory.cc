@@ -676,7 +676,7 @@ std::string get_rif_type_from_file( std::string fname )
 								// What is the best number for this bonus??
                                 // A bug here, as I only need to add bonus to the ones that are defined in the requirements array.
                                 if ( requirements_.size() > 0 && std::find( requirements_.begin(), requirements_.end(), rotscores.get_requirement_num(i_rs) ) != requirements_.end() ) {
-																		sat_bonus -= 10.0;
+																		sat_bonus -= 20.0;
 																}
 								//if ( requirements_.size() > 0 ) sat_bonus += -10.0;
 
@@ -829,12 +829,8 @@ std::string get_rif_type_from_file( std::string fname )
 
 				if( nsat - require_satisfaction_ < 0 ){
 					result.val_ = 9e9;
-				} //else {
-					//result.val_ += -4.0f * nsat;
-				//}
+				} 
 
-				// delete scratch.is_satisfied_;
-				// scratch.is_satisfied_.clear();
 			}
 
 			// this is yolo code by Brian. I have no idea if th is will always work
@@ -871,23 +867,6 @@ std::string get_rif_type_from_file( std::string fname )
                 for ( auto const & x : requirements_ ) pass &= scratch.requirements_satisfied_[x];
                 if ( !pass ) result.val_ = 9e9;
             }
-            
-
-				// #ifdef USE_OPENMP
-				// #pragma omp critical
-				// #endif
-				// std::cout << result.rotamers_.size() << " " << result.val_ << std::endl;
-			// if( result.rotamers_.size() == 0 ){
-			// 	#ifdef USE_OPENMP
-			// 	#pragma omp critical
-			// 	#endif
-			// 	std::cout << "no rotamers!" << std::endl;
-			// }
-
-			// std::cout << "bound score: " << result.val_ << ", packscore: " << packscore << std::endl;
-			// for( int i = 0; i < result.rotamers_.size(); ++i ){
-			// 	std::cout << "res: " << result.rotamers_[i].first << ", rotamer: " << result.rotamers_[i].second << std::endl;
-			// }
 
 		}
 	};
@@ -1065,10 +1044,6 @@ struct RifFactoryImpl :
 				get_objective<MyScoreBBActorRIF>().require_satisfaction_ = config.require_satisfaction;
 		}
 		// the requirement code.
-		if( config.requirements.size() > 0 ){
-			dynamic_cast<MySceneObjectiveRIF&>(*packing_objective).objective.template
-				get_objective<MyScoreBBActorRIF>().requirements_ = config.requirements;
-		}
 
 
 		for( auto op : objectives ){

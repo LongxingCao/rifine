@@ -600,8 +600,7 @@ int main(int argc, char *argv[]) {
 				rso_config.n_sat_groups = opt.require_satisfaction == 0 ? 0 : 1000;//target_donors.size() + target_acceptors.size();
 				rso_config.require_satisfaction = opt.require_satisfaction;
 				rso_config.require_n_rifres = opt.require_n_rifres;
-            
-                rso_config.requirements = opt.requirements;
+        rso_config.requirements = opt.requirements;
 
 			
 			ScenePtr scene_prototype;
@@ -753,6 +752,15 @@ int main(int argc, char *argv[]) {
 		        	packed_results = *hsearch_results_p;
 		        }
 
+						// check the hackpack results, as some of them maybe very bad!!
+						int64_t num_pass_global_cut = 0;
+						for ( int64_t ii = 0; ii < packed_results.size(); ++ii )
+						{
+								if ( packed_results[ii].score > opt.global_score_cut ) break;
+								++num_pass_global_cut;
+						}
+						if ( num_pass_global_cut == 0 ) throw "After hackpack, there is no valid searching points!";
+						packed_results.resize( num_pass_global_cut );
 
 				std::chrono::duration<double> elapsed_seconds_pack = std::chrono::high_resolution_clock::now()-start_pack;
 				time_pck += elapsed_seconds_pack.count();

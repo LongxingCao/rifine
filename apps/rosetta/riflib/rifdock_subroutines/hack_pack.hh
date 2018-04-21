@@ -72,7 +72,11 @@ hack_pack(
 
             if( ipack%out_interval==0 ){ cout << '*'; cout.flush(); }
             RifDockIndex isamp = hsearch_results[ipack].index;
-            if( hsearch_results[ipack].score > rdd.opt.global_score_cut ) continue;
+            if( hsearch_results[ipack].score > rdd.opt.global_score_cut ) {
+								// here I just want to make sure they are really high!!!
+								hsearch_results[ipack].score = 9e9;
+								continue;
+						}
             packed_results[ ipack ].index = isamp;
             packed_results[ ipack ].prepack_rank = ipack;
             ScenePtr tscene = ( rdd.scene_pt[omp_get_thread_num()] );
@@ -101,11 +105,12 @@ hack_pack(
     __gnu_parallel::sort( packed_results.begin(), packed_results.end() );
 
 
+		// I don't quite understand what's the sanity check for??
     int to_check = std::min(1000, (int)packed_results.size());
     std::cout << "Check " << to_check << " results after hackpack" << std::endl;
     for ( int i = 0; i < to_check; i++ ) {
         SearchPointWithRots const & packed_result = packed_results[i];
-        if (packed_result.rotamers().size() == 0) continue;
+        if (packed_result.numrots() == 0) continue;
         ScenePtr tscene( rdd.scene_pt[omp_get_thread_num()] );
         sanity_check_hackpack( rdd, packed_result.index, packed_result.rotamers_, tscene);
     }
