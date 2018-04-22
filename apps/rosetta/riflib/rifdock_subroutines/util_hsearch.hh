@@ -197,7 +197,7 @@ typedef _SearchPoint<DirectorBase> SearchPoint;
     class EigenXform,
     // class Scene,
     class ScenePtr,
-    class ObjectivePtr,
+    class ObjectivePtr
     >
     void
     awful_compile_output_helper(

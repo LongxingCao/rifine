@@ -322,7 +322,6 @@ OPT_1GRP_KEY(     StringVector , rif_dock, scaffolds )
 			NEW_OPT(  rif_dock::fragment_max_rmsd , "Max RMSD to starting fragment.", 10000 );
 			NEW_OPT(  rif_dock::max_fragments, "Maximum number of fragments to find.", 10000000 );
 			NEW_OPT(  rif_dock::morph_rules_files, "List of files for each scaffold to specify morph regions", utility::vector1<std::string>() );
-MaMaMaMaMaMaL
 			NEW_OPT(  rif_dock::include_parent, "Include parent fragment in diversified scaffolds.", false );
 			NEW_OPT(  rif_dock::use_parent_body_energies, "Don't recalculate 1-/2-body energies for fragment insertions", false );
 

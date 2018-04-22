@@ -157,14 +157,8 @@ typedef ::scheme::nest::NEST< 6,
 
 // typedef ::scheme::kinematics::NestDirector< NestOriTrans6D > DirectorOriTrans6D;
 typedef ::scheme::kinematics::NestDirector< NestOriTrans6D, uint64_t> RifDockNestDirector;
-    
-    typedef ::scheme::kinematics::SeedingDirector< EigenXform, std::vector<EigenXform>, RifDockIndex > RifDockSeedingDirector;
-    
-typedef ::scheme::kinematics::ScaffoldDirector< EigenXform, ScaffoldProvider, RifDockIndex > RifDockScaffoldDirector;
 
-typedef ::scheme::kinematics::CompositeDirector< EigenXform, RifDockIndex > RifDockDirector;
-
-typedef shared_ptr<::scheme::kinematics::Director<EigenXform, RifDockIndex> > DirectorBase;
+typedef shared_ptr<::scheme::kinematics::Director<EigenXform, uint64_t> > DirectorBase;
 
 
 

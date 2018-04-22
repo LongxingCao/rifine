@@ -52,6 +52,7 @@ struct Director
 	) const = 0;
 
 	virtual BigIndex size(int resl, BigIndex sizes) const = 0;
+    virtual uint64_t size(int resl) const = 0;
 
 };
 
@@ -129,12 +130,12 @@ struct NestDirector
 	}
         
 
-	virtual BigIndex size(int resl, BigIndex sizes) const {
+	virtual BigIndex size(int resl, BigIndex sizes) const override {
 		set_nest_size(nest_.size(resl), sizes);
 		return sizes;
 	}
     // overload this function ..
-    virtual int64_t size(int64_t resl) const {
+    virtual uint64_t size(int resl) const override {
         return nest_.size(resl);
     }
 
@@ -194,6 +195,11 @@ struct CompositeDirector
 		return sizes;
 	}
 
+    // overload this function ..
+    virtual uint64_t size(int resl) const override {
+        utility_exit_with_message("I should never be called here! Talk with me!");
+        return 0;
+    }
 
 
 };
@@ -262,9 +268,11 @@ struct CompositeDirector
             sizes.seeding_index = seeding_positions_->size();
             return sizes;
         }
-        
-        
-        
+    // overload this function ..
+        virtual uint64_t size(int resl) const override {
+            utility_exit_with_message("I should never be called here! Talk with me!");
+            return 0;
+        }
     };
     
     template< class Position, class SeedingPositions, class RifDockIndex >
@@ -325,7 +333,10 @@ struct ScaffoldDirector
 		return sizes;
 	}
 
-
+    virtual uint64_t size(int resl) const override {
+        utility_exit_with_message("I should never be called!");
+        return 0;
+    }
 
 };
 
