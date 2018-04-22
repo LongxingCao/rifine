@@ -926,7 +926,8 @@ int main( int argc, char *argv[] )
                 
                 
                 // set up scene for each thread
-                BOOST_FOREACH( ScenePtr & s, scene_pt ) s = scene_minimal->clone_deep();
+                // I think shallow is enough, because I will never change the conformation .....
+                BOOST_FOREACH( ScenePtr & s, scene_pt ) s = scene_minimal->clone_shallow();
                 
                 // do a real exhausitive search of all the searching points.
                 #ifdef USE_OPENMP
@@ -982,12 +983,12 @@ int main( int argc, char *argv[] )
                 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                 // TODO: add code for the case without packing. But I think that should never happen.
                 
-                if ( opt.hack_pack /* opt.hackpack, as I think I should always do hack pack. There is now way to skip this step. */ ) {
+                if ( opt.hack_pack /* opt.hackpack, as I think I should always do hack pack. There is no way to skip this step. */ ) {
                     std::cout << "========================================= Now the HackPack stage ============================================" << std::endl << std::endl;
                     
                     // change the scene_minimal
                     {
-                        BOOST_FOREACH( ScenePtr & s, scene_hpack_pt ) s = scene_full->clone_deep();
+                        BOOST_FOREACH( ScenePtr & s, scene_hpack_pt ) s = scene_full->clone_shallow();
                     }
                     
                     std::chrono::time_point<std::chrono::high_resolution_clock> start, end;
@@ -1463,7 +1464,7 @@ int main( int argc, char *argv[] )
                                 for(int ir : replaced_scaffold_res){
                                     rifine_results[i_samp].pose_->pdb_info()->add_reslabel(ir, "PRUNED" );
                                 }
-                            } else if ( (minimizing+2 == do_min) && opt.only_dump_scaffold ) {
+                            } else if ( (minimizing+2 == do_min) && rifine_results[i_samp].score <= opt.rosetta_score_cut && opt.only_dump_scaffold ) {
                                 rifine_results[i_samp].pose_ = pose_to_min.split_by_chain(1);
                                 for(int ir : rifres){
                                     rifine_results[i_samp].pose_->pdb_info()->add_reslabel(ir, "RIFRES" );

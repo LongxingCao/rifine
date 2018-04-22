@@ -133,6 +133,10 @@ struct NestDirector
 		set_nest_size(nest_.size(resl), sizes);
 		return sizes;
 	}
+    // overload this function ..
+    virtual int64_t size(int64_t resl) const {
+        return nest_.size(resl);
+    }
 
 
 };

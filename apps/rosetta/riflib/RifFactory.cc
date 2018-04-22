@@ -676,7 +676,7 @@ std::string get_rif_type_from_file( std::string fname )
 								// What is the best number for this bonus??
                                 // A bug here, as I only need to add bonus to the ones that are defined in the requirements array.
                                 if ( requirements_.size() > 0 && std::find( requirements_.begin(), requirements_.end(), rotscores.get_requirement_num(i_rs) ) != requirements_.end() ) {
-																		sat_bonus -= 20.0;
+																		sat_bonus -= 10.0;
 																}
 								//if ( requirements_.size() > 0 ) sat_bonus += -10.0;
 
@@ -791,6 +791,7 @@ std::string get_rif_type_from_file( std::string fname )
 								typename RIF::Value const & rotscores = rif_->operator[]( bb.position() );
 								static int const Nrots = RIF::Value::N;
 								for( int i_rs = 0; i_rs < Nrots; ++i_rs ){
+										if( rotscores.empty(i_rs) ) break;
 										if( rotscores.rotamer(i_rs) == result.rotamers_[ii].second ){
 												rotscores.mark_sat_groups( i_rs, scratch.requirements_satisfied_ );
 												break;

@@ -169,6 +169,7 @@ OPT_1GRP_KEY(     StringVector , rif_dock, scaffolds )
 	OPT_1GRP_KEY(  StringVector, rif_dock, cst_files )
 
     OPT_1GRP_KEY(  IntegerVector, rif_dock, requirements )
+    OPT_1GRP_KEY(  Boolean     , rif_dock, only_dump_scaffold )
 
 
 
@@ -321,7 +322,7 @@ OPT_1GRP_KEY(     StringVector , rif_dock, scaffolds )
 			NEW_OPT(  rif_dock::fragment_max_rmsd , "Max RMSD to starting fragment.", 10000 );
 			NEW_OPT(  rif_dock::max_fragments, "Maximum number of fragments to find.", 10000000 );
 			NEW_OPT(  rif_dock::morph_rules_files, "List of files for each scaffold to specify morph regions", utility::vector1<std::string>() );
-
+MaMaMaMaMaMaL
 			NEW_OPT(  rif_dock::include_parent, "Include parent fragment in diversified scaffolds.", false );
 			NEW_OPT(  rif_dock::use_parent_body_energies, "Don't recalculate 1-/2-body energies for fragment insertions", false );
 
@@ -336,7 +337,7 @@ OPT_1GRP_KEY(     StringVector , rif_dock, scaffolds )
 			NEW_OPT(  rif_dock::cst_files, "" , utility::vector1<std::string>() );
             
             NEW_OPT(  rif_dock::requirements,        "which rif residue should be in the final output", utility::vector1< int >());
-
+            NEW_OPT(  rif_dock::only_dump_scaffold, "" , true );
 		}
 	#endif
 #endif
@@ -487,6 +488,7 @@ struct RifDockOpt
 	std::vector<std::string> cst_fnames              ;
     
     std::vector<int> requirements;
+    bool        only_dump_scaffold                   ;
 
 
     void init_from_cli();
@@ -707,6 +709,7 @@ struct RifDockOpt
         
         
         for( int req : option[rif_dock::requirements]() ) requirements.push_back(req);
+        only_dump_scaffold                      = option[rif_dock::only_dump_scaffold                  ]();
 
 
 

@@ -4,7 +4,7 @@
 // INC
 
 #define GLOBAL_VARIABLES_ARE_BAD
-#include <rifdock.hh>
+#include <rifdock_legacy.hh>
 #undef GLOBAL_VARIABLES_ARE_BAD
 
 	#include <numeric/random/random.hh>

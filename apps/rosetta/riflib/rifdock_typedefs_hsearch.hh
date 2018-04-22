@@ -156,7 +156,7 @@ typedef ::scheme::nest::NEST< 6,
 
 
 // typedef ::scheme::kinematics::NestDirector< NestOriTrans6D > DirectorOriTrans6D;
-typedef ::scheme::kinematics::NestDirector< NestOriTrans6D, RifDockIndex > RifDockNestDirector;
+typedef ::scheme::kinematics::NestDirector< NestOriTrans6D, uint64_t> RifDockNestDirector;
     
     typedef ::scheme::kinematics::SeedingDirector< EigenXform, std::vector<EigenXform>, RifDockIndex > RifDockSeedingDirector;
     
