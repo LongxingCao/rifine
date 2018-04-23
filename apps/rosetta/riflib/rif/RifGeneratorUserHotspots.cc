@@ -61,61 +61,43 @@ namespace rif {
 	RifGeneratorUserHotspots::modify_rotamer_spec(
 		::scheme::chemical::RotamerIndexSpec& rot_spec
 		
-	){
-		for( int i_hotspot_group = 0; i_hotspot_group < this->opts.hotspot_files.size(); ++i_hotspot_group ){
-			
-			std::string const & hotspot_file = this->opts.hotspot_files[i_hotspot_group];
-			core::pose::Pose pose;
-			core::import_pose::pose_from_file(pose,hotspot_file);
+                                                  ){
+        for( int i_hotspot_group = 0; i_hotspot_group < this->opts.hotspot_files.size(); ++i_hotspot_group ){
+            
+            std::string const & hotspot_file = this->opts.hotspot_files[i_hotspot_group];
+            core::pose::Pose pose;
+            core::import_pose::pose_from_file(pose,hotspot_file);
+            
+            
+            for( int i_hspot_res = 1; i_hspot_res <= pose.size(); ++i_hspot_res ){
+                
+                std::string resn;
+                std::vector<float> mychi;
+                int n_proton_chi;
+                int parent_key;
+                ::scheme::chemical::get_residue_rotspec_params( pose.residue(i_hspot_res), resn, mychi, n_proton_chi, parent_key );
+                
+                int irot = rot_spec.get_matching_rot( resn, mychi, n_proton_chi, 5.0f );
+                
+                if ( irot == -1 ) {
+                    std::cout << "Adding input rotamers: " << i_hspot_res << " " << resn << std::endl;
+                    bool am_i_normal(pose.residue(i_hspot_res).has("N") && pose.residue(i_hspot_res).has("CA")  && pose.residue(i_hspot_res).has("C"));
+                    if (am_i_normal) {
+                        rot_spec.add_rotamer(resn,mychi,n_proton_chi,parent_key);
+                    }
+                } else {
+                    std::cout << "duplicated rotamer, not adding: " << i_hotspot_group << " " << i_hspot_res << " " << resn << std::endl;
+                }
+                
+            }//end loop over all hotspot res within one hotspot file
+        }// end loop over all hotspot files
+        //rot_spec.load();
+        // utility::io::ozstream outfile("test_out.text");
+        // rot_index_spec.save(outfile);
+        // rot_index_spec.fill_rotamer_index(*(params->rot_index_p));
+        std::cout << "modify_rotamer_sepc DONE " << std::endl;
+    }// end modify_rotamer_spec
 
-			
-			for( int i_hspot_res = 1; i_hspot_res <= pose.size(); ++i_hspot_res ){
-				std::string resn = pose.residue(i_hspot_res).name3();
-				int parent_key = -1;
-				
-				int n_proton_chi = 0;
-				if (resn == "CYS" || resn == "SER" || resn == "THR" || resn == "TYR"){
-					n_proton_chi = 1;
-				}
-
-				std::vector<float> mychi(pose.residue(i_hspot_res).nchi());
-				for (int n_chi = 0; n_chi < mychi.size(); n_chi++){
-					mychi.at(n_chi) = pose.chi(n_chi+1,i_hspot_res);
-				}
-				
-				//check if the rotamer exist in rot_spec
-				bool add_this_rotamer = false;
-				for( int irot = 0; irot < rot_spec.size(); ++irot ){
-
-					if( rot_spec.resname(irot) != resn ) continue;
-					bool duplicate_rotamer = true;
-					for (int n_chi = 0; n_chi < rot_spec.get_rotspec(irot).chi_.size(); ++n_chi){
-						//std::cout << "checking " << rot_spec.get_rotspec(irot).resname_ << " " << rot_spec.get_rotspec(irot).chi_.at(n_chi) << " " << resn <<" "<< mychi.at(n_chi) << std::endl;
-						duplicate_rotamer &= ::scheme::chemical::impl::angle_is_close( rot_spec.get_rotspec(irot).chi_.at(n_chi), mychi.at(n_chi), 5.0f );
-					}
-
-					if (duplicate_rotamer){
-						std::cout << "duplicated rotamer, not adding: " << i_hotspot_group << " " << i_hspot_res << " " << resn << std::endl;
-						add_this_rotamer = false;
-						break;
-					} 
-					else if (!duplicate_rotamer){
-						add_this_rotamer = true;
-					}					
-				}// end loop over all existing rot_spec rotamers
-
-				if (add_this_rotamer){
-					std::cout << "Adding input rotamers: " << i_hspot_res << " " << resn << std::endl;
-					rot_spec.add_rotamer(resn,mychi,n_proton_chi,parent_key);
-				}
-			}//end loop over all hotspot res within one hotspot file
-		}// end loop over all hotspot files
-		//rot_spec.load();
-		// utility::io::ozstream outfile("test_out.text");
-		// rot_index_spec.save(outfile);
-		// rot_index_spec.fill_rotamer_index(*(params->rot_index_p));
-		std::cout << "modify_rotamer_sepc DONE " << std::endl;
-	}// end modify_rotamer_spec
 
 
 	void

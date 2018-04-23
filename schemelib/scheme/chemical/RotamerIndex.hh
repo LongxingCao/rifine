@@ -157,6 +157,75 @@ RotamerSpec{
 	int parent_key_, n_proton_chi_;
 
 };
+    
+// brian's code
+    inline
+    void
+    residue_to_identity( core::conformation::ResidueOP & resop ) {
+        typedef ::Eigen::Transform<float,3,Eigen::AffineCompact> EigenXform;
+        
+        Eigen::Vector3f N ( resop->xyz("N" ).x(), resop->xyz("N" ).y(), resop->xyz("N" ).z() );
+        Eigen::Vector3f CA( resop->xyz("CA").x(), resop->xyz("CA").y(), resop->xyz("CA").z() );
+        Eigen::Vector3f C ( resop->xyz("C" ).x(), resop->xyz("C" ).y(), resop->xyz("C" ).z() );
+        // typedef Eigen::Transform<float,3,Eigen::AffineCompact> EigenXform;
+        ::scheme::actor::BackboneActor<EigenXform> bbactor( N, CA , C );
+        
+        EigenXform xform = bbactor.position().inverse();
+        
+        ::numeric::xyzMatrix<float> m;
+        for(int i = 0; i < 3; ++i){
+            for(int j = 0; j < 3; ++j){
+                m(i+1,j+1) = xform.rotation()(i,j);
+            }
+        }
+        ::numeric::xyzTransform<float> x(m);
+        x.t[0] = xform.translation()[0];
+        x.t[1] = xform.translation()[1];
+        x.t[2] = xform.translation()[2];
+        
+        resop->apply_transform_Rx_plus_v( x.R, x.t );
+    }
+    
+    inline
+    core::conformation::ResidueOP
+    get_residue_at_identity(
+                            core::chemical::ResidueType const & rtype,
+                            std::vector<float> const & chi
+                            ) {
+        
+        core::conformation::ResidueOP resop = core::conformation::ResidueFactory::create_residue( rtype );
+        runtime_assert( chi.size() == resop->nchi() );
+        for(int i = 0; i < chi.size(); ++i){
+            resop->set_chi( i+1, chi[i] );
+        }
+        
+        residue_to_identity( resop );
+        
+        return resop;
+        
+    }
+    
+    inline
+    void get_residue_rotspec_params(
+                                    core::conformation::Residue const & res,
+                                    std::string & resn,
+                                    std::vector<float> & chis,
+                                    int & n_proton_chi,
+                                    int & parent_key
+                                    ) {
+        resn = res.name3();
+        parent_key = -1;
+        n_proton_chi = 0;
+        if (resn == "CYS" || resn == "SER" || resn == "THR" || resn == "TYR"){
+            n_proton_chi = 1;
+        }
+        chis.clear();
+        chis.resize(res.nchi());
+        for (int n_chi = 0; n_chi < chis.size(); n_chi++){
+            chis.at(n_chi) = res.chi(n_chi+1);
+        }
+    }
+
 
 //template<class _Atom, class RotamerGenerator, class Xform>
 struct
