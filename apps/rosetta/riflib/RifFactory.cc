@@ -675,9 +675,9 @@ std::string get_rif_type_from_file( std::string fname )
 								// Will this number affect the two body table choice??
 								// What is the best number for this bonus??
                                 // A bug here, as I only need to add bonus to the ones that are defined in the requirements array.
-                                if ( requirements_.size() > 0 && std::find( requirements_.begin(), requirements_.end(), rotscores.get_requirement_num(i_rs) ) != requirements_.end() ) {
-																		sat_bonus -= 10.0;
-																}
+                if ( requirements_.size() > 0 && std::find( requirements_.begin(), requirements_.end(), rotscores.get_requirement_num(i_rs) ) != requirements_.end() ) {
+												sat_bonus -= 10.0;
+										}
 								//if ( requirements_.size() > 0 ) sat_bonus += -10.0;
 
 
@@ -865,7 +865,11 @@ std::string get_rif_type_from_file( std::string fname )
             if ( requirements_.size() > 0 )
             {
                 bool pass = true;
-                for ( auto const & x : requirements_ ) pass &= scratch.requirements_satisfied_[x];
+                for ( auto const & x : requirements_ ) {
+										pass &= scratch.requirements_satisfied_[x];
+										// revert the bonus back
+										result.val_ += 10;
+								}
                 if ( !pass ) result.val_ = 9e9;
             }
 

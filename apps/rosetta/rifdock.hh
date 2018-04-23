@@ -172,6 +172,7 @@ OPT_1GRP_KEY(     StringVector , rif_dock, scaffolds )
     OPT_1GRP_KEY(  Boolean     , rif_dock, only_dump_scaffold )
 
 
+    OPT_1GRP_KEY(  Boolean     , rif_dock, test_longxing )
 
 
  
@@ -336,7 +337,9 @@ OPT_1GRP_KEY(     StringVector , rif_dock, scaffolds )
 			NEW_OPT(  rif_dock::cst_files, "" , utility::vector1<std::string>() );
             
             NEW_OPT(  rif_dock::requirements,        "which rif residue should be in the final output", utility::vector1< int >());
-            NEW_OPT(  rif_dock::only_dump_scaffold, "" , true );
+            NEW_OPT(  rif_dock::only_dump_scaffold, "" , false );
+
+            NEW_OPT(  rif_dock::test_longxing, "", false);
 		}
 	#endif
 #endif
@@ -488,6 +491,7 @@ struct RifDockOpt
     
     std::vector<int> requirements;
     bool        only_dump_scaffold                   ;
+    bool        test_longxing                        ;
 
 
     void init_from_cli();
@@ -709,6 +713,7 @@ struct RifDockOpt
         
         for( int req : option[rif_dock::requirements]() ) requirements.push_back(req);
         only_dump_scaffold                      = option[rif_dock::only_dump_scaffold                  ]();
+        test_longxing                           = option[rif_dock::test_longxing                       ]();
 
 
 

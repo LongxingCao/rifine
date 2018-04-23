@@ -898,24 +898,26 @@ int main(int argc, char *argv[]) {
 			}
 
 			// Longxing
-			///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-			print_header( "perform test with scaffold in original position" ); //////////////////////////////////////////////////////////////////////////////////////////////
-			///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+			if ( opt.test_longxing ){
+				///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+				print_header( "perform test with scaffold in original position" ); //////////////////////////////////////////////////////////////////////////////////////////////
+				///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-            cout << std::endl;
-			cout << "scores for scaffold in original position: " << std::endl;
-			{
-				EigenXform x(EigenXform::Identity());
-				x.translation() = scaffold_center;
-				scene_minimal->set_position(1,x);
-				for(int i = 0; i < RESLS.size(); ++i){
-					std::vector<float> sc = objectives[i]->scores(*scene_minimal);
-					cout << "input bounding score " << i << " " << F(7,3,RESLS[i]) << " "
+        cout << std::endl;
+				cout << "scores for scaffold in original position: " << std::endl;
+				{
+						EigenXform x(EigenXform::Identity());
+						x.translation() = scaffold_center;
+						scene_minimal->set_position(1,x);
+						for(int i = 0; i < RESLS.size(); ++i){
+						std::vector<float> sc = objectives[i]->scores(*scene_minimal);
+						cout << "input bounding score " << i << " " << F(7,3,RESLS[i]) << " "
 					     << F( 7, 3, sc[0]+sc[1] ) << " "
 					     << F( 7, 3, sc[0]       ) << " "
 					     << F( 7, 3, sc[1]       ) << endl;
-				}
+						}
 
+				}
 			}
 
             ////////////  hsearch ///////////////////////
@@ -1011,7 +1013,7 @@ int main(int argc, char *argv[]) {
                             if (iresl == 0) ++non0_space_size;
                             for (uint64_t j = 0; j < opt.DIMPOW2; ++j) {
                                 uint64_t isamp = isamp0 * opt.DIMPOW2 * j;
-                                samples[iresl].push_back( SearchPoint( isamp ) );
+                                samples[iresl+1].push_back( SearchPoint( isamp ) );
                             }
                         }
                         if ( 0 == samples[iresl+1].size() ) {
@@ -1036,6 +1038,18 @@ int main(int argc, char *argv[]) {
                 std::cout << "total non-0 space size was approx " << float(non0_space_size)*1024.0*1024.0*1024.0 << " grid points" << std::endl;
                 std::cout << "total search effort " << KMGT(total_search_effort) << std::endl;
                 
+
+
+								if ( opt.test_longxing ){
+										std::cout << "################### top 20 results after hierarchical search #############################" << std::endl;
+										for ( int ii = 0; ii < 20 && ii < samples.size(); ++ii )
+										{
+												std::cout << samples.back()[ii].score << std::endl;
+										}
+										std::cout << "###################################################################" << std::endl;
+								}
+
+
                 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                 //////////////////////////////////////////////         HACK PACK           /////////////////////////////////////////////////////////////
                 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1131,6 +1145,15 @@ int main(int argc, char *argv[]) {
                 if ( num_pass_global_cut == 0 ) throw "After hackpack, there is no valid searching points!";
                 packed_results.resize( num_pass_global_cut );
                 
+								if ( opt.test_longxing ){
+										std::cout << "################### top 20 results after hackpack #############################" << std::endl;
+										for ( int ii = 0; ii < 20 && ii < packed_results.size(); ++ii )
+										{
+												std::cout << packed_results[ii].score << std::endl;
+										}
+										std::cout << "###################################################################" << std::endl;
+								}
+
                 std::chrono::duration<double> elapsed_seconds_pack = std::chrono::high_resolution_clock::now()-start_pack;
                 time_pck += elapsed_seconds_pack.count();
             }
@@ -1505,6 +1528,15 @@ int main(int argc, char *argv[]) {
 			}
 
 
+								if ( opt.test_longxing ){
+										std::cout << "################### top 20 results after rosetta score & min #############################" << std::endl;
+										for ( int ii = 0; ii < 20 && ii < packed_results.size(); ++ii )
+										{
+												std::cout << packed_results[ii].score << std::endl;
+										}
+										std::cout << "###################################################################" << std::endl;
+								}
+
 			//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 			print_header( "compile and filter results" ); ///////////////////////////////////////////////////////////////////////////
 			//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1516,7 +1548,7 @@ int main(int argc, char *argv[]) {
                 
                 std::vector< std::vector< RifDockResult > > allresults_pt( omp_max_threads() );
                 std::vector< std::pair< EigenXform, uint64_t > > selected_xforms;
-                selected_xforms.resize(65536);
+                selected_xforms.reserve(65536);
                 
                 
                 ///////////////////

@@ -75,73 +75,6 @@ typedef ::scheme::kinematics::Scene<
     > ParametricScene;
     
 
-// Typedefs related to the Hierarchical Search ScaffoldProvider
-
-typedef ::scheme::scaffold::TreeScaffoldProvider<ParametricSceneConformation> ScaffoldProvider;
-typedef shared_ptr<ScaffoldProvider> ScaffoldProviderOP;
-
-typedef typename ScaffoldProvider::ScaffoldIndex ScaffoldIndex;
-
-
-
-
-// If you add something to the index, you must follow these rules
-// 1. Keep your item lightweight
-// 2. Add your item to the hash function
-
-struct RifDockIndex {
-    uint64_t nest_index;
-    uint64_t seeding_index;
-    ScaffoldIndex scaffold_index;
-
-    RifDockIndex() :
-      nest_index(::scheme::kinematics::director_index_default_value()) 
-      {
-          seeding_index = 0;
-          scaffold_index = ::scheme::scaffold::scaffold_index_default_value(scaffold_index);
-      }
-
-    
-    RifDockIndex(
-                 uint64_t nest_index_in,
-                 ScaffoldIndex scaffold_index_in
-                 ) :
-    nest_index( nest_index_in ),
-    seeding_index ( 0 ),
-    scaffold_index( scaffold_index_in ) {}
-    
-    RifDockIndex(
-                 uint64_t nest_index_in,
-                 uint64_t seeding_index_in
-                 ) :
-    nest_index( nest_index_in ),
-    seeding_index ( seeding_index_in )
-    {
-        scaffold_index = ::scheme::scaffold::scaffold_index_default_value(scaffold_index);
-    }
-    
-    
-    RifDockIndex( 
-        uint64_t nest_index_in,
-        uint64_t seeding_index_in,
-        ScaffoldIndex scaffold_index_in
-        ) : 
-        nest_index( nest_index_in ),
-        seeding_index ( seeding_index_in ),
-        scaffold_index( scaffold_index_in ) {}
-
-    bool operator==(RifDockIndex const & o) {
-      return (
-        nest_index == o.nest_index &&
-        seeding_index == o.seeding_index &&
-        scaffold_index == o.scaffold_index
-        );
-    }
-
-};
-
-
-
 
 // Typedefs related to the Hierarchical Search Director
 
@@ -165,30 +98,6 @@ typedef shared_ptr<::scheme::kinematics::Director<EigenXform, uint64_t> > Direct
 
 
 }
-}
-
-namespace std {
-
-    template <>
-    struct hash<devel::scheme::RifDockIndex>
-    {
-        std::size_t operator()(const devel::scheme::RifDockIndex& rdi) const {
-            using std::size_t;
-            using boost::hash;
-            using boost::hash_combine;
-
-            std::size_t seed = 0;
-
-            boost::hash<int> hasher;
-            hash_combine(seed, hasher(rdi.nest_index));
-            std::hash<int>  seeding_index_hasher;
-            hash_combine(seed, seeding_index_hasher(rdi.seeding_index));
-            std::hash<devel::scheme::ScaffoldIndex> scaffold_index_hasher;
-            hash_combine(seed, scaffold_index_hasher(rdi.scaffold_index));
-
-            return seed;
-        }
-    };
 
 }
 
