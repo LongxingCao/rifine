@@ -6,6 +6,7 @@
 #include "scheme/chemical/AtomData.hh"
 #include "scheme/chemical/stub.hh"
 #include "scheme/io/dump_pdb_atom.hh"
+#include "scheme/actor/BackboneActor.hh"
 
 #include <boost/functional/hash.hpp>
 
