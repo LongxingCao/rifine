@@ -867,8 +867,8 @@ std::string get_rif_type_from_file( std::string fname )
                 bool pass = true;
                 for ( auto const & x : requirements_ ) {
 										pass &= scratch.requirements_satisfied_[x];
-										// revert the bonus back
-										result.val_ += 10;
+										// revert the hackpack bonus back
+										if ( packing_ )result.val_ += 10;
 								}
                 if ( !pass ) result.val_ = 9e9;
             }
