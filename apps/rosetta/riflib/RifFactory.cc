@@ -799,8 +799,6 @@ std::string get_rif_type_from_file( std::string fname )
 								}
 						}
 				}
-				// result.rotamers_ = selected_rotamers;
-
 			}
 
 			// This is very slow, as each time the vector is refilled. So maybe I should change n_sat_groups to require_satisfication
@@ -1047,6 +1045,10 @@ struct RifFactoryImpl :
 				get_objective<MyScoreBBActorRIF>().n_sat_groups_ = config.n_sat_groups;
 			dynamic_cast<MySceneObjectiveRIF&>(*packing_objective).objective.template
 				get_objective<MyScoreBBActorRIF>().require_satisfaction_ = config.require_satisfaction;
+		}
+		// the requirement code.
+		if ( config.requirements.size() > 0 ){
+					dynamic_cast<MySceneObjectiveRIF&>(*packing_objective).objective.template get_objective<MyScoreBBActorRIF>().requirements_ = config.requirements;
 		}
 		// the requirement code.
 
