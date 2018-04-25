@@ -101,12 +101,14 @@ get_info_for_iscaff(
 
 
     if( opt.cst_fnames.size() ){
-        std::string cst_fname = "";
+				std::string cst_fname = "";
         if( opt.cst_fnames.size() == opt.scaffold_fnames.size() ){
             cst_fname = opt.cst_fnames.at(iscaff);
         } else if( opt.cst_fnames.size() == 1 ){
             cst_fname = opt.cst_fnames.front();
         } else {
+						std::cout << "cst file numbers: " << opt.cst_fnames.size() << std::endl;
+						std::cout << "scaff file numbers: " << opt.scaffold_fnames.size() << std::endl;
             utility_exit_with_message( "-cst_files list not same length as -scaffolds list" );
         }
         runtime_assert_msg(parse_constrains_file(cst_fname, csts), "Faild to parse the constrain file!!!");

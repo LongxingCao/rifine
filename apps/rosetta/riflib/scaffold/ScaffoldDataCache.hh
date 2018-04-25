@@ -21,7 +21,7 @@
 #include <riflib/rosetta_field.hh>
 #include <riflib/RotamerGenerator.hh>
 #include <riflib/util.hh>
-#include <rifdock.hh>
+#include <rifdock_legacy.hh>
 #include <riflib/rotamer_energy_tables.hh>
 #include <riflib/scaffold/MultithreadPoseCloner.hh>
 #include <riflib/scaffold/util.hh>

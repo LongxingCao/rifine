@@ -108,7 +108,6 @@ int main(int argc, char *argv[]) {
 	utility::file::create_directory_recursive( opt.outdir );
 
 
-
 	#ifdef USE_OPENMP
 		omp_lock_t cout_lock, dump_lock;
 		omp_init_lock( &cout_lock );
@@ -680,6 +679,15 @@ int main(int argc, char *argv[]) {
 				time_rif += elapsed_seconds_rif.count();
 
 
+				// debug info of longxing, it seems the code here will never be run.....
+				if ( opt.test_longxing ){
+						std::cout << "Scores of the top 20 results after the hsearch ... " << std::endl;
+						for ( int ii = 0; ii < 20 && ii < packed_results.size(); ++ii ){
+								std::cout << packed_results[ii].score << "  ";
+						}
+						std::cout << std::endl << "End of the debug info" << std::endl;
+				}
+
 				////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 				//////////////////////////////////////////////         HACK PACK           /////////////////////////////////////////////////////////////
 				////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -693,11 +701,20 @@ int main(int argc, char *argv[]) {
 		        	packed_results = *hsearch_results_p;
 		        }
 
+				// debug info of longxing
+				if ( opt.test_longxing ){
+						std::cout << "Scores of the top 20 results after the hackpack ... " << std::endl;
+						for ( int ii = 0; ii < 20 && ii < packed_results.size(); ++ii ){
+								std::cout << packed_results[ii].score << "  ";
+						}
+						std::cout << std::endl << "End of the debug info" << std::endl;
+				}
+
 						// check the hackpack results, as some of them maybe very bad!!
 						int64_t num_pass_global_cut = 0;
 						for ( int64_t ii = 0; ii < packed_results.size(); ++ii )
 						{
-								if ( packed_results[ii].score > opt.global_score_cut ) break;
+								if ( packed_results[ii].score > opt.score_after_hackpack_cut ) break;
 								++num_pass_global_cut;
 						}
 						if ( num_pass_global_cut == 0 ) throw "After hackpack, there is no valid searching points!";
@@ -707,6 +724,7 @@ int main(int argc, char *argv[]) {
 				time_pck += elapsed_seconds_pack.count();
 			}
 			// std::vector< SearchPointWithRots > & packed_results = *packed_results_p;
+ 
 
 
 			bool const do_rosetta_score = opt.rosetta_score_fraction > 0 || opt.rosetta_score_then_min_below_thresh > -9e8 || opt.rosetta_score_at_least > 0;
@@ -716,6 +734,15 @@ int main(int argc, char *argv[]) {
 				rosetta_rescore( packed_results, rdd, total_search_effort, time_ros );
 
 			}
+
+				// debug info of longxing
+				if ( opt.test_longxing ){
+						std::cout << "Scores of the top 20 results after the rosetta score & min ... " << std::endl;
+						for ( int ii = 0; ii < 20 && ii < packed_results.size(); ++ii ){
+								std::cout << packed_results[ii].score << "  ";
+						}
+						std::cout << std::endl << "End of the debug info" << std::endl;
+				}
 
 
 			//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

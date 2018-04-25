@@ -114,6 +114,7 @@ OPT_1GRP_KEY(     StringVector , rif_dock, scaffolds )
 	OPT_1GRP_KEY(  Boolean     , rif_dock, rosetta_min_targetbb )
 	OPT_1GRP_KEY(  Boolean     , rif_dock, rosetta_min_scaffoldbb )
 	OPT_1GRP_KEY(  Boolean     , rif_dock, rosetta_min_allbb )
+    OPT_1GRP_KEY(  Integer     , rif_dock, rosetta_min_at_least )
 	OPT_1GRP_KEY(  Real        , rif_dock, rosetta_score_cut )
 	OPT_1GRP_KEY(  Boolean     , rif_dock, rosetta_hard_min )
 	OPT_1GRP_KEY(  Boolean     , rif_dock, rosetta_score_total )
@@ -171,6 +172,8 @@ OPT_1GRP_KEY(     StringVector , rif_dock, scaffolds )
     OPT_1GRP_KEY(  IntegerVector, rif_dock, requirements )
 
 
+    OPT_1GRP_KEY(  Boolean, rif_dock, test_longxing )
+    OPT_1GRP_KEY(  Real        , rif_dock, score_after_hackpack_cut )
 
 
  
@@ -283,6 +286,7 @@ OPT_1GRP_KEY(     StringVector , rif_dock, scaffolds )
 			NEW_OPT(  rif_dock::rosetta_min_scaffoldbb  , "",  false );
 			NEW_OPT(  rif_dock::rosetta_min_allbb  , "",  false );
 			NEW_OPT(  rif_dock::rosetta_min_fix_target, "",  false );
+            NEW_OPT(  rif_dock::rosetta_min_at_least, "at least how many go to the rosetta minimization !!!!", -1 );
 			NEW_OPT(  rif_dock::rosetta_score_cut  , "", -10.0 );
 			NEW_OPT(  rif_dock::rosetta_hard_min  , "", false );
 			NEW_OPT(  rif_dock::rosetta_score_total  , "", false );
@@ -336,6 +340,10 @@ OPT_1GRP_KEY(     StringVector , rif_dock, scaffolds )
 			NEW_OPT(  rif_dock::cst_files, "" , utility::vector1<std::string>() );
             
             NEW_OPT(  rif_dock::requirements,        "which rif residue should be in the final output", utility::vector1< int >());
+
+            NEW_OPT(  rif_dock::test_longxing,        "print the longxing's debug info?", false );
+
+            NEW_OPT(  rif_dock::score_after_hackpack_cut,      "the cutoff value for docks go to rosetta score and min. if this flag is not set, it will be equal to the global_score_cut, you can set it to a loosen number", -9e9 );
 
 		}
 	#endif
@@ -438,6 +446,7 @@ struct RifDockOpt
 	bool        rosetta_min_targetbb                 ;
 	bool        rosetta_min_scaffoldbb               ;
 	bool        rosetta_min_allbb                    ;
+    float       rosetta_min_at_least                 ;
 	float       rosetta_score_cut                    ;
 	float       rosetta_hard_min                     ;
 	bool        rosetta_score_total                  ;
@@ -487,6 +496,10 @@ struct RifDockOpt
 	std::vector<std::string> cst_fnames              ;
     
     std::vector<int> requirements;
+
+    bool        test_longxing                        ;
+
+    float       score_after_hackpack_cut             ;
 
 
     void init_from_cli();
@@ -594,6 +607,7 @@ struct RifDockOpt
   		rosetta_min_targetbb                   = option[rif_dock::rosetta_min_targetbb                  ]();
   		rosetta_min_scaffoldbb                 = option[rif_dock::rosetta_min_scaffoldbb                ]();
   		rosetta_min_allbb                      = option[rif_dock::rosetta_min_allbb                     ]();
+        rosetta_min_at_least                   = option[rif_dock::rosetta_min_at_least                  ]();
   		rosetta_score_cut                      = option[rif_dock::rosetta_score_cut                     ]();
   		rosetta_hard_min                       = option[rif_dock::rosetta_hard_min                      ]();
   		rosetta_score_total                    = option[rif_dock::rosetta_score_total                   ]();
@@ -708,7 +722,14 @@ struct RifDockOpt
         
         for( int req : option[rif_dock::requirements]() ) requirements.push_back(req);
 
+        test_longxing         =                option[rif_dock::test_longxing]();
 
+
+        if ( option[rif_dock::score_after_hackpack_cut].user() ){
+            score_after_hackpack_cut = option[ rif_dock::score_after_hackpack_cut ]();
+        } else {
+            score_after_hackpack_cut = global_score_cut;
+        }
 
 	}
 

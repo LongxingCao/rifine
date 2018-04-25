@@ -12,7 +12,7 @@
 
 #include <riflib/types.hh>
 #include <core/types.hh>
-#include <rifdock.hh>
+#include <rifdock_legacy.hh>
 #include <riflib/rifdock_typedefs.hh>
 #include <scheme/scaffold/ScaffoldProviderBase.hh>
 

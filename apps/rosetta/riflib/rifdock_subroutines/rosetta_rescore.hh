@@ -136,8 +136,11 @@ rosetta_rescore(
         size_t n_scormin = 0;
         if( minimizing ){
             // min take ~10x score time, so do on 1/10th of the scored
+						// I should make sure the number to min is smaller than the number scored.
             n_scormin = n_score_calculations * rdd.opt.rosetta_min_fraction;
-            n_scormin = std::ceil(1.0f*n_scormin/omp_max_threads()) * omp_max_threads();
+						// just to use all the cpus
+						n_scormin = std::min<int>( std::max<int>( n_scormin, rdd.opt.rosetta_min_at_least ), n_score_calculations );
+            n_scormin = std::min<int>( std::ceil(1.0f*n_scormin/omp_max_threads()) * omp_max_threads(), n_score_calculations );
         } else {
             // for scoring, use user cut
             n_scormin = rdd.opt.rosetta_score_fraction/40.0 * total_search_effort;

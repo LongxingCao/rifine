@@ -674,9 +674,10 @@ std::string get_rif_type_from_file( std::string fname )
 								// How about the two body tables????
 								// Will this number affect the two body table choice??
 								// What is the best number for this bonus??
-                                // A bug here, as I only need to add bonus to the ones that are defined in the requirements array.
+                // A bug here, as I only need to add bonus to the ones that are defined in the requirements array.
+								// what is the best bonus for the required rif residues? Because of the property of hashing grid, some of the rif residues would clash with the target, so to force the rif residues to survive in the hackpack stage, as if it can not survive in the hackpack stage, the final score would be 9e9. So I can just give a big bonus and then use the global cutoff flag to control the tolerance of clashes.
                 if ( requirements_.size() > 0 && std::find( requirements_.begin(), requirements_.end(), rotscores.get_requirement_num(i_rs) ) != requirements_.end() ) {
-												sat_bonus -= 10.0;
+												sat_bonus -= 999.0;
 										}
 								//if ( requirements_.size() > 0 ) sat_bonus += -10.0;
 
@@ -712,8 +713,8 @@ std::string get_rif_type_from_file( std::string fname )
             // std::cout << "Adding " << ires << std::endl;
             scratch.has_rifrot_[ires] = true;
         }
-				// an arbitrary cutoff value.
-				if( requirements_.size() > 0 && score_rot_tot < 2 )
+				// an arbitrary cutoff value, to make it the same as TaYi's value....
+				if( requirements_.size() > 0 && score_rot_tot < 5.0 )
 				{
                     rotscores.mark_sat_groups( i_rs, scratch.requirements_satisfied_ );
 				}
@@ -866,7 +867,7 @@ std::string get_rif_type_from_file( std::string fname )
                 for ( auto const & x : requirements_ ) {
 										pass &= scratch.requirements_satisfied_[x];
 										// revert the hackpack bonus back
-										if ( packing_ )result.val_ += 10;
+										if ( packing_ )result.val_ += 999.0;
 								}
                 if ( !pass ) result.val_ = 9e9;
             }
