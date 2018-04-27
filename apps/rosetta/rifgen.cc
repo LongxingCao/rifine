@@ -535,6 +535,7 @@ int main(int argc, char *argv[]) {
 	std::cout << "Preparing rotamer index spec..." << std::endl;
 	get_rotamer_spec_default(rot_index_spec,option[rifgen::extra_rotamers](), option[rifgen::extra_rif_rotamers]());
 
+	// this means the rotamer spec is already change before rifgen, so the hot spots will also be used in the Apo rif generation.
 	for( int igen = 0; igen < generators.size(); ++igen )
 	{
 		//cache the input 

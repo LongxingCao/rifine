@@ -75,6 +75,8 @@ namespace rif {
                 std::vector<float> mychi;
                 int n_proton_chi;
                 int parent_key;
+								// TODO:: as the parent key is always -1, so there can be some errors if use the user hot spots and the extra_rotamers together.
+								// hope bad things will not happen.
                 ::scheme::chemical::get_residue_rotspec_params( pose.residue(i_hspot_res), resn, mychi, n_proton_chi, parent_key );
                 
                 int irot = rot_spec.get_matching_rot( resn, mychi, n_proton_chi, 5.0f );
