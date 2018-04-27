@@ -128,8 +128,7 @@ namespace rif {
         bool const use_bidentate_definition = !( bidentate_definitions.empty() );
         std::vector< int > use_bidentate_definition_rays;
         // the requirement definition stuff
-        std::vector< RequirementDefinition > requirement_definitions = get_requirement_definitions( tuning_file );
-        bool const use_requirement_definition = !( requirement_definitions.empty() );
+        bool const use_requirement_definition = !( check_requirement_definition_exists( tuning_file ) );
         std::vector< int > hbond_requirement_labels;
         std::vector< int > bidentate_requirement_labels;
 
@@ -259,39 +258,38 @@ namespace rif {
                     hbond_requirement_labels[ii] = -1;
                     bidentate_requirement_labels[ii] = -1;
                 }
+                
+                std::vector< HbondRequirement > hbond_reqs = get_hbond_requirement_definitions( tuning_file );
+                std::vector< BidentateRequirement > bidentate_reqs = get_bidentate_requirement_definitions( tuning_file );
                 // fill the hbond definitions
-                for ( auto const & x : requirement_definitions ) {
-                    if ( x.require == "HBOND" ) {
-                        for (int ii = 0; ii < target_bonder_names.size(); ++ii) {
-                            if ( target_bonder_names[ii].first == utility::string2int(x.definition[1]) && target_bonder_names[ii].second == x.definition[0] ) {
-                                hbond_requirement_labels[ii] = x.req_num;
-                            }
+                for ( auto const & x : hbond_reqs ){
+                    for ( int ii = 0; ii < target_bonder_names.size(); ++ii){
+                        if ( target_bonder_names[ii].first == x.res_num && target_bonder_names[ii].second == x.atom_name ) {
+                            hbond_requirement_labels[ii] = x.req_num;
                         }
-                    } else if ( x.require == "BIDENTATE" ) {
-                        for (int ii = 0; ii < target_bonder_names.size(); ++ii) {
-                            if ( ( utility::string2int(x.definition[1]) == target_bonder_names[ii].first && x.definition[0] == target_bonder_names[ii].second ) || ( utility::string2int(x.definition[3]) == target_bonder_names[ii].first && x.definition[2] == target_bonder_names[ii].second ) ) {
-                                bidentate_requirement_labels[ii] = x.req_num;
-                            }
-                        }
-                    } else if ( x.require == "HOTSPOT" ) {
-                        
-                    } else {
-                        std::cout << "Unknown requirement definition, maybe you should define more." << std::endl;
                     }
+                }
+                for ( auto const & x : bidentate_reqs ){
+                    for (int ii = 0; ii < target_bonder_names.size(); ++ii) {
+                        if ( ( x.res1_num == target_bonder_names[ii].first && x.atom1_name == target_bonder_names[ii].second ) || ( x.res2_num == target_bonder_names[ii].first && x.atom2_name == target_bonder_names[ii].second ) ) {
+                            bidentate_requirement_labels[ii] = x.req_num;
+                        }
+                    }
+                    
                 }
                 
                 
                 // debuging code here
-               /* 
-                for (int ii = 0; ii < target_bonder_names.size(); ++ii) {
-                    std::cout << "########" << ii << "########" << std::endl;
-                    std::cout << target_bonder_names[ii].first << " " << target_bonder_names[ii].second << std::endl;
-                    std::cout << "BidentateLabels: " << bidentate_requirement_labels[ii] << std::endl;
-                    std::cout << "HbondDefinitionLabels:" << hbond_requirement_labels[ii] << std::endl;
-                    std::cout << "#############END#############" << std::endl;
-                }
-                exit(0);
-                */
+                /*
+                 for (int ii = 0; ii < target_bonder_names.size(); ++ii) {
+                 std::cout << "########" << ii << "########" << std::endl;
+                 std::cout << target_bonder_names[ii].first << " " << target_bonder_names[ii].second << std::endl;
+                 std::cout << "BidentateLabels: " << bidentate_requirement_labels[ii] << std::endl;
+                 std::cout << "HbondDefinitionLabels:" << hbond_requirement_labels[ii] << std::endl;
+                 std::cout << "#############END#############" << std::endl;
+                 }
+                 exit(0);
+                 */
                 
             }
             /*

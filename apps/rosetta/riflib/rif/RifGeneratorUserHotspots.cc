@@ -115,27 +115,18 @@ namespace rif {
         
         
         // requirements definitions
-        std::vector< RequirementDefinition > requirement_definitions = get_requirement_definitions( params->tuning_file );
-        bool const use_requirement_definition = !( requirement_definitions.empty() );
+        bool const use_requirement_definition = !( check_requirement_definition_exists( params->tuning_file ) );
         std::vector< int > hotspot_requirement_labels;
         if ( use_requirement_definition ) {
+						std::vector< HotspotRequirement > hotspot_reqs = get_hotspot_requirement_definitions( params->tuning_file );
             // 20 is an arbitrary number, as I don't think there would be more than 20 hotspots.
             hotspot_requirement_labels.resize( 20 );
             for (int ii = 0; ii < hotspot_requirement_labels.size(); ++ii) {
                 hotspot_requirement_labels[ii] = -1;
             }
             // fill the hotspot definitions
-            for ( auto const & x : requirement_definitions ) {
-                if ( x.require == "HBOND" ) {
-                    //
-                } else if ( x.require == "BIDENTATE" ) {
-                    //
-                } else if ( x.require == "HOTSPOT" ) {
-                    int hotspot_num = utility::string2int( x.definition[0] );
-                    hotspot_requirement_labels[ hotspot_num ] = x.req_num;
-                } else {
-                    std::cout << "Unknown requirement definition, maybe you should define more." << std::endl;
-                }
+            for ( auto const & x : hotspot_reqs ) {
+                hotspot_requirement_labels[ x.hotspot_num ] = x.req_num;
             }
         }
         

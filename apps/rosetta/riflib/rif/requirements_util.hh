@@ -15,6 +15,7 @@
 #include <string>
 #include <vector>
 
+// TODO:: change this tuning file manager to a factory ..... Singleton ?
 
 namespace devel {
 namespace scheme {
@@ -32,17 +33,47 @@ struct BidentateDefinition {
     std::string atom2_name = "";
     int res2_num = -1;
 };
-
-struct RequirementDefinition {
-    int req_num;
-    std::string require;
-    std::vector< std::string > definition;
+    
+struct HotspotRequirement {
+    int req_num = -1;
+    int hotspot_num = -1;
 };
+    
+struct HbondRequirement {
+    int req_num = -1;
+    std::string atom_name = "";
+    int res_num = -1;
+};
+    
+struct BidentateRequirement {
+    int req_num = -1;
+    std::string atom1_name = "";
+    int res1_num = -1;
+    std::string atom2_name = "";
+    int res2_num = -1;
+};
+
+
+struct ApoReqTerm {
+    std::string atom_name = "";
+    int res_num = -1;
+    float distance = 0;
+};
+struct ApoRequirement {
+    int req_num = -1;
+    std::vector<std::string> allowed_rot_names;
+    std::vector<ApoReqTerm> terms;
+};
+
+
 
 std::vector< HBondDefinition > get_hbond_definitions( std::string tuning_file );
 std::vector< BidentateDefinition > get_bidentate_definitions( std::string tuning_file );
-std::vector< RequirementDefinition > get_requirement_definitions( std::string tuning_file );
-
+std::vector< HbondRequirement > get_hbond_requirement_definitions( std::string tuning_file );
+std::vector< BidentateRequirement > get_bidentate_requirement_definitions( std::string tuning_file );
+std::vector< HotspotRequirement > get_hotspot_requirement_definitions( std::string tuning_file );
+std::vector< ApoRequirement > get_Apo_requirement_definitions( std::string tuning_file );
+bool check_requirement_definition_exists( std::string tuning_file );
 }
 }
 }

@@ -599,6 +599,7 @@ struct RotamerIndex {
 			}
 		}
 		{
+            // this is some test code.
 			for( int irot = 0; irot < size(); ++irot ){
 				ALWAYS_ASSERT( protonchi_parent_of_.at(irot) >= 0 && protonchi_parent_of_.at(irot) <= irot );
 			}
@@ -615,6 +616,7 @@ struct RotamerIndex {
 			for( int jrot = 0; jrot < irot; ++jrot){
 				if( oneletter(irot) != oneletter(jrot) ) continue;
 				bool same_chi34 = true;
+                // same chi 3&4, almost the same.
 				for( int ichi = same_struct_start_chi(irot); ichi < nchi_noproton(irot); ++ichi ){
 					same_chi34 &= impl::angle_is_close( chi(irot,ichi), chi(jrot,ichi), 0.001f );
 				}
