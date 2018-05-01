@@ -126,6 +126,8 @@ utility::vector1<core::Size> get_designable_positions_best_guess(
  	dssp.insert_ss_into_pose( pose );
 
  	core::pose::Pose allgly = pose;
+	core::pose::Pose allval = pose;
+  pose_to_val(allval);
  	pose_to_gly(allgly);
 
  	core::scoring::ScoreFunctionOP sf = core::scoring::get_score_function(true);
@@ -151,7 +153,7 @@ utility::vector1<core::Size> get_designable_positions_best_guess(
 	// Real const probe_radius, bool const use_big_polar_H = false );
 	core::id::AtomID_Map< core::Real > atom_sasa;
 	utility::vector1< core::Real > rsd_sasa;
-	core::scoring::calc_per_atom_sasa( pose, atom_sasa, rsd_sasa, 2.1 );
+	core::scoring::calc_per_atom_sasa( allval, atom_sasa, rsd_sasa, 2.1 );
 	for( int ir = 1; ir <= pose.size(); ++ir ){
 		// std::cout << pose.secstruct(ir) << std::endl;
 		bool isloop = pose.secstruct(ir) == 'L';
@@ -247,6 +249,17 @@ void pose_to_gly( core::pose::Pose & pose ){
 		if(   pose.residue(ir).name3()=="PRO" ) continue;
 		if(   pose.residue(ir).name3()=="CYD" ) continue;
 		pose.replace_residue( ir, *gly, true );
+	}
+}
+void pose_to_val( core::pose::Pose & pose ){
+	core::chemical::ResidueTypeSetCAP rts = core::chemical::ChemicalManager::get_instance()->residue_type_set("fa_standard");
+	core::conformation::ResidueOP val = core::conformation::ResidueFactory::create_residue( rts.lock()->name_map("VAL") );
+	for( int ir = 1; ir <= pose.size(); ++ir ){
+		if( ! pose.residue(ir).is_protein()   ) continue;
+		if(   pose.residue(ir).name3()=="GLY" ) continue;
+		if(   pose.residue(ir).name3()=="PRO" ) continue;
+		if(   pose.residue(ir).name3()=="CYD" ) continue;
+		pose.replace_residue( ir, *val, true );
 	}
 }
 void pose_to_ala( core::pose::Pose & pose, utility::vector1<core::Size> const & res_sel ){

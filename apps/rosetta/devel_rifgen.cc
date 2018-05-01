@@ -858,10 +858,10 @@ void RifDockOpt::init_from_cli()
 // refactor
 	#include <riflib/rifdock_subroutines/util.hh>
 	
-	#include <riflib/rifdock_subroutines/HSearchFactory.hh>	
+//#include <riflib/rifdock_subroutines/HSearchFactory.hh>	
 
 	#include <riflib/rifdock_subroutines/hack_pack.hh>
-	#include <riflib/rifdock_subroutines/rosetta_rescore.hh>
+//#include <riflib/rifdock_subroutines/rosetta_rescore.hh>
 	#include <riflib/rifdock_subroutines/compile_and_filter_results.hh>
 	#include <riflib/rifdock_subroutines/output_results.hh>
 

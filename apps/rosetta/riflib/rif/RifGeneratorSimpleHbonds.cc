@@ -128,7 +128,7 @@ namespace rif {
         bool const use_bidentate_definition = !( bidentate_definitions.empty() );
         std::vector< int > use_bidentate_definition_rays;
         // the requirement definition stuff
-        bool const use_requirement_definition = !( check_requirement_definition_exists( tuning_file ) );
+        bool const use_requirement_definition = check_requirement_definition_exists( tuning_file ) ;
         std::vector< int > hbond_requirement_labels;
         std::vector< int > bidentate_requirement_labels;
 
@@ -280,7 +280,8 @@ namespace rif {
                 
                 
                 // debuging code here
-                /*
+                
+								/*
                  for (int ii = 0; ii < target_bonder_names.size(); ++ii) {
                  std::cout << "########" << ii << "########" << std::endl;
                  std::cout << target_bonder_names[ii].first << " " << target_bonder_names[ii].second << std::endl;

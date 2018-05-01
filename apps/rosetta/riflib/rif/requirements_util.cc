@@ -143,7 +143,7 @@ namespace rif {
                 
                 //std::cout << req_temp.req_num << std::endl;
                 
-                if ( splt[2] == "HBOND" ) {
+                if ( splt.size() == 4 && splt[2] == "HBOND" ) {
                     runtime_assert_msg( splt.size() == 4, "something is wrong with the HBOND requirement definition!" );
                     runtime_assert_msg( utility::string2int( splt[1] ) >=0, "The requirement number must be a positive integer!" );
                     req_temp.req_num = utility::string2int(splt[1]);
@@ -181,7 +181,7 @@ namespace rif {
                 
                 //std::cout << req_temp.req_num << std::endl;
                 
-                if ( splt[2] == "BIDENTATE" ) {
+                if ( splt.size() == 6 && splt[2] == "BIDENTATE" ) {
                     runtime_assert_msg( splt.size() == 6, "something is wrong with the BIDENTATE requirement definition!" );
                     runtime_assert_msg( utility::string2int( splt[1] ) >=0, "The requirement number must be a positive integer!" );
                     req_temp.req_num = utility::string2int(splt[1]);
@@ -221,7 +221,7 @@ namespace rif {
                 
                 //std::cout << req_temp.req_num << std::endl;
                 
-                if ( splt[2] == "HOTSPOT" ) {
+                if ( splt.size() == 3 && splt[2] == "HOTSPOT" ) {
                     runtime_assert_msg( splt.size() == 3, "something is wrong with the HOTSPOT requirement definition!" );
                     runtime_assert_msg( utility::string2int( splt[1] ) >=0, "The requirement number must be a positive integer!" );
                     req_temp.req_num = utility::string2int(splt[1]);
@@ -260,9 +260,9 @@ namespace rif {
             {
                 
                 utility::vector1<std::string> splt = utility::quoted_split( s );
-                if ( splt[2] == "APOLAR" ) {
+                if ( splt.size() >=2 && splt[2] == "APOLAR" ) {
                     runtime_assert_msg( utility::string2int( splt[1] ) >=0, "The requirement number must be a positive integer!" );
-                    runtime_assert_msg( splt.size() >= 2, "something is wrong with the HBOND requirement definition!" );
+										req_temp.req_num = utility::string2int( splt[1] );
                     for (int ii = 3; ii <= splt.size(); ++ii) {
                         req_temp.allowed_rot_names.push_back( splt[ii] );
                     }
@@ -276,6 +276,7 @@ namespace rif {
                     term_temp.atom_name = splt[1];
                     term_temp.res_num = utility::string2int( splt[2] );
                     term_temp.distance = utility::string2float( splt[3] );
+										req_temp.terms.push_back( term_temp );
                 } else if ( splt.size() == 1 ) {
                     runtime_assert_msg( splt[1] == "END_APOLAR", "something is wrong with the APOLAR requirement definition!" );
                     runtime_assert_msg( req_temp.terms.size() != 0, "You must assign some definitions for the apolar req, talk with longxing");

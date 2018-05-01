@@ -115,7 +115,7 @@ namespace rif {
         
         
         // requirements definitions
-        bool const use_requirement_definition = !( check_requirement_definition_exists( params->tuning_file ) );
+        bool const use_requirement_definition = check_requirement_definition_exists( params->tuning_file );
         std::vector< int > hotspot_requirement_labels;
         if ( use_requirement_definition ) {
 						std::vector< HotspotRequirement > hotspot_reqs = get_hotspot_requirement_definitions( params->tuning_file );
@@ -129,14 +129,16 @@ namespace rif {
                 hotspot_requirement_labels[ x.hotspot_num ] = x.req_num;
             }
         }
+       
         
-        /*
         // debuging code here
+				/*
         for (int ii = 0; ii < hotspot_requirement_labels.size(); ++ii) {
             std::cout << ii << " " << hotspot_requirement_labels[ii] << std::endl;
         }
         exit(0);
-        */
+				*/
+      
         
         
         

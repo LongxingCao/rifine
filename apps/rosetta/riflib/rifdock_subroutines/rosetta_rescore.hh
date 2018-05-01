@@ -358,6 +358,14 @@ rosetta_rescore(
                             movemap->set_chi(ir,false);
                         }
                     }
+
+										// these are some codes for H3
+										// add some code so I can turn off the chi of the glycan
+										//runtime_assert_msg(pose_to_min.residue(scaffold_size + 31).name3() == "AX1", "Please check the residue number of the glycan, and this version if specific for H3");
+										//movemap->set_chi( scaffold_size + 31, false);
+
+										//
+										//
                     minmover_pt[ithread]->set_movemap(movemap);
 ////////////
 
