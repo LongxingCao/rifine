@@ -221,6 +221,22 @@ namespace rif {
                 x.second = utility::strip( x.second, ' ');
             
 
+						// print out the binder names
+						/*
+						std::cout << "########### debug info for small molecules ##############" << std::endl;
+						for ( auto & x : target_bonder_names )
+								std::cout << x.first << " " << x.second << std::endl;
+						std::cout << " Hbond definitins " << std::endl;
+            for ( HBondDefinition const & hb : hbond_definitions )
+						{
+								std::cout << hb.res_num << " " << hb.atom_name << std::endl;
+								for ( std::string s : hb.allowed_rot_names ) std::cout << s << std::endl;
+						}
+						std::cout << use_requirement_definition << std::endl;
+						std::cout << "#######################################" << std::endl;
+						*/
+
+
             if ( use_hbond_definition ){
                 use_hbond_definition_rays.resize( target_bonder_names.size() );
                 allowed_rotamers_rays.resize( 0 );

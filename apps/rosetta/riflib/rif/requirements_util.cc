@@ -113,7 +113,7 @@ namespace rif {
             else if (s.find("END_REQUIREMENT_DEFINITION") != std::string::npos ) { flag = false; break; }
             
             // if there are some lines of definitions, return true.
-            any_definition = true;
+				    if ( flag ) any_definition = true;
         }
         return any_definition;
     }
