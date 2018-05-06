@@ -281,6 +281,10 @@ namespace rif {
                     runtime_assert_msg( splt[1] == "END_APOLAR", "something is wrong with the APOLAR requirement definition!" );
                     runtime_assert_msg( req_temp.terms.size() != 0, "You must assign some definitions for the apolar req, talk with longxing");
                     apo_reqs.push_back(req_temp);
+										// reinitialize the req_temp
+										req_temp.req_num = -1;
+										req_temp.allowed_rot_names.clear();
+										req_temp.terms.clear();
                     found_one = false;
                 } else {
                     utility_exit_with_message("something is wrong with the APOLAR requirement definition!" );

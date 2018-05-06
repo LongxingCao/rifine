@@ -273,6 +273,26 @@ namespace rif {
 				}
 		}
 
+		// longxing Debug info
+		/*
+		std::cout << "################## debug info for the requirements in the apo search #####################" << std::endl;
+		for ( int ii =0; ii < apo_reqs.size(); ++ii )
+		{
+				std::cout << "requirement num: " << apo_reqs[ii].req_num << std::endl;
+				std::cout << "allowed apo res: ";
+				if ( apo_reqs[ii].allowed_rot_names.size() == 0 ) std::cout << "*";
+				else  for ( std::string s : apo_reqs[ii].allowed_rot_names ) std::cout << s << " ";
+				std::cout << std::endl;
+
+				std::cout << "Apo req terms: " << std::endl;
+				for ( auto const x : apo_reqs[ii].terms )
+				{
+						std::cout << x.atom_name << " " << x.res_num <<	" " << x.distance << std::endl;
+				}
+		}
+		exit(0);
+		*/
+
 		// #ifdef USE_OPENMP
 		// #pragma omp parallel for schedule(dynamic,1)
 		// #endif
