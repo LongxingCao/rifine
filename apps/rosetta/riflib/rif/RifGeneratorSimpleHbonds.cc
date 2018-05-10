@@ -373,14 +373,46 @@ namespace rif {
 			std::cout << "RifGenSimpleHbonds checking res " << resn << std::endl;
 			HBJob j;
 			j.ires = ir;
-			for( int iacc = 1; iacc <= accresn_user.size(); ++iacc ){
-				core::chemical::ResidueType const & rtype = rts.lock()->name_map(accresn_user[iacc]);
+			// check whether using donor definitions or acceptor definitions for this residue
+			// copy the whole vector, maybe a little bit slow, but I think it doesn't matter.'
+			utility::vector1<std::string> donresn_customize = donresn_user;
+			utility::vector1<std::string> accresn_customize = accresn_user;
+			bool use_customize_donor_definition = false;
+			bool use_customize_acceptor_definition = false;
+            for ( int i_donor_def = 0; i_donor_def < donor_definitions.size(); ++i_donor_def )
+            {
+                if( ires == donor_definitions[i_donor_def].res_num )
+                {
+                    use_customize_donor_definition = true;
+                    donresn_customize.clear();
+                    for ( std::string s : donor_definitions[i_donor_def].allowed_donor_res ) {
+                        donresn_customize.push_back( s );
+                    }
+                    break;
+                }
+            }
+            for ( int i_acceptor_def = 0; i_acceptor_def < acceptor_definitions.size(); ++i_acceptor_def )
+            {
+                if( ires == acceptor_definitions[i_acceptor_def].res_num )
+                {
+                    use_customize_acceptor_definition = true;
+                    accresn_customize.clear();
+                    for ( std::string s : acceptor_definitions[i_acceptor_def].allowed_acceptor_res ) {
+                        accresn_customize.push_back( s );
+                    }
+                    break;
+                }
+            }
+
+
+			for( int iacc = 1; iacc <= accresn_customize.size(); ++iacc ){
+				core::chemical::ResidueType const & rtype = rts.lock()->name_map(accresn_customize[iacc]);
 				if( !rtype.has("N") || !rtype.has("CA") || !rtype.has("C") ){
-					std::cout << "not putting " << accresn_user[iacc] << " into rif, no N,CA,C" << std::endl;
+					std::cout << "not putting " << accresn_customize[iacc] << " into rif, no N,CA,C" << std::endl;
 					continue;
 				}
 				j.don = "GLY";
-				j.acc = accresn_user[iacc];
+				j.acc = accresn_customize[iacc];
 				if( std::find( accresn_std.begin(), accresn_std.end(), j.acc ) == accresn_std.end() ) continue; // no non-standard res in RIF
 				j.don_or_acc = "DON_";
 				std::pair<size_t,size_t> b = rot_index.index_bounds(j.acc.substr(0,3));
@@ -392,13 +424,13 @@ namespace rif {
 					hb_jobs.push_back( j );
 				}
 			}
-			for( int idon = 1; idon <= donresn_user.size(); ++idon ){
-				core::chemical::ResidueType const & rtype = rts.lock()->name_map(donresn_user[idon]);
+			for( int idon = 1; idon <= donresn_customize.size(); ++idon ){
+				core::chemical::ResidueType const & rtype = rts.lock()->name_map(donresn_customize[idon]);
 				if( !rtype.has("N") || !rtype.has("CA") || !rtype.has("C") ){
-					std::cout << "not putting " << donresn_user[idon] << " into rif, no N,CA,C" << std::endl;
+					std::cout << "not putting " << donresn_customize[idon] << " into rif, no N,CA,C" << std::endl;
 					continue;
 				}
-				j.don = donresn_user[idon];
+				j.don = donresn_customize[idon];
 				if( std::find( donresn_std.begin(), donresn_std.end(), j.don ) == donresn_std.end() ) continue; // no non-standard res in RIF
 				j.acc = "GLY";
 				j.don_or_acc = "ACC_";

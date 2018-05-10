@@ -84,12 +84,12 @@ namespace rif {
                 utility::vector1<std::string> splt = utility::quoted_split( s );
                 runtime_assert_msg(splt.size() >=1, "something is wrong with the acceptor definition block, please check the tuning file." );
                 acceptor_temp.res_num = utility::string2int( splt[1] );
-                acceptor_temp.allowed_donor_res.clear();
+                acceptor_temp.allowed_acceptor_res.clear();
                 for(int ii = 2; ii <= splt.size(); ++ii )
                 {
                     acceptor_temp.allowed_acceptor_res.push_back( splt[ii] );
                 }
-                acceptors.push_back(donor_temp);
+                acceptors.push_back(acceptor_temp);
             }
         }
         return acceptors;
