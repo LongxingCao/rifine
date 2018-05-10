@@ -116,6 +116,10 @@ namespace rif {
 
 		// the hbond definition stuff
 		std::string tuning_file = params->tuning_file;
+
+		std::vector< DonorDefinition > const donor_definitions = get_donor_definitions( tuning_file );
+		std::vector< AcceptorDefinition > const acceptor_definitions = get_acceptor_definitions( tuning_file );
+
 		std::vector< HBondDefinition > const hbond_definitions = get_hbond_definitions( tuning_file );
 		bool const use_hbond_definition = !( hbond_definitions.empty() );
 		std::vector< int > use_hbond_definition_rays;

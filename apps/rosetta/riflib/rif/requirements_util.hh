@@ -20,6 +20,16 @@
 namespace devel {
 namespace scheme {
 namespace rif {
+    
+struct DonorDefinition {
+    int res_num = -1;
+    std::vector< std::string > allowed_donor_res;
+};
+    
+struct AcceptorDefinition {
+    int res_num = -1;
+    std::vector< std::string > allowed_acceptor_res;
+};
 
 struct HBondDefinition {
     std::string atom_name = "";
@@ -66,7 +76,8 @@ struct ApoRequirement {
 };
 
 
-
+std::vector < DonorDefinition > get_donor_definitions( std::string tuning_file );
+std::vector < AcceptorDefinition > get_acceptor_definitions( std::string tuning_file );
 std::vector< HBondDefinition > get_hbond_definitions( std::string tuning_file );
 std::vector< BidentateDefinition > get_bidentate_definitions( std::string tuning_file );
 std::vector< HbondRequirement > get_hbond_requirement_definitions( std::string tuning_file );

@@ -21,6 +21,81 @@ namespace devel {
 namespace scheme {
 namespace rif {
     
+    // reture the donor definitions from a tuning file.
+    std::vector< DonorDefinition > get_donor_definitions( std::string tuning_file )
+    {
+        std::vector< DonorDefinition > donors;
+        
+        if ( tuning_file == "" )
+        {
+            return donors;
+        }
+        runtime_assert_msg(utility::file::file_exists( tuning_file ), "tunning file does not exits: " + tuning_file );
+        std::ifstream in;
+        std::string s;
+        in.open( tuning_file , std::ios::in );
+        std::vector<std::string> lines;
+        bool flag = false;
+        while ( std::getline(in, s) ){
+            if (s.empty() || s.find("#") == 0) continue;
+            if (s.find("DONOR_DEFINITION") != std::string::npos && s.find("END_DONOR_DEFINITION") == std::string::npos ) { flag = true; continue; }
+            else if (s.find("END_DONOR_DEFINITION") != std::string::npos ) { flag = false; break; }
+            
+            if ( flag )
+            {
+                DonorDefinition donor_temp;
+                utility::vector1<std::string> splt = utility::quoted_split( s );
+                runtime_assert_msg(splt.size() >=1, "something is wrong with the donor definition block, please check the tuning file." );
+                donor_temp.res_num = utility::string2int( splt[1] );
+                donor_temp.allowed_donor_res.clear();
+                for(int ii = 2; ii <= splt.size(); ++ii )
+                {
+                    donor_temp.allowed_donor_res.push_back( splt[ii] );
+                }
+                donors.push_back(donor_temp);
+            }
+        }
+        return donors;
+    }
+    
+    // reture the hbond definitions from a tuning file.
+    std::vector< AcceptorDefinition > get_acceptor_definitions( std::string tuning_file )
+    {
+        std::vector< AcceptorDefinition > acceptors;
+        
+        if ( tuning_file == "" )
+        {
+            return acceptors;
+        }
+        runtime_assert_msg(utility::file::file_exists( tuning_file ), "tunning file does not exits: " + tuning_file );
+        std::ifstream in;
+        std::string s;
+        in.open( tuning_file , std::ios::in );
+        std::vector<std::string> lines;
+        bool flag = false;
+        while ( std::getline(in, s) ){
+            if (s.empty() || s.find("#") == 0) continue;
+            if (s.find("ACCEPTOR_DEFINITION") != std::string::npos && s.find("END_ACCEPTOR_DEFINITION") == std::string::npos ) { flag = true; continue; }
+            else if (s.find("END_ACCEPTOR_DEFINITION") != std::string::npos ) { flag = false; break; }
+            
+            if ( flag )
+            {
+                AcceptorDefinition acceptor_temp;
+                utility::vector1<std::string> splt = utility::quoted_split( s );
+                runtime_assert_msg(splt.size() >=1, "something is wrong with the acceptor definition block, please check the tuning file." );
+                acceptor_temp.res_num = utility::string2int( splt[1] );
+                acceptor_temp.allowed_donor_res.clear();
+                for(int ii = 2; ii <= splt.size(); ++ii )
+                {
+                    acceptor_temp.allowed_acceptor_res.push_back( splt[ii] );
+                }
+                acceptors.push_back(donor_temp);
+            }
+        }
+        return acceptors;
+    }
+
+
     
     // reture the hbond definitions from a tuning file.
     std::vector< HBondDefinition > get_hbond_definitions( std::string tuning_file )
