@@ -877,7 +877,17 @@ namespace rif {
                                 } else {
                                     if ( hbond_requirement_labels[sat1] != -1 && hbond_requirement_labels[sat2] != -1 ) {
                                         if ( hbond_requirement_labels[sat1] != hbond_requirement_labels[sat2] ){
-                                            utility_exit_with_message("I am confused, I don't know which requirement num should I belong to.");
+
+																						// I think if I can satisfy two polar atoms, this means I am not a good rif residue, but to make things simple, I will just assign the satisfication number to the smaller one.
+																						// Or should I just throw away the rifres,
+																						// OK, I have a decision now, and now chose the simplest solution. Just assign to a smaller one
+																						
+																						sat1 = hbond_requirement_labels[sat1] > hbond_requirement_labels[sat2] ? hbond_requirement_labels[sat2] : hbond_requirement_labels[sat1] ;
+																						sat2 = -1;
+
+																						//std::string const & irot_name = rot_index.rotamers_[irot].resname_;
+																						//std::cout << "I am " << irot_name << ", I can satisfy " << hbond_requirement_labels[sat1] << " and " << hbond_requirement_labels[sat2] << " and that is wrong!" << std::endl;
+                                            //utility_exit_with_message("I am confused, I don't know which requirement num should I belong to.");
                                         } else {
                                             sat1 = hbond_requirement_labels[sat1];
                                             sat2 = -1;
