@@ -95,6 +95,7 @@ OPT_1GRP_KEY( StringVector, rifgen, donres )
 	OPT_1GRP_KEY( Real          , rifgen, max_rf_bounding_ratio )
 	OPT_1GRP_KEY( Real          , rifgen, hbond_cart_sample_hack_range )
 	OPT_1GRP_KEY( Real          , rifgen, hbond_cart_sample_hack_resl )
+    OPT_1GRP_KEY( Real          , rifgen, long_hbond_fudge_distance )
 	OPT_1GRP_KEY( Integer       , rifgen, rif_accum_scratch_size_M )
 	OPT_1GRP_KEY( Boolean       , rifgen, make_shitty_rpm_file )
 	OPT_1GRP_KEY( Boolean       , rifgen, test_without_rosetta_fields )
@@ -155,6 +156,7 @@ OPT_1GRP_KEY( StringVector, rifgen, donres )
 		NEW_OPT(  rifgen::max_rf_bounding_ratio            , "" , 4 );
 		NEW_OPT(  rifgen::hbond_cart_sample_hack_range     , "" , 0.375 );
 		NEW_OPT(  rifgen::hbond_cart_sample_hack_resl      , "" , 0.375 );
+        NEW_OPT(  rifgen::long_hbond_fudge_distance, "Any hbond longer than 2A gets moved closer to 2A by this amount for scoring", 0.0 );
 		NEW_OPT(  rifgen::rif_accum_scratch_size_M         , "" , 32000 );
 		NEW_OPT(  rifgen::make_shitty_rpm_file             , "" , false );
 		NEW_OPT(  rifgen::test_without_rosetta_fields      , "" , false );
@@ -331,6 +333,7 @@ std::shared_ptr<::devel::scheme::RifBase> init_rif_and_generators(
 			hbgenopts.debug = false;
 			hbgenopts.hbond_weight = option[rifgen::hbond_weight]();
 			hbgenopts.upweight_multi_hbond = option[rifgen::upweight_multi_hbond]();
+            hbgenopts.long_hbond_fudge_distance = option[ rifgen::long_hbond_fudge_distance ]();
 
 			rif_generators_out.push_back(
 				::scheme::make_shared<devel::scheme::rif::RifGeneratorSimpleHbonds>(
@@ -372,6 +375,7 @@ std::shared_ptr<::devel::scheme::RifBase> init_rif_and_generators(
             hspot_opts.hotspot_sample_angle_bound = option[ rifgen::hotspot_sample_angle_bound]();
             hspot_opts.hotspot_nsamples = option[ rifgen::hotspot_nsamples]();
             hspot_opts.hotspot_score_thresh = option[ rifgen::hotspot_score_thresh]();
+            hspot_opts.long_hbond_fudge_distance = option[rifgen::long_hbond_fudge_distance]();
             hspot_opts.dump_hotspot_samples = option[ rifgen::dump_hotspot_samples]();
 			if (!option[ rifgen::dump_hotspot_samples].user()) hspot_opts.dump_hotspot_samples = 0;
 			hspot_opts.hbond_weight = option[rifgen::hbond_weight]();

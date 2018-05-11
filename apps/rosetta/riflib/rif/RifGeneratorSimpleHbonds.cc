@@ -358,6 +358,7 @@ namespace rif {
 			rot_tgt_scorer.upweight_multi_hbond_ = opts.upweight_multi_hbond;
 			rot_tgt_scorer.upweight_iface_ = 1.0;
 			rot_tgt_scorer.min_hb_quality_for_satisfaction_ = -0.1;
+            rot_tgt_scorer.long_hbond_fudge_distance_ = opts.long_hbond_fudge_distance;
 
 		}
 
@@ -381,7 +382,7 @@ namespace rif {
 			bool use_customize_acceptor_definition = false;
             for ( int i_donor_def = 0; i_donor_def < donor_definitions.size(); ++i_donor_def )
             {
-                if( ires == donor_definitions[i_donor_def].res_num )
+                if( ir == donor_definitions[i_donor_def].res_num )
                 {
                     use_customize_donor_definition = true;
                     donresn_customize.clear();
@@ -393,7 +394,7 @@ namespace rif {
             }
             for ( int i_acceptor_def = 0; i_acceptor_def < acceptor_definitions.size(); ++i_acceptor_def )
             {
-                if( ires == acceptor_definitions[i_acceptor_def].res_num )
+                if( ir == acceptor_definitions[i_acceptor_def].res_num )
                 {
                     use_customize_acceptor_definition = true;
                     accresn_customize.clear();
@@ -446,6 +447,39 @@ namespace rif {
 		}
 		runtime_assert_msg( hb_jobs.size() , "no hbond jobs generated!" );
 		std::sort( hb_jobs.begin(), hb_jobs.end() );
+		/*
+    struct HBJob {
+        std::string don, acc, don_or_acc;
+        int nrots;
+        int ires;
+        bool operator<( HBJob const & other ) const { return nrots > other.nrots; }
+    };
+		*/
+
+		// the code below is some debug info
+		/*
+		for ( HBJob job : hb_jobs )
+		{
+				std::cout << "######### " << job.ires << " ##########" << std::endl;
+				std::cout << "don: " << job.don << " acc: " << job.acc << " don_or_acc: " << job.don_or_acc << std::endl;
+		}
+		std::cout << std::endl;
+		std::cout << "********************** donor and acceptor definitions *********************************" << std::endl;
+		//std::vector< DonorDefinition > const donor_definitions = get_donor_definitions( tuning_file );
+		//std::vector< AcceptorDefinition > const acceptor_definitions = get_acceptor_definitions( tuning_file );
+		for ( DonorDefinition donor : donor_definitions )
+		{
+				std::cout << "############# " << donor.res_num << "#################" << std::endl;
+				for ( std::string s : donor.allowed_donor_res ) std::cout << s << std::endl;
+		}
+		std::cout << std::endl << std::endl << std::endl;
+		for ( AcceptorDefinition acceptor : acceptor_definitions )
+		{
+				std::cout << "############# " << acceptor.res_num << "#################" << std::endl;
+				for ( std::string s : acceptor.allowed_acceptor_res ) std::cout << s << std::endl;
+		}
+		exit(0);
+	*/	
 		// for( int i = 0; i < hb_jobs.size(); ++i ){
 		// 	HBJob j = hb_jobs[i];
 		// 	std::cout << "HBJob " << I(4,i) << I(3,j.ires) << " " << target.residue(j.ires).name() << " "

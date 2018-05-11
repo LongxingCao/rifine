@@ -29,6 +29,7 @@ struct RifGeneratorSimpleHbondsOpts {
 	float dump_fraction = 0.0;
 	float hbond_weight = 2.0;
 	float upweight_multi_hbond = 0;
+    float long_hbond_fudge_distance = 0.0;
 	bool debug = false;
 };
 

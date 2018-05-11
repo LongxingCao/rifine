@@ -189,6 +189,7 @@ namespace rif {
 				rot_tgt_scorer.hbond_weight_ = this->opts.hbond_weight;
 				rot_tgt_scorer.upweight_multi_hbond_ = this->opts.upweight_multi_hbond;
 				rot_tgt_scorer.upweight_iface_ = 1.0;
+                rot_tgt_scorer.long_hbond_fudge_distance_ = this->opts.long_hbond_fudge_distance;
 
 			}
 		}
