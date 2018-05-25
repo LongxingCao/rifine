@@ -21,7 +21,7 @@ cd rosetta/main/source
 CXX=/my/g++/version CC=/my/gcc/version ./ninja_build cxx11_omp -remake  
 
 // xps15
-CXX=/usr/local/bin/g++ CC=/usr/local/bin/gcc CMAKE_ROSETTA_PATH=/software/rosetta-master/ cmake .. -DCMAKE_BUILD_TYPE=Release
+CXX=/usr/local/bin/g++ CC=/usr/local/bin/gcc CMAKE_ROSETTA_PATH=/software/rosetta-rifdock/ cmake .. -DCMAKE_BUILD_TYPE=Release
 //digs
 CMAKE_ROSETTA_PATH=/home/longxing/rosetta-master/ cmake .. -DCMAKE_BUILD_TYPE=Release
 
