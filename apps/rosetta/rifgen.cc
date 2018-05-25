@@ -123,6 +123,7 @@ OPT_1GRP_KEY( StringVector, rifgen, donres )
 	OPT_1GRP_KEY( RealVector        , rifgen, lever_bounds     )
 
 	OPT_1GRP_KEY( String        , rifgen, tuning_file )
+  OPT_1GRP_KEY( Boolean       , rifgen, apores_must_satisfy_req )
 
 	void register_options() {
 		using namespace basic::options;
@@ -187,6 +188,7 @@ OPT_1GRP_KEY( StringVector, rifgen, donres )
 
 
 		NEW_OPT(  rifgen::tuning_file                          , "precisely control how rifgen and rifdock work" , "" );
+		NEW_OPT(  rifgen::apores_must_satisfy_req          , "the apores must satisfy some requirements, or else the rifres will be throw away and this would reduce the rif field a lot! Added by longxiing at 2018-05-24", false );
 	}
 
 
@@ -355,6 +357,7 @@ std::shared_ptr<::devel::scheme::RifBase> init_rif_and_generators(
 			apogenopts.downweight_hydrophobics = option[rifgen::downweight_hydrophobics]();
 			apogenopts.beam_size_M = option[rifgen::beam_size_M]();
 			apogenopts.dump_fraction = option[rifgen::rif_apo_dump_fraction]();
+			apogenopts.apores_must_satisfy_req = option[rifgen::apores_must_satisfy_req]();
 
 			rif_generators_out.push_back(
 				::scheme::make_shared<devel::scheme::rif::RifGeneratorApoHSearch>(

@@ -25,6 +25,7 @@ struct RifGeneratorApoHSearchOpts {
 	bool downweight_hydrophobics = false;
 	float beam_size_M = 10000.0;
 	float dump_fraction = 0.0;
+	bool apores_must_satisfy_req = false;
 };
 
 struct RifGeneratorApoHSearch : public RifGenerator {

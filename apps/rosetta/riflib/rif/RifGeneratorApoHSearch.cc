@@ -633,6 +633,11 @@ namespace rif {
 												}
 											}
 									}
+
+									// check whether the apores can satisfy any requirements
+									// if the apores_must_satisfy_req is set to true and the residue can't safisfy anything, then just continue'
+									if ( opts.apores_must_satisfy_req == true || req_index == -1) continue;
+
 									accumulator->insert( bbactor_child.position_, score_weight*score, crot, req_index );
 
 									if( opts.dump_fraction > 0 ){
