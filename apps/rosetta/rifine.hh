@@ -171,6 +171,7 @@ OPT_1GRP_KEY(     StringVector , rif_dock, scaffolds )
 	OPT_1GRP_KEY(  StringVector, rif_dock, cst_files )
 	OPT_1GRP_KEY(  StringVector, rif_dock, seeding_pos )
     OPT_1GRP_KEY(  Real        , rif_dock, patchdock_min_sasa )
+    OPT_1GRP_KEY(  Integer     , rif_dock, patchdock_top_ranks )
 	OPT_1GRP_KEY(  Boolean     , rif_dock, seeding_by_patchdock )
 	OPT_1GRP_KEY(  String      , rif_dock, xform_pos )
 	OPT_1GRP_KEY(  Boolean     , rif_dock, test_longxing )
@@ -349,6 +350,7 @@ OPT_1GRP_KEY(     StringVector , rif_dock, scaffolds )
 			NEW_OPT(  rif_dock::seeding_pos, "" , utility::vector1<std::string>() );
 			NEW_OPT(  rif_dock::seeding_by_patchdock, "The format of seeding file can be either Rosetta Xform or raw patchdock outputs", true );
             NEW_OPT(  rif_dock::patchdock_min_sasa, "the cutoff sasa value for a valid patchdock output, the default is to use all of them", -1000.0);
+            NEW_OPT(  rif_dock::patchdock_top_ranks, "only use the top solutions of patchdock to do refinement, the default is to use all of them", 99999);
 			NEW_OPT(  rif_dock::xform_pos, "" , "" );
 			NEW_OPT(  rif_dock::test_longxing, "" , false );
             NEW_OPT(  rif_dock::rosetta_score_each_seeding_at_least, "", -1 );
@@ -516,6 +518,7 @@ struct RifDockOpt
     bool        only_dump_scaffold                   ;
 	bool        seeding_by_patchdock                 ;
     float       patchdock_min_sasa                   ;
+    int         patchdock_top_ranks                  ;
 
 	std::vector<int> requirements;
 
@@ -739,6 +742,7 @@ struct RifDockOpt
 		for( std::string s : option[rif_dock::seeding_pos                                              ]() ) seeding_fnames.push_back(s);
 		seeding_by_patchdock                    = option[rif_dock::seeding_by_patchdock                ]();
         patchdock_min_sasa                      = option[rif_dock::patchdock_min_sasa                  ]();
+        patchdock_top_ranks                     = option[rif_dock::patchdock_top_ranks                 ]();
 		xform_fname                             = option[rif_dock::xform_pos                           ]();
         test_longxing                           = option[rif_dock::test_longxing                       ]();
         rosetta_score_each_seeding_at_least     = option[rif_dock::rosetta_score_each_seeding_at_least ]();

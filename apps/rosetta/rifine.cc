@@ -746,7 +746,7 @@ int main( int argc, char *argv[] )
                     }  else {
                         utility_exit_with_message( "-seeding_files list not same length as -scaffolds list" );
                     }
-                    runtime_assert_msg(parse_seeding_file(seeding_fname, seeding_positions, opt.seeding_by_patchdock, opt.patchdock_min_sasa), "Faild to parse the seeding file!!!");
+                    runtime_assert_msg(parse_seeding_file(seeding_fname, seeding_positions, opt.seeding_by_patchdock, opt.patchdock_min_sasa, opt.patchdock_top_ranks), "Faild to parse the seeding file!!!");
                     
                     EigenXform x(EigenXform::Identity());
                     x.translation() = scaffold_center;
