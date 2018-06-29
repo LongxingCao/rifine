@@ -108,8 +108,10 @@ void get_onebody_rotamer_energies(
 
 }
 
+/*
+// this is the slow function, brian implemented a newer one, which is faster using low level code...
 void
-compute_onebody_rotamer_energies(
+compute_onebody_rotamer_energies_legacy(
 	core::pose::Pose const & pose,
 	utility::vector1<core::Size> const & scaffold_res,
 	RotamerIndex const & rot_index,
@@ -204,6 +206,235 @@ compute_onebody_rotamer_energies(
 
 }
 
+ */
+    
+    
+    void
+    compute_onebody_rotamer_energies(
+                                     core::pose::Pose const & pose,
+                                     utility::vector1<core::Size> const & scaffold_res,
+                                     RotamerIndex const & rot_index,
+                                     std::vector<std::vector< float > > & onebody_rotamer_energies,
+                                     bool replace_with_ala
+                                     ){
+        using devel::scheme::str;
+        using devel::scheme::omp_max_threads_1;
+        using devel::scheme::omp_thread_num_1;
+        
+        // make all ala or gly
+        core::pose::Pose bbone(pose);
+        if( replace_with_ala ) pose_to_ala( bbone );
+        std::vector<core::pose::Pose> pose_per_thread( omp_max_threads_1(), bbone );
+        
+        std::vector<core::scoring::ScoreFunctionOP> score_func_per_thread(omp_max_threads_1());
+        utility::vector1<bool> true_vect(bbone.size(), true);
+        
+        //runtime_assert(rot_index.per_thread_rotamers_.size() > 0);
+        int ala_rot = rot_index.ala_rot();
+        
+        core::scoring::get_score_function();	// get one first to prevent multi-thread crash
+        #ifdef USE_OPENMP
+        #pragma omp parallel for schedule(dynamic,1)
+        #endif
+        for( int i = 0; i < score_func_per_thread.size(); i++ ){
+            
+            // We specifically don't use the thread number here because we're filling in the per-thread stuff
+            core::scoring::ScoreFunctionOP & score_func = score_func_per_thread[i];
+            core::pose::Pose & work_pose = pose_per_thread[i];
+            
+            score_func = core::scoring::get_score_function();
+            score_func->set_weight( core::scoring::fa_dun, score_func->get_weight(core::scoring::fa_dun)*0.67 );
+            
+            core::scoring::methods::EnergyMethodOptions opts = score_func->energy_method_options();
+            core::scoring::hbonds::HBondOptions hopts = opts.hbond_options();
+            hopts.use_hb_env_dep( false );
+            hopts.decompose_bb_hb_into_pair_energies(true);
+            opts.hbond_options( hopts );
+            score_func->set_energy_method_options( opts );
+            
+            // all work poses are scored here
+            score_func->score( work_pose );
+            score_func->setup_for_packing( work_pose, true_vect, true_vect );
+            
+        }
+        
+        
+        utility::vector1<core::Real> per_res_nbr_dist( bbone.size(), 0 );
+        float max_res_radius = 0;
+        for ( core::Size ir = 1; ir <= bbone.size(); ir++ ) {
+            float radius = bbone.residue(ir).nbr_radius();
+            per_res_nbr_dist[ir] = radius;
+            max_res_radius = std::max<float>( max_res_radius, radius );
+        }
+        
+        float max_rotamer_radius = rot_index.get_max_nbr_radius();
+        float max_interaction_radius = score_func_per_thread.front()->info()->max_atomic_interaction_distance();
+        float max_radius = max_rotamer_radius + max_res_radius + max_interaction_radius;
+        
+        // Copied from core/pack/packer_neighbors.cc
+        core::conformation::PointGraphOP point_graph( new core::conformation::PointGraph );
+        core::conformation::residue_point_graph_from_conformation( bbone.conformation(), *point_graph );
+        core::conformation::find_neighbors<core::conformation::PointGraphVertexData,core::conformation::PointGraphEdgeData>(
+                                                                                                                            point_graph, max_radius );
+        
+        utility::graph::Graph neighbor_graph( bbone.size() );
+        
+        for ( int ir = 1; ir <= bbone.size(); ir++ ) {
+            for ( auto
+                 iter = point_graph->get_vertex( ir ).const_upper_edge_list_begin(),
+                 iter_end = point_graph->get_vertex( ir ).const_upper_edge_list_end();
+                 iter != iter_end; ++iter ) {
+                
+                int other_pos = iter->upper_vertex();
+                core::Real other_dist = per_res_nbr_dist[other_pos];
+                core::Real dist = other_dist + max_rotamer_radius + max_interaction_radius;
+                
+                if ( iter->data().dsq() < dist*dist ) {
+                    neighbor_graph.add_edge( ir, other_pos );
+                }
+            }
+        }
+        
+        
+        onebody_rotamer_energies.resize( bbone.size() );
+        std::cout << "compute_onebody_rotamer_energies " << bbone.size() << "/" << rot_index.size() << " ";
+        std::exception_ptr exception = nullptr;
+        #ifdef USE_OPENMP
+        #pragma omp parallel for schedule(dynamic,1)
+        #endif
+        for( int ir = 1; ir <= bbone.size(); ++ir ){
+            if( exception ) continue;
+            if( std::find(scaffold_res.begin(), scaffold_res.end(), ir) == scaffold_res.end() ){
+                onebody_rotamer_energies[ir-1].resize( rot_index.size(), 12345.0 );
+                continue;
+            }
+            try {
+                core::pose::Pose & work_pose( pose_per_thread[ omp_thread_num_1()-1 ] );
+                core::scoring::ScoreFunctionOP score_func = score_func_per_thread[ omp_thread_num_1()-1 ];
+                onebody_rotamer_energies[ir-1].resize( rot_index.size(), 12345.0 );
+                if( ! work_pose.residue(ir).is_protein()   ) continue;
+                if(   work_pose.residue(ir).name3()=="GLY" ) continue;
+                if(   work_pose.residue(ir).name3()=="PRO" ) continue;
+                #ifdef USE_OPENMP
+                #pragma omp critical
+                #endif
+                {
+                    std::cout << (100.0*ir)/work_pose.size() << "% "; std::cout.flush();
+                }
+                
+                
+                // Let's make a rotset for the current position
+                core::pack::rotamer_set::RotamerSet_ rotset;
+                rotset.set_resid(ir);
+                
+                core::conformation::ResidueOP original_rot = work_pose.residue( ir ).clone();
+                for ( int irot = 0; irot < rot_index.size(); irot++ ) {
+                    core::conformation::ResidueOP pt_rot = rot_index.get_per_thread_rotamer( omp_thread_num(), irot );
+                    work_pose.replace_residue( ir, *pt_rot, true );	// I give up, there's just so much you have to update without replace residue
+                    rotset.add_rotamer( work_pose.residue(ir) );	// not cloning because yolo
+                }
+                work_pose.replace_residue( ir, *original_rot, true );
+                // Add the current rotamer to the end to get the base score
+                rotset.add_rotamer( *original_rot );
+                int original_rot_index = rotset.num_rotamers();
+                
+                score_func->prepare_rotamers_for_packing(work_pose, rotset);
+                
+                // Now make the energy containers that rosetta wants
+                //   ala    rotamers
+                ObjexxFCL::FArray2D< core::PackerEnergy > pair_energy_table( 1, rotset.num_rotamers(), 0.0 );
+                utility::vector1< core::PackerEnergy > onebody_energies( rotset.num_rotamers(), 0 );
+                
+                // First do the actual one-body energies
+                for ( int irot = 1; irot <= rotset.num_rotamers(); irot++ ) {
+                    core::scoring::EnergyMap emap;
+                    score_func->eval_ci_1b( *(rotset.rotamer( irot )), work_pose, emap );
+                    score_func->eval_cd_1b( *(rotset.rotamer( irot )), work_pose, emap );
+                    onebody_energies[ irot ] += static_cast< core::PackerEnergy > (score_func->weights().dot( emap ));
+                }
+                score_func->evaluate_rotamer_intrares_energies( rotset, work_pose, onebody_energies );
+                
+                // Loop over interacting positions
+                for ( utility::graph::Graph::EdgeListConstIter
+                     iter = neighbor_graph.get_node( ir )->const_edge_list_begin(),
+                     iter_end = neighbor_graph.get_node( ir )->const_edge_list_end();
+                     iter != iter_end; ++iter ) {
+                    
+                    int seqpos = (*iter)->get_other_ind( ir );
+                    
+                    core::pack::rotamer_set::RotamerSet_ other_rotset;
+                    other_rotset.set_resid(seqpos);
+                    other_rotset.add_rotamer( *(work_pose.residue(seqpos).clone()));
+                    score_func->prepare_rotamers_for_packing(work_pose, other_rotset);
+                    
+                    score_func->evaluate_rotamer_pair_energies( rotset, other_rotset, work_pose, pair_energy_table );
+                    
+                }
+                
+                
+                // Long range interactions have their own graph structure
+                for ( auto
+                     lr_iter = score_func->long_range_energies_begin(),
+                     lr_end = score_func->long_range_energies_end();
+                     lr_iter != lr_end; ++lr_iter ) {
+                    
+                    core::scoring::LREnergyContainerCOP lrec = work_pose.energies().long_range_container( (*lr_iter)->long_range_type() );
+                    if ( !lrec || lrec->empty() ) continue; // only score non-emtpy energies.
+                    
+                    for ( core::scoring::ResidueNeighborConstIteratorOP
+                         rni = lrec->const_neighbor_iterator_begin(ir),
+                         rniend = lrec->const_neighbor_iterator_end(ir);
+                         (*rni) != (*rniend); ++(*rni) ) {
+                        
+                        core::Size seqpos = rni->neighbor_id();
+                        runtime_assert( seqpos != ir );
+                        
+                        
+                        core::pack::rotamer_set::RotamerSet_ other_rotset;
+                        other_rotset.set_resid(seqpos);
+                        other_rotset.add_rotamer( *(work_pose.residue(seqpos).clone()));
+                        score_func->prepare_rotamers_for_packing(work_pose, other_rotset);
+                        
+                        (*lr_iter)->evaluate_rotamer_pair_energies( rotset, other_rotset, work_pose, *score_func, 
+                                                                   score_func->weights(), pair_energy_table );
+                        
+                        
+                    }
+                }
+                
+                // Now we have the scores, lets fill the table
+                
+                // Everything is relative to the original, so get that score first
+                float base_score = onebody_energies[original_rot_index] + pair_energy_table( 1, original_rot_index);
+                
+                for ( int irot = 0; irot < rot_index.size(); irot++ ) {
+                    float raw_score = onebody_energies[irot+1] + pair_energy_table( 1, irot+1);
+                    onebody_rotamer_energies[ir-1][irot] = raw_score - base_score;
+                }
+                
+                
+                
+            } catch( ... ) {
+                #ifdef USE_OPENMP
+                #pragma omp critical
+                #endif
+                exception = std::current_exception();
+            }
+        }
+        if( exception ) std::rethrow_exception(exception);
+        
+        std::cout << "compute_onebody_rotamer_energies_DONE" << std::endl;
+        
+        // for( int i = 0; i < onebody_rotamer_energies.size(); ++i ){
+        // 	std::cout << "OBE " << i;
+        // 	for( int j = 0; j < onebody_rotamer_energies[i].size(); ++j ){
+        // 		std::cout << " " << onebody_rotamer_energies[i][j];
+        // 	}
+        // 	std::cout << std::endl;
+        // }
+        
+        
+    }
 
 
 void get_per_rotamer_rf_tables_one(

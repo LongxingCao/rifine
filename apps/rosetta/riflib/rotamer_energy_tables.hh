@@ -29,8 +29,10 @@ void get_onebody_rotamer_energies(
 	bool replace_with_ala = true
 );
 
+// this is the slow compute onebody energy function, Brian add a newer one using the low level code, and the newer one is faster.....
+/*
 void
-compute_onebody_rotamer_energies(
+compute_onebody_rotamer_energies_legacy(
 	core::pose::Pose const & scaffold,
 	utility::vector1<core::Size> const & scaffold_res,
 	RotamerIndex const & rot_index,
@@ -38,6 +40,15 @@ compute_onebody_rotamer_energies(
 	bool replace_with_ala = true
 );
 
+*/
+    void
+    compute_onebody_rotamer_energies(
+                                     core::pose::Pose const & scaffold,
+                                     utility::vector1<core::Size> const & scaffold_res,
+                                     RotamerIndex const & rot_index,
+                                     std::vector<std::vector< float > > & scaffold_onebody_rotamer_energies,
+                                     bool replace_with_ala = true
+                                     );
 
 
 struct RotamerRFOpts {

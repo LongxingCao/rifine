@@ -24,6 +24,7 @@
 
 	#include <core/id/AtomID.hh>
 	#include <core/pose/Pose.hh>
+    #include <core/conformation/Residue.hh>
 	#include <core/scoring/motif/util.hh>
 
 	#include <devel/init.hh>
@@ -59,8 +60,9 @@
 	#include <boost/random/mersenne_twister.hpp>
 	#include <boost/random/uniform_real.hpp>
 
-  // the requirement definitions
-  #include <riflib/rif/requirements_util.hh>
+    // the requirement definitions
+    //#include <cmath>
+    #include <riflib/rif/requirements_util.hh>
 
 
 namespace devel {
@@ -208,71 +210,121 @@ namespace rif {
 			rngs.push_back( boost::random::mt19937( (unsigned int)time(0) + i) );
 		}
 		boost::uniform_real<> uniform;
+        
 
 
-		std::vector<int> rots;
-		for( auto resn : apores ){
-			if( resn.size() > 3 ){
-				int irot = boost::lexical_cast<int>(resn.substr(3,resn.size()-3));
-				std::string threeletter = resn.substr(0,3);
-				std::cerr << rot_index_p->rotamers_[irot].resname_ << std::endl;
-				if( rot_index_p->rotamers_[irot].resname_ == threeletter ){
-					if( rot_index_p->is_primary(irot) && rot_index_p->is_structural_primary(irot) ){
-						rots.push_back( irot );
-					} else {
-						utility_exit_with_message(
-							"rotamer number " + str(irot) + " is not primary rotamer of " + resn);
-					}
-				} else {
-					utility_exit_with_message("residue name3 dosen't match: "+resn);
-				}
-			} else {
-				std::pair<int,int> bounds = rot_index_p->index_bounds( resn );
-				for( int irot = bounds.first; irot < bounds.second; ++irot ){
-					if( rot_index_p->is_primary(irot) && rot_index_p->is_structural_primary(irot) ){
-						rots.push_back( irot );
-					}
-				}
-			}
-		}
-
-		std::map<std::string,float> abs_score_cut_by_res;
-		abs_score_cut_by_res["ALA"] = -0.3;
-		abs_score_cut_by_res["PHE"] = -2.8;
-		abs_score_cut_by_res["ILE"] = -1.7;
-		abs_score_cut_by_res["LEU"] = -1.5;
-		abs_score_cut_by_res["MET"] = -1.7;
-		abs_score_cut_by_res["VAL"] = -1.0;
-		abs_score_cut_by_res["TRP"] = -3.4;
-		abs_score_cut_by_res["LYS"] = -2.6;
-
-
-
+        // the code here looks bad, I should change everything to a struct........
 		// some basic apo requirement definitions.
 		std::vector< ApoRequirement > apo_reqs = get_Apo_requirement_definitions( params->tuning_file );
 		bool const use_apo_requirements = !( apo_reqs.empty() );
 		// change everyting to a vector, so it should make it a little bit faster.
-		std::vector< std::vector< std::pair< float, Eigen::Vector3f > > > req_distance_terms( apo_reqs.size() );
-		std::vector< std::vector<bool> > allowed_res( apo_reqs.size() );
-		std::vector< int > req_nums( apo_reqs.size() );
+		std::vector< std::vector< std::pair< float, Eigen::Vector3f > > > apo_req_distance_terms( apo_reqs.size() );
+		std::vector< std::vector<bool> > apo_allowed_res( apo_reqs.size() );
+		std::vector< int > apo_req_nums( apo_reqs.size() );
 		if ( use_apo_requirements ){
 				for ( int ii = 0; ii < apo_reqs.size(); ++ii ){
-						req_nums[ii] = apo_reqs[ii].req_num;
+						apo_req_nums[ii] = apo_reqs[ii].req_num;
 						for( int jj = 0; jj < rot_index_p->size(); ++jj ){
 								if ( apo_reqs[ii].allowed_rot_names.size() == 0 || std::find(apo_reqs[ii].allowed_rot_names.begin(), apo_reqs[ii].allowed_rot_names.end(), rot_index_p->rotamers_[jj].resname_ ) != apo_reqs[ii].allowed_rot_names.end() )
-										allowed_res[ii].push_back(true);
+										apo_allowed_res[ii].push_back(true);
 								else
-										allowed_res[ii].push_back(false);
+										apo_allowed_res[ii].push_back(false);
 						}
 						for( auto const & x : apo_reqs[ii].terms ){
 								Eigen::Vector3f temp_v( target.residue(x.res_num).xyz(x.atom_name)[0], target.residue(x.res_num).xyz(x.atom_name)[1], target.residue(x.res_num).xyz(x.atom_name)[2] );
 								runtime_assert_msg( x.distance != 0 , "What? How can you set the distance to zero? What do you want? Talk with longxing about this...");
 								float dist_square = x.distance / abs( x.distance ) * x.distance * x.distance;
-								req_distance_terms[ii].push_back(std::make_pair(dist_square, temp_v));
+								apo_req_distance_terms[ii].push_back(std::make_pair(dist_square, temp_v));
 						}
 				}
 		}
+        // the code here looks bad, I should change everything to a struct........
+        // cationpi requirement setup, this time I will only do lys and Arg on the target for TrkA. another case is that
+        // trp and phe are on the target side, but If the trp and phe are on the target side, why no just use hydrophobic interaction.
+        std::vector<CationPiRequirement> cationpi_reqs = get_cationpi_requirement_definitions( params->tuning_file );
+        bool const use_cationpi_requirements = !( cationpi_reqs.empty() );
+        // lys and arg cation positions
+        std::vector< std::pair<Eigen::Vector3f /*position of the cation atom*/, Eigen::Vector3f /*norm vector of the Guanidyl group, for lysine, this is (0,0,0)*/> > cation_genomtry_terms;
+        std::vector< int > cationpi_req_nums( cationpi_reqs.size() );
+        std::vector< std::vector<bool> > cationpi_allowed_res( cationpi_reqs.size() );
+        // in order to keep the original logic of apore search, I should keep the apore search residues in separate with the cation-pi interaction residues, even though they use almost the same hsearch framework.
+        std::vector<bool> rotamer_only_for_cationpi( rot_index_p->size(), false );
+        if ( use_cationpi_requirements ) {
+            for ( int ii = 0; ii < cationpi_reqs.size(); ++ii ) {
+                cationpi_req_nums[ii] = cationpi_reqs[ii].req_num;
+                for( int jj = 0; jj < rot_index_p->size(); ++jj ){
+                    if ( std::find(cationpi_reqs[ii].allowed_rot_names.begin(), cationpi_reqs[ii].allowed_rot_names.end(), rot_index_p->rotamers_[jj].resname_ ) != cationpi_reqs[ii].allowed_rot_names.end() ) {
+                        if ( std::find(apores.begin(), apores.end(), rot_index_p->rotamers_[jj].resname_ ) == apores.end() ) {
+                            rotamer_only_for_cationpi[jj] = true;
+                        }
+                        cationpi_allowed_res[ii].push_back(true);
+										} else {
+                        cationpi_allowed_res[ii].push_back(false);
+										}
+                }
+                // pull out the geometry of the target res
+                core::conformation::Residue const & res = target.residue( cationpi_reqs[ii].res_num );
+                if ( res.name3() == "ARG" ) {
+                    Eigen::Vector3f cation( res.xyz("CZ")[0], res.xyz("CZ")[1], res.xyz("CZ")[2] );
+                    Vec nv = (( res.xyz("NH1") - res.xyz("CZ") ).cross( res.xyz("NH2") - res.xyz("CZ") )).normalized();
+                    cation_genomtry_terms.push_back( std::make_pair(cation, Eigen::Vector3f(nv[0],nv[1],nv[2]) ) );
+                } else if ( res.name3() == "LYS" ) {
+                    Eigen::Vector3f cation( res.xyz("NZ")[0], res.xyz("NZ")[1], res.xyz("NZ")[2] );
+                    Eigen::Vector3f nv    (              0.0,              0.0,             0.0  );
+                    cation_genomtry_terms.push_back( std::make_pair(cation, nv) );
+                } else {
+                    utility_exit_with_message("Are you crazy? Why do you select this residue for a cation-pi interaction?");
+                }
+            }
+            // try to fix the apore vector
+            for (int ii = 0; ii < rot_index_p->size(); ++ii) {
+                if ( rotamer_only_for_cationpi[ii] ) {
+                    if ( std::find(apores.begin(), apores.end(), rot_index_p->rotamers_[ii].resname_ ) == apores.end() ) {
+                        apores.push_back( rot_index_p->rotamers_[ii].resname_ );
+                    }
+                }
+            }
+        }
 
+        std::vector<int> rots;
+        for( auto resn : apores ){
+            if( resn.size() > 3 ){
+                int irot = boost::lexical_cast<int>(resn.substr(3,resn.size()-3));
+                std::string threeletter = resn.substr(0,3);
+                std::cerr << rot_index_p->rotamers_[irot].resname_ << std::endl;
+                if( rot_index_p->rotamers_[irot].resname_ == threeletter ){
+                    if( rot_index_p->is_primary(irot) && rot_index_p->is_structural_primary(irot) ){
+                        rots.push_back( irot );
+                    } else {
+                        utility_exit_with_message(
+                                                  "rotamer number " + str(irot) + " is not primary rotamer of " + resn);
+                    }
+                } else {
+                    utility_exit_with_message("residue name3 dosen't match: "+resn);
+                }
+            } else {
+                std::pair<int,int> bounds = rot_index_p->index_bounds( resn );
+                for( int irot = bounds.first; irot < bounds.second; ++irot ){
+                    if( rot_index_p->is_primary(irot) && rot_index_p->is_structural_primary(irot) ){
+                        rots.push_back( irot );
+                    }
+                }
+            }
+        }
+        
+        std::map<std::string,float> abs_score_cut_by_res;
+        abs_score_cut_by_res["ALA"] = -0.3;
+        abs_score_cut_by_res["PHE"] = -2.8;
+        abs_score_cut_by_res["ILE"] = -1.7;
+        abs_score_cut_by_res["LEU"] = -1.5;
+        abs_score_cut_by_res["MET"] = -1.7;
+        abs_score_cut_by_res["VAL"] = -1.0;
+        abs_score_cut_by_res["TRP"] = -3.4;
+        abs_score_cut_by_res["LYS"] = -2.6;
+        
+        // add some residue for cation-pi requirements
+        abs_score_cut_by_res["TYR"] = -2.8;
+        abs_score_cut_by_res["HIS"] = -1.8;
 		// longxing Debug info
 		/*
 		std::cout << "################## debug info for the requirements in the apo search #####################" << std::endl;
@@ -355,6 +407,8 @@ namespace rif {
 				int rotid;
 				Eigen::Vector3f Ncen, CAcen, Ccen;
 				Eigen::Vector3f CBcen;
+                // used for the cation-pi interaction
+                Eigen::Vector3f benzene_ring_center, imidazole_ring_center, ring_norm_vector;
 			};
 			std::vector<RotChild> inv_rotamer_backbones;
 
@@ -367,13 +421,55 @@ namespace rif {
 					child.Ncen  = x * rot_index_p->atom(crot,0).position() - rotamer_center;
 					child.CAcen = x * rot_index_p->atom(crot,1).position() - rotamer_center;
 					child.Ccen  = x * rot_index_p->atom(crot,2).position() - rotamer_center;
-				  if ( rot_index_p->rotamers_[crot].atoms_.size() > 3 ){
+                    if ( rot_index_p->rotamers_[crot].atoms_.size() > 3 ){
 						// use C-beta if this residue has C-beta, or else use CA
 						// for all case there should have CB
 						child.CBcen = x * rot_index_p->atom(crot,3).position() - rotamer_center;
 					} else {
 						child.CBcen = x * rot_index_p->atom(crot,1).position() - rotamer_center;
 					}
+                    
+                    if        ( rot_index_p->rotamers_[crot].resname_ == "TRP" ) {
+                        Eigen::Vector3f CD2 = x * rot_index_p->atom(crot,6).position() - rotamer_center;
+                        Eigen::Vector3f CZ2 = x * rot_index_p->atom(crot,10).position() - rotamer_center;
+                        Eigen::Vector3f CZ3 = x * rot_index_p->atom(crot,11).position() - rotamer_center;
+                        
+                        Eigen::Vector3f benze = ( CD2 + CZ2 + CZ3 ) / 3.0;
+                        
+                        Eigen::Vector3f CG  = x * rot_index_p->atom(crot,4).position() - rotamer_center;
+                        Eigen::Vector3f CD1 = x * rot_index_p->atom(crot,5).position() - rotamer_center;
+                        Eigen::Vector3f NE1 = x * rot_index_p->atom(crot,7).position() - rotamer_center;
+                        Eigen::Vector3f CE2 = x * rot_index_p->atom(crot,8).position() - rotamer_center;
+                        
+                        Eigen::Vector3f imidazole = ( CD2 + CG + CD1 + NE1 + CE2 ) / 5.0;
+                        
+                        Eigen::Vector3f nv = ( ( CD2 - CZ2 ).cross( CD2 - CZ3 ) ).normalized();
+                        
+                        child.benzene_ring_center = benze;
+                        child.imidazole_ring_center = imidazole;
+                        child.ring_norm_vector =  nv ;
+                    } else if ( rot_index_p->rotamers_[crot].resname_ == "PHE" || rot_index_p->rotamers_[crot].resname_ == "TYR" ) {
+                        Eigen::Vector3f CD1 = x * rot_index_p->atom(crot,5).position() - rotamer_center;
+                        Eigen::Vector3f CD2 = x * rot_index_p->atom(crot,6).position() - rotamer_center;
+                        Eigen::Vector3f CZ  = x * rot_index_p->atom(crot,9).position() - rotamer_center;
+                        
+                        child.benzene_ring_center = ( CD1 + CD2 + CZ ) / 3.0;
+                        child.ring_norm_vector  = ( (CD1-CZ).cross(CD2-CZ) ).normalized();
+                    } else if ( rot_index_p->rotamers_[crot].resname_ == "HIS" ) {
+                        Eigen::Vector3f CG  = x * rot_index_p->atom(crot,4).position() - rotamer_center;
+                        Eigen::Vector3f ND1 = x * rot_index_p->atom(crot,5).position() - rotamer_center;
+                        Eigen::Vector3f CD2 = x * rot_index_p->atom(crot,6).position() - rotamer_center;
+                        Eigen::Vector3f CE1 = x * rot_index_p->atom(crot,7).position() - rotamer_center;
+                        Eigen::Vector3f NE2 = x * rot_index_p->atom(crot,8).position() - rotamer_center;
+                        
+                        // store the ring_center in child.benzene_ring_center, and this can make the codes below a little bit cleaner.
+                        child.benzene_ring_center = ( CG + ND1 + CD2 + CE1 + NE2 ) / 5.0;
+                        child.ring_norm_vector      = ( (CE1-CG).cross(NE2-CG) ).normalized();
+                    } else {
+                        //
+                    }
+                    
+                    
 					auto testca  = x * rot_index_p->atom(crot,3).position() - rotamer_center;
 					auto primaryca = rot_index_p->atom(irot,3).position()-rotamer_center;
 					runtime_assert( (primaryca - testca).norm() < 0.001 );
@@ -611,28 +707,81 @@ namespace rif {
 									int req_index = -1;
 									if( use_apo_requirements ){
 											Eigen::Vector3f currentCB = tscene.position(1) * child.CBcen;
-											for ( int ii = 0; ii< req_nums.size(); ++ ii ){
-												if ( !allowed_res[ii][crot] ) continue;
-												bool pass = true;
-												for ( int jj = 0; jj < req_distance_terms[ii].size(); ++jj ){
-														if ( req_distance_terms[ii][jj].first > 0 ){
-																if ( ( req_distance_terms[ii][jj].second - currentCB ).squaredNorm() > req_distance_terms[ii][jj].first ){
-																		pass = false;
+											for ( int ii = 0; ii< apo_req_nums.size(); ++ ii ){
+												if ( !apo_allowed_res[ii][crot] ) continue;
+												bool satisfy_apo = true;
+												for ( int jj = 0; jj < apo_req_distance_terms[ii].size(); ++jj ){
+														if ( apo_req_distance_terms[ii][jj].first > 0 ){
+																if ( ( apo_req_distance_terms[ii][jj].second - currentCB ).squaredNorm() > apo_req_distance_terms[ii][jj].first ){
+																		satisfy_apo = false;
 																		break;
 																}
 														} else {
-																if ( ( req_distance_terms[ii][jj].second - currentCB ).squaredNorm() < -req_distance_terms[ii][jj].first ){
-																		pass = false;
+																if ( ( apo_req_distance_terms[ii][jj].second - currentCB ).squaredNorm() < -apo_req_distance_terms[ii][jj].first ){
+																		satisfy_apo = false;
 																		break;
 																}
 														}
 												}
-												if ( true == pass ){
-														req_index = req_nums[ii];
+												if ( true == satisfy_apo ){
+														req_index = apo_req_nums[ii];
 														break;
 												}
 											}
 									}
+                                    
+                                    // the cation-pi requirements, I put it after the apo requirement, so that the privillage of cation-pi is higher
+                                    //
+                                    if ( use_cationpi_requirements ) {
+                                        double const max_allowed_squared_distance  = 36.0;
+                                        double const max_allowed_angle_radians_cos = 0.866; /* cos(30.0 / 180 * 3.1415926) */
+                                        bool satisfy_cationpi = false;
+                                        for ( int ii = 0; ii < cationpi_req_nums.size(); ++ii ) {
+                                            if ( !cationpi_allowed_res[ii][crot] ) continue;
+                                            // do I really need to treat trp separatly. I think I should just use the benzene_ring_center, and that can make things much easier.
+                                            // But anyway, to satisfy Brian's requirements, just do it.
+                                            if ( rot_index_p->rotamers_[crot].resname_ == "TRP" ) {
+                                                Eigen::Vector3f benzene_ring_center   = tscene.position(1) * child.benzene_ring_center;
+                                                Eigen::Vector3f imidazole_ring_center = tscene.position(1) * child.imidazole_ring_center;
+                                                
+                                                if ( ( cation_genomtry_terms[ii].first - benzene_ring_center ).squaredNorm() <= max_allowed_squared_distance ) {
+                                                    Eigen::Vector3f ring_nv = ( tscene.position(1) * child.ring_norm_vector - tscene.position(1) * Eigen::Vector3f(0.0, 0.0, 0.0) ).normalized();
+                                                    Eigen::Vector3f v       = ( cation_genomtry_terms[ii].first - benzene_ring_center ).normalized();
+                                                    double vec_dot_protuct = ring_nv.dot(v);
+                                                    if ( vec_dot_protuct >= max_allowed_angle_radians_cos || vec_dot_protuct <= -max_allowed_angle_radians_cos ) {
+                                                        satisfy_cationpi = true;
+                                                    }
+                                                } else if ( ( cation_genomtry_terms[ii].first - imidazole_ring_center ).squaredNorm() <= max_allowed_squared_distance ) {
+                                                    Eigen::Vector3f ring_nv = ( tscene.position(1) * child.ring_norm_vector - tscene.position(1) * Eigen::Vector3f(0.0, 0.0, 0.0) ).normalized();
+                                                    Eigen::Vector3f v       = ( cation_genomtry_terms[ii].first - imidazole_ring_center ).normalized();
+                                                    double vec_dot_protuct = ring_nv.dot(v);
+                                                    if ( vec_dot_protuct >= max_allowed_angle_radians_cos || vec_dot_protuct <= -max_allowed_angle_radians_cos ) {
+                                                        satisfy_cationpi = true;
+                                                    }
+                                                } else {
+                                                    // pass
+                                                }
+                                            } else {
+                                                Eigen::Vector3f benzene_ring_center   = tscene.position(1) * child.benzene_ring_center;
+                                                if (  ( cation_genomtry_terms[ii].first - benzene_ring_center ).squaredNorm() <= max_allowed_squared_distance ) {
+                                                    Eigen::Vector3f ring_nv = ( tscene.position(1) * child.ring_norm_vector - tscene.position(1) * Eigen::Vector3f(0.0, 0.0, 0.0) ).normalized();
+                                                    Eigen::Vector3f v       = ( cation_genomtry_terms[ii].first - benzene_ring_center ).normalized();
+                                                    double vec_dot_protuct = ring_nv.dot(v);
+                                                    if ( vec_dot_protuct >= max_allowed_angle_radians_cos || vec_dot_protuct <= -max_allowed_angle_radians_cos ) {
+                                                        satisfy_cationpi = true;
+                                                    }
+                                                }
+                                            }
+                                            if ( true == satisfy_cationpi ) {
+                                                req_index = cationpi_req_nums[ii];
+                                                break;
+                                            }
+                                        }
+                                        // remove rotamers only for cation-pi interactions, such as his and tyr
+                                        if ( !satisfy_cationpi && rotamer_only_for_cationpi[crot] ) {
+                                            continue;
+                                        }
+                                    }
 
 									// check whether the apores can satisfy any requirements
 									// if the apores_must_satisfy_req is set to true and the residue can't safisfy anything, then just continue'

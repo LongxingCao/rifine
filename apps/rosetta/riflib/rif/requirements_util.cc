@@ -371,7 +371,58 @@ namespace rif {
         return apo_reqs;
     }
     
-    
+    std::vector< CationPiRequirement > get_cationpi_requirement_definitions( std::string tuning_file )
+    {
+        std::vector< CationPiRequirement > cationpi_reqs;
+        
+        if ( tuning_file == "" ) {
+            return cationpi_reqs;
+        }
+        
+        std::vector< std::string > residues_allowed_for_cationpi;
+        residues_allowed_for_cationpi.push_back( "TRP" );
+        residues_allowed_for_cationpi.push_back( "PHE" );
+        residues_allowed_for_cationpi.push_back( "TYR" );
+        residues_allowed_for_cationpi.push_back( "HIS" );
+        
+        runtime_assert_msg(utility::file::file_exists( tuning_file ), "tunning file does not exits: " + tuning_file );
+        std::ifstream in;
+        std::string s;
+        in.open( tuning_file , std::ios::in );
+        std::vector<std::string> lines;
+        bool flag = false;
+        while ( std::getline(in, s) ){
+            if (s.empty() || s.find("#") == 0) continue;
+            if (s.find("REQUIREMENT_DEFINITION") != std::string::npos && s.find("END_REQUIREMENT_DEFINITION") == std::string::npos ) { flag = true; continue; }
+            else if (s.find("END_REQUIREMENT_DEFINITION") != std::string::npos ) { flag = false; break; }
+            
+            if ( flag )
+            {
+                CationPiRequirement req_temp;
+                utility::vector1<std::string> splt = utility::quoted_split( s );
+                
+                //std::cout << req_temp.req_num << std::endl;
+                
+                if ( splt[2] == "CATIONPI" ) {
+                    runtime_assert_msg( splt.size() >= 3, "something is wrong with the CATIONPI requirement definition, talk with longxing about this. You can specify the allow residues to form a cationpi, such as TRP, PHE, HIS!" );
+                    runtime_assert_msg( utility::string2int( splt[1] ) >=0, "The requirement number must be a positive integer!" );
+                    req_temp.req_num = utility::string2int(splt[1]);
+                    req_temp.res_num = utility::string2int(splt[3]);
+                    if ( splt.size() == 3 ) {
+                        req_temp.allowed_rot_names = residues_allowed_for_cationpi;
+                    } else {
+                        for(int ii = 4; ii <= splt.size(); ++ii )
+                        {
+                            runtime_assert_msg( std::find( residues_allowed_for_cationpi.begin(), residues_allowed_for_cationpi.end(), splt[ii] ) != residues_allowed_for_cationpi.end(), "can this residue form cationpi interactin?? we should talk about this." );
+                            req_temp.allowed_rot_names.push_back( splt[ii] );
+                        }
+                    }
+                    cationpi_reqs.push_back(req_temp);
+                }
+            }
+        }
+        return cationpi_reqs;
+    }
     
 }
 }
