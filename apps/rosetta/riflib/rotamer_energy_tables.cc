@@ -108,10 +108,10 @@ void get_onebody_rotamer_energies(
 
 }
 
-/*
+
 // this is the slow function, brian implemented a newer one, which is faster using low level code...
 void
-compute_onebody_rotamer_energies_legacy(
+compute_onebody_rotamer_energies(
 	core::pose::Pose const & pose,
 	utility::vector1<core::Size> const & scaffold_res,
 	RotamerIndex const & rot_index,
@@ -206,7 +206,7 @@ compute_onebody_rotamer_energies_legacy(
 
 }
 
- */
+/* 
     
     
     void
@@ -436,6 +436,7 @@ compute_onebody_rotamer_energies_legacy(
         
     }
 
+*/
 
 void get_per_rotamer_rf_tables_one(
 	devel::scheme::RotamerIndex const & rot_index,
