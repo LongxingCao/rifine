@@ -211,9 +211,7 @@ namespace rif {
 		}
 		boost::uniform_real<> uniform;
         
-
-
-        // the code here looks bad, I should change everything to a struct........
+    // the code here looks bad, I should change everything to a struct........
 		// some basic apo requirement definitions.
 		std::vector< ApoRequirement > apo_reqs = get_Apo_requirement_definitions( params->tuning_file );
 		bool const use_apo_requirements = !( apo_reqs.empty() );
@@ -223,6 +221,7 @@ namespace rif {
 		std::vector< int > apo_req_nums( apo_reqs.size() );
 		if ( use_apo_requirements ){
 				for ( int ii = 0; ii < apo_reqs.size(); ++ii ){
+						std::cout << "Processing apolar requirement definition, index:" << apo_reqs[ii].req_num << std::endl;
 						apo_req_nums[ii] = apo_reqs[ii].req_num;
 						for( int jj = 0; jj < rot_index_p->size(); ++jj ){
 								if ( apo_reqs[ii].allowed_rot_names.size() == 0 || std::find(apo_reqs[ii].allowed_rot_names.begin(), apo_reqs[ii].allowed_rot_names.end(), rot_index_p->rotamers_[jj].resname_ ) != apo_reqs[ii].allowed_rot_names.end() )
@@ -238,6 +237,8 @@ namespace rif {
 						}
 				}
 		}
+
+
         // the code here looks bad, I should change everything to a struct........
         // cationpi requirement setup, this time I will only do lys and Arg on the target for TrkA. another case is that
         // trp and phe are on the target side, but If the trp and phe are on the target side, why no just use hydrophobic interaction.
@@ -285,6 +286,7 @@ namespace rif {
                 }
             }
         }
+				
 
         std::vector<int> rots;
         for( auto resn : apores ){

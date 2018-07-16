@@ -403,7 +403,7 @@ namespace rif {
                 
                 //std::cout << req_temp.req_num << std::endl;
                 
-                if ( splt[2] == "CATIONPI" ) {
+                if ( splt.size() >= 2 &&  splt[2] == "CATIONPI" ) {
                     runtime_assert_msg( splt.size() >= 3, "something is wrong with the CATIONPI requirement definition, talk with longxing about this. You can specify the allow residues to form a cationpi, such as TRP, PHE, HIS!" );
                     runtime_assert_msg( utility::string2int( splt[1] ) >=0, "The requirement number must be a positive integer!" );
                     req_temp.req_num = utility::string2int(splt[1]);
