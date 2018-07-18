@@ -222,8 +222,42 @@ struct RotamerScoreSat : public RotamerScore<_Data,_RotamerBits,_Divisor> {
 						++osat;
 					}
 				}
-			}
-			BASE::set_or_merge( other );
+			    BASE::set_or_merge( other );
+			} else {
+                // 2018-07-16 longxing
+                // the original code is here, I just commended out. The original logic is just keep the low energy one,
+                // however, it only copies the base class part, and keeps the sat part. that's a bug. look at the code below'
+			    // BASE::set_or_merge( other );
+                // now I will change the logic a little. keep the one with a high number of sat. That is specially for requirement stuff.
+                // because the requirement relies on the sat slot a lot.
+                // the logic here is a little bit confusing
+                int nsat =0, onsat = 0;
+                for ( int isat = 0; isat< NSat; ++isat ) {
+			        nsat += this->sat_data_[isat].not_empty();
+			        onsat += other.sat_data_[isat].not_empty();
+                }
+                // just keep the rif res with a bigger requirement number, os sat number, else keep the one can satisfy more
+                if ( 0 !=nsat && nsat == onsat ) {
+                    if ( this->sat_data_[0].target_sat_num() < other.sat_data_[0].target_sat_num() ) {
+                        *this = other;
+                    } else if ( this->sat_data_[0].target_sat_num() == other.sat_data_[0].target_sat_num() ) {
+                        if ( this->data_ < other.data_ ) {
+                            // this means the actual score is high
+                            *this = other;
+                        }
+                    } else {
+                        // empty
+                    }
+                } else if ( 0 == nsat && nsat == onsat ) {
+                    if ( this->data_ < other.data_ ) *this = other;;
+                } else if ( nsat < onsat ) {
+                    *this = other;
+                } else {
+                    // empty
+                }
+            }
+
+
 		}
 	}
 
