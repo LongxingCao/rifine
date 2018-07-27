@@ -202,6 +202,16 @@ namespace rif {
 				}
 			}
 		}
+
+
+		/* A big risk here, the code below was added by longxing, because of the disulfide problem.
+		 * However, I should use it carefully, as an acceptor may form two hydrogen bonds. That happends a lot,
+		 * So I must use it carefully , aha, aha
+		 * Just remember, an acceptor can form two hydrogen bonds.
+		 * That is for ASP, GLU, ASN GLN ... and also backbone carbonyl groups.
+		 */
+
+
 		std::vector< ::scheme::chemical::HBondRay > target_donors, target_acceptors;
 		params->hbopt.satisfied_atoms = ::devel::scheme::get_satisfied_atoms( target );
 		for( auto ir : target_res ){
@@ -386,9 +396,12 @@ namespace rif {
                 {
                     use_customize_donor_definition = true;
                     donresn_customize.clear();
+										std::cout << "Change the default donor residues for " << ir << " to: ";
                     for ( std::string s : donor_definitions[i_donor_def].allowed_donor_res ) {
                         donresn_customize.push_back( s );
+												std::cout << s << " ";
                     }
+										std::cout << std::endl;
                     break;
                 }
             }
@@ -398,9 +411,12 @@ namespace rif {
                 {
                     use_customize_acceptor_definition = true;
                     accresn_customize.clear();
+										std::cout << "Change the default acceptor residues for " << ir << " to: ";
                     for ( std::string s : acceptor_definitions[i_acceptor_def].allowed_acceptor_res ) {
                         accresn_customize.push_back( s );
+												std::cout << s << " ";
                     }
+										std::cout << std::endl;
                     break;
                 }
             }
