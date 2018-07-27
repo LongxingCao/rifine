@@ -209,6 +209,7 @@ namespace rif {
 		 * So I must use it carefully , aha, aha
 		 * Just remember, an acceptor can form two hydrogen bonds.
 		 * That is for ASP, GLU, ASN GLN ... and also backbone carbonyl groups.
+		 * THe only thing affected is I delete this code is disulfide bonds. 2018-07-26
 		 */
 
 
