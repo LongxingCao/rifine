@@ -736,7 +736,8 @@ namespace rif {
                                     //
                                     if ( use_cationpi_requirements ) {
                                         double const max_allowed_squared_distance  = 36.0;
-                                        double const max_allowed_angle_radians_cos = 0.866; /* cos(30.0 / 180 * 3.1415926) */
+                                        double const max_allowed_angle1_radians_cos = 0.866; /* cos(30.0 / 180 * 3.1415926) */
+                                        double const max_allowed_angle2_radians_cos = 0.766; /* cos(40.0 / 180 * 3.1415926) */
                                         bool satisfy_cationpi = false;
                                         for ( int ii = 0; ii < cationpi_req_nums.size(); ++ii ) {
                                             if ( !cationpi_allowed_res[ii][crot] ) continue;
@@ -750,14 +751,18 @@ namespace rif {
                                                     Eigen::Vector3f ring_nv = ( tscene.position(1) * child.ring_norm_vector - tscene.position(1) * Eigen::Vector3f(0.0, 0.0, 0.0) ).normalized();
                                                     Eigen::Vector3f v       = ( cation_genomtry_terms[ii].first - benzene_ring_center ).normalized();
                                                     double vec_dot_protuct = ring_nv.dot(v);
-                                                    if ( vec_dot_protuct >= max_allowed_angle_radians_cos || vec_dot_protuct <= -max_allowed_angle_radians_cos ) {
+																										double nv_nv_dot_product = ring_nv.dot( cation_genomtry_terms[ii].second );
+                                                    if ( (vec_dot_protuct >= max_allowed_angle1_radians_cos || vec_dot_protuct <= -max_allowed_angle1_radians_cos) && 
+																														(nv_nv_dot_product >= max_allowed_angle2_radians_cos || nv_nv_dot_product<= -max_allowed_angle2_radians_cos) ) {
                                                         satisfy_cationpi = true;
                                                     }
                                                 } else if ( ( cation_genomtry_terms[ii].first - imidazole_ring_center ).squaredNorm() <= max_allowed_squared_distance ) {
                                                     Eigen::Vector3f ring_nv = ( tscene.position(1) * child.ring_norm_vector - tscene.position(1) * Eigen::Vector3f(0.0, 0.0, 0.0) ).normalized();
                                                     Eigen::Vector3f v       = ( cation_genomtry_terms[ii].first - imidazole_ring_center ).normalized();
                                                     double vec_dot_protuct = ring_nv.dot(v);
-                                                    if ( vec_dot_protuct >= max_allowed_angle_radians_cos || vec_dot_protuct <= -max_allowed_angle_radians_cos ) {
+																										double nv_nv_dot_product = ring_nv.dot( cation_genomtry_terms[ii].second );
+                                                    if ( (vec_dot_protuct >= max_allowed_angle1_radians_cos || vec_dot_protuct <= -max_allowed_angle1_radians_cos) && 
+																														(nv_nv_dot_product >= max_allowed_angle2_radians_cos || nv_nv_dot_product<= -max_allowed_angle2_radians_cos) ) {
                                                         satisfy_cationpi = true;
                                                     }
                                                 } else {
@@ -769,7 +774,9 @@ namespace rif {
                                                     Eigen::Vector3f ring_nv = ( tscene.position(1) * child.ring_norm_vector - tscene.position(1) * Eigen::Vector3f(0.0, 0.0, 0.0) ).normalized();
                                                     Eigen::Vector3f v       = ( cation_genomtry_terms[ii].first - benzene_ring_center ).normalized();
                                                     double vec_dot_protuct = ring_nv.dot(v);
-                                                    if ( vec_dot_protuct >= max_allowed_angle_radians_cos || vec_dot_protuct <= -max_allowed_angle_radians_cos ) {
+																										double nv_nv_dot_product = ring_nv.dot( cation_genomtry_terms[ii].second );
+                                                    if ( (vec_dot_protuct >= max_allowed_angle1_radians_cos || vec_dot_protuct <= -max_allowed_angle1_radians_cos) && 
+																														(nv_nv_dot_product >= max_allowed_angle2_radians_cos || nv_nv_dot_product<= -max_allowed_angle2_radians_cos) ) {
                                                         satisfy_cationpi = true;
                                                     }
                                                 }

@@ -932,8 +932,8 @@ namespace rif {
 																						// I think if I can satisfy two polar atoms, this means I am not a good rif residue, but to make things simple, I will just assign the satisfication number to the smaller one.
 																						// Or should I just throw away the rifres,
 																						// OK, I have a decision now, and now chose the simplest solution. Just assign to a smaller one
-																						
-																						sat1 = hbond_requirement_labels[sat1] > hbond_requirement_labels[sat2] ? hbond_requirement_labels[sat2] : hbond_requirement_labels[sat1] ;
+																					 // to make the logic here consistent with the rif merge, the larger the better,	
+																						sat1 = hbond_requirement_labels[sat1] < hbond_requirement_labels[sat2] ? hbond_requirement_labels[sat2] : hbond_requirement_labels[sat1] ;
 																						sat2 = -1;
 
 																						//std::string const & irot_name = rot_index.rotamers_[irot].resname_;
