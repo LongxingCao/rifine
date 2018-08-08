@@ -1012,7 +1012,7 @@ int main(int argc, char *argv[]) {
                             if ( samples[iresl][i].score >= opt.global_score_cut ) continue;
                             if (iresl == 0) ++non0_space_size;
                             for (uint64_t j = 0; j < opt.DIMPOW2; ++j) {
-                                uint64_t isamp = isamp0 * opt.DIMPOW2 * j;
+                                uint64_t isamp = isamp0 * opt.DIMPOW2 + j;
                                 samples[iresl+1].push_back( SearchPoint( isamp ) );
                             }
                         }
