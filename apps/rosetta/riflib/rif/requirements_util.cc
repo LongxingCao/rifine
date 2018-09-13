@@ -371,6 +371,80 @@ namespace rif {
         return apo_reqs;
     }
     
+    std::vector< PiPiStackingRequirement > get_pipi_stacking_requirement_definitions( std::string tuning_file )
+    {
+        std::vector< PiPiStackingRequirement > pipi_reqs;
+        
+        if ( tuning_file == "" ) {
+            return pipi_reqs;
+        }
+        runtime_assert_msg(utility::file::file_exists( tuning_file ), "tunning file does not exits: " + tuning_file );
+        std::ifstream in;
+        std::string s;
+        in.open( tuning_file , std::ios::in );
+        std::vector<std::string> lines;
+        
+        std::vector< std::string > residues_allowed_for_pipi_stacking;
+        residues_allowed_for_pipi_stacking.push_back( "TRP" );
+        residues_allowed_for_pipi_stacking.push_back( "PHE" );
+        residues_allowed_for_pipi_stacking.push_back( "TYR" );
+        //residues_allowed_for_pipi_stacking.push_back( "HIS" );
+        
+        // define here, because of the logic ...
+        // how to parse the apolar definition
+        PiPiStackingRequirement req_temp;
+        bool flag = false;
+        bool found_one = false;
+        while ( std::getline(in, s) ){
+            if (s.empty() || s.find("#") == 0) continue;
+            if (s.find("REQUIREMENT_DEFINITION") != std::string::npos && s.find("END_REQUIREMENT_DEFINITION") == std::string::npos ) { flag = true; continue; }
+            else if (s.find("END_REQUIREMENT_DEFINITION") != std::string::npos ) { flag = false; break; }
+            
+            if ( flag && !found_one )
+            {
+                
+                utility::vector1<std::string> splt = utility::quoted_split( s );
+                if ( splt.size() >=2 && splt[2] == "PIPISTACKING" ) {
+                    runtime_assert_msg( utility::string2int( splt[1] ) >=0, "The requirement number must be a positive integer!" );
+                    req_temp.req_num = utility::string2int( splt[1] );
+                    if ( splt.size() == 2 ) {
+                        req_temp.allowed_rot_names = residues_allowed_for_pipi_stacking;
+                    } else {
+                        for (int ii = 3; ii <= splt.size(); ++ii) {
+                            req_temp.allowed_rot_names.push_back( splt[ii] );
+                            runtime_assert_msg( std::find( residues_allowed_for_pipi_stacking.begin(), residues_allowed_for_pipi_stacking.end(), splt[ii] ) != residues_allowed_for_pipi_stacking.end(), "Can this residue form pipi stacking interactin?? How?? Let me know." );
+                        }
+                    }
+                    found_one = true;
+                    continue;
+                }
+            } else if ( flag && found_one ) {
+                utility::vector1<std::string> splt = utility::quoted_split( s );
+                if ( splt.size() == 2 ) {
+                    PiPiStackingTerm term_temp;
+                    term_temp.atom_name = splt[1];
+                    term_temp.res_num = utility::string2int( splt[2] );
+                    req_temp.terms.push_back( term_temp );
+                } else if ( splt.size() == 1 ) {
+                    runtime_assert_msg( splt[1] == "END_PIPISTACKING", "something is wrong with the PIPI stacking requirement definition!" );
+                    runtime_assert_msg( req_temp.terms.size() >= 3, "You must assign at least three points to define the ring, talk with longxing to fix the code if you have better ideas");
+                    pipi_reqs.push_back(req_temp);
+                    // reinitialize the req_temp
+                    req_temp.req_num = -1;
+                    req_temp.allowed_rot_names.clear();
+                    req_temp.terms.clear();
+                    found_one = false;
+                } else {
+                    utility_exit_with_message("something is wrong with the APOLAR requirement definition!" );
+                }
+            } else {
+                // not in the
+            }
+        }
+        return pipi_reqs;
+    }
+
+    
     std::vector< CationPiRequirement > get_cationpi_requirement_definitions( std::string tuning_file )
     {
         std::vector< CationPiRequirement > cationpi_reqs;

@@ -74,6 +74,16 @@ struct ApoRequirement {
     std::vector<ApoReqTerm> terms;
 };
     
+struct PiPiStackingTerm {
+    std::string atom_name = "";
+    int res_num = -1;
+};
+struct PiPiStackingRequirement {
+    int req_num = -1;
+    std::vector<std::string> allowed_rot_names;
+    std::vector<PiPiStackingTerm> terms;
+};
+    
 struct CationPiRequirement {
     int req_num = -1;
     int res_num = -1;
@@ -89,6 +99,7 @@ std::vector< HbondRequirement > get_hbond_requirement_definitions( std::string t
 std::vector< BidentateRequirement > get_bidentate_requirement_definitions( std::string tuning_file );
 std::vector< HotspotRequirement > get_hotspot_requirement_definitions( std::string tuning_file );
 std::vector< ApoRequirement > get_Apo_requirement_definitions( std::string tuning_file );
+std::vector< PiPiStackingRequirement > get_pipi_stacking_requirement_definitions( std::string tuning_file );
 std::vector< CationPiRequirement > get_cationpi_requirement_definitions( std::string tuning_file );
 bool check_requirement_definition_exists( std::string tuning_file );
 }

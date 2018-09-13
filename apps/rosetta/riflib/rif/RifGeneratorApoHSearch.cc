@@ -211,70 +211,104 @@ namespace rif {
 		}
 		boost::uniform_real<> uniform;
         
-    // the code here looks bad, I should change everything to a struct........
-		// some basic apo requirement definitions.
-		std::vector< ApoRequirement > apo_reqs = get_Apo_requirement_definitions( params->tuning_file );
-		bool const use_apo_requirements = !( apo_reqs.empty() );
-		// change everyting to a vector, so it should make it a little bit faster.
-		std::vector< std::vector< std::pair< float, Eigen::Vector3f > > > apo_req_distance_terms( apo_reqs.size() );
-		std::vector< std::vector<bool> > apo_allowed_res( apo_reqs.size() );
-		std::vector< int > apo_req_nums( apo_reqs.size() );
-		if ( use_apo_requirements ){
-				for ( int ii = 0; ii < apo_reqs.size(); ++ii ){
-						std::cout << "Processing apolar requirement definition, index:" << apo_reqs[ii].req_num << std::endl;
-						apo_req_nums[ii] = apo_reqs[ii].req_num;
-						for( int jj = 0; jj < rot_index_p->size(); ++jj ){
-								if ( apo_reqs[ii].allowed_rot_names.size() == 0 || std::find(apo_reqs[ii].allowed_rot_names.begin(), apo_reqs[ii].allowed_rot_names.end(), rot_index_p->rotamers_[jj].resname_ ) != apo_reqs[ii].allowed_rot_names.end() )
-										apo_allowed_res[ii].push_back(true);
-								else
-										apo_allowed_res[ii].push_back(false);
-						}
-						for( auto const & x : apo_reqs[ii].terms ){
-								Eigen::Vector3f temp_v( target.residue(x.res_num).xyz(x.atom_name)[0], target.residue(x.res_num).xyz(x.atom_name)[1], target.residue(x.res_num).xyz(x.atom_name)[2] );
-								runtime_assert_msg( x.distance != 0 , "What? How can you set the distance to zero? What do you want? Talk with longxing about this...");
-								float dist_square = x.distance / abs( x.distance ) * x.distance * x.distance;
-								apo_req_distance_terms[ii].push_back(std::make_pair(dist_square, temp_v));
-						}
-				}
-		}
-
-
+        // the code here looks bad, I should change everything to a struct........
+        // some basic apo requirement definitions.
+        std::vector< ApoRequirement > apo_reqs = get_Apo_requirement_definitions( params->tuning_file );
+        bool const use_apo_requirements = !( apo_reqs.empty() );
+        // change everyting to a vector, so it should make it a little bit faster.
+        std::vector< std::vector< std::pair< float, Eigen::Vector3f > > > apo_req_distance_terms( apo_reqs.size() );
+        std::vector< std::vector<bool> > apo_allowed_res( apo_reqs.size() );
+        std::vector< int > apo_req_nums( apo_reqs.size() );
+        if ( use_apo_requirements ){
+            for ( int ii = 0; ii < apo_reqs.size(); ++ii ){
+                apo_req_nums[ii] = apo_reqs[ii].req_num;
+                for( int jj = 0; jj < rot_index_p->size(); ++jj ){
+                    if ( apo_reqs[ii].allowed_rot_names.size() == 0 || std::find(apo_reqs[ii].allowed_rot_names.begin(), apo_reqs[ii].allowed_rot_names.end(), rot_index_p->rotamers_[jj].resname_ ) != apo_reqs[ii].allowed_rot_names.end() )
+                        apo_allowed_res[ii].push_back(true);
+                    else
+                        apo_allowed_res[ii].push_back(false);
+                }
+                for( auto const & x : apo_reqs[ii].terms ){
+                    Eigen::Vector3f temp_v( target.residue(x.res_num).xyz(x.atom_name)[0], target.residue(x.res_num).xyz(x.atom_name)[1], target.residue(x.res_num).xyz(x.atom_name)[2] );
+                    runtime_assert_msg( x.distance != 0 , "What? How can you set the distance to zero? What do you want? Talk with longxing about this...");
+                    float dist_square = x.distance / abs( x.distance ) * x.distance * x.distance;
+                    apo_req_distance_terms[ii].push_back(std::make_pair(dist_square, temp_v));
+                }
+            }
+        }
         // the code here looks bad, I should change everything to a struct........
         // cationpi requirement setup, this time I will only do lys and Arg on the target for TrkA. another case is that
         // trp and phe are on the target side, but If the trp and phe are on the target side, why no just use hydrophobic interaction.
         std::vector<CationPiRequirement> cationpi_reqs = get_cationpi_requirement_definitions( params->tuning_file );
         bool const use_cationpi_requirements = !( cationpi_reqs.empty() );
+        
+        // for the pipi stacking, I would just use the same code for cation-pi interactions.
+        std::vector<PiPiStackingRequirement> pipi_reqs = get_pipi_stacking_requirement_definitions( params->tuning_file );
+        bool const use_pipi_requirements = !( pipi_reqs.empty() );
         // lys and arg cation positions
         std::vector< std::pair<Eigen::Vector3f /*position of the cation atom*/, Eigen::Vector3f /*norm vector of the Guanidyl group, for lysine, this is (0,0,0)*/> > cation_genomtry_terms;
-        std::vector< int > cationpi_req_nums( cationpi_reqs.size() );
-        std::vector< std::vector<bool> > cationpi_allowed_res( cationpi_reqs.size() );
+        std::vector< int > cationpi_req_nums( cationpi_reqs.size() + pipi_reqs.size() );
+        std::vector< std::vector<bool> > cationpi_allowed_res( cationpi_reqs.size() + pipi_reqs.size() );
         // in order to keep the original logic of apore search, I should keep the apore search residues in separate with the cation-pi interaction residues, even though they use almost the same hsearch framework.
+        
+        
         std::vector<bool> rotamer_only_for_cationpi( rot_index_p->size(), false );
-        if ( use_cationpi_requirements ) {
-            for ( int ii = 0; ii < cationpi_reqs.size(); ++ii ) {
-                cationpi_req_nums[ii] = cationpi_reqs[ii].req_num;
-                for( int jj = 0; jj < rot_index_p->size(); ++jj ){
-                    if ( std::find(cationpi_reqs[ii].allowed_rot_names.begin(), cationpi_reqs[ii].allowed_rot_names.end(), rot_index_p->rotamers_[jj].resname_ ) != cationpi_reqs[ii].allowed_rot_names.end() ) {
-                        if ( std::find(apores.begin(), apores.end(), rot_index_p->rotamers_[jj].resname_ ) == apores.end() ) {
-                            rotamer_only_for_cationpi[jj] = true;
+        if ( use_cationpi_requirements || use_pipi_requirements ) {
+            int pipi_index_shift = cationpi_reqs.size();
+            if ( use_cationpi_requirements ) {
+                for ( int ii = 0; ii < cationpi_reqs.size(); ++ii ) {
+                    cationpi_req_nums[ii] = cationpi_reqs[ii].req_num;
+                    for( int jj = 0; jj < rot_index_p->size(); ++jj ){
+                        if ( std::find(cationpi_reqs[ii].allowed_rot_names.begin(), cationpi_reqs[ii].allowed_rot_names.end(), rot_index_p->rotamers_[jj].resname_ ) != cationpi_reqs[ii].allowed_rot_names.end() ) {
+                            if ( std::find(apores.begin(), apores.end(), rot_index_p->rotamers_[jj].resname_ ) == apores.end() ) {
+                                rotamer_only_for_cationpi[jj] = true;
+                            }
+                            cationpi_allowed_res[ii].push_back(true);
+                        } else {
+                            cationpi_allowed_res[ii].push_back(false);
                         }
-                        cationpi_allowed_res[ii].push_back(true);
-										} else {
-                        cationpi_allowed_res[ii].push_back(false);
-										}
+                    }
+                    // pull out the geometry of the target res
+                    core::conformation::Residue const & res = target.residue( cationpi_reqs[ii].res_num );
+                    if ( res.name3() == "ARG" ) {
+                        Eigen::Vector3f cation( res.xyz("CZ")[0], res.xyz("CZ")[1], res.xyz("CZ")[2] );
+                        Vec nv = (( res.xyz("NH1") - res.xyz("CZ") ).cross( res.xyz("NH2") - res.xyz("CZ") )).normalized();
+                        cation_genomtry_terms.push_back( std::make_pair(cation, Eigen::Vector3f(nv[0],nv[1],nv[2]) ) );
+                    } else if ( res.name3() == "LYS" ) {
+                        Eigen::Vector3f cation( res.xyz("NZ")[0], res.xyz("NZ")[1], res.xyz("NZ")[2] );
+                        Eigen::Vector3f nv    (              0.0,              0.0,             0.0  );
+                        cation_genomtry_terms.push_back( std::make_pair(cation, nv) );
+                    } else {
+                        utility_exit_with_message("Are you crazy? Why do you select this residue for a cation-pi interaction?");
+                    }
                 }
-                // pull out the geometry of the target res
-                core::conformation::Residue const & res = target.residue( cationpi_reqs[ii].res_num );
-                if ( res.name3() == "ARG" ) {
-                    Eigen::Vector3f cation( res.xyz("CZ")[0], res.xyz("CZ")[1], res.xyz("CZ")[2] );
-                    Vec nv = (( res.xyz("NH1") - res.xyz("CZ") ).cross( res.xyz("NH2") - res.xyz("CZ") )).normalized();
-                    cation_genomtry_terms.push_back( std::make_pair(cation, Eigen::Vector3f(nv[0],nv[1],nv[2]) ) );
-                } else if ( res.name3() == "LYS" ) {
-                    Eigen::Vector3f cation( res.xyz("NZ")[0], res.xyz("NZ")[1], res.xyz("NZ")[2] );
-                    Eigen::Vector3f nv    (              0.0,              0.0,             0.0  );
-                    cation_genomtry_terms.push_back( std::make_pair(cation, nv) );
-                } else {
-                    utility_exit_with_message("Are you crazy? Why do you select this residue for a cation-pi interaction?");
+            }
+            
+            if (use_pipi_requirements ) {
+                for ( int ii = 0; ii < pipi_reqs.size(); ++ii ) {
+                    cationpi_req_nums[ii+pipi_index_shift] = pipi_reqs[ii].req_num;
+                    for( int jj = 0; jj < rot_index_p->size(); ++jj ){
+                        if ( std::find(pipi_reqs[ii].allowed_rot_names.begin(), pipi_reqs[ii].allowed_rot_names.end(), rot_index_p->rotamers_[jj].resname_ ) != pipi_reqs[ii].allowed_rot_names.end() ) {
+                            if ( std::find(apores.begin(), apores.end(), rot_index_p->rotamers_[jj].resname_ ) == apores.end() ) {
+                                rotamer_only_for_cationpi[jj] = true;
+                            }
+                            cationpi_allowed_res[ii+pipi_index_shift].push_back(true);
+                        } else {
+                            cationpi_allowed_res[ii+pipi_index_shift].push_back(false);
+                        }
+                    }
+                    Eigen::Vector3f center(0.0, 0.0, 0.0);
+                    std::vector<Eigen::Vector3f> vertices;
+                    for( auto const & x : pipi_reqs[ii].terms ){
+                        Eigen::Vector3f temp_v( target.residue(x.res_num).xyz(x.atom_name)[0], target.residue(x.res_num).xyz(x.atom_name)[1], target.residue(x.res_num).xyz(x.atom_name)[2] );
+                        vertices.push_back(temp_v);
+                        center += temp_v;
+                    }
+                    center /= pipi_reqs[ii].terms.size();
+                    Eigen::Vector3f  nv = ( (vertices[2] - vertices[0]).cross(vertices[2] - vertices[1]) );
+                    runtime_assert_msg( nv.norm() != 0.0 , "Atom 1,2,3 in this ring is colinear???" );
+                    nv.normalize();
+                    cation_genomtry_terms.push_back( std::make_pair(center, nv) );
                 }
             }
             // try to fix the apore vector
@@ -732,9 +766,7 @@ namespace rif {
 											}
 									}
                                     
-                                    // the cation-pi requirements, I put it after the apo requirement, so that the privillage of cation-pi is higher
-                                    //
-                                    if ( use_cationpi_requirements ) {
+                                    if ( use_cationpi_requirements || use_pipi_requirements ) {
                                         double const max_allowed_squared_distance  = 36.0;
                                         double const max_allowed_angle1_radians_cos = 0.866; /* cos(30.0 / 180 * 3.1415926) */
                                         double const max_allowed_angle2_radians_cos = 0.766; /* cos(40.0 / 180 * 3.1415926) */
@@ -751,18 +783,18 @@ namespace rif {
                                                     Eigen::Vector3f ring_nv = ( tscene.position(1) * child.ring_norm_vector - tscene.position(1) * Eigen::Vector3f(0.0, 0.0, 0.0) ).normalized();
                                                     Eigen::Vector3f v       = ( cation_genomtry_terms[ii].first - benzene_ring_center ).normalized();
                                                     double vec_dot_protuct = ring_nv.dot(v);
-																										double nv_nv_dot_product = ring_nv.dot( cation_genomtry_terms[ii].second );
-                                                    if ( (vec_dot_protuct >= max_allowed_angle1_radians_cos || vec_dot_protuct <= -max_allowed_angle1_radians_cos) && 
-																														(nv_nv_dot_product >= max_allowed_angle2_radians_cos || nv_nv_dot_product<= -max_allowed_angle2_radians_cos) ) {
+                                                    double nv_nv_dot_product = ring_nv.dot( cation_genomtry_terms[ii].second );
+                                                    if ( (vec_dot_protuct >= max_allowed_angle1_radians_cos || vec_dot_protuct <= -max_allowed_angle1_radians_cos) &&
+                                                        (nv_nv_dot_product >= max_allowed_angle2_radians_cos || nv_nv_dot_product<= -max_allowed_angle2_radians_cos) ) {
                                                         satisfy_cationpi = true;
                                                     }
                                                 } else if ( ( cation_genomtry_terms[ii].first - imidazole_ring_center ).squaredNorm() <= max_allowed_squared_distance ) {
                                                     Eigen::Vector3f ring_nv = ( tscene.position(1) * child.ring_norm_vector - tscene.position(1) * Eigen::Vector3f(0.0, 0.0, 0.0) ).normalized();
                                                     Eigen::Vector3f v       = ( cation_genomtry_terms[ii].first - imidazole_ring_center ).normalized();
                                                     double vec_dot_protuct = ring_nv.dot(v);
-																										double nv_nv_dot_product = ring_nv.dot( cation_genomtry_terms[ii].second );
-                                                    if ( (vec_dot_protuct >= max_allowed_angle1_radians_cos || vec_dot_protuct <= -max_allowed_angle1_radians_cos) && 
-																														(nv_nv_dot_product >= max_allowed_angle2_radians_cos || nv_nv_dot_product<= -max_allowed_angle2_radians_cos) ) {
+                                                    double nv_nv_dot_product = ring_nv.dot( cation_genomtry_terms[ii].second );
+                                                    if ( (vec_dot_protuct >= max_allowed_angle1_radians_cos || vec_dot_protuct <= -max_allowed_angle1_radians_cos) &&
+                                                        (nv_nv_dot_product >= max_allowed_angle2_radians_cos || nv_nv_dot_product<= -max_allowed_angle2_radians_cos) ) {
                                                         satisfy_cationpi = true;
                                                     }
                                                 } else {
@@ -774,9 +806,9 @@ namespace rif {
                                                     Eigen::Vector3f ring_nv = ( tscene.position(1) * child.ring_norm_vector - tscene.position(1) * Eigen::Vector3f(0.0, 0.0, 0.0) ).normalized();
                                                     Eigen::Vector3f v       = ( cation_genomtry_terms[ii].first - benzene_ring_center ).normalized();
                                                     double vec_dot_protuct = ring_nv.dot(v);
-																										double nv_nv_dot_product = ring_nv.dot( cation_genomtry_terms[ii].second );
-                                                    if ( (vec_dot_protuct >= max_allowed_angle1_radians_cos || vec_dot_protuct <= -max_allowed_angle1_radians_cos) && 
-																														(nv_nv_dot_product >= max_allowed_angle2_radians_cos || nv_nv_dot_product<= -max_allowed_angle2_radians_cos) ) {
+                                                    double nv_nv_dot_product = ring_nv.dot( cation_genomtry_terms[ii].second );
+                                                    if ( (vec_dot_protuct >= max_allowed_angle1_radians_cos || vec_dot_protuct <= -max_allowed_angle1_radians_cos) &&
+                                                        (nv_nv_dot_product >= max_allowed_angle2_radians_cos || nv_nv_dot_product<= -max_allowed_angle2_radians_cos) ) {
                                                         satisfy_cationpi = true;
                                                     }
                                                 }
