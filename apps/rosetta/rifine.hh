@@ -181,6 +181,15 @@ OPT_1GRP_KEY(     StringVector , rif_dock, scaffolds )
 	OPT_1GRP_KEY(  Boolean     , rif_dock, only_dump_scaffold )
 	OPT_1GRP_KEY(  IntegerVector, rif_dock, requirements )
 
+    // hydrophobic contacts
+    OPT_1GRP_KEY(  Integer     , rif_dock, require_hydrophobic_residue_contacts )
+    OPT_1GRP_KEY(  Real        , rif_dock, hydrophobic_ddg_cut )
+    OPT_1GRP_KEY(  Real        , rif_dock, one_hydrophobic_better_than )
+    OPT_1GRP_KEY(  Real        , rif_dock, two_hydrophobics_better_than )
+    OPT_1GRP_KEY(  Real        , rif_dock, three_hydrophobics_better_than )
+    OPT_1GRP_KEY(  Real        , rif_dock, hydrophobic_ddg_per_atom_cut )
+    OPT_1GRP_KEY(  String      , rif_dock, hydrophobic_target_res )
+
 
 
 
@@ -359,6 +368,15 @@ OPT_1GRP_KEY(     StringVector , rif_dock, scaffolds )
 			NEW_OPT(  rif_dock::only_dump_scaffold, "" , true );
             NEW_OPT(  rif_dock::requirements,        "which rif residue should be in the final output", utility::vector1< int >());
 
+            // hydrophobic contacts
+            NEW_OPT(  rif_dock::require_hydrophobic_residue_contacts, "How many target res to have at least 0.5 fa_sol, fa_atr, fa_rep with.", 0 );
+            NEW_OPT(  rif_dock::hydrophobic_ddg_cut, "Really crappy approximation to hydrophobic ddg", 0 );
+            NEW_OPT(  rif_dock::one_hydrophobic_better_than, "Require one rifres to have hydrophobic ddg better than this", 0 );
+            NEW_OPT(  rif_dock::two_hydrophobics_better_than, "Require two rifres to have hydrophobic ddg better than this", 0 );
+            NEW_OPT(  rif_dock::three_hydrophobics_better_than, "Require three rifres to have hydrophobic ddg better than this", 0 );
+            NEW_OPT(  rif_dock::hydrophobic_ddg_per_atom_cut, "To be considered for better_than, must have ddg per atom better than this", 0 );
+            NEW_OPT(  rif_dock::hydrophobic_target_res, "Comma separated list of residues to consider for hydrophobics. Default is all res", "" );
+
 		}
 	#endif
 #endif
@@ -521,6 +539,15 @@ struct RifDockOpt
     int         patchdock_top_ranks                  ;
 
 	std::vector<int> requirements;
+
+    // hydrophobic contacts
+    int         require_hydrophobic_residue_contacts ;
+    float       hydrophobic_ddg_cut                  ;
+    float       one_hydrophobic_better_than          ;
+    float       two_hydrophobics_better_than         ;
+    float       three_hydrophobics_better_than       ;
+    float       hydrophobic_ddg_per_atom_cut         ;
+    utility::vector1<int> hydrophobic_target_res     ;
 
     void init_from_cli();
 
@@ -751,6 +778,19 @@ struct RifDockOpt
 		only_dump_scaffold                      = option[rif_dock::only_dump_scaffold                  ]();
 
 		for( int req : option[rif_dock::requirements]() ) requirements.push_back(req);
+
+
+        // hydrophobic contacts
+        require_hydrophobic_residue_contacts   = option[rif_dock::require_hydrophobic_residue_contacts  ]();
+        hydrophobic_ddg_cut                    = option[rif_dock::hydrophobic_ddg_cut                   ]();
+        one_hydrophobic_better_than            = option[rif_dock::one_hydrophobic_better_than           ]();
+        two_hydrophobics_better_than           = option[rif_dock::two_hydrophobics_better_than          ]();
+        three_hydrophobics_better_than         = option[rif_dock::three_hydrophobics_better_than        ]();
+        hydrophobic_ddg_per_atom_cut           = option[rif_dock::hydrophobic_ddg_per_atom_cut          ]();
+        if ( option[rif_dock::hydrophobic_target_res]().length() > 0) {
+            int t = 0;
+            hydrophobic_target_res = utility::string_split(option[rif_dock::hydrophobic_target_res](), ',', t);
+        }
 
 
 	}

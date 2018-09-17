@@ -72,6 +72,8 @@
 #include <boost/random/mersenne_twister.hpp>
 #include <boost/random/uniform_real.hpp>
 
+#include <riflib/HydrophobicManager.hh>
+
 
 int main( int argc, char *argv[] )
 {
@@ -299,6 +301,32 @@ int main( int argc, char *argv[] )
         } // end of if(true)
     } // end of load bounding grid
     
+
+    // setup the Hydrophobic manager
+    shared_ptr<HydrophobicManager> hydrophobic_manager = nullptr;
+    if ( opt.require_hydrophobic_residue_contacts > 0 || opt.hydrophobic_ddg_cut < 0 ||
+            opt.one_hydrophobic_better_than < 0 ||
+            opt.two_hydrophobics_better_than < 0 ||
+            opt.three_hydrophobics_better_than < 0 ) {
+
+        utility::vector1<int> use_hydrophobic_target_res;
+        if (opt.hydrophobic_target_res.size() > 0) {
+            use_hydrophobic_target_res = opt.hydrophobic_target_res;
+        } else {
+            use_hydrophobic_target_res = target_res;
+        }
+
+        hydrophobic_manager = make_shared<HydrophobicManager>( target, use_hydrophobic_target_res, rot_index_p );
+        hydrophobic_manager->setup_criteria(               opt.hydrophobic_ddg_cut,
+                                                           opt.require_hydrophobic_residue_contacts,
+                                                           opt.one_hydrophobic_better_than, 
+                                                           opt.two_hydrophobics_better_than, 
+                                                           opt.three_hydrophobics_better_than,
+                                                           opt.hydrophobic_ddg_per_atom_cut );
+    }
+
+
+
     // prepare and read RIF
     print_header( "read in RIFs" );
     std::vector< shared_ptr< RifBase> > rif_ptrs;
@@ -670,6 +698,7 @@ int main( int argc, char *argv[] )
                 rso_config.require_satisfaction = opt.require_satisfaction;
                 rso_config.require_n_rifres = opt.require_n_rifres;
                 rso_config.requirements = opt.requirements;
+                rso_config.hydrophobic_manager = hydrophobic_manager;
             
             ScenePtr scene_prototype;
             std::vector< ObjectivePtr > objectives;

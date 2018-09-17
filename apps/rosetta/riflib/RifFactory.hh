@@ -16,6 +16,8 @@
 #include <riflib/RotamerGenerator.hh>
 #include <scheme/objective/storage/TwoBodyTable.hh>
 
+#include <riflib/HydrophobicManager.hh>
+
 #include <string>
 #include <vector>
 #include <boost/any.hpp>
@@ -103,6 +105,7 @@ struct RifSceneObjectiveConfig
 	int require_satisfaction;
 	int require_n_rifres;
 	std::vector< int > requirements;
+	shared_ptr<HydrophobicManager> hydrophobic_manager;
 };
 
 

@@ -511,6 +511,7 @@ std::string get_rif_type_from_file( std::string fname )
         std::vector< std::pair<int,int> > const * scaffold_rotamers_ = nullptr;
 		// sat group vector goes here
 		//std::vector<float> is_satisfied_score_;
+
 	};
 
 	template< class BBActor, class RIF, class VoxelArrayPtr >
@@ -527,6 +528,7 @@ std::string get_rif_type_from_file( std::string fname )
 		std::vector< shared_ptr< ::scheme::search::HackPack> > packperthread_;
 		// the requirements code
 		std::vector< int > requirements_;
+        shared_ptr< HydrophobicManager> hydrophobic_manager_;
 	private:
 		shared_ptr<RIF const> rif_ = nullptr;
 	public:
@@ -781,8 +783,31 @@ std::string get_rif_type_from_file( std::string fname )
 						}
 				}
 
+								// the hydrophobic manager only works in the packing stage, yes!!!
+                if ( hydrophobic_manager_ ) {
+                    std::vector<std::pair<int, EigenXform>> irot_and_bbpos;
+                    for( int i = 0; i < result.rotamers_.size(); ++i ){
+                        BBActor const & bb = scene.template get_actor<BBActor>( 1, result.rotamers_[i].first );
+                        int irot = result.rotamers_[i].second;
+
+                        irot_and_bbpos.emplace_back( irot, bb.position() );
+                    }
+                    std::vector<int> hyd_counts, per_irot_counts;
+                    bool pass_hydrophobic_residue_contacts = true;
+                    bool pass_hydrophobic_ddg = true;
+                    bool pass_better_than = true;
+                    bool pass_all = hydrophobic_manager_->apply( irot_and_bbpos, hyd_counts, per_irot_counts, pass_hydrophobic_residue_contacts,
+                                                                                             pass_hydrophobic_ddg, pass_better_than );
+                    if ( ! pass_all ) {
+                        result.val_ = 9e9;
+                    }
+
+                }
+
 
 				// OK! Now check the requirements satisfication here!!!!!!!!!
+				// this is because the packing will only chose one rotamer at each residue position
+				// to correct this, need to do this...................................
 				if ( requirements_.size() > 0 )
 				{
 						for( int ii = 0; ii < scratch.requirements_satisfied_.size(); ++ii ) scratch.requirements_satisfied_[ii] = false;
@@ -1051,6 +1076,9 @@ struct RifFactoryImpl :
 		if ( config.requirements.size() > 0 ){
 					dynamic_cast<MySceneObjectiveRIF&>(*packing_objective).objective.template get_objective<MyScoreBBActorRIF>().requirements_ = config.requirements;
 		}
+        if ( config.hydrophobic_manager ){
+                    dynamic_cast<MySceneObjectiveRIF&>(*packing_objective).objective.template get_objective<MyScoreBBActorRIF>().hydrophobic_manager_ = config.hydrophobic_manager;
+        }
 		// the requirement code.
 
 
