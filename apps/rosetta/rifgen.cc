@@ -83,6 +83,7 @@ OPT_1GRP_KEY( StringVector, rifgen, donres )
 	OPT_1GRP_KEY( Real          , rifgen, hash_cart_resl )
 	OPT_1GRP_KEY( Real          , rifgen, hash_angle_resl )
 	OPT_1GRP_KEY( Real          , rifgen, score_threshold )
+	OPT_1GRP_KEY( Real          , rifgen, score_threshold_polar )
 	OPT_1GRP_KEY( Integer       , rifgen, rf_oversample )
 	OPT_1GRP_KEY( Boolean       , rifgen, generate_rf_for_docking )
 	OPT_1GRP_KEY( Real          , rifgen, beam_size_M )
@@ -145,6 +146,7 @@ OPT_1GRP_KEY( StringVector, rifgen, donres )
 		NEW_OPT(  rifgen::hash_cart_resl                   , "" , 0.2 );
 		NEW_OPT(  rifgen::hash_angle_resl                  , "" , 1.5 );
 		NEW_OPT(  rifgen::score_threshold                  , "" , -0.5 );
+		NEW_OPT(  rifgen::score_threshold_polar            , "This would overwrite the global definition of score_thershold, just give better control of polar interactions" , -0.5 );
 		NEW_OPT(  rifgen::rf_oversample                    , "" , 2 );
 		NEW_OPT(  rifgen::generate_rf_for_docking          , "" , true );
 		NEW_OPT(  rifgen::beam_size_M                      , "" , 10.000000 );
@@ -330,7 +332,12 @@ std::shared_ptr<::devel::scheme::RifBase> init_rif_and_generators(
 			hbgenopts.rot_samp_range = option[ rifgen::rot_samp_range ]();
 			hbgenopts.hbond_cart_sample_hack_range = option[ rifgen::hbond_cart_sample_hack_range ]();
 			hbgenopts.hbond_cart_sample_hack_resl = option[ rifgen::hbond_cart_sample_hack_resl ]();
-			hbgenopts.score_threshold = option[ rifgen::score_threshold ]();
+			// longxing 20190318: specific flag for apolar cutoff values, so we could allow all the polar interactions no matter how bad the energy is.
+			if ( option[ rifgen::score_threshold_polar ].user() ) {
+				hbgenopts.score_threshold = option[ rifgen::score_threshold_polar ]();
+			} else {
+				hbgenopts.score_threshold = option[ rifgen::score_threshold ]();
+			}
 			hbgenopts.dump_fraction = option[rifgen::rif_hbond_dump_fraction]();
 			hbgenopts.debug = false;
 			hbgenopts.hbond_weight = option[rifgen::hbond_weight]();

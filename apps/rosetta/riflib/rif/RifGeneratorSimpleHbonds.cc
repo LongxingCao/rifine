@@ -873,7 +873,9 @@ namespace rif {
 												pass = true;
 										}
 								}
-								if (false &&  pass && sat2 != -1 && use_hbond_definition_rays[sat2] != -1 )
+								// What does this mean???? I can not understand my own code!!!
+								//if (false &&  pass && sat2 != -1 && use_hbond_definition_rays[sat2] != -1 )
+								if ( pass && sat2 != -1 && use_hbond_definition_rays[sat2] != -1 )
 								{
 										pass = false;
 										if ( std::find( allowed_rotamers_rays[ use_hbond_definition_rays[ sat2 ] ].begin(), allowed_rotamers_rays[ use_hbond_definition_rays[ sat2 ] ].end(), irot_name ) != allowed_rotamers_rays[ use_hbond_definition_rays[ sat2 ] ].end() )
