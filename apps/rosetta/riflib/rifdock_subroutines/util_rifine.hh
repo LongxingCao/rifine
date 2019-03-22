@@ -427,6 +427,79 @@ typedef _SearchPointWithRots<DirectorBase> SearchPointWithRots;
         
     }
     
+    
+    // the reason that I didn't pass the reference of the option struct is that "too many different option structs"
+    // To be safe.
+    void
+    output_results(
+                   std::vector< RifDockResult > & selected_results,
+                   std::vector< shared_ptr< RifBase> > & rif_ptrs,
+                   ScenePtr scene_minimal,
+                   std::vector<int> & scaffres_l2g,
+                   bool align_to_scaffold,
+                   std::string scafftag,
+                   std::string outdir,
+                   std::string output_tag,
+                   
+                   utility::io::ozstream & dokout,
+                   int64_t npack) {
+        if( align_to_scaffold ) std::cout << "ALIGN TO SCAFFOLD" << std::endl;
+        else                        std::cout << "ALIGN TO TARGET"   << std::endl;
+        
+        for( int i_selected_result=0; i_selected_result < selected_results.size(); ++i_selected_result ){
+            RifDockResult const & selected_results = selected_results.at(i_selected_result);
+            std::string pdboutfile = outdir + "/" + scafftag + "_" + devel::scheme::str(i_selected_result,9)+".pdb.gz";
+            if( output_tag.size() ){
+                pdboutfile = outdir + "/" + scafftag+"_" + output_tag + "_" + devel::scheme::str(i_selected_result,9)+".pdb.gz";
+            }
+            //std::string resfileoutfile = rdd.opt.outdir + "/" + scafftag+"_"+devel::scheme::str(i_selected_result,9)+".resfile";
+            //std::string allrifrotsoutfile = rdd.opt.outdir + "/" + scafftag+"_allrifrots_"+devel::scheme::str(i_selected_result,9)+".pdb.gz";
+            
+            std::ostringstream oss;
+            oss << "rif score: " << I(4,i_selected_result)
+            << " rank "       << I(9,selected_result.isamp)
+            << " dist0:    "  << F(7,2,selected_result.dist0)
+            << " packscore: " << F(7,3,selected_result.packscore)
+            // << " score: "     << F(7,3,selected_result.nopackscore)
+            // << " rif: "       << F(7,3,selected_result.rifscore)
+            << " steric: "    << F(7,3,selected_result.stericscore)
+            << " cluster: "   << I(7,selected_result.cluster_score)
+            << " rifrank: "   << I(7,selected_result.prepack_rank) << " " << F(7,5,(float)selected_result.prepack_rank/(float)npack)
+            << " " << pdboutfile
+            << std::endl;
+            std::cout << oss.str();
+            dokout << oss.str(); dokout.flush();
+            
+            core::pose::Pose pose_to_dump = selected_results.pose_;
+            
+            std::vector< std::pair< int, std::string > > brians_infolabels;
+            for( int i_actor = 0; i_actor < scene_minimal-> template num_actors<BBActor>(1); ++i_actor ) {
+                BBActor bba = scene_minimal->template get_actor<BBActor>(1,i_actor);
+                int const ires = 1+scaffres_l2g.at( bba.index_ );
+                
+                std::vector< std::pair<float, int > > rotscores;
+                rif_ptrs.back()->get_rotamers_for_xform( bba.position(), rotscores );
+                BOOST_FOREACH( std::pair<float,int> const & p, rotscores) {
+                    int const irot = p.second;
+                    std::pair< int, int > sat1_sat2 = rif_ptrs.back()->get_sat1_sat2(bba.position(), irot);
+                    if (sat1_sat2.first > -1) {
+                        std::pair< int, std::string > brian_pair;
+                        brian_pair.first = ires;
+                        brian_pair.second = "HOT_IN:" + str(sat1_sat2.first);
+                        brians_infolabels.push_back(brian_pair);
+                    }
+                }
+                
+            } // loop for all BBActor positions
+            
+            for ( auto p : brians_infolabels ) {
+                pose_to_dump.pdb_info()->add_reslabel(p.first, p.second);
+            }
+            
+            pose_to_dump.dump_pdb(pdboutfile);
+        } // end of the for loop that iterating over all the results
+    } // end of the output_results function
+    
     } // namespace scheme
 } // namespace devel
 
