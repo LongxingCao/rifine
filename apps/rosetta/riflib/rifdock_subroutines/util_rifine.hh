@@ -301,6 +301,10 @@ struct tmplSearchPointWithRots {
 template <class __Director>
 using _SearchPointWithRots = tmplSearchPointWithRots<_DirectorBigIndex<__Director>>;
 typedef _SearchPointWithRots<DirectorBase> SearchPointWithRots;
+
+template <class __Director>
+using _RifDockResult = tmplRifDockResult<_DirectorBigIndex<__Director>>;
+typedef _RifDockResult<DirectorBase> RifDockResult;
     
     
     
