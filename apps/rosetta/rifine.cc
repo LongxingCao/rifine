@@ -1602,35 +1602,38 @@ int main( int argc, char *argv[] )
             print_header( "output results" ); //////////////////////////////////////////////////////////////////////////////////////////////
             ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             
-            // output results here. It is easy here as ........
-            // there is no need to cluster the results ........
-            {
-                print_header("compile and output results");
-                
-                
-                for (int64_t i_samp = 0; i_samp < rifine_results.size(); ++i_samp) {
-                    if ( i_samp > opt.n_pdb_out || rifine_results[i_samp].score > opt.rosetta_score_cut || rifine_results[i_samp].pose_ == nullptr ) {
-                        break;
-                    }
-                    
-                    //pdb name
-                    std::string pdboutfile = opt.outdir + "/" + scafftag + "_" + devel::scheme::str(i_samp,9)+".pdb.gz";
-                    if( opt.output_tag.size() ){
-                        pdboutfile = opt.outdir + "/" + scafftag+"_" + opt.output_tag + "_" + devel::scheme::str(i_samp,9)+".pdb.gz";
-                    }
-                    std::ostringstream oss;
-                    oss << "rif score: " << I(4,i_samp)
-                    << " rank "       << I(9,i_samp)
-                    << " packscore: " << F(7,3,rifine_results[i_samp].score)
-                    << " rifrank: "   << I(7,rifine_results[i_samp].prepack_rank)
-                    << " " << pdboutfile
-                    << std::endl;
-                    std::cout << oss.str();
-                    dokout << oss.str(); dokout.flush();
-                    
-                    rifine_results[i_samp].pose_->dump_pdb(pdboutfile);
-                } // end loop of the output pdbfiles
-            } // end block of the pdb out
+            
+            output_results( selected_results, rif_ptrs, scene_minimal, scaffres_l2g, opt.align_to_scaffold, scafftag, opt.outdir, opt.output_tag, dokout);
+            
+//            // output results here. It is easy here as ........
+//            // there is no need to cluster the results ........
+//            {
+//                print_header("compile and output results");
+//                
+//                
+//                for (int64_t i_samp = 0; i_samp < rifine_results.size(); ++i_samp) {
+//                    if ( i_samp > opt.n_pdb_out || rifine_results[i_samp].score > opt.rosetta_score_cut || rifine_results[i_samp].pose_ == nullptr ) {
+//                        break;
+//                    }
+//                    
+//                    //pdb name
+//                    std::string pdboutfile = opt.outdir + "/" + scafftag + "_" + devel::scheme::str(i_samp,9)+".pdb.gz";
+//                    if( opt.output_tag.size() ){
+//                        pdboutfile = opt.outdir + "/" + scafftag+"_" + opt.output_tag + "_" + devel::scheme::str(i_samp,9)+".pdb.gz";
+//                    }
+//                    std::ostringstream oss;
+//                    oss << "rif score: " << I(4,i_samp)
+//                    << " rank "       << I(9,i_samp)
+//                    << " packscore: " << F(7,3,rifine_results[i_samp].score)
+//                    << " rifrank: "   << I(7,rifine_results[i_samp].prepack_rank)
+//                    << " " << pdboutfile
+//                    << std::endl;
+//                    std::cout << oss.str();
+//                    dokout << oss.str(); dokout.flush();
+//                    
+//                    rifine_results[i_samp].pose_->dump_pdb(pdboutfile);
+//                } // end loop of the output pdbfiles
+//            } // end block of the pdb out
             
             
             

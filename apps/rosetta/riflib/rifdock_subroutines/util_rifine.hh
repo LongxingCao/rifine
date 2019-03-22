@@ -5,6 +5,7 @@
 #ifndef INCLUDED_riflib_rifdock_subroutines_util_hh
 #define INCLUDED_riflib_rifdock_subroutines_util_hh
 
+#include <ObjexxFCL/format.hh>
 
 #include <riflib/types.hh>
 
@@ -445,13 +446,16 @@ typedef _RifDockResult<DirectorBase> RifDockResult;
                    std::string outdir,
                    std::string output_tag,
                    
-                   utility::io::ozstream & dokout,
-                   int64_t npack) {
+                   utility::io::ozstream & dokout) {
+
+				using ObjexxFCL::format::F;
+				using ObjexxFCL::format::I;
+
         if( align_to_scaffold ) std::cout << "ALIGN TO SCAFFOLD" << std::endl;
         else                        std::cout << "ALIGN TO TARGET"   << std::endl;
         
         for( int i_selected_result=0; i_selected_result < selected_results.size(); ++i_selected_result ){
-            RifDockResult const & selected_results = selected_results.at(i_selected_result);
+            RifDockResult const & selected_result = selected_results.at(i_selected_result);
             std::string pdboutfile = outdir + "/" + scafftag + "_" + devel::scheme::str(i_selected_result,9)+".pdb.gz";
             if( output_tag.size() ){
                 pdboutfile = outdir + "/" + scafftag+"_" + output_tag + "_" + devel::scheme::str(i_selected_result,9)+".pdb.gz";
@@ -468,13 +472,12 @@ typedef _RifDockResult<DirectorBase> RifDockResult;
             // << " rif: "       << F(7,3,selected_result.rifscore)
             << " steric: "    << F(7,3,selected_result.stericscore)
             << " cluster: "   << I(7,selected_result.cluster_score)
-            << " rifrank: "   << I(7,selected_result.prepack_rank) << " " << F(7,5,(float)selected_result.prepack_rank/(float)npack)
             << " " << pdboutfile
             << std::endl;
             std::cout << oss.str();
             dokout << oss.str(); dokout.flush();
             
-            core::pose::Pose pose_to_dump = selected_results.pose_;
+            core::pose::Pose pose_to_dump(*selected_result.pose_);
             
             std::vector< std::pair< int, std::string > > brians_infolabels;
             for( int i_actor = 0; i_actor < scene_minimal-> template num_actors<BBActor>(1); ++i_actor ) {
@@ -483,7 +486,8 @@ typedef _RifDockResult<DirectorBase> RifDockResult;
                 
                 std::vector< std::pair<float, int > > rotscores;
                 rif_ptrs.back()->get_rotamers_for_xform( bba.position(), rotscores );
-                BOOST_FOREACH( std::pair<float,int> const & p, rotscores) {
+								typedef std::pair<float, int> PairFI;
+                BOOST_FOREACH( PairFI const & p, rotscores) {
                     int const irot = p.second;
                     std::pair< int, int > sat1_sat2 = rif_ptrs.back()->get_sat1_sat2(bba.position(), irot);
                     if (sat1_sat2.first > -1) {
