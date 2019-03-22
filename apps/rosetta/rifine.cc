@@ -989,7 +989,7 @@ int main( int argc, char *argv[] )
                 
                 // selecting the best for hack pack.
                 std::cout << "" << std::endl;
-                std::cout << "Done with refinement stage, now selecting the best results for hpack." << std::endl;
+                std::cout << "Done with rifinement stage, now selecting the best results for hpack." << std::endl;
                 int64_t const len = nest_size * seeding_size;
                 
                 
@@ -1527,7 +1527,8 @@ int main( int argc, char *argv[] )
                 Nout         = std::min( (int64_t)opt.n_result_limit, Nout );
                 
                 std::vector< std::vector< RifDockResult > > allresults_pt( omp_max_threads() );
-                std::vector< std::pair< EigenXform, uint64_t > > selected_results;
+                std::vector< std::pair< EigenXform, uint64_t > > selected_xforms;
+                selected_xforms.reserve(65536);
                 
                 //////////////////////////////
                 
@@ -1544,7 +1545,7 @@ int main( int argc, char *argv[] )
                 for( int64_t isamp=0; isamp < Nout_singlethread; ++isamp ) {
                     if (isamp%out_interval == 0) std::cout << "*"; std::cout.flush();
                     awful_compile_output_helper< EigenXform, ScenePtr, ObjectivePtr >(
-                            isamp, RESLS.size()-1, refine_results, scene_pt, director,
+                            isamp, RESLS.size()-1, rifine_results, scene_pt, director,
                             redundancy_filter_rg, redundancy_filter_mag, scaffold_center,
                             allresults_pt, selected_results, selected_xforms, n_pdb_out,
                             #ifdef USE_OPENMP
@@ -1565,7 +1566,7 @@ int main( int argc, char *argv[] )
                 for( int64_t isamp = Nout_singlethread; isamp < Nout; ++isamp ) {
                     if( exception ) continue;
                     try {
-                        if( isamp%out_interval==0 ){ cout << '*'; cout.flush(); }
+                        if( isamp%out_interval==0 ){ std::cout << '*'; std::cout.flush(); }
                         awful_compile_output_helper< EigenXform, ScenePtr, ObjectivePtr >(
                                 isamp, RESLS.size()-1, rifine_results, scene_pt, director,
                                 redundancy_filter_rg, redundancy_filter_mag, scaffold_center,
