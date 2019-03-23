@@ -24,6 +24,10 @@ CXX=/my/g++/version CC=/my/gcc/version ./ninja_build cxx11_omp -remake
 CXX=/usr/local/bin/g++ CC=/usr/local/bin/gcc CMAKE_ROSETTA_PATH=/software/rosetta-rifdock/ cmake .. -DCMAKE_BUILD_TYPE=Release
 //digs
 CMAKE_ROSETTA_PATH=/home/longxing/Rifdock/rosetta_rifdock/ cmake .. -DCMAKE_BUILD_TYPE=Release
+//digs debug mode
+CMAKE_ROSETTA_PATH=/home/longxing/Rifdock/rosetta_rifdock/ cmake .. -DCMAKE_BUILD_TYPE=Debug
+
+
 
 Clone this repository and perform:  
 cd scheme  
