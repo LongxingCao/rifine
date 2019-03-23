@@ -346,6 +346,8 @@ typedef _RifDockResult<DirectorBase> RifDockResult;
         
         SearchPointWithRots const & sp = packed_results[isamp];
         if( sp.score >= 0.0f ) return;
+				// if the pose is null, return. Longxing, 20190323
+				if ( sp.pose_ == nullptr ) return;
         ScenePtr scene_minimal( scene_pt[omp_get_thread_num()] );
         director->set_scene( sp.index, iresl, *scene_minimal );
         std::vector<float> sc = objective->scores(*scene_minimal);

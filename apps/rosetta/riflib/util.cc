@@ -256,7 +256,7 @@ void pose_to_gly( core::pose::Pose & pose ){
 void pose_to_val( core::pose::Pose & pose ){
 	core::chemical::ResidueTypeSetCAP rts = core::chemical::ChemicalManager::get_instance()->residue_type_set("fa_standard");
 	core::conformation::ResidueOP val = core::conformation::ResidueFactory::create_residue( rts.lock()->name_map("VAL") );
-  //val->set_chi(1, 172.0);
+  val->set_chi(1, 172.0);
 	for( int ir = 1; ir <= pose.size(); ++ir ){
 		if( ! pose.residue(ir).is_protein()   ) continue;
 		if(   pose.residue(ir).name3()=="GLY" ) continue;
