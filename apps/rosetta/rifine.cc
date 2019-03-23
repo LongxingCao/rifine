@@ -346,6 +346,7 @@ int main( int argc, char *argv[] )
                 shared_ptr<RifBase> & rif_ptr = rif_ptrs[i_readmap];
                 // ideas from Brian, just pass a nullptr
                 // here try to only load the highest resolution rif.
+                // ATTENTION, only the highest resolution rif is loadded..................s
                 if ( i_readmap < ( opt.rif_files.size() - 1 ) ){
                     rif_ptr = nullptr;
                     continue;
@@ -891,7 +892,9 @@ int main( int argc, char *argv[] )
                 
             }
 
-            // dump the transforms 
+            // dump the transforms
+            // this is related to the nest director!!!
+            // the xforms you are using must match the parameters above.
             if ( false )
             {
                 //  dump all the transforms to .....
@@ -986,7 +989,7 @@ int main( int argc, char *argv[] )
                 
                 // selecting the best for hack pack.
                 std::cout << "" << std::endl;
-                std::cout << "Done with refinement stage, now selecting the best results for hpack." << std::endl;
+                std::cout << "Done with rifinement stage, now selecting the best results for hpack." << std::endl;
                 int64_t const len = nest_size * seeding_size;
                 
                 
@@ -1493,7 +1496,7 @@ int main( int argc, char *argv[] )
                                 for(int ir : replaced_scaffold_res){
                                     rifine_results[i_samp].pose_->pdb_info()->add_reslabel(ir, "PRUNED" );
                                 }
-                            } else if ( (minimizing+2 == do_min) && rifine_results[i_samp].score <= opt.rosetta_score_cut && opt.only_dump_scaffold ) {
+                            } else if ( (minimizing+1 == do_min) && rifine_results[i_samp].score <= opt.rosetta_score_cut && opt.only_dump_scaffold ) {
                                 rifine_results[i_samp].pose_ = pose_to_min.split_by_chain(1);
                                 for(int ir : rifres){
                                     rifine_results[i_samp].pose_->pdb_info()->add_reslabel(ir, "RIFRES" );
@@ -1516,380 +1519,121 @@ int main( int argc, char *argv[] )
                 std::cout << std::endl << "Rosetta score and min done! Total " << elapsed_seconds_rosetta.count() << " CPU ticks spend." << std::endl << std::endl;
             }
         
-            
-            
-            
-            // output results here. It is easy here as ........
-            // there is no need to cluster the results ........
+            // fitering redundancy again, this seems to be useless, since I already filtered this. But any way, to make it more compatible
+            // with legacy results. I would just add the code again. Longxing, 2019-03-21
+            std::vector< RifDockResult > selected_results, allresults;
             {
-                print_header("compile and output results");
+                int64_t Nout = rifine_results.size();
+                Nout         = std::min( (int64_t)opt.n_result_limit, Nout );
                 
+                std::vector< std::vector< RifDockResult > > allresults_pt( omp_max_threads() );
+                std::vector< std::pair< EigenXform, uint64_t > > selected_xforms;
+                selected_xforms.reserve(65536);
                 
-                for (int64_t i_samp = 0; i_samp < rifine_results.size(); ++i_samp) {
-                    if ( i_samp > opt.n_pdb_out || rifine_results[i_samp].score > opt.rosetta_score_cut || rifine_results[i_samp].pose_ == nullptr ) {
-                        break;
+                //////////////////////////////
+                
+                int nclose = 0;
+                int nclosemax = opt.force_output_if_close_to_input_num;
+                float nclosethresh = opt.force_output_if_close_to_input;
+                int n_pdb_out = opt.n_pdb_out;
+                float redundancy_filter_mag = opt.redundancy_filter_mag;
+                std::cout << "redundancy_filter_mag " << redundancy_filter_mag << "A \"rmsd\"" << std::endl;
+                int64_t Nout_singlethread = std::min( (int64_t)10000, Nout );
+                
+                std::cout << "going through 10K results ( 1 thread ): ";
+                int64_t out_interval = 10000/81;
+                for( int64_t isamp=0; isamp < Nout_singlethread; ++isamp ) {
+                    if (isamp%out_interval == 0) std::cout << "*"; std::cout.flush();
+                    awful_compile_output_helper< EigenXform, ScenePtr, ObjectivePtr >(
+                            isamp, 0/*  RESLS.size()-1 */, rifine_results, scene_pt, director,
+                            redundancy_filter_rg, redundancy_filter_mag, scaffold_center,
+                            allresults_pt, selected_results, selected_xforms, n_pdb_out,
+                            #ifdef USE_OPENMP
+                            dump_lock,
+                            #endif
+                            objectives.back(), nclose, nclosemax, nclosethresh,
+                            scaffold_perturb
+                    );
+                }
+                
+                std::cout << std::endl;
+                std::cout << "going through all results (threaded): ";
+                out_interval = Nout / 82;
+                std::exception_ptr exception = nullptr;
+                #ifdef USE_OPENMP
+                #pragma omp parallel for schedule(dynamic,8)
+                #endif
+                for( int64_t isamp = Nout_singlethread; isamp < Nout; ++isamp ) {
+                    if( exception ) continue;
+                    try {
+                        if( isamp%out_interval==0 ){ std::cout << '*'; std::cout.flush(); }
+                        awful_compile_output_helper< EigenXform, ScenePtr, ObjectivePtr >(
+                                isamp, 0/*RESLS.size()-1*/, rifine_results, scene_pt, director,
+                                redundancy_filter_rg, redundancy_filter_mag, scaffold_center,
+                                allresults_pt, selected_results, selected_xforms, n_pdb_out,
+                                #ifdef USE_OPENMP
+                                dump_lock,
+                                #endif
+                                objectives.back(), nclose, nclosemax, nclosethresh,
+                                scaffold_perturb
+                        );
+                        
+                    } catch (...) {
+                        #pragma omp critical
+                        exception = std::current_exception();
                     }
+                }
+                if( exception ) std::rethrow_exception(exception);
+                std::cout << std::endl;
+                
+                std::cout << "sort compiled results" << std::endl;
+                BOOST_FOREACH( std::vector<RifDockResult> const & rs, allresults_pt ) {
+                    BOOST_FOREACH( RifDockResult const & r, rs ) {
+                        allresults.push_back( r );
+                    }
+                }
                     
-                    //pdb name
-                    std::string pdboutfile = opt.outdir + "/" + scafftag + "_" + devel::scheme::str(i_samp,9)+".pdb.gz";
-                    if( opt.output_tag.size() ){
-                        pdboutfile = opt.outdir + "/" + scafftag+"_" + opt.output_tag + "_" + devel::scheme::str(i_samp,9)+".pdb.gz";
-                    }
-                    std::ostringstream oss;
-                    oss << "rif score: " << I(4,i_samp)
-                    << " rank "       << I(9,i_samp)
-                    << " packscore: " << F(7,3,rifine_results[i_samp].score)
-                    << " rifrank: "   << I(7,rifine_results[i_samp].prepack_rank)
-                    << " " << pdboutfile
-                    << std::endl;
-                    std::cout << oss.str();
-                    dokout << oss.str(); dokout.flush();
-                    
-                    rifine_results[i_samp].pose_->dump_pdb(pdboutfile);
-                } // end loop of the output pdbfiles
-            } // end block of the pdb out
+                __gnu_parallel::sort( allresults.begin(), allresults.end() );
+            } // end block of compile and filter results
             
-            /*
-             
-             for (int64_t i_samp = 0; i_samp < rifine_results.size(); ++i_samp) {
-             if ( i_samp > 20 || rifine_results[i_samp].pose_ == nullptr ) {
-             break;
-             }
-             std::cout << "SeedP: " << rifine_results[i_samp].index.seeding_index << "_" << rifine_results[i_samp].index.nest_index << " " << rifine_results[i_samp].score << std::endl;
-             rifine_results[i_samp].pose_->dump_pdb( "seed_" + str(rifine_results[i_samp].index.seeding_index) + "_" + str(rifine_results[i_samp].index.nest_index) + ".pdb" );
-             } // end if of the rosetta score and min
-             
-             {
-             
-             // Here I just should output some of the results to make sure everything is fine.
-             
-             director->set_scene( packed_results[0][0].index, 0, *scene_minimal );
-             director->set_scene( packed_results[0][1].index, 0, *scene_full );
-             EigenXform p1 = scene_minimal->position(1);
-             EigenXform p2 = scene_full->position(1);
-             float mag = xform_magnitude( p2 * p1.inverse(),  redundancy_filter_rg);
-             
-             
-             // It seem it perfectly recap
-             SearchPointWithRots selected_result;
-             
-             
-             //for ( int64_t i_samp = 0; i_samp <; ++i_samp) {
-             int current_rank;
-             for (int64_t i_samp = 0; i_samp < packed_results[0].size(); ++i_samp) {
-             if (packed_results[0][i_samp].index.nest_index == 2370540 ) {
-             selected_result = packed_results[0][i_samp];
-             current_rank = i_samp;
-             break;
-             }
-             }
-             std::cout << "The xform_magnitute of p1 and p2: " << mag << std::endl;
-             std::cout << "Current rank of the right solution: " << current_rank << std::endl;
-             std::cout << "Prerank of the right solution: " << selected_result.prepack_rank << std::endl;
-             std::cout << "Score of the right solution: " << selected_result.score << std::endl;
-             
-             
-             //selected_result = packed_results[2][200];
-             
-             for (int i = 0; i < 2; ++i) {
-             selected_result = packed_results[0][i];
-             core::pose::Pose dump_pose = both_full_pose;
-             director->set_scene( selected_result.index, 0, *scene_full );
-             EigenXform p = scene_full->position(1);
-             xform_pose( dump_pose, eigen2xyz(p), 1, scaffold.size() );
-             
-             
-             core::chemical::ResidueTypeSetCAP rts = core::chemical::ChemicalManager::get_instance()->residue_type_set("fa_standard");
-             for ( int ipr = 0; ipr < selected_result.numrots(); ++ipr ) {
-             int ires = scaffres_l2g.at( selected_result.rotamers().at(ipr).first );
-             int irot =                  selected_result.rotamers().at(ipr).second;
-             core::conformation::ResidueOP newrsd = core::conformation::ResidueFactory::create_residue( rts.lock()->name_map(rot_index.resname(irot)) );
-             dump_pose.replace_residue( ires+1, *newrsd, true );
-             for ( int ichi = 0; ichi < rot_index.nchi(irot); ++ichi ) {
-             dump_pose.set_chi( ichi+1, ires+1, rot_index.chi( irot, ichi ) );
-             }
-             }
-             //std::cout << "i_samp: " << str(i_samp) << " score: " << selected_result.score  << std::endl;
-             dump_pose.dump_pdb( "rank_" + str(i) +  ".pdb");
-             
-             
-             //scaffold_onebody_glob0
-             std::cout << "The one body energy of " << str(i) << std::endl;
-             for ( int ipr = 0; ipr < selected_result.numrots(); ++ipr ) {
-             int ires = scaffres_l2g.at( selected_result.rotamers().at(ipr).first );
-             int irot =                  selected_result.rotamers().at(ipr).second;
-             std::cout << "res: " << str(ires+1) << " " << rot_index.resname(irot) << " irot "  << irot << " " << scaffold_onebody_glob0[ires][irot] << std::endl;
-             }
-             
-             // scaffold_twobody
-             std::cout << "Print out the two body table and see the energy" << std::endl;
-             for ( int ipr_1 = 0; ipr_1 < selected_result.numrots() - 1; ++ipr_1) {
-             for (int ipr_2 = 1; ipr_2 < selected_result.numrots(); ++ipr_2) {
-             int ires_1 = scaffres_l2g.at( selected_result.rotamers().at(ipr_1).first );
-             int irot_1 =                  selected_result.rotamers().at(ipr_1).second;
-             
-             int ires_2 = scaffres_l2g.at( selected_result.rotamers().at(ipr_2).first );
-             int irot_2 =                  selected_result.rotamers().at(ipr_2).second;
-             
-             
-             std::cout << "res1 " << str(ires_1 + 1) << " " << rot_index.resname(irot_1) << "res2 " << str(ires_2 + 1) << " " << rot_index.resname(irot_2) << " " << scaffold_twobody->twobody(ires_1, ires_2, irot_1, irot_2) << std::endl;
-             }
-             
-             }
-             
-             // }
-             
-             }
-             
-             for (int i = 0; i < 20; ++i) {
-             std::cout << "i_samp: " << str(i) << " score: " << packed_results[0][i].score << " prepack_rank: " << packed_results[0][i].prepack_rank << std::endl;
-             }
-             
-             }
-             
-             
-             
-             
-             
-             {
-             // Here I just should output some of the results to make sure everything is fine.
-             // It seem it perfectly recap
-             SearchPointWithRots selected_result;
-             
-             for ( int64_t i_samp = 0; i_samp < 20; ++i_samp) {
-             
-             
-             selected_result = packed_results[2][i_samp];
-             
-             core::pose::Pose dump_pose = both_full_pose;
-             director->set_scene( selected_result.index, 0, *scene_full );
-             EigenXform p = scene_full->position(1);
-             xform_pose( dump_pose, eigen2xyz(p), 1, scaffold.size() );
-             
-             
-             core::chemical::ResidueTypeSetCAP rts = core::chemical::ChemicalManager::get_instance()->residue_type_set("fa_standard");
-             for ( int ipr = 0; ipr < selected_result.numrots(); ++ipr ) {
-             int ires = scaffres_l2g.at( selected_result.rotamers().at(ipr).first );
-             int irot =                  selected_result.rotamers().at(ipr).second;
-             core::conformation::ResidueOP newrsd = core::conformation::ResidueFactory::create_residue( rts.lock()->name_map(rot_index.resname(irot)) );
-             dump_pose.replace_residue( ires+1, *newrsd, true );
-             for ( int ichi = 0; ichi < rot_index.nchi(irot); ++ichi ) {
-             dump_pose.set_chi( ichi+1, ires+1, rot_index.chi( irot, ichi ) );
-             }
-             }
-             std::cout << "SeedP: " << 2 << " " << packed_results[2][i_samp].score << " " << packed_results[2][i_samp].prepack_rank << " " << i_samp << std::endl;
-             //dump_pose.dump_pdb( "Seeding_" + str(i_samp) + "_best.pdb");
-             }
-             }
-             
-             // check the outputs of hpack
-             {
-             // Here I just should output some of the results to make sure everything is fine.
-             // It seem it perfectly recap
-             SearchPointWithRots selected_result;
-             
-             for ( int64_t i_samp = 0; i_samp < 20; ++i_samp) {
-             
-             
-             selected_result = packed_results[2][i_samp];
-             
-             core::pose::Pose dump_pose = both_full_pose;
-             director->set_scene( selected_result.index, 0, *scene_full );
-             EigenXform p = scene_full->position(1);
-             xform_pose( dump_pose, eigen2xyz(p), 1, scaffold.size() );
-             
-             
-             core::chemical::ResidueTypeSetCAP rts = core::chemical::ChemicalManager::get_instance()->residue_type_set("fa_standard");
-             for ( int ipr = 0; ipr < selected_result.numrots(); ++ipr ) {
-             int ires = scaffres_l2g.at( selected_result.rotamers().at(ipr).first );
-             int irot =                  selected_result.rotamers().at(ipr).second;
-             core::conformation::ResidueOP newrsd = core::conformation::ResidueFactory::create_residue( rts.lock()->name_map(rot_index.resname(irot)) );
-             dump_pose.replace_residue( ires+1, *newrsd, true );
-             for ( int ichi = 0; ichi < rot_index.nchi(irot); ++ichi ) {
-             dump_pose.set_chi( ichi+1, ires+1, rot_index.chi( irot, ichi ) );
-             }
-             }
-             std::cout << "i_samp: " << str(i_samp) << " score: " << selected_result.score  << std::endl;
-             dump_pose.dump_pdb( "Seeding_" + str(i_samp) + "_best.pdb");
-             }
-             
-             for ( int64_t i_samp1 = 0; i_samp1 < 20; ++i_samp1) {
-             for ( int64_t i_samp2 = i_samp1 + 1; i_samp2 < 20; ++i_samp2) {
-             director->set_scene( packed_results[2][i_samp1].index, 0, *scene_minimal );
-             director->set_scene( packed_results[2][i_samp2].index, 0, *scene_full );
-             EigenXform p1 = scene_minimal->position(1);
-             EigenXform p2 = scene_full->position(1);
-             
-             float xmag =  xform_magnitude( p2 * p1.inverse(), redundancy_filter_rg );
-             
-             std::cout << xmag << "  ";
-             }
-             std::cout << std::endl;
-             }
-             
-             }
-             
-             for (int64_t i_seed = 0; i_seed < seeding_size; ++i_seed) {
-                if (packed_results[i_seed].size() > 0) {
-                    std::cout << "SeedP: " << i_seed << " " << packed_results[i_seed][0].score << " " << packed_results[i_seed][0].prepack_rank << std::endl;
-                }
-             }
+            std::cout << "allresults.size(): " << allresults.size() << " selected_results.size(): " << selected_results.size() << std::endl;
             
-            // Here I just should output some of the results to make sure everything is fine.
-            // It seem it perfectly recap
-            {
-                SearchPointWithRots selected_result;
-                
-                for (int64_t i_samp = 0; i_samp < packed_results[2].size(); ++i_samp) {
-                    if (0 == packed_results[2][i_samp].prepack_rank) {
-                        selected_result = packed_results[2][i_samp];
-                    }
-                }
-                
-                core::pose::Pose dump_pose = both_full_pose;
-                director->set_scene( selected_result.index, 0, *scene_full );
-                EigenXform p = scene_full->position(1);
-                xform_pose( dump_pose, eigen2xyz(p), 1, scaffold.size() );
-                
-                core::chemical::ResidueTypeSetCAP rts = core::chemical::ChemicalManager::get_instance()->residue_type_set("fa_standard");
-                for ( int ipr = 0; ipr < selected_result.numrots(); ++ipr ) {
-                    int ires = scaffres_l2g.at( selected_result.rotamers().at(ipr).first );
-                    int irot =                  selected_result.rotamers().at(ipr).second;
-                    core::conformation::ResidueOP newrsd = core::conformation::ResidueFactory::create_residue( rts.lock()->name_map(rot_index.resname(irot)) );
-                    dump_pose.replace_residue( ires+1, *newrsd, true );
-                    for ( int ichi = 0; ichi < rot_index.nchi(irot); ++ichi ) {
-                        dump_pose.set_chi( ichi+1, ires+1, rot_index.chi( irot, ichi ) );
-                    }
-                }
-                
-                dump_pose.dump_pdb("best.pdb");
-            }
-                
+            ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            print_header( "output results" ); //////////////////////////////////////////////////////////////////////////////////////////////
+            ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             
             
-            for (int64_t i_seed = 0; i_seed < seeding_size; ++i_seed) {
-                std::cout << "SeedP: " << i_seed << " " << samples[i_seed][0].score << " " << samples[i_seed][10].score << " " << samples[i_seed][20].score << std::endl;
-            }
-             
-            RifDockIndex rdi;
-            for (int i = 0; i < nest_size; ++i) {
-                rdi.seeding_index = 1;
-                rdi.nest_index = i;
-                
-                bool director_success = n_director->set_scene( rdi, 0, *scene_minimal );
-                
-                if ( director_success ) {
-                    EigenXform p = scene_minimal->position(1);
-                    double ang = Eigen::AngleAxisf( p.rotation() ).angle();
-                    if ( std::abs( ang ) <= 20 ) {
-                        std::cout << "SP" << " " << i << " " << ang << " "
-                                  << p.linear().row(0) << " " << p.linear().row(1)<< " " << p.linear().row(2) << " "
-                                  << p.translation().x() << " " << p.translation().y() << " " << p.translation().z() << std::endl;
-                    }
-                }
-            }
+            output_results( selected_results, rif_ptrs, director, scene_minimal, 0 /*RESLS.size()-1*/, scaffres_l2g, opt.align_to_scaffold, scafftag, opt.outdir, opt.output_tag, dokout);
             
-            
-            
-            // The code here seems augly, that's because I must be in compatible with the current current rifdock master.
-            // the real searching, packing and scoring happen here.
-            bool serach_failed = false;
-            int64_t seeding_size = director->size(0, RifDockIndex() ).seeding_index;
-            int64_t nest_size = director->size(0, RifDockIndex()).nest_index;
-            std::vector< std::vector< SearchPoint > > samples( seeding_size );
-            
-            
-            
-            std::cout << "Seeding size: " << seeding_size << std::endl;
-            std::cout << "Nest size" << nest_size << std::endl;
-            
-            {
-                // do an exausitive searching.
-                RifDockIndex rdi;
-                for ( int64_t i_seed = 0; i_seed < seeding_size; ++i_seed ) {
-                    rdi.seeding_index = i_seed;
-                    // for each sampling position
-                    for ( int64_t i_samp = 0; i_samp < nest_size; ++i_samp ) {
-                        rdi.nest_index = i_samp;
-                        
-                        
-                        bool director_success = director->set_scene( rdi, 0, *scene_minimal );
-                        if ( ! director_success ) {
-                            continue;
-                        }
-                        
-                        
-                        SearchPoint sp;
-                        sp.index = rdi;
-                        // sp.score = objectives.back()->score(*scene_minimal);
-                        // samples[i_seed].push_back( sp );
-                    }
-                }
-                for ( int64_t i_seed = 0; i_seed < seeding_size; ++i_seed ) {
-                    std::cout << samples[i_seed].size() << std::endl;
-                }
-            }
-            
-            
-            
-            RifDockIndex rdi;
-            for (int i = 0; i < nest_size; ++i) {
-                rdi.seeding_index = 1;
-                rdi.nest_index = i;
-                std::cout << "I am here scoring the first time for " << i << std::endl;
-                bool director_success = director->set_scene( rdi, 0, *scene_minimal );
-                if ( director_success ) {
-                    std::cout << "Score another three times: "<< i << std::endl;
-                    std::cout << director->set_scene( rdi, 0, *scene_minimal ) << std::endl;
-                    std::cout << director->set_scene( rdi, 0, *scene_minimal ) << std::endl;
-                    std::cout << director->set_scene( rdi, 0, *scene_minimal ) << std::endl;
-                }
-            }
-            
-            
-            
-            if ( false )
-            {
-                core::pose::Pose final_pose = scaffold_centered;
-                EigenXform final_pos;
-                double final_score = 9e9;
-                int64_t lowsc_index = 0;
-                double current_sc;
-                RifDockIndex rdi;
-                for ( int64_t isamp = 0; isamp < nest_size0; ++isamp ) {
-                    rdi.nest_index = isamp;
-                    bool director_success = director->set_scene( rdi, 0, *scene_minimal );
-                    if ( ! director_success ) {
-                        continue;
-                    }
-                    
-                    current_sc = objectives[3]->score(*scene_minimal);
-                    if ( current_sc < final_score ) {
-                        final_score = current_sc;
-                        final_pos = scene_minimal->position(1);
-                        lowsc_index = isamp;
-                        
-                    }
-                    
-                    if ( uniform(rng) < 0.01 ) {
-                        std::string dump_name = str(isamp) + "_" + str(objectives[3]->score(*scene_minimal)) + ".pdb";
-                        core::pose::Pose pose_dump( scaffold_centered );
-                        xform_pose( pose_dump, eigen2xyz( scene_minimal->position(1) ) );
-                        pose_dump.dump_pdb(dump_name);
-                    }
-                }
-                xform_pose( final_pose, eigen2xyz( final_pos ) );
-                final_pose.dump_pdb( "LowSc_" + str(lowsc_index) + "_" + str(final_score) + ".pdb" );
-            }
-            */
-            
-            
-            
-            
-            
-            
-            
-            
+//            // output results here. It is easy here as ........
+//            // there is no need to cluster the results ........
+//            {
+//                print_header("compile and output results");
+//                
+//                
+//                for (int64_t i_samp = 0; i_samp < rifine_results.size(); ++i_samp) {
+//                    if ( i_samp > opt.n_pdb_out || rifine_results[i_samp].score > opt.rosetta_score_cut || rifine_results[i_samp].pose_ == nullptr ) {
+//                        break;
+//                    }
+//                    
+//                    //pdb name
+//                    std::string pdboutfile = opt.outdir + "/" + scafftag + "_" + devel::scheme::str(i_samp,9)+".pdb.gz";
+//                    if( opt.output_tag.size() ){
+//                        pdboutfile = opt.outdir + "/" + scafftag+"_" + opt.output_tag + "_" + devel::scheme::str(i_samp,9)+".pdb.gz";
+//                    }
+//                    std::ostringstream oss;
+//                    oss << "rif score: " << I(4,i_samp)
+//                    << " rank "       << I(9,i_samp)
+//                    << " packscore: " << F(7,3,rifine_results[i_samp].score)
+//                    << " rifrank: "   << I(7,rifine_results[i_samp].prepack_rank)
+//                    << " " << pdboutfile
+//                    << std::endl;
+//                    std::cout << oss.str();
+//                    dokout << oss.str(); dokout.flush();
+//                    
+//                    rifine_results[i_samp].pose_->dump_pdb(pdboutfile);
+//                } // end loop of the output pdbfiles
+//            } // end block of the pdb out
             
             
             

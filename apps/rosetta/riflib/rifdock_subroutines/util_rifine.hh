@@ -5,6 +5,7 @@
 #ifndef INCLUDED_riflib_rifdock_subroutines_util_hh
 #define INCLUDED_riflib_rifdock_subroutines_util_hh
 
+#include <ObjexxFCL/format.hh>
 
 #include <riflib/types.hh>
 
@@ -235,6 +236,22 @@ bool parse_exhausitive_searching_file(std::string fname, std::vector<std::pair< 
     return true;
 }
 
+
+template<class _DirectorBigIndex>
+struct tmplRifDockResult {
+    typedef _DirectorBigIndex DirectorBigIndex;
+    typedef tmplRifDockResult<DirectorBigIndex> This;
+    float dist0, packscore, nopackscore, rifscore, stericscore;
+    uint64_t isamp;
+    DirectorBigIndex scene_index;
+    uint32_t prepack_rank;
+    float cluster_score;
+    bool operator< ( This const & o ) const { return packscore < o.packscore; }
+    shared_ptr< std::vector< std::pair<intRot,intRot> > > rotamers_;
+    core::pose::PoseOP pose_ = nullptr;
+    size_t numrots() const { if(rotamers_==nullptr) return 0; return rotamers_->size(); }
+    std::vector< std::pair<intRot,intRot> > const & rotamers() const { assert(rotamers_!=nullptr); return *rotamers_; }
+};
     
 
 #pragma pack (push, 4) // allows size to be 12 rather than 16
@@ -285,6 +302,220 @@ struct tmplSearchPointWithRots {
 template <class __Director>
 using _SearchPointWithRots = tmplSearchPointWithRots<_DirectorBigIndex<__Director>>;
 typedef _SearchPointWithRots<DirectorBase> SearchPointWithRots;
+
+template <class __Director>
+using _RifDockResult = tmplRifDockResult<_DirectorBigIndex<__Director>>;
+typedef _RifDockResult<DirectorBase> RifDockResult;
+    
+    
+    
+    // how can I fix this??? make the whole prototype into a class maybe???
+    // what does it do?
+    //  set and rescore scene with nopackscore, record more score detail
+    //  compute dist0
+    //  select results with some redundancy filtering
+    template<
+    class EigenXform,
+    // class Scene,
+    class ScenePtr,
+    class ObjectivePtr
+    >
+    void
+    awful_compile_output_helper(
+                                int64_t isamp,
+                                int iresl,
+                                std::vector< SearchPointWithRots > const & packed_results,
+                                std::vector< ScenePtr > & scene_pt,
+                                DirectorBase director,
+                                float redundancy_filter_rg,
+                                float redundancy_filter_mag,
+                                Eigen::Vector3f scaffold_center,
+                                std::vector< std::vector< RifDockResult > > & allresults_pt,
+                                std::vector< RifDockResult >   & selected_results,
+                                std::vector< std::pair<EigenXform, uint64_t> > & selected_xforms,
+                                int n_pdb_out,
+                                #ifdef USE_OPENMP
+                                omp_lock_t & dump_lock,
+                                #endif
+                                ObjectivePtr objective,
+                                int & nclose,
+                                int nclosemax,
+                                float nclosethresh,
+                                EigenXform scaffold_perturb
+                                ) {
+        
+        SearchPointWithRots const & sp = packed_results[isamp];
+        if( sp.score >= 0.0f ) return;
+				// if the pose is null, return. Longxing, 20190323
+				if ( sp.pose_ == nullptr ) return;
+        ScenePtr scene_minimal( scene_pt[omp_get_thread_num()] );
+        director->set_scene( sp.index, iresl, *scene_minimal );
+        std::vector<float> sc = objective->scores(*scene_minimal);
+        float const nopackscore = sc[0]+sc[1]; //result.sum();
+        float const rifscore = sc[0]; //result.template get<MyScoreBBActorRIF>();
+        float const stericscore = sc[1]; //result.template get<MyClashScore>();
+        
+        // dist0 is only important to the nclose* options
+        float dist0; {
+            EigenXform x = scene_minimal->position(1);
+            x = scaffold_perturb * x;
+            x.translation() -= scaffold_center;
+            dist0 = ::devel::scheme::xform_magnitude( x, redundancy_filter_rg );
+        }
+        
+        RifDockResult r; // float dist0, packscore, nopackscore, rifscore, stericscore;
+        r.isamp = isamp;
+        r.prepack_rank = sp.prepack_rank;
+        r.scene_index = sp.index;
+        r.packscore = sp.score;
+        r.nopackscore = nopackscore;
+        r.rifscore = rifscore;
+        r.stericscore = stericscore;
+        r.dist0 = dist0;
+        r.cluster_score = 0.0;
+        r.pose_ = sp.pose_;
+        allresults_pt.at( omp_get_thread_num() ).push_back( r ); // recorded w/o rotamers here
+        
+        bool force_selected = ( dist0 < nclosethresh && ++nclose < nclosemax ); // not thread-safe... is this important?
+        
+        if( selected_xforms.size() < n_pdb_out || force_selected ){
+            
+            EigenXform xposition1 = scene_minimal->position(1);
+            EigenXform xposition1inv = xposition1.inverse();
+            
+            float mindiff_candidate = 9e9;
+            int64_t i_closest_result;
+            typedef std::pair< EigenXform, int64_t > XRpair;
+            BOOST_FOREACH( XRpair const & xrp, selected_xforms ){
+                EigenXform const & xsel = xrp.first;
+                EigenXform const xdiff = xposition1inv * xsel;
+                float diff = devel::scheme::xform_magnitude( xdiff, redundancy_filter_rg );
+                if( diff < mindiff_candidate ){
+                    mindiff_candidate = diff;
+                    i_closest_result = xrp.second;
+                }
+                // todo: also compare AA composition of rotamers
+            }
+            
+            if( mindiff_candidate < redundancy_filter_mag ){ // redundant result
+                selected_results[i_closest_result].cluster_score += 1.0; //sp.score==0.0 ? nopackscore : sp.score;
+            }
+            
+            if( mindiff_candidate > redundancy_filter_mag || force_selected ){
+                
+                #ifdef USE_OPENMP
+                omp_set_lock( &dump_lock );
+                #endif
+                {
+                    // std::cout << "checking again to add selected " << selected_xforms.size() << " " << omp_get_thread_num() << std::endl;
+                    float mindiff_actual = 9e9;
+                    BOOST_FOREACH( XRpair const & xrp, selected_xforms ){
+                        EigenXform const & xsel = xrp.first;
+                        EigenXform const xdiff = xposition1inv * xsel;
+                        mindiff_actual = std::min( mindiff_actual, devel::scheme::xform_magnitude( xdiff, redundancy_filter_rg ) );
+                    }
+                    if( mindiff_actual > redundancy_filter_mag || force_selected ){
+                        if( redundancy_filter_mag > 0.0001 ) {
+                            selected_xforms.push_back( std::make_pair(xposition1, (int64_t)selected_results.size()) );
+                        }
+                        r.rotamers_ = sp.rotamers_;
+                        selected_results.push_back( r ); // recorded with rotamers here
+                    } else {
+                        // std::cout << " second check failed" << std::endl;
+                    }
+                }
+                #ifdef USE_OPENMP
+                omp_unset_lock( &dump_lock );
+                #endif
+                
+            } // end if( mindiff > redundancy_filter_mag ){
+            
+        } // end    if( selected_xforms.size() < n_pdb_out || force_selected )
+        
+    }
+    
+    
+    // the reason that I didn't pass the reference of the option struct is that "too many different option structs"
+    // To be safe.
+    void
+    output_results(
+                   std::vector< RifDockResult > & selected_results,
+                   std::vector< shared_ptr< RifBase> > & rif_ptrs,
+                   DirectorBase director,
+                   ScenePtr scene_minimal,
+                   int iresl,
+                   std::vector<int> & scaffres_l2g,
+                   bool align_to_scaffold,
+                   std::string scafftag,
+                   std::string outdir,
+                   std::string output_tag,
+                   
+                   utility::io::ozstream & dokout) {
+
+				using ObjexxFCL::format::F;
+				using ObjexxFCL::format::I;
+
+        if( align_to_scaffold ) std::cout << "ALIGN TO SCAFFOLD" << std::endl;
+        else                        std::cout << "ALIGN TO TARGET"   << std::endl;
+        
+        for( int i_selected_result=0; i_selected_result < selected_results.size(); ++i_selected_result ){
+            RifDockResult const & selected_result = selected_results.at(i_selected_result);
+            std::string pdboutfile = outdir + "/" + scafftag + "_" + devel::scheme::str(i_selected_result,9)+".pdb.gz";
+            if( output_tag.size() ){
+                pdboutfile = outdir + "/" + scafftag+"_" + output_tag + "_" + devel::scheme::str(i_selected_result,9)+".pdb.gz";
+            }
+            //std::string resfileoutfile = rdd.opt.outdir + "/" + scafftag+"_"+devel::scheme::str(i_selected_result,9)+".resfile";
+            //std::string allrifrotsoutfile = rdd.opt.outdir + "/" + scafftag+"_allrifrots_"+devel::scheme::str(i_selected_result,9)+".pdb.gz";
+            
+            std::ostringstream oss;
+            oss << "rif score: " << I(4,i_selected_result)
+            << " rank "       << I(9,selected_result.isamp)
+            << " dist0:    "  << F(7,2,selected_result.dist0)
+            << " packscore: " << F(7,3,selected_result.packscore)
+            // << " score: "     << F(7,3,selected_result.nopackscore)
+            // << " rif: "       << F(7,3,selected_result.rifscore)
+            << " steric: "    << F(7,3,selected_result.stericscore)
+            << " cluster: "   << I(7,selected_result.cluster_score)
+            << " " << pdboutfile
+            << std::endl;
+            std::cout << oss.str();
+            dokout << oss.str(); dokout.flush();
+            
+						// be careful here. Usually, the pose has been minimized, so the positions are different from
+						// the BBActors....
+						std::cout << "################ pose size " << selected_result.pose_->size() << std::endl;
+            core::pose::Pose pose_to_dump(*selected_result.pose_);
+            
+
+						director->set_scene( selected_result.scene_index, iresl, *scene_minimal );
+            std::vector< std::pair< int, std::string > > brians_infolabels;
+            for( int i_actor = 0; i_actor < scene_minimal-> template num_actors<BBActor>(1); ++i_actor ) {
+                BBActor bba = scene_minimal->template get_actor<BBActor>(1,i_actor);
+                int const ires = 1+scaffres_l2g.at( bba.index_ );
+                
+                std::vector< std::pair<float, int > > rotscores;
+                rif_ptrs.back()->get_rotamers_for_xform( bba.position(), rotscores );
+								typedef std::pair<float, int> PairFI;
+                BOOST_FOREACH( PairFI const & p, rotscores) {
+                    int const irot = p.second;
+                    std::pair< int, int > sat1_sat2 = rif_ptrs.back()->get_sat1_sat2(bba.position(), irot);
+                    if (sat1_sat2.first > -1) {
+                        std::pair< int, std::string > brian_pair;
+                        brian_pair.first = ires;
+                        brian_pair.second = "HOT_IN:" + str(sat1_sat2.first);
+                        brians_infolabels.push_back(brian_pair);
+                    }
+                }
+                
+            } // loop for all BBActor positions
+            
+            for ( auto p : brians_infolabels ) {
+                pose_to_dump.pdb_info()->add_reslabel(p.first, p.second);
+            }
+            
+            pose_to_dump.dump_pdb(pdboutfile);
+        } // end of the for loop that iterating over all the results
+    } // end of the output_results function
     
     } // namespace scheme
 } // namespace devel
