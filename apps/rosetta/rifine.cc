@@ -1496,7 +1496,7 @@ int main( int argc, char *argv[] )
                                 for(int ir : replaced_scaffold_res){
                                     rifine_results[i_samp].pose_->pdb_info()->add_reslabel(ir, "PRUNED" );
                                 }
-                            } else if ( (minimizing+2 == do_min) && rifine_results[i_samp].score <= opt.rosetta_score_cut && opt.only_dump_scaffold ) {
+                            } else if ( (minimizing+1 == do_min) && rifine_results[i_samp].score <= opt.rosetta_score_cut && opt.only_dump_scaffold ) {
                                 rifine_results[i_samp].pose_ = pose_to_min.split_by_chain(1);
                                 for(int ir : rifres){
                                     rifine_results[i_samp].pose_->pdb_info()->add_reslabel(ir, "RIFRES" );
@@ -1545,7 +1545,7 @@ int main( int argc, char *argv[] )
                 for( int64_t isamp=0; isamp < Nout_singlethread; ++isamp ) {
                     if (isamp%out_interval == 0) std::cout << "*"; std::cout.flush();
                     awful_compile_output_helper< EigenXform, ScenePtr, ObjectivePtr >(
-                            isamp, RESLS.size()-1, rifine_results, scene_pt, director,
+                            isamp, 0/*  RESLS.size()-1 */, rifine_results, scene_pt, director,
                             redundancy_filter_rg, redundancy_filter_mag, scaffold_center,
                             allresults_pt, selected_results, selected_xforms, n_pdb_out,
                             #ifdef USE_OPENMP
@@ -1568,7 +1568,7 @@ int main( int argc, char *argv[] )
                     try {
                         if( isamp%out_interval==0 ){ std::cout << '*'; std::cout.flush(); }
                         awful_compile_output_helper< EigenXform, ScenePtr, ObjectivePtr >(
-                                isamp, RESLS.size()-1, rifine_results, scene_pt, director,
+                                isamp, 0/*RESLS.size()-1*/, rifine_results, scene_pt, director,
                                 redundancy_filter_rg, redundancy_filter_mag, scaffold_center,
                                 allresults_pt, selected_results, selected_xforms, n_pdb_out,
                                 #ifdef USE_OPENMP
@@ -1603,7 +1603,7 @@ int main( int argc, char *argv[] )
             ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             
             
-            output_results( selected_results, rif_ptrs, scene_minimal, scaffres_l2g, opt.align_to_scaffold, scafftag, opt.outdir, opt.output_tag, dokout);
+            output_results( selected_results, rif_ptrs, director, scene_minimal, 0 /*RESLS.size()-1*/, scaffres_l2g, opt.align_to_scaffold, scafftag, opt.outdir, opt.output_tag, dokout);
             
 //            // output results here. It is easy here as ........
 //            // there is no need to cluster the results ........

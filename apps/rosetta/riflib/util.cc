@@ -157,9 +157,11 @@ utility::vector1<core::Size> get_designable_positions_best_guess(
 	for( int ir = 1; ir <= pose.size(); ++ir ){
 		// std::cout << pose.secstruct(ir) << std::endl;
 		bool isloop = pose.secstruct(ir) == 'L';
-		int natoms = pose.residue(ir).nheavyatoms()-pose.residue(ir).last_backbone_atom();
+		// I am not sure using poly Val scaffold is a good idea or not. But any way I will just leave it here.
+		// Let's fix this later.
+		int natoms = allval.residue(ir).nheavyatoms()-allval.residue(ir).last_backbone_atom();
 		core::Real scsasa = 0;
-		for( int ia = pose.residue(ir).first_sidechain_atom(); ia <= pose.residue(ir).natoms(); ++ia ){
+		for( int ia = allval.residue(ir).first_sidechain_atom(); ia <= allval.residue(ir).natoms(); ++ia ){
 			scsasa += atom_sasa[core::id::AtomID(ia,ir)];
 		}
 		float scsasa_per_atom = scsasa / float(natoms);
@@ -254,6 +256,7 @@ void pose_to_gly( core::pose::Pose & pose ){
 void pose_to_val( core::pose::Pose & pose ){
 	core::chemical::ResidueTypeSetCAP rts = core::chemical::ChemicalManager::get_instance()->residue_type_set("fa_standard");
 	core::conformation::ResidueOP val = core::conformation::ResidueFactory::create_residue( rts.lock()->name_map("VAL") );
+  //val->set_chi(1, 172.0);
 	for( int ir = 1; ir <= pose.size(); ++ir ){
 		if( ! pose.residue(ir).is_protein()   ) continue;
 		if(   pose.residue(ir).name3()=="GLY" ) continue;

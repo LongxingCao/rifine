@@ -323,7 +323,7 @@ typedef _RifDockResult<DirectorBase> RifDockResult;
     void
     awful_compile_output_helper(
                                 int64_t isamp,
-                                int resl,
+                                int iresl,
                                 std::vector< SearchPointWithRots > const & packed_results,
                                 std::vector< ScenePtr > & scene_pt,
                                 DirectorBase director,
@@ -347,7 +347,7 @@ typedef _RifDockResult<DirectorBase> RifDockResult;
         SearchPointWithRots const & sp = packed_results[isamp];
         if( sp.score >= 0.0f ) return;
         ScenePtr scene_minimal( scene_pt[omp_get_thread_num()] );
-        director->set_scene( sp.index, resl, *scene_minimal );
+        director->set_scene( sp.index, iresl, *scene_minimal );
         std::vector<float> sc = objective->scores(*scene_minimal);
         float const nopackscore = sc[0]+sc[1]; //result.sum();
         float const rifscore = sc[0]; //result.template get<MyScoreBBActorRIF>();
@@ -439,7 +439,9 @@ typedef _RifDockResult<DirectorBase> RifDockResult;
     output_results(
                    std::vector< RifDockResult > & selected_results,
                    std::vector< shared_ptr< RifBase> > & rif_ptrs,
+                   DirectorBase director,
                    ScenePtr scene_minimal,
+                   int iresl,
                    std::vector<int> & scaffres_l2g,
                    bool align_to_scaffold,
                    std::string scafftag,
@@ -477,8 +479,13 @@ typedef _RifDockResult<DirectorBase> RifDockResult;
             std::cout << oss.str();
             dokout << oss.str(); dokout.flush();
             
+						// be careful here. Usually, the pose has been minimized, so the positions are different from
+						// the BBActors....
+						std::cout << "################ pose size " << selected_result.pose_->size() << std::endl;
             core::pose::Pose pose_to_dump(*selected_result.pose_);
             
+
+						director->set_scene( selected_result.scene_index, iresl, *scene_minimal );
             std::vector< std::pair< int, std::string > > brians_infolabels;
             for( int i_actor = 0; i_actor < scene_minimal-> template num_actors<BBActor>(1); ++i_actor ) {
                 BBActor bba = scene_minimal->template get_actor<BBActor>(1,i_actor);
