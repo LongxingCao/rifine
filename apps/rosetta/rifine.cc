@@ -850,6 +850,18 @@ int main( int argc, char *argv[] )
 
                 // I don't want to do this, but it seem currently the best way is to hardcode the  bodie radius.
                 // I think 15 is a reasonable number.'
+                
+                
+                // 2019-03-30 Now I recalled everything I did before.
+                // target_center           -> 0, 0, 0 // This is to dump the rifine xform box with the center in the origin
+                // resl0                   -> 1.0     // This differs with the hsearch, where the resl0 is 16.0
+                // search_diameter         -> 4.0     // default is 150 angstrom in the hsearch protocol
+                // hsearch_scale_factor    -> 1.2     // 1.0
+                // body_radius             -> 15.0    // std::min( scaff_radius, rif_radius );
+                //
+                // Actually, all the values I set above are for the calculation of cart_grid and rot_resl_deg0, which are
+                // 0.69282 and 2.29244 repectively.
+                
                 double const resl0 = 1;
                 double const hsearch_scale_factor = 1.2;
                 double const body_radius = 15.0;
@@ -859,6 +871,10 @@ int main( int argc, char *argv[] )
                 double const hackysin = std::min( 1.0, resl0*hsearch_scale_factor/2.0/ body_radius );
                 runtime_assert( hackysin > 0.0 );
                 double const rot_resl_deg0 = asin( hackysin ) * 180.0 / M_PI;
+                
+                // Here I can set arbitrary values for cart_grid and rot_resl_deg0. Should I set it smaller???????????????
+                // may be 0.5 angstrom and 1.5 degree ??
+                
                 int nside = std::ceil( search_diameter / cart_grid );
                 std::cout << "search dia.    : " << search_diameter << std::endl;
                 std::cout << "nside          : " << nside        << std::endl;
