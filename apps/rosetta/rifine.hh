@@ -190,6 +190,8 @@ OPT_1GRP_KEY(     StringVector , rif_dock, scaffolds )
     OPT_1GRP_KEY(  Real        , rif_dock, hydrophobic_ddg_per_atom_cut )
     OPT_1GRP_KEY(  String      , rif_dock, hydrophobic_target_res )
 
+    OPT_1GRP_KEY(  Real        , rif_dock, score_after_hackpack_cut )
+
 
 
 
@@ -377,6 +379,8 @@ OPT_1GRP_KEY(     StringVector , rif_dock, scaffolds )
             NEW_OPT(  rif_dock::hydrophobic_ddg_per_atom_cut, "To be considered for better_than, must have ddg per atom better than this", 0 );
             NEW_OPT(  rif_dock::hydrophobic_target_res, "Comma separated list of residues to consider for hydrophobics. Default is all res", "" );
 
+            NEW_OPT(  rif_dock::score_after_hackpack_cut,      "the cutoff value for docks go to rosetta score and min. if this flag is not set, it will be equal to the global_score_cut, you can set it to a loosen number", -9e9 );
+
 		}
 	#endif
 #endif
@@ -548,6 +552,8 @@ struct RifDockOpt
     float       three_hydrophobics_better_than       ;
     float       hydrophobic_ddg_per_atom_cut         ;
     utility::vector1<int> hydrophobic_target_res     ;
+
+    float       score_after_hackpack_cut             ;
 
     void init_from_cli();
 
@@ -790,6 +796,13 @@ struct RifDockOpt
         if ( option[rif_dock::hydrophobic_target_res]().length() > 0) {
             int t = 0;
             hydrophobic_target_res = utility::string_split(option[rif_dock::hydrophobic_target_res](), ',', t);
+        }
+
+
+        if ( option[rif_dock::score_after_hackpack_cut].user() ){
+            score_after_hackpack_cut = option[ rif_dock::score_after_hackpack_cut ]();
+        } else {
+            score_after_hackpack_cut = global_score_cut;
         }
 
 

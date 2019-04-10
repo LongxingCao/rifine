@@ -344,15 +344,7 @@ int main( int argc, char *argv[] )
                 std::string const & rif_file = opt.rif_files[i_readmap];
                 std::string & rif_decr = rif_descriptions[i_readmap];
                 shared_ptr<RifBase> & rif_ptr = rif_ptrs[i_readmap];
-                // ideas from Brian, just pass a nullptr
-                // here try to only load the highest resolution rif.
-                // ATTENTION, only the highest resolution rif is loadded..................s
-                if ( i_readmap < ( opt.rif_files.size() - 1 ) ){
-                    rif_ptr = nullptr;
-                    continue;
-                }
-                //
-                //
+                // In this protocol, all the rif files are loaded. 2019-03-30
                 rif_ptr = rif_factory->create_rif_from_file( rif_file, rif_decr );
                 // hack the normal loading process
                 runtime_assert_msg( rif_ptrs[i_readmap] , "rif creation from file failed! " + rif_file );
@@ -765,6 +757,7 @@ int main( int argc, char *argv[] )
             
 
             // parse the seeding files.
+            // the seedings here just mean some random initial starting positions.
             std::string seeding_fname = "";
             shared_ptr<std::vector<EigenXform> > seeding_positions_p = make_shared<std::vector<EigenXform> >();
             std::vector<EigenXform> & seeding_positions(*seeding_positions_p);
@@ -825,68 +818,31 @@ int main( int argc, char *argv[] )
                 
             }
             
-            // I would only do a refinement of the seeding positions.
-            // This is fixed, never change this part so that it matchs the xform_positions.
+            // This is the protocol combining hsearch and seeding, the main idea is to increase the coverage
+            // of sampling.
             DirectorBase director;
             shared_ptr<RifDockNestDirector> n_director;
             {
-                // start resolution from 1... must be compatible with the rif resolution (suggested by Brian).
-                // I think this fit perfect with the rif resolution.
-                //double resl0 = 1;
-                // It should be 1 to match the hight resolution rif, and I set it to 2 to test.
-
-                /*
-                // the old code here
-                F3 target_center = pose_center( target );
+                // This is the original searching grid!!!!
+                F3 target_center = pose_center(target);
                 float const body_radius = std::min( scaff_radius, rif_radius );
-                double const cart_grid = opt.resl0*opt.hsearch_scale_factor/sqrt(3); 
-                double const hacksin = std::min( 1.0, opt.resl0*hsearch_scale_factor/2.0/body_radius );
-                runtime_assert( hackysin > 0.0 );
-                double const rot_resl_deg0 = asin( hacksin ) * 180.0 / M_PI;
-                int nside = std::ceil( opt.search_diameter / cart_grid );
-                */
-
-
-
-                // I don't want to do this, but it seem currently the best way is to hardcode the  bodie radius.
-                // I think 15 is a reasonable number.'
-                
-                
-                // 2019-03-30 Now I recalled everything I did before.
-                // target_center           -> 0, 0, 0 // This is to dump the rifine xform box with the center in the origin
-                // resl0                   -> 1.0     // This differs with the hsearch, where the resl0 is 16.0
-                // search_diameter         -> 4.0     // default is 150 angstrom in the hsearch protocol
-                // hsearch_scale_factor    -> 1.2     // 1.0
-                // body_radius             -> 15.0    // std::min( scaff_radius, rif_radius );
-                //
-                // Actually, all the values I set above are for the calculation of cart_grid and rot_resl_deg0, which are
-                // 0.69282 and 2.29244 repectively.
-                
-                double const resl0 = 1;
-                double const hsearch_scale_factor = 1.2;
-                double const body_radius = 15.0;
-                double const search_diameter = 4.0;
-
-                double const cart_grid = resl0*hsearch_scale_factor/sqrt(3); // 1.5 is a big hack here.... 2 would be more "correct"
-                double const hackysin = std::min( 1.0, resl0*hsearch_scale_factor/2.0/ body_radius );
+                double const cart_grid = opt.resl0*opt.hsearch_scale_factor/sqrt(3); // 1.5 is a big hack here.... 2 would be more "correct"
+                double const hackysin = std::min( 1.0, opt.resl0*opt.hsearch_scale_factor/2.0/ body_radius );
                 runtime_assert( hackysin > 0.0 );
                 double const rot_resl_deg0 = asin( hackysin ) * 180.0 / M_PI;
                 
-                // Here I can set arbitrary values for cart_grid and rot_resl_deg0. Should I set it smaller???????????????
-                // may be 0.5 angstrom and 1.5 degree ??
-                
-                int nside = std::ceil( search_diameter / cart_grid );
-                std::cout << "search dia.    : " << search_diameter << std::endl;
+                int nside = std::ceil( opt.search_diameter / cart_grid );
+                std::cout << "search dia.    : " << opt.search_diameter << std::endl;
                 std::cout << "nside          : " << nside        << std::endl;
-                std::cout << "resl0:           " << resl0 << std::endl;
+                std::cout << "resl0:           " << opt.resl0 << std::endl;
                 std::cout << "body_radius:     " << body_radius << std::endl;
                 std::cout << "rif_radius:      " << rif_radius << std::endl;
                 std::cout << "scaffold_radius: " << scaff_radius << std::endl;
                 std::cout << "cart_grid:       " << cart_grid  << std::endl;
                 std::cout << "rot_resl_deg0:   " << rot_resl_deg0 << std::endl;
                 I3 nc( nside, nside, nside );
-                F3 lb = F3( 0.0, 0.0, 0.0) + F3( -cart_grid*nside/2.0, -cart_grid*nside/2.0, -cart_grid*nside/2.0 );
-                F3 ub = F3( 0.0, 0.0, 0.0) + F3(  cart_grid*nside/2.0,  cart_grid*nside/2.0,  cart_grid*nside/2.0 );
+                F3 lb = target_center + F3( -cart_grid*nside/2.0, -cart_grid*nside/2.0, -cart_grid*nside/2.0 );
+                F3 ub = target_center + F3(  cart_grid*nside/2.0,  cart_grid*nside/2.0,  cart_grid*nside/2.0 );
                 std::cout << "cart grid ub " << ub << std::endl;
                 std::cout << "cart grid lb " << lb << std::endl;
                 std::cout << "(ub-lb/nc) = " << ((ub-lb)/nc.template cast<float>()) << std::endl;
@@ -907,123 +863,139 @@ int main( int argc, char *argv[] )
                 n_director = nest_director;
                 
             }
-
-            // dump the transforms
-            // this is related to the nest director!!!
-            // the xforms you are using must match the parameters above.
-            if ( false )
-            {
-                //  dump all the transforms to .....
-                utility::io::ozstream xform_pos( "xform_pos_ang_all.x" );
-
-
-                RifDockIndex rdi;
-                int64_t nest_size = n_director->size(0, RifDockIndex()).nest_index;
-                for (int i = 0; i < nest_size; ++i) {
-                    rdi.seeding_index = 1;
-                    rdi.nest_index = i;
-
-                
-                    bool director_success = n_director->set_scene( rdi, 0, *scene_minimal );
-                
-                    if ( director_success ) {
-                        EigenXform p = scene_minimal->position(1);
-                        double ang = Eigen::AngleAxisf( p.rotation() ).angle();
-                        xform_pos << "SP" << " " << i << " " << ang << " "
-                                  << p.linear().row(0) << " " << p.linear().row(1)<< " " << p.linear().row(2) << " "
-                                  << p.translation().x() << " " << p.translation().y() << " " << p.translation().z() << std::endl;
-                    }
-                }
-
-                xform_pos.close();
-
-                return 0;
-            }
             
 
 
-            // parse and read in the exhausitive searching positions.
-            std::vector< std::pair< int64_t, EigenXform > > xform_positions;
-            {
-                runtime_assert_msg(parse_exhausitive_searching_file(opt.xform_fname, xform_positions /*, 10*/), "Faild to parse the xform file!!!");
-            }
             
-            // nowo I have ererything (seeding positions and exhausitive searching positions ), I can just do the calcusition without the director!!
             
             std::vector< std::vector< SearchPointWithRots > > packed_results;
             std::vector< ScenePtr > scene_pt( omp_max_threads_1() );
             std::vector< ScenePtr > scene_hpack_pt( omp_max_threads_1() );
+            
             {
-                std::vector< std::vector< SearchPoint > > samples;
+                // v(v(v)) each_seeding:hsearch_samples:each_sesolution
+                std::vector< std::vector< SearchPoint > > hsearch_samples;
+                std::vector< std::vector< std::vector< SearchPoint > > > samples;
                 
                 int64_t seeding_size = director->size(0, RifDockIndex() ).seeding_index;
-                int64_t nest_size = xform_positions.size();
+            
+                samples.resize( seeding_size );
+                
+                // clone scene for each thread.
+                BOOST_FOREACH( ScenePtr & s, scene_pt ) s = scene_minimal->clone_shallow();
                 
                 std::cout << std::endl;
                 std::cout << "========================================== Now the Hsearch stage ============================================" << std::endl << std::endl;
-                std::cout << "Rifine stage: begin threaded exhausitive searching, " << KMGT( nest_size ) << " samples, " << KMGT( seeding_size ) << " seeding positions." << std::endl;
+                std::cout << "Perform hierarchical search for " << KMGT( seeding_size ) << " seeding positions." << std::endl;
                 
-                int64_t const out_interval = seeding_size * nest_size / 109;
-                std::chrono::time_point<std::chrono::high_resolution_clock> start, end;
-                start = std::chrono::high_resolution_clock::now();
-                
-                // prefill the samples vector
-                samples.resize( seeding_size );
-                for ( int64_t ii = 0; ii < seeding_size; ++ii) samples[ii].resize( nest_size );
-                
-                
-                // set up scene for each thread
-                // I think shallow is enough, because I will never change the conformation .....
-                BOOST_FOREACH( ScenePtr & s, scene_pt ) s = scene_minimal->clone_shallow();
-                
-                // do a real exhausitive search of all the searching points.
-                #ifdef USE_OPENMP
-                #pragma omp parallel for schedule(dynamic,64)
-                #endif
-                for ( int64_t i_seed = 0; i_seed < seeding_size; ++i_seed ) {
-                    for ( int64_t i_samp = 0; i_samp < nest_size; ++i_samp ) {
+                // loop over each seeding position
+                for ( uint64_t iseed = 0; iseed < seeding_size; ++iseed ) {
+                    std::cout << "##########////    seeding pos" <<  iseed << "   ////##########" << std::endl;
+                    
+                    bool search_failed = false;
+                    
+                    // initialize all the index for RESL0
+                    samples[iseed].resize( RESLS.size());
+                    samples[iseed][0].resize( director->size(0, RifDockIndex()).nest_index );
+                    for ( uint64_t ii=0; ii < director->size(0, RifDockIndex()).nest_index; ++ii) {
+                        samples[iseed][0][ii] = SearchPoint( RifDockIndex(ii, iseed) );
+                    }
+                    
+                    
+                    for( int iresl = 0; iresl < RESLS.size(); ++iresl)
+                    {
+                        std::cout << "HSearsh stage " << iresl+1 << " resl " << F(5,2,RESLS[iresl]) << " begin threaded sampling, " << KMGT(samples[iseed][iresl].size()) << " samples: ";
+                        int64_t const out_interval = samples[iseed][iresl].size()/50;
+                        std::exception_ptr exception = nullptr;
+                        std::chrono::time_point<std::chrono::high_resolution_clock> start, end;
+                        start = std::chrono::high_resolution_clock::now();
+                        // iterate over all resolutions
+                        #ifdef USE_OPENMP
+                        #pragma omp parallel for schedule(dynamic,64)
+                        #endif
+                        for ( int64_t i = 0; i < samples[iseed][iresl].size(); ++i ) {
+                            if( exception ) continue;
+                            try {
+                                if( i%out_interval==0 ){ std::cout << '*'; std::cout.flush(); }
+                                RifDockIndex const isamp = samples[iseed][iresl][i].index;
+                                ScenePtr tscene( scene_pt[omp_get_thread_num()] );
+                                bool director_success = director->set_scene( isamp, iresl, *tscene );
+                                if ( ! director_success ) {
+                                    samples[iseed][iresl][i].score = 9e9;
+                                    continue;
+                                }
+                                if ( opt.tether_to_input_position ) {
+                                    EigenXform x = tscene->position(1);
+                                    x.translation() -= scaffold_center;
+                                    float xmag =  xform_magnitude( x, redundancy_filter_rg );
+                                    if( xmag > opt.tether_to_input_position_cut + RESLS[iresl] ){
+                                        samples[iseed][iresl][i].score = 9e9;
+                                        continue;
+                                    }
+                                }
+                                
+                                // the real rif score!!!!!!
+                                samples[iseed][iresl][i].score = objectives[iresl]->score( *tscene );
+                            } catch( std::exception const & ex ) {
+                                #ifdef USE_OPENMP
+                                #pragma omp critical
+                                #endif
+                                exception = std::current_exception();
+                            }
+                        } // endl of searching in a specific resolution
+                        if( exception ) std::rethrow_exception(exception);
+                        end = std::chrono::high_resolution_clock::now();
+                        std::chrono::duration<double> elapsed_seconds_rif = end-start;
+                        float rate = (double)samples[iresl].size()/ elapsed_seconds_rif.count()/omp_max_threads();
+                        std::cout << std::endl;// << "done threaded sampling, partitioning data..." << endl;
                         
-                        if ( ( i_seed * nest_size + i_samp ) % out_interval == 0 ) { std::cout << '*'; std::cout.flush(); }
+                        // sort and filter the results
+                        SearchPoint max_pt, min_pt;
+                        int64_t len = samples[iseed][iresl].size();
+                        if( samples[iseed][iresl].size() > opt.beam_size/opt.DIMPOW2 ){
+                            __gnu_parallel::nth_element( samples[iseed][iresl].begin(), samples[iseed][iresl].begin()+opt.beam_size/opt.DIMPOW2, samples[iseed][iresl].end() );
+                            len = opt.beam_size/opt.DIMPOW2;
+                            min_pt = *__gnu_parallel::min_element( samples[iseed][iresl].begin(), samples[iseed][iresl].begin()+len );
+                            max_pt = *(samples[iseed][iresl].begin()+opt.beam_size/opt.DIMPOW2 );
+                        } else {
+                            min_pt = *__gnu_parallel::min_element( samples[iseed][iresl].begin(), samples[iseed][iresl].end() );
+                            max_pt = *__gnu_parallel::max_element( samples[iseed][iresl].begin(), samples[iseed][iresl].end() );
+                        }
+                        std::cout << "HSearsh stage " << iresl+1 << " complete, resl. " << F(7,3,RESLS[iresl]) << ", "
+                        << " " << KMGT(samples[iseed][iresl].size()) << ", promote: " << F(9,6,min_pt.score) << " to "
+                        << F(9,6, std::min(opt.global_score_cut,max_pt.score)) << " rate " << KMGT(rate) << "/s/t " << std::endl;
+
+                        // already the highest resolution, so jump out of the loop
+                        if( iresl+1 == samples[iseed].size() ) break;
                         
-                        ScenePtr tscene( scene_pt[omp_get_thread_num()] );
-                        
-                        // TODO: only the index is enough, I think.
-                        EigenXform p(EigenXform::Identity());
-                        p.rotate( xform_positions[i_samp].second.rotation() * seeding_positions[i_seed].rotation() );
-                        p.translation() = xform_positions[i_samp].second.translation() + seeding_positions[i_seed].translation();
-                        
-                        
-                        tscene->set_position(1, p);
-                        
-                        samples[i_seed][i_samp].index.nest_index = xform_positions[i_samp].first;
-                        samples[i_seed][i_samp].index.seeding_index = i_seed;
-                        samples[i_seed][i_samp].score = objectives.back()->score(*tscene);
-                        
-                    } // end loop of each xform position
-                } // end loop of each seeding position
+                        for ( int64_t i = 0; i < len; ++i ) {
+                            RifDockIndex isamp0 = samples[iseed][iresl][i].index;
+                            if ( samples[iseed][iresl][i].score >= opt.global_score_cut ) continue;
+                            // if (iresl == 0) ++non0_space_size;
+                            for (uint64_t j = 0; j < opt.DIMPOW2; ++j) {
+                                RifDockIndex isamp( isamp0.nest_index * opt.DIMPOW2 + j, iseed );
+                                samples[iseed][iresl+1].push_back( SearchPoint( isamp ) );
+                            }
+                        }
+                        if ( 0 == samples[iseed][iresl+1].size() ) {
+                            search_failed = true;
+                            std::cout << "search fail, no valid samples!" << std::endl;
+                            break;
+                        }
+                        samples[iseed][iresl].clear();
+                    } // loop for all resolutions
+                    // check in this seeding position, if there is any valide search point.
+                    if (search_failed) continue;
+                    // now sort the final hsearch result
+                    std::cout << "full sort of final samples" << std::endl;
+                    __gnu_parallel::sort( samples[iseed].back().begin(), samples[iseed].back().end() );
+                } // loop for all seeding positions
                 
                 // selecting the best for hack pack.
                 std::cout << "" << std::endl;
-                std::cout << "Done with rifinement stage, now selecting the best results for hpack." << std::endl;
-                int64_t const len = nest_size * seeding_size;
+                std::cout << "Done with hsearch_rifine stage, now selecting the best results for hpack." << std::endl;
                 
                 
-                #ifdef USE_OPENMP
-                #pragma omp parallel for schedule(dynamic,64)
-                #endif
-                for ( int64_t i_seed = 0; i_seed < seeding_size; ++i_seed ) {
-                    if ( len > opt.beam_size /* opt.beam_size / opt.DIMPOW2 */ ) {
-                        int64_t len_each = int( std::ceil ( opt.beam_size / seeding_size ) );
-                        std::nth_element( samples[i_seed].begin(), samples[i_seed].begin()+len_each, samples[i_seed].end() );
-                        samples[i_seed].resize( len_each );
-                    }
-                    std::sort(samples[i_seed].begin(), samples[i_seed].end());
-                    
-                }
-                
-                
-                end = std::chrono::high_resolution_clock::now();
-                std::cout << "Rifine and selection stage done, and it took "  << (end - start).count() << " CPU ticks." << std::endl << std::endl;
                 
                 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                 /////////////////////////////////                 HACK PACK                  ///////////////////////////////////////////////
@@ -1043,40 +1015,44 @@ int main( int argc, char *argv[] )
                     
                     
                     
-                    // As Brian said, the hackpack is very fast, so Maybe I should pack all of them?????????
-                    // So here I changed the logic of pack samples selection.
-                    // It would be a little slow to hackpack all of them.
-                    // But finally, I found the hack pack is much slower, so I should pick the top x percent for the hpack stage.
-                    packed_results.resize(seeding_size);
-                    
-                    // it is a little bit tricky to setup the progress  bar for the hackpack step, as the number of the samples in each seeding position is different.
-                    // also here setup the number of samples to hackpack.
                     std::vector<std::vector< bool > > progress_bar(seeding_size);
                     {
                         int64_t out_interval = 0;
                         int64_t total_npack = 0;
-                        for (int64_t i_seed = 0; i_seed < seeding_size; ++i_seed) {
-                            int cutoff_score_pos = -1;
-                            int each_seed_size = samples[i_seed].size();
-                            for ( int64_t i_samp = 0; i_samp < each_seed_size; ++i_samp) {
-                                // here I change this to cluster_score_cut, it is better as .......
-                                // cluster score here, good .......
-                                if ( samples[i_seed][i_samp].score >= opt.cluster_score_cut ) {
-                                    cutoff_score_pos = i_samp;
-                                    break;
+                        // now put all samples into the hsearch_samples.
+                        for ( int64_t iseed = 0; iseed < samples.size(); ++iseed ) {
+                            // make sure there are valide points
+                            if ( samples[iseed].size() != RESLS.size() ) continue;
+                            // count how many designs could pass the global score cut
+                            int64_t n_packsamp = 0;
+                            for ( n_packsamp; n_packsamp < samples[iseed].back().size(); ++n_packsamp ) {
+                                if ( samples[iseed].back()[n_packsamp].score > opt.global_score_cut ) break;
+                            }
+                            int npack = std::min( n_packsamp, int64_t(samples[iseed].back().size() * opt.hack_pack_frac) );
+                        
+                            if (npack>0) {
+                                total_npack += npack;
+                                packed_results.resize( packed_results.size() +1 );
+                                packed_results.back().resize(npack);
+                                for (uint64_t ii=0; ii<npack; ++ii) {
+                                    packed_results.back()[ii].index = samples[iseed].back()[ii].index;
+                                    packed_results.back()[ii].prepack_rank = ii;
                                 }
                             }
-                            // define the number of samples in each seeding position.
-                            int n_sample = int( std::ceil ( ((-1 == cutoff_score_pos) ? each_seed_size: cutoff_score_pos) * opt.hack_pack_frac ) );
-                            
-                            packed_results[i_seed].resize(n_sample);
-                            progress_bar[i_seed].resize( n_sample );
-                            total_npack += n_sample;
+                        } // loop for each seeding positions
+                        
+                        // no valide results for hackpacking, jump to the next scaffolds.
+                        // need to check at each step to make sure there are still valid results.
+                        if (total_npack == 0) {
+                            continue;
                         }
+                        
                         out_interval = total_npack / 109;
                         out_interval = out_interval > 0 ? out_interval : 1;
                         total_npack = 0;
-                        for (int64_t i_seed = 0; i_seed < seeding_size; ++i_seed) {
+                        progress_bar.resize( packed_results.size() );
+                        for (int64_t i_seed = 0; i_seed < packed_results.size(); ++i_seed) {
+                            progress_bar[i_seed].resize( packed_results[i_seed].size() );
                             for (int64_t i_samp = 0; i_samp < packed_results[i_seed].size(); ++i_samp) {
                                 total_npack += 1;
                                 if (total_npack % out_interval == 0) {
@@ -1088,23 +1064,20 @@ int main( int argc, char *argv[] )
                         }
                     }
                     
-                    
                     // the real hackpack part.
                     
                     #ifdef USE_OPENMP
                     #pragma omp parallel for schedule(dynamic,64)
                     #endif
-                    for ( int64_t i_seed = 0; i_seed < seeding_size; ++i_seed ) {
+                    for ( int64_t i_seed = 0; i_seed < packed_results.size(); ++i_seed ) {
                         for (int64_t i_sample = 0; i_sample < packed_results[i_seed].size(); ++i_sample) {
                             
                             if ( true == progress_bar[i_seed][i_sample] ) { std::cout << '*'; std::cout.flush(); }
                             
-                            packed_results[i_seed][i_sample].index = samples[i_seed][i_sample].index;
-                            packed_results[i_seed][i_sample].prepack_rank = i_sample;
                             
                             // choose the scene.
                             ScenePtr tscene( scene_hpack_pt[omp_get_thread_num()] );
-                            bool director_success = director->set_scene( packed_results[i_seed][i_sample].index, 0, *tscene );
+                            bool director_success = director->set_scene( packed_results[i_seed][i_sample].index, RESLS.size()-1, *tscene );
                             if ( ! director_success ) {
                                 // packed_results[ ipack ].rotamers(); // this initializes it to blank
                                 packed_results[ i_seed ][ i_sample ].score = 9e9;
@@ -1119,7 +1092,7 @@ int main( int argc, char *argv[] )
                     #ifdef USE_OPENMP
                     #pragma omp parallel for schedule(dynamic,64)
                     #endif
-                    for (int64_t i_seed=0; i_seed < seeding_size; ++i_seed) {
+                    for (int64_t i_seed=0; i_seed < packed_results.size(); ++i_seed) {
                         std::sort(packed_results[i_seed].begin(), packed_results[i_seed].end());
                     }
                     
@@ -1134,89 +1107,83 @@ int main( int argc, char *argv[] )
             
             
             // condense and select the good results, I would also use the redundancy filter to remove the bad ones.
-            std::vector< std::vector< SearchPointWithRots > > scoremin_results;
+            // very bad name here, but to make less changes for the the rifine code, I just set the vector name to
+            // rifine results.
+            std::vector< SearchPointWithRots > rifine_results;
             {
-                print_header( "find good seeding pos by cluster score and filter redundant hackpack results" );
-                int64_t const seeding_size = director->size(0, RifDockIndex()).seeding_index;
+                std::vector< SearchPointWithRots > packed_results_all;
                 
-                // cluster score in each seeding position.
-                std::vector< int > cluster_score(seeding_size, -1);
-                for (int64_t i_seed = 0; i_seed < seeding_size; ++i_seed) {
-                    int c_score = 0;
-                    for (int64_t i_samp = 0; i_samp < packed_results[i_seed].size(); ++i_samp) {
-                        if ( packed_results[i_seed][i_samp].score > opt.cluster_score_cut ) {
+                print_header( "Now perform redundancy filtering" );
+                print_header("condense all results and do redundancy filtering");
+                
+                for (int64_t i_seed=0; i_seed < packed_results.size(); ++i_seed) {
+                    int64_t nsamples = 0;
+                    for ( int64_t i_samp=0; i_samp<packed_results[i_seed].size(); ++i_samp) {
+                        if (packed_results[i_seed][i_samp].score > opt.score_after_hackpack_cut) {
                             break;
                         }
-                        c_score += 1;
+                        nsamples += 1;
                     }
-                    cluster_score[i_seed] = c_score;
+                    std::copy( packed_results[i_seed].begin(), packed_results[i_seed].begin()+nsamples, std::back_inserter(packed_results_all) );
                 }
+                std::sort(packed_results_all.begin(), packed_results_all.end());
                 
+                std::cout << "Total number of output before filtering is " << KMGT( packed_results_all.size() ) << std::endl;
                 
-                // print the cluster score of each seeding position.
-                std::cout << "Cluster score of each seeding pos: " << std::endl;
-                for (int64_t i_seed = 0; i_seed < seeding_size; ++i_seed) {
-                    std::cout << i_seed << ":" << cluster_score[i_seed] << " ";
-                }
-                std::cout << std::endl;
-                
-                std::vector<int> cluster_score_nth;
-                for ( auto a : cluster_score ) if(a > 0) cluster_score_nth.push_back(a);
-                
-                // I almost forgot the logic of the complex code here, ohhh, my god .................
-                // fix the bug, segment fault
-                if ( cluster_score_nth.size() == 0 ) {
-                    throw "No valid seeding positions found!!!";
-                }
-                
-                int c_score_cut = int( std::floor ( (1 - opt.keep_top_clusters_frac) * cluster_score_nth.size() ) );
-                std::nth_element( cluster_score_nth.begin(), cluster_score_nth.begin()+c_score_cut, cluster_score_nth.end() );
-                int cutoff_of_num = cluster_score_nth[c_score_cut];
-                
-                std::cout << std::endl << "Cutoff value of clusters: " << cutoff_of_num << std::endl;
-                
-                for (int i_seed = 0; i_seed < seeding_size; ++i_seed) {
-                    if ( cluster_score[i_seed] >= cutoff_of_num && packed_results[i_seed].size() > 0 && packed_results[i_seed][0].score <= opt.global_score_cut ) {
-                        scoremin_results.resize( scoremin_results.size() + 1 );
-                        scoremin_results.back().push_back( packed_results[i_seed][0] );
-                        for (int i_samp = 1; i_samp < packed_results[i_seed].size() && packed_results[i_seed][i_samp].score < opt.global_score_cut; ++i_samp) {
-                            bool is_redundant = false;
-                            for ( int64_t i_selected = 0; i_selected < scoremin_results.back().size(); ++i_selected ) {
-                                director->set_scene( packed_results[i_seed][i_samp].index, 0, *scene_minimal );
-                                director->set_scene( scoremin_results.back()[i_selected].index, 0, *scene_full );
-                                EigenXform p1 = scene_minimal->position(1);
-                                EigenXform p2 = scene_full->position(1);
-                                float mag = devel::scheme::xform_magnitude( p2 * p1.inverse(), redundancy_filter_rg );
-                                if ( mag <= opt.redundancy_filter_mag ) {
-                                    is_redundant = true;
-                                    break;
-                                }
-                            }
-                            if ( !is_redundant ) {
-                                scoremin_results.back().push_back( packed_results[i_seed][i_samp] );
-                            }
+                // the real redundancy filtering stage happens here
+                {
+                    std::vector<EigenXform> selected_xforms;
+                    selected_xforms.reserve(65535);
+                    float redundancy_filter_mag = opt.redundancy_filter_mag;
+                    std::cout << "redundancy_filter_mag " << redundancy_filter_mag << "A \"rmsd\"" << std::endl;
+                    int64_t Nout_singlethread = std::min( (int64_t)10000, (int64_t)packed_results_all.size() );
+                    
+                    std::cout << "going through 10K results ( 1 thread ): ";
+                    int64_t out_interval = 10000/81;
+                    for( int64_t isamp=0; isamp < Nout_singlethread; ++isamp ) {
+                        if (isamp%out_interval == 0) std::cout << "*"; std::cout.flush();
+                        redundancy_filtering< EigenXform, ScenePtr, ObjectivePtr >(
+                                    isamp, RESLS.size()-1, packed_results_all, scene_pt, director,
+                                    redundancy_filter_rg, redundancy_filter_mag,
+                                    rifine_results, selected_xforms,
+                                    #ifdef USE_OPENMP
+                                    dump_lock
+                                    #endif
+                        );
+                    }
+                    
+                    std::cout << std::endl;
+                    std::cout << "going through all results (threaded): ";
+                    out_interval = (int64_t)packed_results_all.size() / 82;
+                    std::exception_ptr exception = nullptr;
+                    #ifdef USE_OPENMP
+                    #pragma omp parallel for schedule(dynamic,8)
+                    #endif
+                    for( int64_t isamp = Nout_singlethread; isamp < packed_results_all.size(); ++isamp ) {
+                        if( exception ) continue;
+                        try {
+                            if( isamp%out_interval==0 ){ std::cout << '*'; std::cout.flush(); }
+                            redundancy_filtering< EigenXform, ScenePtr, ObjectivePtr >(
+                                    isamp, RESLS.size()-1, packed_results_all, scene_pt, director,
+                                    redundancy_filter_rg, redundancy_filter_mag,
+                                    rifine_results, selected_xforms,
+                                    #ifdef USE_OPENMP
+                                    dump_lock
+                                    #endif
+                            );
+                            
+                        } catch (...) {
+                            #pragma omp critical
+                            exception = std::current_exception();
                         }
                     }
-                }
+                } // end block of redundancy filtering
                 
-                // report the total number of results left
-                int64_t total_left = 0;
-                std::cout << std::endl << "Num of samples left in selected seeding position: " << std::endl;
-                for ( auto & a : scoremin_results ){
-                    int num = a.size();
-                    total_left += num;
-                    std::cout << a[0].index.seeding_index << ":" << num << " ";
-                }
-                std::cout << std::endl << std::endl;
-                std::cout << "Number of total searching points left: " << total_left << std::endl << std::endl;
+                std::cout << "Total number of output after filtering is " << KMGT( rifine_results.size() ) << std::endl;
+                
             }
             
 
-            
-            
-            
-            
-            
             
             
             /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1225,7 +1192,7 @@ int main( int argc, char *argv[] )
             // rossetta score and min, you should always do rosetta score and min, there is no way to skip this step
             // TODO: add code if skip this step, should I do this. Just for fun and a waste of time??
             // Maybe here I can use the rosetta_score_each_seeding_at_least flag, as it is useful for each seeding position.
-            std::vector<SearchPointWithRots> rifine_results;
+            // all the data are stored in the scoremin_results vector, sorted and redundancy filtered.
             bool const do_rosetta_score = opt.rosetta_score_fraction > 0 || opt.rosetta_score_then_min_below_thresh > -9e8 || opt.rosetta_score_each_seeding_at_least > 0;
             if ( do_rosetta_score && opt.hack_pack ) {
                 
@@ -1234,7 +1201,7 @@ int main( int argc, char *argv[] )
                 
                
                 
-                
+                int n_score_calculations = 0;
                 int do_min = 2;
                 if ( opt.rosetta_min_fraction == 0.0 ) do_min = 1;
                 
@@ -1243,21 +1210,6 @@ int main( int argc, char *argv[] )
                     is_scaffold_fixed_res[designable] = false;
                 }
                 
-                
-                // I don't know how to name the final result. Maybe just rifine.
-                int total_score_min = 0;
-                int out_interval = 1;
-                {
-                    for (int64_t i_seed = 0; i_seed < scoremin_results.size(); ++i_seed) {
-                        int n_sample = int( std::round( scoremin_results[i_seed].size() * opt.rosetta_score_fraction ) );
-                        n_sample = n_sample > opt.rosetta_score_each_seeding_at_least ? n_sample : opt.rosetta_score_each_seeding_at_least;
-                        n_sample = scoremin_results[i_seed].size() > n_sample ? n_sample : scoremin_results[i_seed].size();
-                        total_score_min += n_sample;
-                        for ( int64_t i_samp = 0; i_samp < n_sample; ++i_samp) {
-                            rifine_results.push_back( scoremin_results[i_seed][i_samp] );
-                        }
-                    }
-                }
                 
                 
                 for (int minimizing = 0; minimizing < do_min; ++minimizing) {
@@ -1325,35 +1277,41 @@ int main( int argc, char *argv[] )
                     } // end loop of initialize of scorefunctions.
                     
                     
-                    // decide the numbers to score and min. I think here I am using the global score cut to remove the "bad" designs.
-                    {
-                        if ( minimizing ) {
-                            
-                            int num_to_min = int ( std::ceil ( total_score_min * opt.rosetta_min_fraction ) );
-                            if ( num_to_min < opt.rosetta_min_at_least ) {
-                                total_score_min = opt.rosetta_min_at_least > total_score_min ? total_score_min : opt.rosetta_min_at_least ;
-                            } else {
-                                total_score_min = num_to_min;
+                    // I would make the "fraction" schema simpler.
+                    size_t n_scormin = 0;
+                    if( minimizing ){
+                        // min take ~10x score time, so do on 1/10th of the scored
+                        n_scormin = int( std::ceil(n_score_calculations * opt.rosetta_min_fraction) );
+                        // padding to the num of threads
+                        n_scormin = std::ceil(1.0f*n_scormin/omp_max_threads()) * omp_max_threads();
+                        // make sure not to big.
+                        n_scormin = std::min( (int64_t)n_scormin, (int64_t)n_score_calculations);
+                    } else {
+                        // for scoring, use user cut
+                        n_scormin = opt.rosetta_score_fraction * rifine_results.size();
+                        if( opt.rosetta_score_then_min_below_thresh > -9e8 ){
+                            for( n_scormin=0; n_scormin < rifine_results.size(); ++n_scormin ){
+                                if( rifine_results[n_scormin].score > opt.rosetta_score_then_min_below_thresh )
+                                    break;
                             }
-                            
-                            
-                            out_interval = total_score_min / 109;
-                            out_interval = out_interval > 0 ? out_interval : 1;
-                            std::cout << std::endl << "rosetta min on: "   << KMGT(total_score_min) << std::endl;
-                        } else {
-                            // I just think 109 is beautiful, there is no reason why.
-                            out_interval = total_score_min / 109;
-                            out_interval = out_interval > 0 ? out_interval : 1;
-                            std::cout << "rosetta score on: " << KMGT(total_score_min) << std::endl;
                         }
-                    } // end block of the code to decide the numbers to score and min.
+                        n_scormin = std::min<int>( std::max<int>( n_scormin, opt.rosetta_score_at_least ), opt.rosetta_score_at_most );
+                        n_scormin = std::min<int>( n_scormin, rifine_results.size() );
+                        n_score_calculations = n_scormin;
+                    }
+                    rifine_results.resize(n_scormin);
                     
+                    
+                    int64_t const out_interval = std::max<int64_t>(1,n_scormin/50);
+                    if( minimizing) std::cout << "rosetta min on "   << KMGT(n_scormin) << ": ";
+                    else            std::cout << "rosetta score on " << KMGT(n_scormin) << ": ";
+                    std::exception_ptr exception = nullptr;
                     
                     // the real score and min code.
                     #ifdef USE_OPENMP
                     #pragma omp parallel for schedule(dynamic,1)
                     #endif
-                    for (int64_t i_samp = 0; i_samp < total_score_min; ++i_samp) {
+                    for (int64_t i_samp = 0; i_samp < n_scormin; ++i_samp) {
                             
                             if ( i_samp % out_interval == 0 ) { std::cout << '*'; std::cout.flush();  };
                             
@@ -1501,7 +1459,7 @@ int main( int argc, char *argv[] )
                                 }
                                 rifine_results[i_samp].score = rosetta_score;
                             }
-                            
+
                             // store the results?
                             if( (minimizing+1 == do_min)     && rifine_results[i_samp].score <= opt.rosetta_score_cut && !opt.only_dump_scaffold /*only dump scaffold*/ ){
                                 rifine_results[i_samp].pose_ = core::pose::PoseOP( new core::pose::Pose(pose_to_min) );
@@ -1527,7 +1485,19 @@ int main( int argc, char *argv[] )
                 
                 
                     // sort the results
-                    __gnu_parallel::sort( rifine_results.begin(), rifine_results.begin() + total_score_min );
+                    __gnu_parallel::sort( rifine_results.begin(), rifine_results.end() );
+
+                    if ( opt.test_longxing ) {
+                        if ( minimizing == 0 ) {
+                            std::cout << "Top scores after rosetta score:" << std::endl;
+                        } else {
+                            std::cout << "Top scores after minimization:" << std::endl;
+                        }
+                        for( int64_t ii = 0; ii < 20 && ii < rifine_results.size(); ++ii ) {
+                            std::cout << rifine_results[ii].score << "   ";
+                        }
+                        std::cout << std::endl;
+                    }
                  // end loop of minimizing
                 }
                 std::chrono::duration<double> elapsed_seconds_rosetta = std::chrono::high_resolution_clock::now()-start_rosetta;
@@ -1560,7 +1530,7 @@ int main( int argc, char *argv[] )
                 for( int64_t isamp=0; isamp < Nout_singlethread; ++isamp ) {
                     if (isamp%out_interval == 0) std::cout << "*"; std::cout.flush();
                     awful_compile_output_helper< EigenXform, ScenePtr, ObjectivePtr >(
-                            isamp, 0/*  RESLS.size()-1 */, rifine_results, scene_pt, director,
+                            isamp, RESLS.size()-1, rifine_results, scene_pt, director,
                             redundancy_filter_rg, redundancy_filter_mag, scaffold_center,
                             allresults_pt, selected_results, selected_xforms, n_pdb_out,
                             #ifdef USE_OPENMP
@@ -1583,7 +1553,7 @@ int main( int argc, char *argv[] )
                     try {
                         if( isamp%out_interval==0 ){ std::cout << '*'; std::cout.flush(); }
                         awful_compile_output_helper< EigenXform, ScenePtr, ObjectivePtr >(
-                                isamp, 0/*RESLS.size()-1, the reason I set this to 0 is that, the resl0 is set to 1 already!!!*/, rifine_results, scene_pt, director,
+                                isamp, RESLS.size()-1, rifine_results, scene_pt, director,
                                 redundancy_filter_rg, redundancy_filter_mag, scaffold_center,
                                 allresults_pt, selected_results, selected_xforms, n_pdb_out,
                                 #ifdef USE_OPENMP
@@ -1618,7 +1588,7 @@ int main( int argc, char *argv[] )
             ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             
             
-            output_results( selected_results, rif_ptrs, director, scene_minimal, 0 /*RESLS.size()-1. resl0 is set to 1 here.*/, scaffres_l2g, opt.align_to_scaffold, scafftag, opt.outdir, opt.output_tag, dokout);
+            output_results( selected_results, rif_ptrs, director, scene_minimal, RESLS.size()-1, scaffres_l2g, opt.align_to_scaffold, scafftag, opt.outdir, opt.output_tag, dokout);
             
 //            // output results here. It is easy here as ........
 //            // there is no need to cluster the results ........

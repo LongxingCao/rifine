@@ -714,6 +714,7 @@ int main(int argc, char *argv[]) {
 						int64_t num_pass_global_cut = 0;
 						for ( int64_t ii = 0; ii < packed_results.size(); ++ii )
 						{
+								// the reason that I add the check here is that rif residues are rescored duing the hackpack stage.
 								if ( packed_results[ii].score > opt.score_after_hackpack_cut ) break;
 								++num_pass_global_cut;
 						}

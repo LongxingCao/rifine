@@ -308,6 +308,64 @@ using _RifDockResult = tmplRifDockResult<_DirectorBigIndex<__Director>>;
 typedef _RifDockResult<DirectorBase> RifDockResult;
     
     
+    // This function is just a simplified version of awful_compile_output_helper
+    // designed to do redundancy filtering after hackpack
+    // the only function is redundancy filtering, no score check, no pose check.
+    // purely based on xform position.
+    template<
+    class EigenXform,
+    class ScenePtr,
+    class ObjectivePtr
+    >
+    void redundancy_filtering(
+                              int64_t isamp,
+                              int iresl,
+                              std::vector< SearchPointWithRots > const & packed_results,
+                              std::vector< ScenePtr > & scene_pt,
+                              DirectorBase director,
+                              float redundancy_filter_rg,
+                              float redundancy_filter_mag,
+                              std::vector< SearchPointWithRots > & selected_results,
+                              std::vector< EigenXform > & selected_xforms,
+                              #ifdef USE_OPENMP
+                              omp_lock_t & dump_lock
+                              #endif
+    )
+    {
+        SearchPointWithRots const & sp = packed_results[isamp];
+        ScenePtr scene_minimal( scene_pt[omp_get_thread_num()] );
+        director->set_scene( sp.index, iresl, *scene_minimal );
+        EigenXform xposition1 = scene_minimal->position(1);
+        EigenXform xposition1inv = xposition1.inverse();
+        
+        float mindiff_candidate = 9e9;
+        BOOST_FOREACH( EigenXform const & xsel, selected_xforms ){
+            EigenXform const xdiff = xposition1inv * xsel;
+            mindiff_candidate = std::min( mindiff_candidate, devel::scheme::xform_magnitude( xdiff, redundancy_filter_rg ) );
+        }
+        if( mindiff_candidate > redundancy_filter_mag ) {
+            // need to double check this because of multi-threading issues
+            #ifdef USE_OPENMP
+            omp_set_lock( &dump_lock );
+            #endif
+            {
+                float mindiff_candidate = 9e9;
+                BOOST_FOREACH( EigenXform const & xsel, selected_xforms ){
+                    EigenXform const xdiff = xposition1inv * xsel;
+                    mindiff_candidate = std::min( mindiff_candidate, devel::scheme::xform_magnitude( xdiff, redundancy_filter_rg ) );
+                }
+                if ( mindiff_candidate > redundancy_filter_mag ) {
+                    if( redundancy_filter_mag > 0.0001 ) {
+                        selected_xforms.push_back( xposition1 );
+                    }
+                    selected_results.push_back( sp );
+                }
+            }
+            #ifdef USE_OPENMP
+            omp_unset_lock( &dump_lock );
+            #endif
+        }
+    }
     
     // how can I fix this??? make the whole prototype into a class maybe???
     // what does it do?
@@ -483,9 +541,7 @@ typedef _RifDockResult<DirectorBase> RifDockResult;
             
 						// be careful here. Usually, the pose has been minimized, so the positions are different from
 						// the BBActors....
-						std::cout << "################ pose size " << selected_result.pose_->size() << std::endl;
             core::pose::Pose pose_to_dump(*selected_result.pose_);
-            
 
 						director->set_scene( selected_result.scene_index, iresl, *scene_minimal );
             std::vector< std::pair< int, std::string > > brians_infolabels;
