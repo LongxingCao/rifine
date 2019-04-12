@@ -756,28 +756,31 @@ int main( int argc, char *argv[] )
             
             
 
-            // parse the seeding files.
+            // generate random initial starting position to cover more starting positions
             // the seedings here just mean some random initial starting positions.
-            std::string seeding_fname = "";
             shared_ptr<std::vector<EigenXform> > seeding_positions_p = make_shared<std::vector<EigenXform> >();
             std::vector<EigenXform> & seeding_positions(*seeding_positions_p);
-            bool use_seeding = false;
             {
-                if( opt.seeding_fnames.size() ){
-                    if( opt.seeding_fnames.size() == opt.scaffold_fnames.size() ){
-                        seeding_fname = opt.seeding_fnames.at(iscaff);
-                    }  else {
-                        utility_exit_with_message( "-seeding_files list not same length as -scaffolds list" );
+                EigenXform xx(EigenXform::Identity());
+                seeding_positions.push_back(xx);
+                for( int ii = 1; ii < opt.random_initial_seeds; ++ii ) {
+                    EigenXform yy;
+                    // try 1000 times one
+                    for( int jj = 0; jj < 1000; ++jj ) {
+                        ::scheme::numeric::rand_xform( rng, yy, (float)8.0 );
+                        bool redundant = false;
+                        for( EigenXform const & zz : seeding_positions ) {
+                            float mag = xform_magnitude( yy * zz.inverse(), redundancy_filter_rg);
+                            if ( mag < opt.redundancy_filter_mag ) {
+                                redundant = true;
+                                break;
+                            }
+                        }
+                        if ( !redundant ) {
+                            seeding_positions.push_back(yy);
+                            break;
+                        }
                     }
-                    runtime_assert_msg(parse_seeding_file(seeding_fname, seeding_positions, opt.seeding_by_patchdock, opt.patchdock_min_sasa, opt.patchdock_top_ranks), "Faild to parse the seeding file!!!");
-                    
-                    EigenXform x(EigenXform::Identity());
-                    x.translation() = scaffold_center;
-                    for( auto & t : seeding_positions ) t = t * x;
-
-                    use_seeding = true;
-                }else {
-                    use_seeding = false;
                 }
             }
             
@@ -785,17 +788,15 @@ int main( int argc, char *argv[] )
             if ( opt.test_longxing )
             {
                 std::cout << "scores for the initial seeding positions" << std::endl;
-                if ( use_seeding ) {
-                    for ( int i = 0; i < seeding_positions.size(); ++i ) {
-                        scene_minimal->set_position( 1, seeding_positions[i] );
-                        // output the score of each position:      Seeding position #i: sc sc sc sc sc
-                        std::cout << "Seeding position " << I(5,i + 1) << ":";
-                        for( int j = 0; j < RESLS.size(); ++j ){
-                            double sc = objectives[j]->score(*scene_minimal);
-                            std::cout << " " << F(10,3,sc);
-                        }
-                        std::cout << std::endl;
+                for ( int i = 0; i < seeding_positions.size(); ++i ) {
+                    scene_minimal->set_position( 1, seeding_positions[i] );
+                    // output the score of each position:      Seeding position #i: sc sc sc sc sc
+                    std::cout << "Seeding position " << I(5,i + 1) << ":";
+                    for( int j = 0; j < RESLS.size(); ++j ){
+                        double sc = objectives[j]->score(*scene_minimal);
+                        std::cout << " " << F(10,3,sc);
                     }
+                    std::cout << std::endl;
                 }
             }
             

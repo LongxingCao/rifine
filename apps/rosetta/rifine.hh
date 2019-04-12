@@ -191,6 +191,7 @@ OPT_1GRP_KEY(     StringVector , rif_dock, scaffolds )
     OPT_1GRP_KEY(  String      , rif_dock, hydrophobic_target_res )
 
     OPT_1GRP_KEY(  Real        , rif_dock, score_after_hackpack_cut )
+    OPT_1GRP_KEY(  Integer        , rif_dock, random_initial_seeds )
 
 
 
@@ -380,6 +381,7 @@ OPT_1GRP_KEY(     StringVector , rif_dock, scaffolds )
             NEW_OPT(  rif_dock::hydrophobic_target_res, "Comma separated list of residues to consider for hydrophobics. Default is all res", "" );
 
             NEW_OPT(  rif_dock::score_after_hackpack_cut,      "the cutoff value for docks go to rosetta score and min. if this flag is not set, it will be equal to the global_score_cut, you can set it to a loosen number", -9e9 );
+            NEW_OPT(  rif_dock::random_initial_seeds, "do random perturbation for the initial positions to get more hits, default value one just means the normal hierarchical searching", 1 );
 
 		}
 	#endif
@@ -554,6 +556,7 @@ struct RifDockOpt
     utility::vector1<int> hydrophobic_target_res     ;
 
     float       score_after_hackpack_cut             ;
+    int         random_initial_seeds                 ;
 
     void init_from_cli();
 
@@ -804,6 +807,9 @@ struct RifDockOpt
         } else {
             score_after_hackpack_cut = global_score_cut;
         }
+
+        // this is used in the rifine_hsearch protocol
+        random_initial_seeds                   = option[rif_dock::random_initial_seeds                  ]();
 
 
 	}
