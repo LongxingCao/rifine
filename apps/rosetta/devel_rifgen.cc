@@ -885,7 +885,7 @@ int main(int argc, char *argv[]) {
 	devel::scheme::print_header( "setup global options" );
 	RifDockOpt opt;
 	opt.init_from_cli();
-	utility::file::create_directory_recursive( opt.outdir );
+	//utility::file::create_directory_recursive( opt.outdir );
 
 
 
