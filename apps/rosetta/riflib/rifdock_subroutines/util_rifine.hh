@@ -12,6 +12,7 @@
 #include <core/conformation/Residue.hh>
 #include <core/id/AtomID.hh>
 #include <core/pose/Pose.hh>
+#include<core/scoring/rms_util.hh>
 
 #include <numeric/xyzTransform.hh>
 #include <numeric/xyzVector.hh>
@@ -306,6 +307,67 @@ typedef _SearchPointWithRots<DirectorBase> SearchPointWithRots;
 template <class __Director>
 using _RifDockResult = tmplRifDockResult<_DirectorBigIndex<__Director>>;
 typedef _RifDockResult<DirectorBase> RifDockResult;
+    
+
+
+    // This function is just a simplified version of awful_compile_output_helper
+    // designed to do redundancy filtering after hackpack
+    // the only function is redundancy filtering, no score check, no pose check.
+    // purely based on xform position.
+    template<
+    class EigenXform,
+    class ScenePtr,
+    class ObjectivePtr
+    >
+    void real_rmsd_xform(
+                              int iresl,
+                              std::vector< SearchPointWithRots > const & packed_results,
+                              std::vector< ScenePtr > & scene_pt,
+                              DirectorBase director,
+                              float redundancy_filter_rg,
+															core::pose::Pose const & pose
+    )
+    {
+				const int64_t total_samples = packed_results.size();
+				std::cout << std::endl << "Now calculating the real rmsd and the xform_magnitute (Very slow, I didn't optimize this. Only for testing.') for " << total_samples << std::endl << std::endl;;
+				const int64_t total_num_scores = total_samples * (total_samples - 1) / 2;
+				const int64_t samples_per_dot = total_samples / 109>1? total_samples/109 : 1;
+				typedef std::pair<float, float> RMSD_XFORM;
+				std::vector<RMSD_XFORM> results(total_num_scores);
+				#ifdef USE_OPENMP
+        #pragma omp parallel for schedule(dynamic,16)
+        #endif
+				for( int64_t isamp = 0; isamp < total_samples; ++isamp ) {
+						if ( isamp % samples_per_dot == 0 ) std::cout << "*" << std::flush;
+						SearchPointWithRots const & isp = packed_results[isamp];
+						ScenePtr scene_minimal( scene_pt[omp_get_thread_num()] );
+						director->set_scene( isp.index, iresl, *scene_minimal );
+						EigenXform xposition1 = scene_minimal->position(1);
+						EigenXform xposition1inv = xposition1.inverse();
+						core::pose::Pose ipose(pose);
+						core::pose::Pose jpose(pose);
+						xform_pose(ipose, eigen2xyz(xposition1));
+						for( int64_t jsamp = isamp+1; jsamp<total_samples; ++jsamp) {
+								SearchPointWithRots const & jsp = packed_results[jsamp];
+								director->set_scene( jsp.index, iresl, *scene_minimal );
+								EigenXform xposition2 = scene_minimal->position(1);
+								EigenXform xposition2inv = xposition2.inverse();
+								EigenXform const xdiff = xposition1inv * xposition2;
+								float xform_rmsd = devel::scheme::xform_magnitude(xdiff, redundancy_filter_rg);
+								xform_pose(jpose, eigen2xyz(xposition2));
+								float real_rmsd  = core::scoring::all_atom_rmsd_nosuper(ipose, jpose);
+								xform_pose(jpose, eigen2xyz(xposition2inv));
+								int64_t index = total_num_scores - (total_samples - isamp) * (total_samples - isamp - 1) / 2 + (jsamp - isamp) - 1;
+								results[index].first = real_rmsd;
+								results[index].second = xform_rmsd;
+						}
+				}
+				
+				utility::io::ozstream results_file( "rmsd_xformmag.list" );
+				for ( RMSD_XFORM const & r : results ) results_file << r.first << " " << r.second << std::endl;
+				results_file.close();
+				return;
+    }
     
     
     // This function is just a simplified version of awful_compile_output_helper

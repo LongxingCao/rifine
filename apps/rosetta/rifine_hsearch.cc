@@ -1047,6 +1047,8 @@ int main( int argc, char *argv[] )
                         if (total_npack == 0) {
                             continue;
                         }
+
+                        print_header( "hack-packing top " + KMGT(total_npack) );
                         
                         out_interval = total_npack / 109;
                         out_interval = out_interval > 0 ? out_interval : 1;
@@ -1067,10 +1069,10 @@ int main( int argc, char *argv[] )
                     
                     // the real hackpack part.
                     
-                    #ifdef USE_OPENMP
-                    #pragma omp parallel for schedule(dynamic,64)
-                    #endif
                     for ( int64_t i_seed = 0; i_seed < packed_results.size(); ++i_seed ) {
+                        #ifdef USE_OPENMP
+                        #pragma omp parallel for schedule(dynamic,64)
+                        #endif
                         for (int64_t i_sample = 0; i_sample < packed_results[i_seed].size(); ++i_sample) {
                             
                             if ( true == progress_bar[i_seed][i_sample] ) { std::cout << '*'; std::cout.flush(); }
@@ -1131,6 +1133,16 @@ int main( int argc, char *argv[] )
                 
                 std::cout << "Total number of output before filtering is " << KMGT( packed_results_all.size() ) << std::endl;
                 
+
+                if( opt.test_longxing ) {
+                    real_rmsd_xform<EigenXform, ScenePtr, ObjectivePtr> ( RESLS.size()-1,
+                                                                          packed_results_all,
+                                                                          scene_pt,
+                                                                          director,
+                                                                          redundancy_filter_rg,
+                                                                          scaffold_centered);
+                }
+
                 // the real redundancy filtering stage happens here
                 {
                     std::vector<EigenXform> selected_xforms;
@@ -1155,7 +1167,7 @@ int main( int argc, char *argv[] )
                     
                     std::cout << std::endl;
                     std::cout << "going through all results (threaded): ";
-                    out_interval = (int64_t)packed_results_all.size() / 82;
+                    out_interval = (int64_t)( packed_results_all.size() - Nout_singlethread )/ 82;
                     std::exception_ptr exception = nullptr;
                     #ifdef USE_OPENMP
                     #pragma omp parallel for schedule(dynamic,8)
@@ -1180,7 +1192,7 @@ int main( int argc, char *argv[] )
                     }
                 } // end block of redundancy filtering
                 
-                std::cout << "Total number of output after filtering is " << KMGT( rifine_results.size() ) << std::endl;
+                std::cout << std::endl << "Total number of output after filtering is " << KMGT( rifine_results.size() ) << std::endl;
                 
             }
             
@@ -1304,7 +1316,7 @@ int main( int argc, char *argv[] )
                     
                     
                     int64_t const out_interval = std::max<int64_t>(1,n_scormin/50);
-                    if( minimizing) std::cout << "rosetta min on "   << KMGT(n_scormin) << ": ";
+                    if( minimizing) std::cout << std::endl << "rosetta min on "   << KMGT(n_scormin) << ": ";
                     else            std::cout << "rosetta score on " << KMGT(n_scormin) << ": ";
                     std::exception_ptr exception = nullptr;
                     
