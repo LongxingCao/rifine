@@ -107,6 +107,17 @@ namespace rif {
 		out << "ENDMDL" << std::endl;
 
 	}
+    
+    inline float score_cationpi(Eigen::Vector3f const & cation_nv, Eigen::Vector3f const & cation_center, Eigen::Vector3f const & ring_nv, Eigen::Vector3f const & ring_center )
+    {
+        // copied from bcov's cation-pi scoring term
+        Eigen::Vector3f line_other = cation_nv + cation_center;
+        float cylinder_offset = (ring_center-cation_center).cross(ring_center-line_other).norm() / cation_nv.norm()
+        float cylinder_score = 0.0;
+        if( cylinder_offset <= 4) cylinder_offset = std::max<float>(0, std::cos(cylinder_offset/2.0));
+        if( cylinder_score == 0.0 ) return 0.0;
+        
+    }
 
 
 	void
@@ -741,6 +752,7 @@ namespace rif {
 									if( score > final_score_cut ) continue;
 
 									int req_index = -1;
+                                    float cationpi_bonus = 0.0;
 									if( use_apo_requirements ){
 											Eigen::Vector3f currentCB = tscene.position(1) * child.CBcen;
 											for ( int ii = 0; ii< apo_req_nums.size(); ++ ii ){
