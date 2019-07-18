@@ -43,6 +43,7 @@ struct BidentateDefinition {
     std::string atom2_name = "";
     int res2_num = -1;
 };
+
     
 struct HotspotRequirement {
     int req_num = -1;
@@ -61,6 +62,16 @@ struct BidentateRequirement {
     int res1_num = -1;
     std::string atom2_name = "";
     int res2_num = -1;
+};
+
+struct TridentateRequirement {
+    int req_num = -1;
+    std::string atom1_name = "";
+    int res1_num = -1;
+    std::string atom2_name = "";
+    int res2_num = -1;
+    std::string atom3_name = "";
+    int res3_num = -1;
 };
 
 struct ApoReqTerm {
@@ -97,6 +108,7 @@ std::vector< HBondDefinition > get_hbond_definitions( std::string tuning_file );
 std::vector< BidentateDefinition > get_bidentate_definitions( std::string tuning_file );
 std::vector< HbondRequirement > get_hbond_requirement_definitions( std::string tuning_file );
 std::vector< BidentateRequirement > get_bidentate_requirement_definitions( std::string tuning_file );
+std::vector< TridentateRequirement > get_tridentate_requirement_definitions( std::string tuning_file );
 std::vector< HotspotRequirement > get_hotspot_requirement_definitions( std::string tuning_file );
 std::vector< ApoRequirement > get_Apo_requirement_definitions( std::string tuning_file );
 std::vector< PiPiStackingRequirement > get_pipi_stacking_requirement_definitions( std::string tuning_file );

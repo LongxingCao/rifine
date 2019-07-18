@@ -133,8 +133,13 @@ namespace rif {
         std::vector< int > use_bidentate_definition_rays;
         // the requirement definition stuff
         bool const use_requirement_definition = check_requirement_definition_exists( tuning_file ) ;
+				bool use_hbond_requirement_definition = false;
+				bool use_bidentate_requirement_definition = false;
+				bool use_tridentate_requirement_definition = false;
         std::vector< int > hbond_requirement_labels;
         std::vector< int > bidentate_requirement_labels;
+				// that's quite risky, is there a faster way to check subset exists!!!
+        std::vector< int > tridentate_requirement_labels;
 
 		RotamerIndex const & rot_index( *rot_index_p );
 
@@ -285,17 +290,21 @@ namespace rif {
             if ( use_requirement_definition ) {
                 hbond_requirement_labels.resize( target_bonder_names.size() );
                 bidentate_requirement_labels.resize( target_bonder_names.size() );
+                tridentate_requirement_labels.resize( target_bonder_names.size() );
                 for (int ii = 0; ii < target_bonder_names.size(); ++ii) {
                     hbond_requirement_labels[ii] = -1;
                     bidentate_requirement_labels[ii] = -1;
+                    tridentate_requirement_labels[ii] = -1;
                 }
                 
                 std::vector< HbondRequirement > hbond_reqs = get_hbond_requirement_definitions( tuning_file );
                 std::vector< BidentateRequirement > bidentate_reqs = get_bidentate_requirement_definitions( tuning_file );
+                std::vector< TridentateRequirement > tridentate_reqs = get_tridentate_requirement_definitions( tuning_file );
                 // fill the hbond definitions
                 for ( auto const & x : hbond_reqs ){
                     for ( int ii = 0; ii < target_bonder_names.size(); ++ii){
                         if ( target_bonder_names[ii].first == x.res_num && target_bonder_names[ii].second == x.atom_name ) {
+														use_hbond_requirement_definition = true;
                             hbond_requirement_labels[ii] = x.req_num;
                         }
                     }
@@ -303,7 +312,19 @@ namespace rif {
                 for ( auto const & x : bidentate_reqs ){
                     for (int ii = 0; ii < target_bonder_names.size(); ++ii) {
                         if ( ( x.res1_num == target_bonder_names[ii].first && x.atom1_name == target_bonder_names[ii].second ) || ( x.res2_num == target_bonder_names[ii].first && x.atom2_name == target_bonder_names[ii].second ) ) {
+														use_bidentate_requirement_definition = true;
                             bidentate_requirement_labels[ii] = x.req_num;
+                        }
+                    }
+                    
+                }
+                for ( auto const & x : tridentate_reqs ){
+                    for (int ii = 0; ii < target_bonder_names.size(); ++ii) {
+                        if ( ( x.res1_num == target_bonder_names[ii].first && x.atom1_name == target_bonder_names[ii].second ) || 
+														 ( x.res2_num == target_bonder_names[ii].first && x.atom2_name == target_bonder_names[ii].second ) ||
+														 ( x.res3_num == target_bonder_names[ii].first && x.atom3_name == target_bonder_names[ii].second ) ) {
+														use_tridentate_requirement_definition = true;
+                            tridentate_requirement_labels[ii] = x.req_num;
                         }
                     }
                     
@@ -312,16 +333,18 @@ namespace rif {
                 
                 // debuging code here
                 
-								/*
+							/*	
                  for (int ii = 0; ii < target_bonder_names.size(); ++ii) {
                  std::cout << "########" << ii << "########" << std::endl;
                  std::cout << target_bonder_names[ii].first << " " << target_bonder_names[ii].second << std::endl;
-                 std::cout << "BidentateLabels: " << bidentate_requirement_labels[ii] << std::endl;
-                 std::cout << "HbondDefinitionLabels:" << hbond_requirement_labels[ii] << std::endl;
+                 std::cout << "TridentateLabels: " << tridentate_requirement_labels[ii] << std::endl;
+                 //std::cout << "BidentateLabels: " << bidentate_requirement_labels[ii] << std::endl;
+                 //std::cout << "HbondDefinitionLabels:" << hbond_requirement_labels[ii] << std::endl;
+                 //std::cout << "HbondDefinitionLabels:" << hbond_requirement_labels[ii] << std::endl;
                  std::cout << "#############END#############" << std::endl;
                  }
                  exit(0);
-                 */
+            */ 
                 
             }
             /*
@@ -851,11 +874,15 @@ namespace rif {
 						// positioned_rotamer_score += hb_pair_score;
 
 
-						int sat1=-1, sat2=-1;
+						int sat1=-1, sat2=-1, sat3=-1, sat4=-1;
+						int sat1_final = -1;
+						int sat2_final = -1;
 
-						float positioned_rotamer_score = rot_tgt_scorer.score_rotamer_v_target_sat( irot, bbactor.position_, sat1, sat2, 10.0, 0 );
+						float positioned_rotamer_score = rot_tgt_scorer.score_rotamer_v_target_sat( irot, bbactor.position_, sat1, sat2, sat3, sat4, 10.0, 0 );
 
-                        
+						// the code is really messed up here. I think I can make the cold much cleaner, but I don't want to do it.'
+            sat1_final = sat1;
+						sat2_final = sat2;
 
 
 						if( positioned_rotamer_score > opts.score_threshold ) continue;
@@ -901,62 +928,62 @@ namespace rif {
                         
                         if ( use_requirement_definition ) {
                             
-                            // don't define overlap
-                            if ( sat1 == -1 && sat2 == -1 ) {
-                                // what should I do here??
-                            } else if ( sat1 != -1 && sat2 == -1 ) {
-                                if ( hbond_requirement_labels[sat1] != -1 ) {
-                                    sat1 = hbond_requirement_labels[sat1];
-                                    sat2 = -1;
-                                } else {
-                                    sat1 = -1;
-                                    sat2 = -1;
-                                }
-                            } else if ( sat1 ==-1 && sat2 != -1 ) {
-                                // this will never happen.
-                                if ( hbond_requirement_labels[sat2] != -1 ) {
-                                    sat1 = hbond_requirement_labels[sat2];
-                                    sat2 = -1;
-                                } else {
-                                    sat1 = -1;
-                                    sat2 = -1;
-                                }
-                            } else {
-                                
-                                // I think here the priority of bidentate hydrogen bonds should be higher.
-                                if ( bidentate_requirement_labels[sat1] != -1 && bidentate_requirement_labels[sat1] == bidentate_requirement_labels[sat2] ) {
-                                    sat1 = bidentate_requirement_labels[sat1];
-                                    sat2 = -1;
-                                } else {
-                                    if ( hbond_requirement_labels[sat1] != -1 && hbond_requirement_labels[sat2] != -1 ) {
-                                        if ( hbond_requirement_labels[sat1] != hbond_requirement_labels[sat2] ){
-
-																						// I think if I can satisfy two polar atoms, this means I am not a good rif residue, but to make things simple, I will just assign the satisfication number to the smaller one.
-																						// Or should I just throw away the rifres,
-																						// OK, I have a decision now, and now chose the simplest solution. Just assign to a smaller one
-																					 // to make the logic here consistent with the rif merge, the larger the better,	
-																						sat1 = hbond_requirement_labels[sat1] < hbond_requirement_labels[sat2] ? hbond_requirement_labels[sat2] : hbond_requirement_labels[sat1] ;
-																						sat2 = -1;
-
-																						//std::string const & irot_name = rot_index.rotamers_[irot].resname_;
-																						//std::cout << "I am " << irot_name << ", I can satisfy " << hbond_requirement_labels[sat1] << " and " << hbond_requirement_labels[sat2] << " and that is wrong!" << std::endl;
-                                            //utility_exit_with_message("I am confused, I don't know which requirement num should I belong to.");
-                                        } else {
-                                            sat1 = hbond_requirement_labels[sat1];
-                                            sat2 = -1;
-                                        }
-                                    } else if ( hbond_requirement_labels[sat1] != -1 && hbond_requirement_labels[sat2] == -1 ) {
-                                        sat1 = hbond_requirement_labels[sat1];
-                                        sat2 = -1;
-                                    } else if ( hbond_requirement_labels[sat1] == -1 && hbond_requirement_labels[sat2] != -1 ) {
-                                        sat1 = hbond_requirement_labels[sat2];
-                                        sat2 = -1;
-                                    } else {
-                                        sat1 = -1;
-                                        sat2 = -1;
-                                    }
+                            sat1_final = -1, sat2_final = -1;
+                            // there are some conflicts, the larger the better!!!!!!!!!!!!!!!!!!!!!!!!!!
+                            if ( use_hbond_requirement_definition && sat1 != -1 && hbond_requirement_labels[sat1] != -1 ) {
+                                sat1_final = hbond_requirement_labels[sat1];
+                            }
+                            if ( use_hbond_requirement_definition && sat2 != -1 && hbond_requirement_labels[sat2] != -1 ) {
+                                if ( hbond_requirement_labels[sat2] > sat1_final ) {
+                                    sat1_final = hbond_requirement_labels[sat2];
                                 }
                             }
+                            
+                            // I think here the priority of bidentate hydrogen bonds should be higher.
+                            if ( (use_bidentate_requirement_definition | use_tridentate_requirement_definition) && sat1 != -1 && sat2 != -2 )
+                            {
+                                if ( bidentate_requirement_labels[sat1] == bidentate_requirement_labels[sat2] ) sat1_final = bidentate_requirement_labels[sat1];
+                                
+                                // the priority of tridentates is even highter
+                                
+                                if( use_tridentate_requirement_definition && sat3 != -1 && sat4 == -1 &&
+                                   tridentate_requirement_labels[sat1] != -1 &&
+                                   tridentate_requirement_labels[sat1] == tridentate_requirement_labels[sat2] &&
+                                   tridentate_requirement_labels[sat1] == tridentate_requirement_labels[sat3] )
+                                {
+                                    sat1_final = tridentate_requirement_labels[sat1];
+                                } else if ( use_tridentate_requirement_definition && sat3 != -1 && sat4 != -1 ) {
+                                    if ( tridentate_requirement_labels[sat1] != -1 &&
+                                        tridentate_requirement_labels[sat1] == tridentate_requirement_labels[sat2] &&
+                                        tridentate_requirement_labels[sat1] == tridentate_requirement_labels[sat3]
+                                        ) {
+                                        sat1_final = tridentate_requirement_labels[sat1];
+                                        
+                                    } else if ( tridentate_requirement_labels[sat1] != 1 &&
+                                               tridentate_requirement_labels[sat1] == tridentate_requirement_labels[sat2] &&
+                                               tridentate_requirement_labels[sat1] == tridentate_requirement_labels[sat4]
+                                               ) {
+                                        sat1_final = tridentate_requirement_labels[sat1];
+                                    } else if ( tridentate_requirement_labels[sat1] != -1 &&
+                                               tridentate_requirement_labels[sat1] == tridentate_requirement_labels[sat3] &&
+                                               tridentate_requirement_labels[sat1] == tridentate_requirement_labels[sat4]
+                                               ) {
+                                        sat1_final = tridentate_requirement_labels[sat1];
+                                    } else if ( tridentate_requirement_labels[sat2] != -1 &&
+                                               tridentate_requirement_labels[sat2] == tridentate_requirement_labels[sat3] &&
+                                               tridentate_requirement_labels[sat2] == tridentate_requirement_labels[sat4]
+                                               ) {
+                                        sat1_final = tridentate_requirement_labels[sat2];
+                                    } else {
+                                        // nothing here!!
+                                    }
+                                    
+                                }
+                                // the tridentate definition will overwrite everything
+                                
+                            }
+                            
+                            
                         }
 
 						if( n_sat_groups > 0 ){
@@ -979,7 +1006,7 @@ namespace rif {
 							// }
 						}
 
-						accumulator->insert( bbactor.position_, positioned_rotamer_score, irot, sat1, sat2 );
+						accumulator->insert( bbactor.position_, positioned_rotamer_score, irot, sat1_final, sat2_final );
 
 
 						// // shitty test output

@@ -318,6 +318,10 @@ float score_hbond_rays(
     }
 
     
+// throught out the whole rifdock code, sat==-1 means no satisfication
+// Warning!!!!!!!!!!!!
+// Warning!!!!!!!!!!!!!!
+// Warning!!!!!!!!!!!!!!!!
 template< class VoxelArrayPtr, class HBondRay, class RotamerIndex >
 struct ScoreRotamerVsTarget {
 	::scheme::shared_ptr< RotamerIndex const > rot_index_p_ = nullptr;
@@ -339,8 +343,23 @@ struct ScoreRotamerVsTarget {
 		float bad_score_thresh = 10.0, // hbonds won't get computed if grid score is above this
 		int start_atom = 0 // to score only SC, use 4... N,CA,C,CB (?)
 	) const	{
-		int tmp1=-12345, tmp2=-12345;
-		return score_rotamer_v_target_sat( irot, rbpos, tmp1, tmp2, bad_score_thresh, start_atom );
+		int tmp1=-1, tmp2=-1, tmp3=-1, tmp4=-1;
+		return score_rotamer_v_target_sat( irot, rbpos, tmp1, tmp2, tmp3, tmp4, bad_score_thresh, start_atom );
+	}
+
+	// some rif rotamers can form more than two hydrogen bonds, like asp, asn, glum gln
+	template< class Xform, class Int >
+  float
+	score_rotamer_v_target_sat(
+		Int const & irot,
+		Xform const & rbpos,
+		int & sat1,
+		int & sat2,
+		float bad_score_thresh = 10.0,
+		int start_atom = 0
+  ) const {
+			int tmp3=-1, tmp4=-1;
+			return score_rotamer_v_target_sat(irot, rbpos, sat1, sat2, tmp3, tmp4, bad_score_thresh, start_atom);
 	}
 
 	template< class Xform, class Int >
@@ -350,6 +369,8 @@ struct ScoreRotamerVsTarget {
 		Xform const & rbpos,
 		int & sat1,
 		int & sat2,
+		int & sat3,
+		int & sat4,
 		float bad_score_thresh = 10.0, // hbonds won't get computed if grid score is above this
 		int start_atom = 0 // to score only SC, use 4... N,CA,C,CB (?)
 	) const	{
@@ -359,6 +380,10 @@ struct ScoreRotamerVsTarget {
 		float score = 0;
 		typedef typename RotamerIndex::Atom Atom;
 		// typedef typename RotamerIndex::Rotamer Rotamer;
+		
+		// as outside this class, sat==-1 means no satisfication, initialize all the sat slots to -1 to be safe
+		sat1 = -1, sat2 = -1, sat3 = -1, sat4 = -1;
+
 		for( int iatom = start_atom; iatom < rot_index_p_->nheavyatoms(irot); ++iatom )
 		{
 			Atom const & atom = rot_index_p_->rotamer(irot).atoms_.at(iatom);
@@ -389,13 +414,13 @@ struct ScoreRotamerVsTarget {
 					hr_rot_acc.horb_cen  = rbpos * hr_rot_acc.horb_cen;
 					hr_rot_acc.direction = rbpos * dirpos - hr_rot_acc.horb_cen;
                     
-                    float best_score = 100;
+                    float best_score = this->min_hb_quality_for_satisfaction_;
                     int best_sat = -1;
                     for( int i_hr_tgt_don = 0; i_hr_tgt_don < target_donors_.size(); ++i_hr_tgt_don )
                     {
                         HBondRay const & hr_tgt_don = target_donors_.at(i_hr_tgt_don);
                         float const thishb = score_hbond_rays( hr_tgt_don, hr_rot_acc, 0.0, long_hbond_fudge_distance_ );
-                        if ( thishb < best_score ) {
+                        if ( thishb <= best_score ) {
                             best_score = thishb;
                             best_sat = i_hr_tgt_don;
                         }
@@ -407,10 +432,16 @@ struct ScoreRotamerVsTarget {
                                 sat1 = best_sat;
                             } else if ( sat2 == -1 || sat2 == best_sat) {
                                 sat2 = best_sat;
-                            }
+                            } else if ( sat3 == -1 || sat3 == best_sat ) {
+																sat3 = best_sat;
+														} else if ( sat4 == -1 || sat4 == best_sat ) {
+																sat4 = best_sat;
+														}
                         } else if ( best_score < this->min_hb_quality_for_satisfaction_ ) {
                             if(      sat1==-1 ) sat1 = best_sat;
                             else if( sat2==-1 ) sat2 = best_sat;
+														else if( sat3==-1 ) sat3 = best_sat;
+														else if( sat4==-1 ) sat4 = best_sat;
                         }
                         if( upweight_multi_hbond_ && best_score < min_hb_quality_for_multi_ ){
                             if( used_tgt_donor[best_sat] >= min_hb_quality_for_multi_ ) ++hbcount;
@@ -431,13 +462,13 @@ struct ScoreRotamerVsTarget {
                     hr_rot_don.horb_cen  = rbpos * hr_rot_don.horb_cen;
                     hr_rot_don.direction = rbpos * dirpos - hr_rot_don.horb_cen;
                     
-                    float best_score = 100;
+                    float best_score = this->min_hb_quality_for_satisfaction_;
                     int best_sat = -1;
                     for( int i_hr_tgt_acc = 0; i_hr_tgt_acc < target_acceptors_.size(); ++i_hr_tgt_acc )
                     {
                         HBondRay const & hr_tgt_acc = target_acceptors_.at(i_hr_tgt_acc);
                         float const thishb = score_hbond_rays( hr_rot_don, hr_tgt_acc, 0.0, long_hbond_fudge_distance_ );
-                        if ( thishb < best_score ) {
+                        if ( thishb <= best_score ) {
                             best_score = thishb;
                             best_sat = i_hr_tgt_acc;
                         }
@@ -449,10 +480,16 @@ struct ScoreRotamerVsTarget {
                                 sat1 = best_sat+target_donors_.size();
                             } else if ( sat2 == -1 || sat2 == ( best_sat+target_donors_.size() ) ) {
                                 sat2 = best_sat+target_donors_.size();
-                            }
+                            } else if ( sat3 == -1 || sat3 == ( best_sat+target_donors_.size() ) ) {
+																sat3 = best_sat+target_donors_.size();
+														} else if ( sat4 == -1 || sat4 == ( best_sat+target_donors_.size() ) ) {
+																sat4 = best_sat+target_donors_.size();
+														}
                         } else if ( best_score < this->min_hb_quality_for_satisfaction_ ) {
                             if(      sat1==-1 ) sat1 = best_sat+target_donors_.size();
                             else if( sat2==-1 ) sat2 = best_sat+target_donors_.size();
+                            else if( sat3==-1 ) sat3 = best_sat+target_donors_.size();
+                            else if( sat4==-1 ) sat4 = best_sat+target_donors_.size();
                         }
                         if( upweight_multi_hbond_ && best_score < min_hb_quality_for_multi_ ){
                             if( used_tgt_acceptor[best_sat] >= min_hb_quality_for_multi_ ) ++hbcount;

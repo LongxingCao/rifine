@@ -167,7 +167,7 @@ namespace rif {
         }
         return bdhbs;
     }
-    
+
     bool check_requirement_definition_exists( std::string tuning_file )
     {
         // TODO: there are lots of duplicate codes here, it is not smart, but I need to make it smarter.
@@ -269,6 +269,48 @@ namespace rif {
             }
         }
         return bidentate_reqs;
+    }
+
+    std::vector< TridentateRequirement > get_tridentate_requirement_definitions( std::string tuning_file )
+    {
+        std::vector< TridentateRequirement > tridentate_reqs;
+        
+        if ( tuning_file == "" ) {
+            return tridentate_reqs;
+        }
+        runtime_assert_msg(utility::file::file_exists( tuning_file ), "tunning file does not exits: " + tuning_file );
+        std::ifstream in;
+        std::string s;
+        in.open( tuning_file , std::ios::in );
+        std::vector<std::string> lines;
+        bool flag = false;
+        while ( std::getline(in, s) ){
+            if (s.empty() || s.find("#") == 0) continue;
+            if (s.find("REQUIREMENT_DEFINITION") != std::string::npos && s.find("END_REQUIREMENT_DEFINITION") == std::string::npos ) { flag = true; continue; }
+            else if (s.find("END_REQUIREMENT_DEFINITION") != std::string::npos ) { flag = false; break; }
+            
+            if ( flag )
+            {
+                TridentateRequirement req_temp;
+                utility::vector1<std::string> splt = utility::quoted_split( s );
+                
+                //std::cout << req_temp.req_num << std::endl;
+                
+                if ( splt.size() == 8 && splt[2] == "TRIDENTATE" ) {
+                    runtime_assert_msg( splt.size() == 8, "something is wrong with the BIDENTATE requirement definition!" );
+                    runtime_assert_msg( utility::string2int( splt[1] ) >=0, "The requirement number must be a positive integer!" );
+                    req_temp.req_num = utility::string2int(splt[1]);
+                    req_temp.atom1_name = splt[3];
+                    req_temp.res1_num = utility::string2int( splt[4] );
+                    req_temp.atom2_name = splt[5];
+                    req_temp.res2_num = utility::string2int( splt[6] );
+                    req_temp.atom3_name = splt[7];
+                    req_temp.res3_num = utility::string2int( splt[8] );
+                    tridentate_reqs.push_back(req_temp);
+                }
+            }
+        }
+        return tridentate_reqs;
     }
     
     std::vector< HotspotRequirement > get_hotspot_requirement_definitions( std::string tuning_file )

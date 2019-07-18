@@ -7,6 +7,8 @@
 
 #include <basic/options/option_macros.hh>
 #include <basic/options/keys/corrections.OptionKeys.gen.hh>
+#include <basic/options/keys/in.OptionKeys.gen.hh>
+#include <basic/options/keys/out.OptionKeys.gen.hh>
 #include <riflib/scaffold/nineA_util.hh>
 #include <vector>
 
@@ -68,6 +70,7 @@ OPT_1GRP_KEY(  Real        , rif_dock, pack_iter_mult )
 OPT_1GRP_KEY(  Integer     , rif_dock, pack_n_iters )
 OPT_1GRP_KEY(  Real        , rif_dock, hbond_weight )
 OPT_1GRP_KEY(  Real        , rif_dock, upweight_multi_hbond )
+OPT_1GRP_KEY(  Real        , rif_dock, long_hbond_fudge_distance )
 OPT_1GRP_KEY(  Real        , rif_dock, global_score_cut )
 
 OPT_1GRP_KEY(  Integer     , rif_dock, n_result_limit )
@@ -87,10 +90,6 @@ OPT_1GRP_KEY(  Boolean     , rif_dock, add_native_scaffold_rots_when_packing )
 OPT_1GRP_KEY(  Boolean     , rif_dock, dump_all_rif_rots )
 OPT_1GRP_KEY(  Boolean     , rif_dock, dump_all_rif_rots_into_output )
 OPT_1GRP_KEY(  Boolean     , rif_dock, rif_rots_as_chains )
-
-OPT_1GRP_KEY(  String      , rif_dock, dump_rifgen_near_pdb )
-OPT_1GRP_KEY(  Real        , rif_dock, dump_rifgen_near_pdb_dist )
-OPT_1GRP_KEY(  Real        , rif_dock, dump_rifgen_near_pdb_frac )
 
 OPT_1GRP_KEY(  String     , rif_dock, dokfile )
 OPT_1GRP_KEY(  String     , rif_dock, outdir )
@@ -184,10 +183,18 @@ OPT_1GRP_KEY(  Real        , rif_dock, keep_top_clusters_frac )
 OPT_1GRP_KEY(  Boolean     , rif_dock, only_dump_scaffold )
 OPT_1GRP_KEY(  IntegerVector, rif_dock, requirements )
 
+OPT_1GRP_KEY(  String      , rif_dock, dump_mode )
+
+OPT_1GRP_KEY(  Integer     , rif_dock, dump_rifres_near_residue_resi )
+OPT_1GRP_KEY(  Real        , rif_dock, dump_rifres_near_residue_max_dist )
+
+OPT_1GRP_KEY(  IntegerVector     , rif_dock, score_resi )
+
+OPT_1GRP_KEY(  Integer     , rif_dock, dump_requirement_num      )
+
 OPT_1GRP_KEY(  StringVector, rif_dock, dump_residue_names   )
 OPT_1GRP_KEY(  Real        , rif_dock, dump_fraction        )
 OPT_1GRP_KEY(  Real        , rif_dock, dump_score_cutoff        )
-OPT_1GRP_KEY(  Integer     , rif_dock, dump_requirement_num      )
 OPT_1GRP_KEY(  String      , rif_dock, dump_fname           )
 
 
@@ -249,6 +256,7 @@ void register_options() {
     NEW_OPT(  rif_dock::pack_n_iters, "" , 1 );
     NEW_OPT(  rif_dock::hbond_weight, "" , 2.0 );
     NEW_OPT(  rif_dock::upweight_multi_hbond, "" , 0.0 );
+    NEW_OPT(  rif_dock::long_hbond_fudge_distance, "" , 0.0 );
     NEW_OPT(  rif_dock::global_score_cut, "" , 0.0 );
     
     NEW_OPT(  rif_dock::n_result_limit, "" , 2000000000 );
@@ -272,10 +280,6 @@ void register_options() {
     NEW_OPT(  rif_dock::dump_all_rif_rots, "", false );
     NEW_OPT(  rif_dock::dump_all_rif_rots_into_output, "dump all rif rots into output", false);
     NEW_OPT(  rif_dock::rif_rots_as_chains, "dump rif rots as chains instead of models, loses resnum if true", false );
-    
-    NEW_OPT(  rif_dock::dump_rifgen_near_pdb, "dump rifgen rotamers with same AA type near this single residue", "");
-    NEW_OPT(  rif_dock::dump_rifgen_near_pdb_dist, "", 1 );
-    NEW_OPT(  rif_dock::dump_rifgen_near_pdb_frac, "", 1 );
     
     NEW_OPT(  rif_dock::dokfile, "", "default.dok" );
     NEW_OPT(  rif_dock::outdir, "", "./" );
@@ -367,10 +371,18 @@ void register_options() {
     NEW_OPT(  rif_dock::only_dump_scaffold, "" , true );
     NEW_OPT(  rif_dock::requirements,        "which rif residue should be in the final output", utility::vector1< int >());
     
+		NEW_OPT(  rif_dock::dump_mode,           "the dump mode to use", "RANDOM_DUMP");
+
+    NEW_OPT(  rif_dock::dump_rifres_near_residue_max_dist, "the maximum distance allowed to dump", 1.0);
+    NEW_OPT(  rif_dock::dump_rifres_near_residue_resi, "the rosetta residue index to dump", 1 );
+    
+    NEW_OPT(  rif_dock::score_resi, "the rosetta residue index to score", utility::vector1<int>() );
+    
+    NEW_OPT(  rif_dock::dump_requirement_num,  "the requirement index", -1 );
+
     NEW_OPT(  rif_dock::dump_residue_names,  "which residue should be dumped", utility::vector1<std::string>() );
     NEW_OPT(  rif_dock::dump_fraction,  "the fraction to be dumped", 0.0001 );
     NEW_OPT(  rif_dock::dump_score_cutoff,  "the cutoff value of the score to be dumped", 99999 );
-    NEW_OPT(  rif_dock::dump_requirement_num,  "the requirement index", -1 );
     NEW_OPT(  rif_dock::dump_fname,  "the output file name", "random_dump.pdb" );
     
     
@@ -406,9 +418,6 @@ struct RifDockOpt
     bool        dump_all_rif_rots                    ;
     bool        dump_all_rif_rots_into_output        ;
     bool        rif_rots_as_chains                   ;
-    std::string dump_rifgen_near_pdb                 ;
-    float       dump_rifgen_near_pdb_dist            ;
-    float       dump_rifgen_near_pdb_frac            ;
     bool        add_native_scaffold_rots_when_packing;
     bool        restrict_to_native_scaffold_res      ;
     float       bonus_to_native_scaffold_res         ;
@@ -456,6 +465,7 @@ struct RifDockOpt
     float       hbond_weight                         ;
     float       upweight_iface                       ;
     float       upweight_multi_hbond                 ;
+    float       long_hbond_fudge_distance            ;
     int         n_result_limit                       ;
     float       redundancy_filter_mag                ;
     int         force_output_if_close_to_input_num   ;
@@ -534,18 +544,23 @@ struct RifDockOpt
     
     std::vector<int> requirements;
     
+		std::string input_pdb                            ;
+
+    std::string dump_mode                            ;
+    float       dump_rifres_near_residue_max_dist    ;
+    int         dump_rifres_near_residue_resi        ;
     
-    void init_from_cli();
-    
+		utility::vector1<int>         score_resi         ;
+
+    int                          dump_requirement_num ;
+
     std::vector< std::string>    dump_residue_names   ;
     float                        dump_fraction        ;
     float                        dump_score_cutoff    ;
-    int                          dump_requirement_num      ;
     std::string                  dump_fname           ;
-    
-    
-    
-    
+
+
+    void init_from_cli();
 };
 
 #endif
@@ -579,9 +594,6 @@ void RifDockOpt::init_from_cli()
     dump_all_rif_rots                      = option[rif_dock::dump_all_rif_rots                  ]();
     dump_all_rif_rots_into_output		   = option[rif_dock::dump_all_rif_rots_into_output      ]();
     rif_rots_as_chains                     = option[rif_dock::rif_rots_as_chains                 ]();
-    dump_rifgen_near_pdb                   = option[rif_dock::dump_rifgen_near_pdb               ]();
-    dump_rifgen_near_pdb_dist              = option[rif_dock::dump_rifgen_near_pdb_dist          ]();
-    dump_rifgen_near_pdb_frac              = option[rif_dock::dump_rifgen_near_pdb_frac          ]();
     add_native_scaffold_rots_when_packing  = option[rif_dock::add_native_scaffold_rots_when_packing ]();
     restrict_to_native_scaffold_res        = option[rif_dock::restrict_to_native_scaffold_res       ]();
     bonus_to_native_scaffold_res           = option[rif_dock::bonus_to_native_scaffold_res          ]();
@@ -628,6 +640,7 @@ void RifDockOpt::init_from_cli()
     hbond_weight                           = option[rif_dock::hbond_weight                          ]();
     upweight_iface                         = option[rif_dock::upweight_iface                        ]();
     upweight_multi_hbond                   = option[rif_dock::upweight_multi_hbond                  ]();
+    long_hbond_fudge_distance              = option[rif_dock::long_hbond_fudge_distance             ]();
     n_result_limit                         = option[rif_dock::n_result_limit                        ]();
     redundancy_filter_mag                  = option[rif_dock::redundancy_filter_mag                 ]();
     force_output_if_close_to_input_num     = option[rif_dock::force_output_if_close_to_input_num    ]();
@@ -769,13 +782,26 @@ void RifDockOpt::init_from_cli()
     
     
     for( int req : option[rif_dock::requirements]() ) requirements.push_back(req);
+   
+		dump_mode = option[rif_dock::dump_mode]();
+
+		if ( option[ basic::options::OptionKeys::in::file::s ].user() ) {
+				utility::vector1<std::string> input_pdbs = option[ in::file::s ]();
+				if ( 1 != input_pdbs.size() ) utility_exit_with_message("I can handle only one input each time!");
+        input_pdb = input_pdbs[1];
+		}
     
+    dump_rifres_near_residue_max_dist              = option[rif_dock::dump_rifres_near_residue_max_dist          ]();
+    dump_rifres_near_residue_resi                  = option[rif_dock::dump_rifres_near_residue_resi              ]();
     
+    score_resi                                     = option[rif_dock::score_resi              ]();
+
+    dump_requirement_num = option[rif_dock::dump_requirement_num]();
     
     for( std::string res : option[rif_dock::dump_residue_names]() ) dump_residue_names.push_back(res);
+		if ( dump_residue_names.size() == 0 ) dump_residue_names.push_back("*");
     dump_fraction = option[rif_dock::dump_fraction]();
     dump_score_cutoff = option[rif_dock::dump_score_cutoff]();
-    dump_requirement_num = option[rif_dock::dump_requirement_num]();
     dump_fname = option[rif_dock::dump_fname]();
     
     
@@ -810,7 +836,8 @@ void RifDockOpt::init_from_cli()
 	#include <core/conformation/ResidueFactory.hh>
 	#include <core/kinematics/MoveMap.hh>
 	#include <core/scoring/Energies.hh>
-        #include <protocols/minimization_packing/MinMover.hh>
+  #include <protocols/minimization_packing/MinMover.hh>
+  #include <protocols/simple_moves/AlignChainMover.hh>
 
 	#include <devel/init.hh>
 	#include <riflib/RotamerGenerator.hh>
@@ -934,11 +961,11 @@ int main(int argc, char *argv[]) {
 		shared_ptr<RifFactory> rif_factory = ::devel::scheme::create_rif_factory( rif_factory_config );
 
 
+        core::pose::PoseOP target_pose_op = core::import_pose::pose_from_file(opt.target_pdb);
+        utility::vector1<core::Size> target_res = get_res( opt.target_res_fname , *target_pose_op, /*nocgp*/false );
 
 
-
-
-	print_header( "create rotamer index" );
+        print_header( "create rotamer index" );
 		
 		std::cout << "Loading " << opt.rot_spec_fname << "..." << std::endl;
 		std::string rot_index_spec_file = opt.rot_spec_fname;
@@ -1007,31 +1034,142 @@ int main(int argc, char *argv[]) {
 		}
 		std::cout << "rif uses: " << Nusingrot << " rotamers " << std::endl;
 
+		if ( opt.dump_mode == "RANDOM_DUMP" ) {
+				rif_ptrs.back()->random_dump_rotamers( opt.dump_residue_names, opt.dump_fname, rot_index_p, opt.dump_fraction, opt.dump_score_cutoff, opt.dump_requirement_num );
+		} else if ( opt.dump_mode == "DUMP_NEAR_RES" ) {
+            core::pose::Pose input_pose = *(core::import_pose::pose_from_file(opt.input_pdb));
+            protocols::simple_moves::AlignChainMoverOP align( new protocols::simple_moves::AlignChainMover() );
+            align->pose( target_pose_op );
+            align->source_chain( 2 );
+            align->target_chain( 1 );
+            align->apply( input_pose );
+            core::conformation::Residue const & res = input_pose.residue(opt.dump_rifres_near_residue_resi);
+            
+            rif_ptrs.back()->dump_rotamers_near_res( res, opt.dump_fname, opt.dump_rifres_near_residue_max_dist, opt.dump_fraction, rot_index_p );
+            
 
-		if (opt.dump_rifgen_near_pdb.length() > 0) {
-			float dump_dist = opt.dump_rifgen_near_pdb_dist;
-			float dump_frac = opt.dump_rifgen_near_pdb_frac;
-			core::pose::Pose pose = *(core::import_pose::pose_from_file(opt.dump_rifgen_near_pdb));
-			core::conformation::Residue const & res = pose.residue(1);
-			numeric::xyzVector<core::Real> n_xyz = res.xyz("N");
+		} else if ( opt.dump_mode == "SCORE_RESI" ) {
+            // duplicate code
+            core::pose::Pose input_pose = *(core::import_pose::pose_from_file(opt.input_pdb));
+            protocols::simple_moves::AlignChainMoverOP align( new protocols::simple_moves::AlignChainMover() );
+            align->pose( target_pose_op );
+            align->source_chain( 2 );
+            align->target_chain( 1 );
+            align->apply( input_pose );
 
-			std::stringstream fname;
-			fname << "rifgen_dump_" << opt.dump_rifgen_near_pdb << "_" << boost::str(boost::format("%.2f") % dump_dist ) << ".pdb.gz";
+						utility::vector1<::scheme::actor::BackboneActor<EigenXform>> bbactors;
+            // I need to have my own rotamer index spec
+            ::scheme::chemical::RotamerIndexSpec my_rot_index_spec;
+            std::string resn;
+            std::vector<float> mychi;
+            int n_proton_chi;
+            int parent_key;
+            // due to the sanity check code, ala should alway be in the rotamer index
+            my_rot_index_spec.add_rotamer( "ALA", std::vector<float>(), 0, -1);
 
-			rif_ptrs.back()->dump_rotamers_near_res( res, fname.str(), dump_dist, dump_frac, rot_index_p );
-
+						for( int ii = 1; ii <= opt.score_resi.size(); ++ii ) {
+								core::conformation::Residue const & res = input_pose.residue(opt.score_resi[ii]);
+								Eigen::Vector3f N ( res.xyz("N").x(), res.xyz("N").y(), res.xyz("N").z() );
+								Eigen::Vector3f CA ( res.xyz("CA").x(), res.xyz("CA").y(), res.xyz("CA").z() );
+								Eigen::Vector3f C ( res.xyz("C").x(), res.xyz("C").y(), res.xyz("C").z() );
+								::scheme::actor::BackboneActor<EigenXform> bbactor( N, CA, C );
+								bbactors.push_back(bbactor);
+								::scheme::chemical::get_residue_rotspec_params( res, resn, mychi, n_proton_chi, parent_key );
+								my_rot_index_spec.add_rotamer( resn, mychi, n_proton_chi, parent_key);
+						}
+            shared_ptr<RotamerIndex> my_rot_index_p = ::devel::scheme::get_rotamer_index( my_rot_index_spec );
+            
+            std::vector< VoxelArrayPtr > target_field_by_atype;
+            {
+                devel::scheme::RosettaFieldOptions rfopts;
+                rfopts.field_resl = opt.target_rf_resl;
+                rfopts.data_dir = "DUMMY_DATA_DIR_FIXME";
+                rfopts.oversample = opt.target_rf_oversample;
+                rfopts.block_hbond_sites = false;
+                rfopts.max_bounding_ratio = opt.max_rf_bounding_ratio;
+                rfopts.fail_if_no_cached_data = true;
+                rfopts.repulsive_only_boundary = true;
+                rfopts.cache_mismatch_tolerance = 0.01; // this is kinda loose...
+                std::string cache_prefix = opt.target_rf_cache;
+                devel::scheme::get_rosetta_fields_specified_cache_prefix(
+                                                                         cache_prefix,
+                                                                         opt.target_pdb,
+                                                                         *target_pose_op,
+                                                                         target_res,
+                                                                         rfopts,
+                                                                         target_field_by_atype,
+                                                                         false
+                                                                         );
+                
+                // load the target donor rays and acceptor rays
+                std::vector< ::scheme::chemical::HBondRay > target_donors;
+                std::vector< ::scheme::chemical::HBondRay > target_acceptors;
+                std::vector< std::pair<int, std::string> > target_donor_names;
+                std::vector< std::pair<int, std::string> > target_acceptor_names;
+                std::vector< std::pair<int, std::string> > target_bonder_names;
+                ::devel::scheme::HBRayOpts hbopt;
+                hbopt.satisfied_atoms = get_satisfied_atoms(*target_pose_op);
+                for( auto ir : target_res ) {
+                    ::devel::scheme::get_donor_rays( *target_pose_op, ir, hbopt, target_donors, target_donor_names);
+                    ::devel::scheme::get_acceptor_rays( *target_pose_op, ir, hbopt, target_acceptors, target_acceptor_names);
+                }
+                target_bonder_names = target_donor_names;
+                for( auto const & x : target_acceptor_names ) target_bonder_names.push_back( x );
+                for ( auto & x : target_bonder_names ) x.second = utility::strip( x.second, ' ');
+                
+                devel::scheme::ScoreRotamerVsTarget<
+                    VoxelArrayPtr, ::scheme::chemical::HBondRay, ::devel::scheme::RotamerIndex
+                > rot_tgt_scorer;
+                rot_tgt_scorer.rot_index_p_ = my_rot_index_p;
+                rot_tgt_scorer.target_field_by_atype_ = target_field_by_atype;
+                rot_tgt_scorer.target_donors_ = target_donors;
+                rot_tgt_scorer.target_acceptors_ = target_acceptors;
+                rot_tgt_scorer.hbond_weight_ = opt.hbond_weight;
+                rot_tgt_scorer.upweight_multi_hbond_ = opt.upweight_multi_hbond;
+                rot_tgt_scorer.upweight_iface_ = 1.0;
+                rot_tgt_scorer.min_hb_quality_for_satisfaction_ = -0.1;
+                rot_tgt_scorer.long_hbond_fudge_distance_ = opt.long_hbond_fudge_distance;
+                
+                print_header( "Satisfied atoms:" );
+                for( auto const & x : hbopt.satisfied_atoms ) {
+                    core::conformation::Residue const & res_temp = target_pose_op->residue(x.second);
+                    std::cout << std::setw(4) << x.second << std::setw(5) << res_temp.name1() << std::setw(6) << res_temp.atom_name(x.first) << std::endl;
+                }
+                std::cout << std::endl;
+                
+                print_header( "Donor atoms:" );
+                for( auto const & x : target_donor_names ) {
+                    core::conformation::Residue const & res_temp = target_pose_op->residue(x.first);
+                    std::cout << std::setw(4) << x.first << std::setw(5) << res_temp.name1() << std::setw(6) << x.second << std::endl;
+                }
+                std::cout << std::endl;
+                
+                print_header( "Acceptor atoms:" );
+                for( auto const & x : target_acceptor_names ) {
+                    core::conformation::Residue const & res_temp = target_pose_op->residue(x.first);
+                    std::cout << std::setw(4) << x.first << std::setw(5) << res_temp.name1() << std::setw(6) << x.second << std::endl;
+                }
+                std::cout << std::endl;
+                
+                print_header("Rotamer Scoring");
+								for ( int ii = 1; ii <= opt.score_resi.size(); ++ii ) {
+										int sat1 = -1, sat2 = -1, sat3 = -1, sat4 = -1;
+										float const rot_score = rot_tgt_scorer.score_rotamer_v_target_sat(ii , bbactors[ii].position(), sat1,sat2,sat3,sat4, 10.0, 4);
+										std::cout << " The score of residue " << opt.score_resi[ii] << " " << my_rot_index_p->resname(ii) << " in rif field is " << rot_score << std::endl;
+										std::cout << std::setw(5) << sat1 << (sat1 == -1 ? "":boost::str(boost::format("%5d%10s") % target_bonder_names[sat1].first % target_bonder_names[sat1].second.c_str()) ) << std::endl;
+										std::cout << std::setw(5) << sat2 << (sat2 == -1 ? "":boost::str(boost::format("%5d%10s") % target_bonder_names[sat2].first % target_bonder_names[sat2].second.c_str()) ) << std::endl;
+										std::cout << std::setw(5) << sat3 << (sat3 == -1 ? "":boost::str(boost::format("%5d%10s") % target_bonder_names[sat3].first % target_bonder_names[sat3].second.c_str()) ) << std::endl;
+										std::cout << std::setw(5) << sat4 << (sat4 == -1 ? "":boost::str(boost::format("%5d%10s") % target_bonder_names[sat4].first % target_bonder_names[sat4].second.c_str()) ) << std::endl << std::endl;
+								}
+                
+            }
+            
+        }else {
+				utility_exit_with_message("Unknown dumping mode, currently supported modes are:\n1) RANDOM_DUMP.\n2) DUMP_NEAR_RES.\n3) SCORE_RESI.\n");
 		}
 
-       
-		std::vector< std::string > to_dump;
-        if (opt.dump_residue_names.size() == 0) {
-            to_dump.push_back("*");
-        } else {
-            to_dump = opt.dump_residue_names;
-        }
-		
-		rif_ptrs.back()->random_dump_rotamers( to_dump, opt.dump_fname, rot_index_p, opt.dump_fraction, opt.dump_score_cutoff, opt.dump_requirement_num );
-	}
+
+		}
 
   
 	
@@ -1048,7 +1186,7 @@ int main(int argc, char *argv[]) {
 		omp_destroy_lock( &dump_lock );
 	#endif
 
-	std::cout << "rif_dock_test_DONE" << std::endl;
+	std::cout << "devel_rifgen_DONE" << std::endl;
 
 	return 0;
  }
