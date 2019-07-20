@@ -1144,7 +1144,7 @@ int main( int argc, char *argv[] )
                 }
 
                 // the real redundancy filtering stage happens here
-                {
+                if ( opt.do_filtering_before_rosetta ) {
                     std::vector<EigenXform> selected_xforms;
                     selected_xforms.reserve(65535);
                     float redundancy_filter_mag = opt.redundancy_filter_mag;
@@ -1190,7 +1190,10 @@ int main( int argc, char *argv[] )
                             exception = std::current_exception();
                         }
                     }
-                } // end block of redundancy filtering
+                } else {
+                    rifine_results = packed_results_all;
+                    std::cout << std::endl << "No filtering is done before rosetta score and mean." << std::endl;
+                }// end block of redundancy filtering
                 
                 std::cout << std::endl << "Total number of output after filtering is " << KMGT( rifine_results.size() ) << std::endl;
                 

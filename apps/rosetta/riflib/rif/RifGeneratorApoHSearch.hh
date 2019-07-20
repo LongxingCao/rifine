@@ -26,7 +26,8 @@ struct RifGeneratorApoHSearchOpts {
 	float beam_size_M = 10000.0;
 	float dump_fraction = 0.0;
 	bool apores_must_satisfy_req = false;
-	float cationpi_bonus_weights = 4.0;
+	float min_cationpi_score     = -0.2;
+	float cationpi_bonus_weights = 6.0;
 };
 
 struct RifGeneratorApoHSearch : public RifGenerator {

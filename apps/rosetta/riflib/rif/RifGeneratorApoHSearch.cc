@@ -111,7 +111,6 @@ namespace rif {
     inline float score_cationpi(Eigen::Vector3f const & cation_center, Eigen::Vector3f const & cation_nv, Eigen::Vector3f const & ring_center, Eigen::Vector3f const & ring_nv )
     {
         // copied from bcov's cation-pi scoring term
-        float score = 1.0;
         float distance = (cation_center - ring_center).norm();
         float distance_score = 1.0;
         if( distance < 6 && distance > 3.5 ) {
@@ -122,13 +121,13 @@ namespace rif {
         Eigen::Vector3f line_other = cation_nv + cation_center;
         float cylinder_offset = (ring_center-cation_center).cross(ring_center-line_other).norm() / cation_nv.norm();
         float cylinder_score = 1.0;
-        if( cylinder_offset <= 4) cylinder_offset = std::max<float>(0, std::cos(cylinder_offset/2.0));
+        if( cylinder_offset <= 4) cylinder_score = std::max<float>(0, std::cos(cylinder_offset/2.0));
         else return 0.0;
         float plane_angle = std::acos( std::abs(cation_nv.dot(ring_nv) ) );
         float plane_score = 1.0;
-        if( plane_angle > 0.1745 && plane_angle < 1.221 ){ /* 10 ~ 70 */
-            plane_score = std::max<float>(0, (std::cos(3*(plane_angle-0.1745))+1)/2.0);
-        } else if ( plane_angle >= 1.221 ) {
+        if( plane_angle > 0.1745 && plane_angle < 0.87 ){ /* 10 ~ 50 */
+            plane_score = std::max<float>(0, (std::cos(4.5*(plane_angle-0.1745))+1)/2.0);
+        } else if ( plane_angle >= 0.87 ) {
             return 0.0;
         }
         return -1 * distance_score * cylinder_score * plane_score;
@@ -815,13 +814,13 @@ namespace rif {
                                                 float benzene_score = score_cationpi(cation_genomtry_terms[ii].first, cation_genomtry_terms[ii].second, benzene_ring_center, ring_nv);
                                                 cationpi_bonus = benzene_score;
                                             }
-                                            if ( cationpi_bonus < 0.0 ) {
+                                            if ( cationpi_bonus <= opts.min_cationpi_score ) {
                                                 req_index = cationpi_req_nums[ii];
                                                 break;
                                             }
                                         }
                                         // remove rotamers only for cation-pi interactions, such as his and tyr
-                                        if ( cationpi_bonus == 0.0 && rotamer_only_for_cationpi[crot] ) {
+                                        if ( cationpi_bonus > opts.min_cationpi_score && rotamer_only_for_cationpi[crot] ) {
                                             continue;
                                         }
                                     }
