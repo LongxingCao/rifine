@@ -329,11 +329,12 @@ typedef _RifDockResult<DirectorBase> RifDockResult;
     )
     {
 				const int64_t total_samples = packed_results.size();
-				std::cout << std::endl << "Now calculating the real rmsd and the xform_magnitute (Very slow, I didn't optimize this. Only for testing.') for " << total_samples << std::endl << std::endl;;
+				std::cout << std::endl << "Now calculating the real rmsd and the xform_magnitute (Very slow, I didn't optimize this. Only for testing. for " << total_samples << std::endl << std::endl;;
 				const int64_t total_num_scores = total_samples * (total_samples - 1) / 2;
 				const int64_t samples_per_dot = total_samples / 109>1? total_samples/109 : 1;
 				typedef std::pair<float, float> RMSD_XFORM;
 				std::vector<RMSD_XFORM> results(total_num_scores);
+
 				#ifdef USE_OPENMP
         #pragma omp parallel for schedule(dynamic,16)
         #endif
@@ -361,11 +362,29 @@ typedef _RifDockResult<DirectorBase> RifDockResult;
 								results[index].first = real_rmsd;
 								results[index].second = xform_rmsd;
 						}
+						
 				}
 				
 				utility::io::ozstream results_file( "rmsd_xformmag.list" );
 				for ( RMSD_XFORM const & r : results ) results_file << r.first << " " << r.second << std::endl;
 				results_file.close();
+
+				std::ostringstream oss;
+				oss << "#isamp seeding_index nest_index xx xy xz yx yy yz zx zy zz tx ty tz\n";
+				for ( int64_t isamp = 0; isamp < total_samples; ++ isamp ) {
+						SearchPointWithRots const & isp = packed_results[isamp];
+						ScenePtr scene_minimal( scene_pt.back() );
+						director->set_scene( isp.index, iresl, *scene_minimal );
+						EigenXform xposition1 = scene_minimal->position(1);
+						// now dump the top100 index, xform, ... for debuging
+						oss << isamp << " " << isp.index.seeding_index << " " << isp.index.nest_index << " "
+								<< xposition1.linear().row(0) << " " << xposition1.linear().row(1) << " " << xposition1.linear().row(2) << " "
+								<< xposition1.translation().x() << " " << xposition1.translation().y() << " " << xposition1.translation().z() << std::endl;
+				}
+				utility::io::ozstream info_file("results_info.list");
+				info_file << oss.str();
+				info_file.close();
+
 				return;
     }
     

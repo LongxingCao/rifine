@@ -430,10 +430,8 @@ int main( int argc, char *argv[] )
             {
                 core::import_pose::pose_from_file( scaffold, scaff_fname );
                 if( opt.random_perturb_scaffold ){
-                    if( opt.random_perturb_scaffold ){
-                        runtime_assert_msg( !opt.use_scaffold_bounding_grids,
+                    runtime_assert_msg( !opt.use_scaffold_bounding_grids,
                             "opt.use_scaffold_bounding_grids incompatible with random_perturb_scaffold" );
-                    }
                     ::scheme::numeric::rand_xform( rng, scaffold_perturb );
                     xform_pose( scaffold, eigen2xyz(scaffold_perturb ) );
                 }
@@ -767,807 +765,794 @@ int main( int argc, char *argv[] )
                     EigenXform yy;
                     // try 1000 times one
                     for( int jj = 0; jj < 1000; ++jj ) {
-                        ::scheme::numeric::rand_xform( rng, yy, (float)8.0 );
-                        bool redundant = false;
-                        for( EigenXform const & zz : seeding_positions ) {
-                            float mag = xform_magnitude( yy * zz.inverse(), redundancy_filter_rg);
-                            if ( mag < opt.redundancy_filter_mag ) {
-                                redundant = true;
+                            ::scheme::numeric::rand_xform( rng, yy, (float)8.0 );
+                            bool redundant = false;
+                            for( EigenXform const & zz : seeding_positions ) {
+                                float mag = xform_magnitude( yy * zz.inverse(), redundancy_filter_rg);
+                                if ( mag < 2*opt.redundancy_filter_mag ) {
+                                    redundant = true;
+                                    break;
+                                }
+                            }
+                            if ( !redundant ) {
+                                seeding_positions.push_back(yy);
                                 break;
                             }
                         }
-                        if ( !redundant ) {
-                            seeding_positions.push_back(yy);
-                            break;
+                    }
+                }
+                
+                // scores for the initial positions.
+                if ( opt.test_longxing )
+                {
+                    std::cout << "scores for the initial seeding positions" << std::endl;
+                    for ( int i = 0; i < seeding_positions.size(); ++i ) {
+                        scene_minimal->set_position( 1, seeding_positions[i] );
+                        // output the score of each position:      Seeding position #i: sc sc sc sc sc
+                        std::cout << "Seeding position " << I(5,i + 1) << ":";
+                        for( int j = 0; j < RESLS.size(); ++j ){
+                            double sc = objectives[j]->score(*scene_minimal);
+                            std::cout << " " << F(10,3,sc);
                         }
+                        std::cout << std::endl;
                     }
                 }
-            }
-            
-            // scores for the initial positions.
-            if ( opt.test_longxing )
-            {
-                std::cout << "scores for the initial seeding positions" << std::endl;
-                for ( int i = 0; i < seeding_positions.size(); ++i ) {
-                    scene_minimal->set_position( 1, seeding_positions[i] );
-                    // output the score of each position:      Seeding position #i: sc sc sc sc sc
-                    std::cout << "Seeding position " << I(5,i + 1) << ":";
-                    for( int j = 0; j < RESLS.size(); ++j ){
-                        double sc = objectives[j]->score(*scene_minimal);
-                        std::cout << " " << F(10,3,sc);
+                
+                
+                
+                // test case for the original position.
+                if ( opt.test_longxing )
+                {
+                    std::cout << "scores for scaffold in original position: " << std::endl;
+                    EigenXform x(EigenXform::Identity());
+                    x.translation() = scaffold_center;
+                    scene_minimal->set_position(1,x);
+                    for(int i = 0; i < RESLS.size(); ++i){
+                        std::vector<float> sc = objectives[i]->scores(*scene_minimal);
+                        std::cout << "input bounding score " << i << " " << F(7,3,RESLS[i]) << " "
+                        << F( 7, 3, sc[0]+sc[1] ) << " "
+                        << F( 7, 3, sc[0]       ) << " "
+                        << F( 7, 3, sc[1]       ) << std::endl;
                     }
+                    
+                }
+                
+                // This is the protocol combining hsearch and seeding, the main idea is to increase the coverage
+                // of sampling.
+                DirectorBase director;
+                shared_ptr<RifDockNestDirector> n_director;
+                {
+                    // This is the original searching grid!!!!
+                    F3 target_center = pose_center(target);
+                    float const body_radius = std::min( scaff_radius, rif_radius );
+                    double const cart_grid = opt.resl0*opt.hsearch_scale_factor/sqrt(3); // 1.5 is a big hack here.... 2 would be more "correct"
+                    double const hackysin = std::min( 1.0, opt.resl0*opt.hsearch_scale_factor/2.0/ body_radius );
+                    runtime_assert( hackysin > 0.0 );
+                    double const rot_resl_deg0 = asin( hackysin ) * 180.0 / M_PI;
+                    
+                    int nside = std::ceil( opt.search_diameter / cart_grid );
+                    std::cout << "search dia.    : " << opt.search_diameter << std::endl;
+                    std::cout << "nside          : " << nside        << std::endl;
+                    std::cout << "resl0:           " << opt.resl0 << std::endl;
+                    std::cout << "body_radius:     " << body_radius << std::endl;
+                    std::cout << "rif_radius:      " << rif_radius << std::endl;
+                    std::cout << "scaffold_radius: " << scaff_radius << std::endl;
+                    std::cout << "cart_grid:       " << cart_grid  << std::endl;
+                    std::cout << "rot_resl_deg0:   " << rot_resl_deg0 << std::endl;
+                    I3 nc( nside, nside, nside );
+                    F3 lb = target_center + F3( -cart_grid*nside/2.0, -cart_grid*nside/2.0, -cart_grid*nside/2.0 );
+                    F3 ub = target_center + F3(  cart_grid*nside/2.0,  cart_grid*nside/2.0,  cart_grid*nside/2.0 );
+                    std::cout << "cart grid ub " << ub << std::endl;
+                    std::cout << "cart grid lb " << lb << std::endl;
+                    std::cout << "(ub-lb/nc) = " << ((ub-lb)/nc.template cast<float>()) << std::endl;
+                    std::cout << "cartcen to corner (cart. covering radius): " << sqrt(3.0)*cart_grid/2.0 << std::endl;
+                    shared_ptr<RifDockNestDirector> nest_director = make_shared<RifDockNestDirector>( rot_resl_deg0, lb, ub, nc, 1 );
+                    std::cout << "NestDirector:" << std::endl << *nest_director << std::endl;
+                    std::cout << "nest size:    " << float(nest_director->size(0, RifDockIndex()).nest_index) << std::endl;
+                    std::cout << "size of search space: ~" << float(nest_director->size(0, RifDockIndex()).nest_index) << " grid points" << std::endl;
+                    
+                    shared_ptr<RifDockSeedingDirector> seeding_director = make_shared<RifDockSeedingDirector>(seeding_positions_p, 1);
+                    
+                    std::vector<DirectorBase> director_list;
+                    director_list.push_back( nest_director );  // Nest director must come first!!!!
+                    director_list.push_back( seeding_director );
+                    
+                    director = make_shared<RifDockDirector>(director_list);
+                    
+                    n_director = nest_director;
+                    
+                }
+                
+
+
+                
+                
+                std::vector< std::vector< SearchPointWithRots > > packed_results;
+                std::vector< ScenePtr > scene_pt( omp_max_threads_1() );
+                std::vector< ScenePtr > scene_hpack_pt( omp_max_threads_1() );
+                
+                {
+                    // v(v(v)) each_seeding:hsearch_samples:each_sesolution
+                    std::vector< std::vector< SearchPoint > > hsearch_samples;
+                    std::vector< std::vector< std::vector< SearchPoint > > > samples;
+                    
+                    int64_t seeding_size = director->size(0, RifDockIndex() ).seeding_index;
+                
+                    samples.resize( seeding_size );
+                    
+                    // clone scene for each thread.
+                    BOOST_FOREACH( ScenePtr & s, scene_pt ) s = scene_minimal->clone_shallow();
+                    
                     std::cout << std::endl;
-                }
-            }
-            
-            
-            
-            // test case for the original position.
-            if ( opt.test_longxing )
-            {
-                std::cout << "scores for scaffold in original position: " << std::endl;
-                EigenXform x(EigenXform::Identity());
-                x.translation() = scaffold_center;
-                scene_minimal->set_position(1,x);
-                for(int i = 0; i < RESLS.size(); ++i){
-                    std::vector<float> sc = objectives[i]->scores(*scene_minimal);
-                    std::cout << "input bounding score " << i << " " << F(7,3,RESLS[i]) << " "
-                    << F( 7, 3, sc[0]+sc[1] ) << " "
-                    << F( 7, 3, sc[0]       ) << " "
-                    << F( 7, 3, sc[1]       ) << std::endl;
-                }
-                
-            }
-            
-            // This is the protocol combining hsearch and seeding, the main idea is to increase the coverage
-            // of sampling.
-            DirectorBase director;
-            shared_ptr<RifDockNestDirector> n_director;
-            {
-                // This is the original searching grid!!!!
-                F3 target_center = pose_center(target);
-                float const body_radius = std::min( scaff_radius, rif_radius );
-                double const cart_grid = opt.resl0*opt.hsearch_scale_factor/sqrt(3); // 1.5 is a big hack here.... 2 would be more "correct"
-                double const hackysin = std::min( 1.0, opt.resl0*opt.hsearch_scale_factor/2.0/ body_radius );
-                runtime_assert( hackysin > 0.0 );
-                double const rot_resl_deg0 = asin( hackysin ) * 180.0 / M_PI;
-                
-                int nside = std::ceil( opt.search_diameter / cart_grid );
-                std::cout << "search dia.    : " << opt.search_diameter << std::endl;
-                std::cout << "nside          : " << nside        << std::endl;
-                std::cout << "resl0:           " << opt.resl0 << std::endl;
-                std::cout << "body_radius:     " << body_radius << std::endl;
-                std::cout << "rif_radius:      " << rif_radius << std::endl;
-                std::cout << "scaffold_radius: " << scaff_radius << std::endl;
-                std::cout << "cart_grid:       " << cart_grid  << std::endl;
-                std::cout << "rot_resl_deg0:   " << rot_resl_deg0 << std::endl;
-                I3 nc( nside, nside, nside );
-                F3 lb = target_center + F3( -cart_grid*nside/2.0, -cart_grid*nside/2.0, -cart_grid*nside/2.0 );
-                F3 ub = target_center + F3(  cart_grid*nside/2.0,  cart_grid*nside/2.0,  cart_grid*nside/2.0 );
-                std::cout << "cart grid ub " << ub << std::endl;
-                std::cout << "cart grid lb " << lb << std::endl;
-                std::cout << "(ub-lb/nc) = " << ((ub-lb)/nc.template cast<float>()) << std::endl;
-                std::cout << "cartcen to corner (cart. covering radius): " << sqrt(3.0)*cart_grid/2.0 << std::endl;
-                shared_ptr<RifDockNestDirector> nest_director = make_shared<RifDockNestDirector>( rot_resl_deg0, lb, ub, nc, 1 );
-                std::cout << "NestDirector:" << std::endl << *nest_director << std::endl;
-                std::cout << "nest size:    " << float(nest_director->size(0, RifDockIndex()).nest_index) << std::endl;
-                std::cout << "size of search space: ~" << float(nest_director->size(0, RifDockIndex()).nest_index) << " grid points" << std::endl;
-                
-                shared_ptr<RifDockSeedingDirector> seeding_director = make_shared<RifDockSeedingDirector>(seeding_positions_p, 1);
-                
-                std::vector<DirectorBase> director_list;
-                director_list.push_back( nest_director );  // Nest director must come first!!!!
-                director_list.push_back( seeding_director );
-                
-                director = make_shared<RifDockDirector>(director_list);
-                
-                n_director = nest_director;
-                
-            }
-            
-
-
-            
-            
-            std::vector< std::vector< SearchPointWithRots > > packed_results;
-            std::vector< ScenePtr > scene_pt( omp_max_threads_1() );
-            std::vector< ScenePtr > scene_hpack_pt( omp_max_threads_1() );
-            
-            {
-                // v(v(v)) each_seeding:hsearch_samples:each_sesolution
-                std::vector< std::vector< SearchPoint > > hsearch_samples;
-                std::vector< std::vector< std::vector< SearchPoint > > > samples;
-                
-                int64_t seeding_size = director->size(0, RifDockIndex() ).seeding_index;
-            
-                samples.resize( seeding_size );
-                
-                // clone scene for each thread.
-                BOOST_FOREACH( ScenePtr & s, scene_pt ) s = scene_minimal->clone_shallow();
-                
-                std::cout << std::endl;
-                std::cout << "========================================== Now the Hsearch stage ============================================" << std::endl << std::endl;
-                std::cout << "Perform hierarchical search for " << KMGT( seeding_size ) << " seeding positions." << std::endl;
-                
-                // loop over each seeding position
-                for ( uint64_t iseed = 0; iseed < seeding_size; ++iseed ) {
-                    std::cout << "##########////    seeding pos" <<  iseed << "   ////##########" << std::endl;
+                    std::cout << "========================================== Now the Hsearch stage ============================================" << std::endl << std::endl;
+                    std::cout << "Perform hierarchical search for " << KMGT( seeding_size ) << " seeding positions." << std::endl;
                     
-                    bool search_failed = false;
-                    
-                    // initialize all the index for RESL0
-                    samples[iseed].resize( RESLS.size());
-                    samples[iseed][0].resize( director->size(0, RifDockIndex()).nest_index );
-                    for ( uint64_t ii=0; ii < director->size(0, RifDockIndex()).nest_index; ++ii) {
-                        samples[iseed][0][ii] = SearchPoint( RifDockIndex(ii, iseed) );
-                    }
-                    
-                    
-                    for( int iresl = 0; iresl < RESLS.size(); ++iresl)
-                    {
-                        std::cout << "HSearsh stage " << iresl+1 << " resl " << F(5,2,RESLS[iresl]) << " begin threaded sampling, " << KMGT(samples[iseed][iresl].size()) << " samples: ";
-                        int64_t const out_interval = samples[iseed][iresl].size()/50;
-                        std::exception_ptr exception = nullptr;
-                        std::chrono::time_point<std::chrono::high_resolution_clock> start, end;
-                        start = std::chrono::high_resolution_clock::now();
-                        // iterate over all resolutions
-                        #ifdef USE_OPENMP
-                        #pragma omp parallel for schedule(dynamic,64)
-                        #endif
-                        for ( int64_t i = 0; i < samples[iseed][iresl].size(); ++i ) {
-                            if( exception ) continue;
-                            try {
-                                if( i%out_interval==0 ){ std::cout << '*'; std::cout.flush(); }
-                                RifDockIndex const isamp = samples[iseed][iresl][i].index;
-                                ScenePtr tscene( scene_pt[omp_get_thread_num()] );
-                                bool director_success = director->set_scene( isamp, iresl, *tscene );
-                                if ( ! director_success ) {
-                                    samples[iseed][iresl][i].score = 9e9;
-                                    continue;
-                                }
-                                if ( opt.tether_to_input_position ) {
-                                    EigenXform x = tscene->position(1);
-                                    x.translation() -= scaffold_center;
-                                    float xmag =  xform_magnitude( x, redundancy_filter_rg );
-                                    if( xmag > opt.tether_to_input_position_cut + RESLS[iresl] ){
+                    // loop over each seeding position
+                    for ( uint64_t iseed = 0; iseed < seeding_size; ++iseed ) {
+                        std::cout << "##########////    seeding pos" <<  iseed << "   ////##########" << std::endl;
+                        
+                        bool search_failed = false;
+                        
+                        // initialize all the index for RESL0
+                        samples[iseed].resize( RESLS.size());
+                        samples[iseed][0].resize( director->size(0, RifDockIndex()).nest_index );
+                        for ( uint64_t ii=0; ii < director->size(0, RifDockIndex()).nest_index; ++ii) {
+                            samples[iseed][0][ii] = SearchPoint( RifDockIndex(ii, iseed) );
+                        }
+                        
+                        
+                        for( int iresl = 0; iresl < RESLS.size(); ++iresl)
+                        {
+                            std::cout << "HSearsh stage " << iresl+1 << " resl " << F(5,2,RESLS[iresl]) << " begin threaded sampling, " << KMGT(samples[iseed][iresl].size()) << " samples: ";
+                            int64_t const out_interval = samples[iseed][iresl].size()/50;
+                            std::exception_ptr exception = nullptr;
+                            std::chrono::time_point<std::chrono::high_resolution_clock> start, end;
+                            start = std::chrono::high_resolution_clock::now();
+                            // iterate over all resolutions
+                            #ifdef USE_OPENMP
+                            #pragma omp parallel for schedule(dynamic,64)
+                            #endif
+                            for ( int64_t i = 0; i < samples[iseed][iresl].size(); ++i ) {
+                                if( exception ) continue;
+                                try {
+                                    if( i%out_interval==0 ){ std::cout << '*'; std::cout.flush(); }
+                                    RifDockIndex const isamp = samples[iseed][iresl][i].index;
+                                    ScenePtr tscene( scene_pt[omp_get_thread_num()] );
+                                    bool director_success = director->set_scene( isamp, iresl, *tscene );
+                                    if ( ! director_success ) {
                                         samples[iseed][iresl][i].score = 9e9;
                                         continue;
                                     }
+                                    if ( opt.tether_to_input_position ) {
+                                        EigenXform x = tscene->position(1);
+                                        x.translation() -= scaffold_center;
+                                        float xmag =  xform_magnitude( x, redundancy_filter_rg );
+                                        if( xmag > opt.tether_to_input_position_cut + RESLS[iresl] ){
+                                            samples[iseed][iresl][i].score = 9e9;
+                                            continue;
+                                        }
+                                    }
+                                    
+                                    // the real rif score!!!!!!
+                                    samples[iseed][iresl][i].score = objectives[iresl]->score( *tscene );
+                                } catch( std::exception const & ex ) {
+                                    #ifdef USE_OPENMP
+                                    #pragma omp critical
+                                    #endif
+                                    exception = std::current_exception();
                                 }
+                            } // endl of searching in a specific resolution
+                            if( exception ) std::rethrow_exception(exception);
+                            end = std::chrono::high_resolution_clock::now();
+                            std::chrono::duration<double> elapsed_seconds_rif = end-start;
+                            float rate = (double)samples[iresl].size()/ elapsed_seconds_rif.count()/omp_max_threads();
+                            std::cout << std::endl;// << "done threaded sampling, partitioning data..." << endl;
+                            
+                            // sort and filter the results
+                            SearchPoint max_pt, min_pt;
+                            int64_t len = samples[iseed][iresl].size();
+                            if( samples[iseed][iresl].size() > opt.beam_size/opt.DIMPOW2 ){
+                                __gnu_parallel::nth_element( samples[iseed][iresl].begin(), samples[iseed][iresl].begin()+opt.beam_size/opt.DIMPOW2, samples[iseed][iresl].end() );
+                                len = opt.beam_size/opt.DIMPOW2;
+                                min_pt = *__gnu_parallel::min_element( samples[iseed][iresl].begin(), samples[iseed][iresl].begin()+len );
+                                max_pt = *(samples[iseed][iresl].begin()+opt.beam_size/opt.DIMPOW2 );
+                            } else {
+                                min_pt = *__gnu_parallel::min_element( samples[iseed][iresl].begin(), samples[iseed][iresl].end() );
+                                max_pt = *__gnu_parallel::max_element( samples[iseed][iresl].begin(), samples[iseed][iresl].end() );
+                            }
+                            std::cout << "HSearsh stage " << iresl+1 << " complete, resl. " << F(7,3,RESLS[iresl]) << ", "
+                            << " " << KMGT(samples[iseed][iresl].size()) << ", promote: " << F(9,6,min_pt.score) << " to "
+                            << F(9,6, std::min(opt.global_score_cut,max_pt.score)) << " rate " << KMGT(rate) << "/s/t " << std::endl;
+
+                            // already the highest resolution, so jump out of the loop
+                            if( iresl+1 == samples[iseed].size() ) break;
+                            
+                            for ( int64_t i = 0; i < len; ++i ) {
+                                RifDockIndex isamp0 = samples[iseed][iresl][i].index;
+                                if ( samples[iseed][iresl][i].score >= opt.global_score_cut ) continue;
+                                // if (iresl == 0) ++non0_space_size;
+                                for (uint64_t j = 0; j < opt.DIMPOW2; ++j) {
+                                    RifDockIndex isamp( isamp0.nest_index * opt.DIMPOW2 + j, iseed );
+                                    samples[iseed][iresl+1].push_back( SearchPoint( isamp ) );
+                                }
+                            }
+                            if ( 0 == samples[iseed][iresl+1].size() ) {
+                                search_failed = true;
+                                std::cout << "search fail, no valid samples!" << std::endl;
+                                break;
+                            }
+                            samples[iseed][iresl].clear();
+                        } // loop for all resolutions
+                        // check in this seeding position, if there is any valide search point.
+                        if (search_failed) continue;
+                        // now sort the final hsearch result
+                        std::cout << "full sort of final samples" << std::endl;
+                        __gnu_parallel::sort( samples[iseed].back().begin(), samples[iseed].back().end() );
+                    } // loop for all seeding positions
+                    
+                    // selecting the best for hack pack.
+                    std::cout << "" << std::endl;
+                    std::cout << "Done with hsearch_rifine stage, now selecting the best results for hpack." << std::endl;
+                    
+                    
+                    
+                    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                    /////////////////////////////////                 HACK PACK                  ///////////////////////////////////////////////
+                    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                    // TODO: add code for the case without packing. But I think that should never happen.
+                    
+                    if ( opt.hack_pack /* opt.hackpack, as I think I should always do hack pack. There is no way to skip this step. */ ) {
+                        std::cout << "========================================= Now the HackPack stage ============================================" << std::endl << std::endl;
+                        
+                        // change the scene_minimal
+                        {
+                            BOOST_FOREACH( ScenePtr & s, scene_hpack_pt ) s = scene_full->clone_shallow();
+                        }
+                        
+                        std::chrono::time_point<std::chrono::high_resolution_clock> start, end;
+                        start = std::chrono::high_resolution_clock::now();
+                        
+                        
+                        
+                        std::vector<std::vector< bool > > progress_bar(seeding_size);
+                        {
+                            int64_t out_interval = 0;
+                            int64_t total_npack = 0;
+                            // now put all samples into the hsearch_samples.
+                            for ( int64_t iseed = 0; iseed < samples.size(); ++iseed ) {
+                                // make sure there are valide points
+                                if ( samples[iseed].size() != RESLS.size() ) continue;
+                                // count how many designs could pass the global score cut
+                                int64_t n_packsamp = 0;
+                                for ( n_packsamp; n_packsamp < samples[iseed].back().size(); ++n_packsamp ) {
+                                    if ( samples[iseed].back()[n_packsamp].score > opt.global_score_cut ) break;
+                                }
+                                int npack = std::min( n_packsamp, int64_t(samples[iseed].back().size() * opt.hack_pack_frac) );
+                            
+                                if (npack>0) {
+                                    total_npack += npack;
+                                    packed_results.resize( packed_results.size() +1 );
+                                    packed_results.back().resize(npack);
+                                    for (uint64_t ii=0; ii<npack; ++ii) {
+                                        packed_results.back()[ii].index = samples[iseed].back()[ii].index;
+                                        packed_results.back()[ii].prepack_rank = ii;
+                                    }
+                                }
+                            } // loop for each seeding positions
+                            
+                            // no valide results for hackpacking, jump to the next scaffolds.
+                            // need to check at each step to make sure there are still valid results.
+                            if (total_npack == 0) {
+                                continue;
+                            }
+
+                            print_header( "hack-packing top " + KMGT(total_npack) );
+                            
+                            out_interval = total_npack / 109;
+                            out_interval = out_interval > 0 ? out_interval : 1;
+                            total_npack = 0;
+                            progress_bar.resize( packed_results.size() );
+                            for (int64_t i_seed = 0; i_seed < packed_results.size(); ++i_seed) {
+                                progress_bar[i_seed].resize( packed_results[i_seed].size() );
+                                for (int64_t i_samp = 0; i_samp < packed_results[i_seed].size(); ++i_samp) {
+                                    total_npack += 1;
+                                    if (total_npack % out_interval == 0) {
+                                        progress_bar[i_seed][i_samp] = true;
+                                    } else {
+                                        progress_bar[i_seed][i_samp] = false;
+                                    }
+                                }
+                            }
+                        }
+                        
+                        // the real hackpack part.
+                        
+                        for ( int64_t i_seed = 0; i_seed < packed_results.size(); ++i_seed ) {
+                            #ifdef USE_OPENMP
+                            #pragma omp parallel for schedule(dynamic,64)
+                            #endif
+                            for (int64_t i_sample = 0; i_sample < packed_results[i_seed].size(); ++i_sample) {
                                 
-                                // the real rif score!!!!!!
-                                samples[iseed][iresl][i].score = objectives[iresl]->score( *tscene );
-                            } catch( std::exception const & ex ) {
-                                #ifdef USE_OPENMP
-                                #pragma omp critical
-                                #endif
-                                exception = std::current_exception();
-                            }
-                        } // endl of searching in a specific resolution
-                        if( exception ) std::rethrow_exception(exception);
-                        end = std::chrono::high_resolution_clock::now();
-                        std::chrono::duration<double> elapsed_seconds_rif = end-start;
-                        float rate = (double)samples[iresl].size()/ elapsed_seconds_rif.count()/omp_max_threads();
-                        std::cout << std::endl;// << "done threaded sampling, partitioning data..." << endl;
-                        
-                        // sort and filter the results
-                        SearchPoint max_pt, min_pt;
-                        int64_t len = samples[iseed][iresl].size();
-                        if( samples[iseed][iresl].size() > opt.beam_size/opt.DIMPOW2 ){
-                            __gnu_parallel::nth_element( samples[iseed][iresl].begin(), samples[iseed][iresl].begin()+opt.beam_size/opt.DIMPOW2, samples[iseed][iresl].end() );
-                            len = opt.beam_size/opt.DIMPOW2;
-                            min_pt = *__gnu_parallel::min_element( samples[iseed][iresl].begin(), samples[iseed][iresl].begin()+len );
-                            max_pt = *(samples[iseed][iresl].begin()+opt.beam_size/opt.DIMPOW2 );
-                        } else {
-                            min_pt = *__gnu_parallel::min_element( samples[iseed][iresl].begin(), samples[iseed][iresl].end() );
-                            max_pt = *__gnu_parallel::max_element( samples[iseed][iresl].begin(), samples[iseed][iresl].end() );
-                        }
-                        std::cout << "HSearsh stage " << iresl+1 << " complete, resl. " << F(7,3,RESLS[iresl]) << ", "
-                        << " " << KMGT(samples[iseed][iresl].size()) << ", promote: " << F(9,6,min_pt.score) << " to "
-                        << F(9,6, std::min(opt.global_score_cut,max_pt.score)) << " rate " << KMGT(rate) << "/s/t " << std::endl;
-
-                        // already the highest resolution, so jump out of the loop
-                        if( iresl+1 == samples[iseed].size() ) break;
-                        
-                        for ( int64_t i = 0; i < len; ++i ) {
-                            RifDockIndex isamp0 = samples[iseed][iresl][i].index;
-                            if ( samples[iseed][iresl][i].score >= opt.global_score_cut ) continue;
-                            // if (iresl == 0) ++non0_space_size;
-                            for (uint64_t j = 0; j < opt.DIMPOW2; ++j) {
-                                RifDockIndex isamp( isamp0.nest_index * opt.DIMPOW2 + j, iseed );
-                                samples[iseed][iresl+1].push_back( SearchPoint( isamp ) );
-                            }
-                        }
-                        if ( 0 == samples[iseed][iresl+1].size() ) {
-                            search_failed = true;
-                            std::cout << "search fail, no valid samples!" << std::endl;
-                            break;
-                        }
-                        samples[iseed][iresl].clear();
-                    } // loop for all resolutions
-                    // check in this seeding position, if there is any valide search point.
-                    if (search_failed) continue;
-                    // now sort the final hsearch result
-                    std::cout << "full sort of final samples" << std::endl;
-                    __gnu_parallel::sort( samples[iseed].back().begin(), samples[iseed].back().end() );
-                } // loop for all seeding positions
-                
-                // selecting the best for hack pack.
-                std::cout << "" << std::endl;
-                std::cout << "Done with hsearch_rifine stage, now selecting the best results for hpack." << std::endl;
-                
-                
-                
-                ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                /////////////////////////////////                 HACK PACK                  ///////////////////////////////////////////////
-                ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                // TODO: add code for the case without packing. But I think that should never happen.
-                
-                if ( opt.hack_pack /* opt.hackpack, as I think I should always do hack pack. There is no way to skip this step. */ ) {
-                    std::cout << "========================================= Now the HackPack stage ============================================" << std::endl << std::endl;
-                    
-                    // change the scene_minimal
-                    {
-                        BOOST_FOREACH( ScenePtr & s, scene_hpack_pt ) s = scene_full->clone_shallow();
-                    }
-                    
-                    std::chrono::time_point<std::chrono::high_resolution_clock> start, end;
-                    start = std::chrono::high_resolution_clock::now();
-                    
-                    
-                    
-                    std::vector<std::vector< bool > > progress_bar(seeding_size);
-                    {
-                        int64_t out_interval = 0;
-                        int64_t total_npack = 0;
-                        // now put all samples into the hsearch_samples.
-                        for ( int64_t iseed = 0; iseed < samples.size(); ++iseed ) {
-                            // make sure there are valide points
-                            if ( samples[iseed].size() != RESLS.size() ) continue;
-                            // count how many designs could pass the global score cut
-                            int64_t n_packsamp = 0;
-                            for ( n_packsamp; n_packsamp < samples[iseed].back().size(); ++n_packsamp ) {
-                                if ( samples[iseed].back()[n_packsamp].score > opt.global_score_cut ) break;
-                            }
-                            int npack = std::min( n_packsamp, int64_t(samples[iseed].back().size() * opt.hack_pack_frac) );
-                        
-                            if (npack>0) {
-                                total_npack += npack;
-                                packed_results.resize( packed_results.size() +1 );
-                                packed_results.back().resize(npack);
-                                for (uint64_t ii=0; ii<npack; ++ii) {
-                                    packed_results.back()[ii].index = samples[iseed].back()[ii].index;
-                                    packed_results.back()[ii].prepack_rank = ii;
+                                if ( true == progress_bar[i_seed][i_sample] ) { std::cout << '*'; std::cout.flush(); }
+                                
+                                
+                                // choose the scene.
+                                ScenePtr tscene( scene_hpack_pt[omp_get_thread_num()] );
+                                bool director_success = director->set_scene( packed_results[i_seed][i_sample].index, RESLS.size()-1, *tscene );
+                                if ( ! director_success ) {
+                                    // packed_results[ ipack ].rotamers(); // this initializes it to blank
+                                    packed_results[ i_seed ][ i_sample ].score = 9e9;
+                                    continue;
                                 }
-                            }
-                        } // loop for each seeding positions
-                        
-                        // no valide results for hackpacking, jump to the next scaffolds.
-                        // need to check at each step to make sure there are still valid results.
-                        if (total_npack == 0) {
-                            continue;
-                        }
-
-                        print_header( "hack-packing top " + KMGT(total_npack) );
-                        
-                        out_interval = total_npack / 109;
-                        out_interval = out_interval > 0 ? out_interval : 1;
-                        total_npack = 0;
-                        progress_bar.resize( packed_results.size() );
-                        for (int64_t i_seed = 0; i_seed < packed_results.size(); ++i_seed) {
-                            progress_bar[i_seed].resize( packed_results[i_seed].size() );
-                            for (int64_t i_samp = 0; i_samp < packed_results[i_seed].size(); ++i_samp) {
-                                total_npack += 1;
-                                if (total_npack % out_interval == 0) {
-                                    progress_bar[i_seed][i_samp] = true;
-                                } else {
-                                    progress_bar[i_seed][i_samp] = false;
-                                }
+                                //packed_results[ i_seed ][ i_sample ].score = samples[i_seed][i_sample].score;
+                                packed_results[ i_seed ][ i_sample ].score = packing_objective->score_with_rotamers( *tscene, packed_results[i_seed][ i_sample ].rotamers() );
                             }
                         }
-                    }
-                    
-                    // the real hackpack part.
-                    
-                    for ( int64_t i_seed = 0; i_seed < packed_results.size(); ++i_seed ) {
+                        
+                        // now sorting the results.
                         #ifdef USE_OPENMP
                         #pragma omp parallel for schedule(dynamic,64)
                         #endif
-                        for (int64_t i_sample = 0; i_sample < packed_results[i_seed].size(); ++i_sample) {
-                            
-                            if ( true == progress_bar[i_seed][i_sample] ) { std::cout << '*'; std::cout.flush(); }
-                            
-                            
-                            // choose the scene.
-                            ScenePtr tscene( scene_hpack_pt[omp_get_thread_num()] );
-                            bool director_success = director->set_scene( packed_results[i_seed][i_sample].index, RESLS.size()-1, *tscene );
-                            if ( ! director_success ) {
-                                // packed_results[ ipack ].rotamers(); // this initializes it to blank
-                                packed_results[ i_seed ][ i_sample ].score = 9e9;
-                                continue;
-                            }
-                            //packed_results[ i_seed ][ i_sample ].score = samples[i_seed][i_sample].score;
-                            packed_results[ i_seed ][ i_sample ].score = packing_objective->score_with_rotamers( *tscene, packed_results[i_seed][ i_sample ].rotamers() );
+                        for (int64_t i_seed=0; i_seed < packed_results.size(); ++i_seed) {
+                            std::sort(packed_results[i_seed].begin(), packed_results[i_seed].end());
                         }
-                    }
+                        
+                        
+                        end = std::chrono::high_resolution_clock::now();
+                        std::cout << std::endl;
+                        std::cout << "Hackpack stage done, and it took "  << (end - start).count() << " CPU ticks." << std::endl << std::endl;
+                    } // end if of hack pack
                     
-                    // now sorting the results.
-                    #ifdef USE_OPENMP
-                    #pragma omp parallel for schedule(dynamic,64)
-                    #endif
+                } // end block of the position refinement and hpack.
+                
+                
+                
+                // condense and select the good results, I would also use the redundancy filter to remove the bad ones.
+                // very bad name here, but to make less changes for the the rifine code, I just set the vector name to
+                // rifine results.
+                std::vector< SearchPointWithRots > rifine_results;
+                {
+                    std::vector< SearchPointWithRots > packed_results_all;
+                    
+                    print_header( "Now perform redundancy filtering" );
+                    print_header("condense all results and do redundancy filtering");
+                    
                     for (int64_t i_seed=0; i_seed < packed_results.size(); ++i_seed) {
-                        std::sort(packed_results[i_seed].begin(), packed_results[i_seed].end());
-                    }
-                    
-                    
-                    end = std::chrono::high_resolution_clock::now();
-                    std::cout << std::endl;
-                    std::cout << "Hackpack stage done, and it took "  << (end - start).count() << " CPU ticks." << std::endl << std::endl;
-                } // end if of hack pack
-                
-            } // end block of the position refinement and hpack.
-            
-            
-            
-            // condense and select the good results, I would also use the redundancy filter to remove the bad ones.
-            // very bad name here, but to make less changes for the the rifine code, I just set the vector name to
-            // rifine results.
-            std::vector< SearchPointWithRots > rifine_results;
-            {
-                std::vector< SearchPointWithRots > packed_results_all;
-                
-                print_header( "Now perform redundancy filtering" );
-                print_header("condense all results and do redundancy filtering");
-                
-                for (int64_t i_seed=0; i_seed < packed_results.size(); ++i_seed) {
-                    int64_t nsamples = 0;
-                    for ( int64_t i_samp=0; i_samp<packed_results[i_seed].size(); ++i_samp) {
-                        if (packed_results[i_seed][i_samp].score > opt.score_after_hackpack_cut) {
-                            break;
+                        int64_t nsamples = 0;
+                        for ( int64_t i_samp=0; i_samp<packed_results[i_seed].size(); ++i_samp) {
+                            if (packed_results[i_seed][i_samp].score > opt.score_after_hackpack_cut) {
+                                break;
+                            }
+                            nsamples += 1;
                         }
-                        nsamples += 1;
+                        std::copy( packed_results[i_seed].begin(), packed_results[i_seed].begin()+nsamples, std::back_inserter(packed_results_all) );
                     }
-                    std::copy( packed_results[i_seed].begin(), packed_results[i_seed].begin()+nsamples, std::back_inserter(packed_results_all) );
+                    std::sort(packed_results_all.begin(), packed_results_all.end());
+                    
+                    std::cout << "Total number of output before filtering is " << KMGT( packed_results_all.size() ) << std::endl;
+                    
+
+                    if( false ) {
+                        real_rmsd_xform<EigenXform, ScenePtr, ObjectivePtr> ( RESLS.size()-1,
+                                                                              packed_results_all,
+                                                                              scene_pt,
+                                                                              director,
+                                                                              redundancy_filter_rg,
+                                                                              scaffold_centered);
+                    }
+
+                    // the real redundancy filtering stage happens here
+                    if ( opt.redundancy_filter_mag_before > 0.0 ) {
+                        std::vector<EigenXform> selected_xforms;
+                        selected_xforms.reserve(65535);
+                        float redundancy_filter_mag = opt.redundancy_filter_mag_before;
+                        std::cout << "redundancy_filter_mag " << redundancy_filter_mag << "A \"rmsd\"" << std::endl;
+                        int64_t Nout_singlethread = std::min( (int64_t)10000, (int64_t)packed_results_all.size() );
+                        
+                        std::cout << "going through 10K results ( 1 thread ): ";
+                        int64_t out_interval = 10000/81;
+                        for( int64_t isamp=0; isamp < Nout_singlethread; ++isamp ) {
+                            if (isamp%out_interval == 0) std::cout << "*"; std::cout.flush();
+                            redundancy_filtering< EigenXform, ScenePtr, ObjectivePtr >(
+                                        isamp, RESLS.size()-1, packed_results_all, scene_pt, director,
+                                        redundancy_filter_rg, redundancy_filter_mag,
+                                        rifine_results, selected_xforms,
+                                        #ifdef USE_OPENMP
+                                        dump_lock
+                                        #endif
+                            );
+                        }
+                        
+                        std::cout << std::endl;
+                        std::cout << "going through all results (threaded): ";
+                        out_interval = (int64_t)( packed_results_all.size() - Nout_singlethread )/ 82;
+                        std::exception_ptr exception = nullptr;
+                        #ifdef USE_OPENMP
+                        #pragma omp parallel for schedule(dynamic,128)
+                        #endif
+                        for( int64_t isamp = Nout_singlethread; isamp < packed_results_all.size(); ++isamp ) {
+                            if( exception ) continue;
+                            try {
+                                if( isamp%out_interval==0 ){ std::cout << '*'; std::cout.flush(); }
+                                redundancy_filtering< EigenXform, ScenePtr, ObjectivePtr >(
+                                        isamp, RESLS.size()-1, packed_results_all, scene_pt, director,
+                                        redundancy_filter_rg, redundancy_filter_mag,
+                                        rifine_results, selected_xforms,
+                                        #ifdef USE_OPENMP
+                                        dump_lock
+                                        #endif
+                                );
+                                
+                            } catch (...) {
+                                #pragma omp critical
+                                exception = std::current_exception();
+                            }
+                        }
+                    } else {
+                        rifine_results = packed_results_all;
+                        std::cout << std::endl << "No filtering is done before rosetta score and mean." << std::endl;
+                    }// end block of redundancy filtering
+                    
+                    std::cout << std::endl << "Total number of output after filtering is " << KMGT( rifine_results.size() ) << std::endl;
+                    
                 }
-                std::sort(packed_results_all.begin(), packed_results_all.end());
-                
-                std::cout << "Total number of output before filtering is " << KMGT( packed_results_all.size() ) << std::endl;
                 
 
-                if( opt.test_longxing ) {
-                    real_rmsd_xform<EigenXform, ScenePtr, ObjectivePtr> ( RESLS.size()-1,
-                                                                          packed_results_all,
-                                                                          scene_pt,
-                                                                          director,
-                                                                          redundancy_filter_rg,
-                                                                          scaffold_centered);
+                
+                
+                /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                //////////////////////////////////////       Rosetta score and min     /////////////////////////////////////////////////////////////
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                // rossetta score and min, you should always do rosetta score and min, there is no way to skip this step
+                // TODO: add code if skip this step, should I do this. Just for fun and a waste of time??
+                // Maybe here I can use the rosetta_score_each_seeding_at_least flag, as it is useful for each seeding position.
+                // all the data are stored in the scoremin_results vector, sorted and redundancy filtered.
+                bool const do_rosetta_score = opt.rosetta_score_fraction > 0 || opt.rosetta_score_then_min_below_thresh > -9e8 || opt.rosetta_score_each_seeding_at_least > 0;
+                if ( do_rosetta_score && opt.hack_pack ) {
+                    
+                    std::cout << "=========================================  Rosetta score and min ============================================" << std::endl << std::endl;
+                    std::chrono::time_point<std::chrono::high_resolution_clock> start_rosetta = std::chrono::high_resolution_clock::now();
+                    
+                   
+                    
+                    int n_score_calculations = 0;
+                    int do_min = 2;
+                    if ( opt.rosetta_min_fraction == 0.0 ) do_min = 1;
+                    
+                    std::vector<bool> is_scaffold_fixed_res(scaffold.size()+1,true);
+                    for(int designable : scaffold_res){
+                        is_scaffold_fixed_res[designable] = false;
+                    }
+                    
+                    
+                    
+                    for (int minimizing = 0; minimizing < do_min; ++minimizing) {
+
+                        
+                        std::vector<core::kinematics::MoveMapOP> movemap_pt( omp_max_threads() );
+                        std::vector<protocols::minimization_packing::MinMoverOP> minmover_pt( omp_max_threads() );
+                        std::vector<core::scoring::ScoreFunctionOP> scorefunc_pt( omp_max_threads() );
+                        std::vector<core::pose::Pose> work_pose_pt        ( omp_max_threads() );
+                        std::vector<core::pose::Pose> both_per_thread     ( omp_max_threads() );
+                        for ( int i = 0; i < omp_max_threads(); ++i ) {
+                            // both_full_per_thread[i] = both_full_pose;
+                            if( opt.replace_orig_scaffold_res ){
+                                both_per_thread[i] = both_pose;
+                            } else {
+                                both_per_thread[i] = both_full_pose;
+                            }
+                            // create score function
+                            // scorefunc_pt[i] = core::scoring::ScoreFucntionFactory::create_score_function( opt.rosetta_soft_score );
+                            if ( minimizing ) {
+                                if ( opt.rosetta_hard_min ) {
+                                    scorefunc_pt[i] = core::scoring::ScoreFunctionFactory::create_score_function( opt.rosetta_hard_score );
+                                } else {
+                                     scorefunc_pt[i] = core::scoring::ScoreFunctionFactory::create_score_function( opt.rosetta_soft_score );
+                                }
+                            } else if ( do_min == 2 ) {
+                                // not minimizing, but will do minimization.
+                                scorefunc_pt[i] = core::scoring::ScoreFunctionFactory::create_score_function( opt.rosetta_soft_score );
+                                if( !opt.rosetta_hard_min ){
+                                    scorefunc_pt[i]->set_weight( core::scoring::fa_rep, scorefunc_pt[i]->get_weight(core::scoring::fa_rep)*0.7 );
+                                    scorefunc_pt[i]->set_weight( core::scoring::fa_dun, scorefunc_pt[i]->get_weight(core::scoring::fa_dun)*0.7 );
+                                }
+                            } else {
+                                // not minimizing at all, score pass only.
+                                scorefunc_pt[i] = core::scoring::ScoreFunctionFactory::create_score_function( opt.rosetta_soft_score );
+                                if( !opt.rosetta_hard_min ){
+                                    scorefunc_pt[i]->set_weight( core::scoring::fa_rep, scorefunc_pt[i]->get_weight(core::scoring::fa_rep)*1.0 );
+                                    scorefunc_pt[i]->set_weight( core::scoring::fa_dun, scorefunc_pt[i]->get_weight(core::scoring::fa_dun)*1.0 );
+                                }
+                            }
+                            if( target.size() == 1 ){
+                                // assume this is a ligand, so hbonding is important
+                                scorefunc_pt[i]->set_weight( core::scoring::fa_elec    , scorefunc_pt[i]->get_weight(core::scoring::fa_elec    )*2.0 );
+                                scorefunc_pt[i]->set_weight( core::scoring::hbond_sc   , scorefunc_pt[i]->get_weight(core::scoring::hbond_sc   )*2.0 );
+                                scorefunc_pt[i]->set_weight( core::scoring::hbond_bb_sc, scorefunc_pt[i]->get_weight(core::scoring::hbond_bb_sc)*2.0 );
+                            } else {
+                                scorefunc_pt[i]->set_weight( core::scoring::fa_elec    , scorefunc_pt[i]->get_weight(core::scoring::fa_elec    )*1.0 );
+                                scorefunc_pt[i]->set_weight( core::scoring::hbond_sc   , scorefunc_pt[i]->get_weight(core::scoring::hbond_sc   )*1.0 );
+                                scorefunc_pt[i]->set_weight( core::scoring::hbond_bb_sc, scorefunc_pt[i]->get_weight(core::scoring::hbond_bb_sc)*1.0 );
+                            }
+                            
+                            // set up the minmover
+                            movemap_pt[i] = core::kinematics::MoveMapOP( new core::kinematics::MoveMap() );
+                            movemap_pt[i]->set_chi(true);
+                            movemap_pt[i]->set_jump(true);
+                            for(int ir = 1; ir <= both_full_pose.size(); ++ir){
+                                bool is_scaffold = ir <= scaffold.size();
+                                if( is_scaffold ) movemap_pt[i]->set_bb(ir, opt.rosetta_min_allbb || opt.rosetta_min_scaffoldbb );
+                                else              movemap_pt[i]->set_bb(ir, opt.rosetta_min_allbb || opt.rosetta_min_targetbb );
+                                if( opt.rosetta_min_fix_target && !is_scaffold ){
+                                    movemap_pt[i]->set_chi(ir,false);
+                                }
+                            }
+                            minmover_pt[i] = protocols::minimization_packing::MinMoverOP(new protocols::minimization_packing::MinMover( movemap_pt[i], scorefunc_pt[i], "dfpmin_armijo_nonmonotone", 0.001, true ) );
+                        } // end loop of initialize of scorefunctions.
+                        
+                        
+                        // I would make the "fraction" schema simpler.
+                        size_t n_scormin = 0;
+                        if( minimizing ){
+                            // min take ~10x score time, so do on 1/10th of the scored
+                            n_scormin = int( std::ceil(n_score_calculations * opt.rosetta_min_fraction) );
+                            // padding to the num of threads
+                            n_scormin = std::ceil(1.0f*n_scormin/omp_max_threads()) * omp_max_threads();
+                            // make sure not to big.
+                            n_scormin = std::min( (int64_t)n_scormin, (int64_t)n_score_calculations);
+                        } else {
+                            // for scoring, use user cut
+                            n_scormin = opt.rosetta_score_fraction * rifine_results.size();
+                            if( opt.rosetta_score_then_min_below_thresh > -9e8 ){
+                                for( n_scormin=0; n_scormin < rifine_results.size(); ++n_scormin ){
+                                    if( rifine_results[n_scormin].score > opt.rosetta_score_then_min_below_thresh )
+                                        break;
+                                }
+                            }
+                            n_scormin = std::min<int>( std::max<int>( n_scormin, opt.rosetta_score_at_least ), opt.rosetta_score_at_most );
+                            n_scormin = std::min<int>( n_scormin, rifine_results.size() );
+                            n_score_calculations = n_scormin;
+                        }
+                        rifine_results.resize(n_scormin);
+                        
+                        
+                        int64_t const out_interval = std::max<int64_t>(1,n_scormin/50);
+                        if( minimizing) std::cout << std::endl << "rosetta min on "   << KMGT(n_scormin) << ": ";
+                        else            std::cout << "rosetta score on " << KMGT(n_scormin) << ": ";
+                        std::exception_ptr exception = nullptr;
+                        
+                        // the real score and min code.
+                        #ifdef USE_OPENMP
+                        #pragma omp parallel for schedule(dynamic,1)
+                        #endif
+                        for (int64_t i_samp = 0; i_samp < n_scormin; ++i_samp) {
+                                
+                                if ( i_samp % out_interval == 0 ) { std::cout << '*'; std::cout.flush();  };
+                                
+                                // get the current thread num
+                                int const ithread = omp_get_thread_num();
+                                
+                                // get the transform of the scaffold
+                                director->set_scene(rifine_results[i_samp].index, 0, *scene_pt[ithread]);
+                                // I don't think there is any need to align everything to the scaffold.
+                                EigenXform xposition1 = scene_pt[ithread]->position(1);
+                                
+                                // transform the scaffold to the position
+                                core::pose::Pose & pose_to_min( work_pose_pt[ithread] );
+                                pose_to_min = both_per_thread[ithread];
+                                xform_pose( pose_to_min, eigen2xyz(xposition1) , 1 , scaffold.size() );
+                                
+                                // place the rotamers.
+                                core::chemical::ResidueTypeSetCAP rts = core::chemical::ChemicalManager::get_instance()->residue_type_set("fa_standard");
+                                std::vector<bool> is_rif_res(pose_to_min.size(),false);
+                                for ( int ipr = 0; ipr < rifine_results[i_samp].numrots(); ++ipr ) {
+                                    int ires = scaffres_l2g.at( rifine_results[i_samp].rotamers().at(ipr).first );
+                                    int irot =                  rifine_results[i_samp].rotamers().at(ipr).second;
+                                    core::conformation::ResidueOP newrsd = core::conformation::ResidueFactory::create_residue( rts.lock()->name_map(rot_index.resname(irot)) );
+                                    pose_to_min.replace_residue( ires+1, *newrsd, true );
+                                    is_rif_res[ires] = true;
+                                    for ( int ichi = 0; ichi < rot_index.nchi(irot); ++ichi ) {
+                                        pose_to_min.set_chi( ichi+1, ires+1, rot_index.chi( irot, ichi ) );
+                                    }
+                                }
+                                
+                                
+                                EigenXform Xtorifframe = EigenXform::Identity();
+                                
+                                // replace the clash residues
+                                std::vector<int> replaced_scaffold_res, rifres;
+                                auto alaop = core::conformation::ResidueFactory::create_residue( rts.lock()->name_map("ALA" ) );
+                                
+                                std::vector<int> rifatypemap = get_rif_atype_map();
+                                for (int ir = 1; ir <= scaffold.size(); ++ir) {
+                                    auto const & ires = pose_to_min.residue(ir);
+                                    if ( !ires.is_protein() ) continue;
+                                    if( ires.aa()==core::chemical::aa_gly ||
+                                       ires.aa()==core::chemical::aa_ala ||
+                                       ires.aa()==core::chemical::aa_pro ) continue;
+                                    if(is_rif_res[ir-1]){
+                                        rifres.push_back(ir);
+                                        continue;
+                                    }
+                                    if(is_scaffold_fixed_res[ir]) continue;
+                                    
+                                    bool ir_clash = false;
+                                    float evtarget = 0.0;
+                                    for (int ia = 6; ia <= ires.nheavyatoms(); ++ia) {
+                                        auto const & ixyz = ires.xyz(ia);
+                                        
+                                        Eigen::Vector3f satm;
+                                        for(int k = 0; k < 3; ++k) satm[k] = ixyz[k];
+                                        int const irifatype = rifatypemap[ires.atom_type_index(ia)];
+                                        evtarget += target_field_by_atype.at(irifatype)->at(satm);
+                                    }
+                                    if( evtarget > 3.0f ) ir_clash = true;
+                                    
+                                    // check against other rif res
+                                    for( int ipr = 0; ipr < rifine_results[i_samp].numrots(); ++ipr ){
+                                        int jr = 1+scaffres_l2g.at( rifine_results[i_samp].rotamers().at(ipr).first );
+                                        auto const & jres = pose_to_min.residue(jr);
+                                        // should do rsd nbr check... but speed not critical here ATM...
+                                        for( int ia = 6; ia <= ires.nheavyatoms(); ++ia){
+                                            auto const & ixyz = ires.xyz(ia);
+                                            for( int ja = 6; ja <= jres.nheavyatoms(); ++ja){
+                                                auto const & jxyz = jres.xyz(ja);
+                                                if( ixyz.distance_squared(jxyz) < 9.0 ){
+                                                    ir_clash = true;
+                                                }
+                                            }
+                                        }
+                                    }
+                                    if ( ir_clash ) {
+                                        pose_to_min.replace_residue(ir, *alaop, true);
+                                        replaced_scaffold_res.push_back(ir);
+                                    }
+                                } // check clash and replace to AlA
+                                
+                                
+                                // the minimizing block
+                                if ( minimizing ) {
+                                    minmover_pt[ithread]->apply( pose_to_min );
+                                } else {
+                                    scorefunc_pt[ithread]->score( pose_to_min );
+                                }// the minimizing block
+                                
+                                // store the score
+                                if ( opt.rosetta_score_total ) {
+                                    rifine_results[i_samp].score = pose_to_min.energies().total_energy();
+                                } else {
+                                    double rosetta_score = 0.0;
+                                    auto const & weights = pose_to_min.energies().weights();
+                                    if( !opt.rosetta_score_ddg_only ){
+                                        for( int ir = 1; ir <= scaffold.size(); ++ir ){
+                                            if( is_rif_res[ir-1] ){
+                                                rosetta_score += pose_to_min.energies().onebody_energies(ir).dot(weights);
+                                            }
+                                        }
+                                    }
+                                    if( !opt.rosetta_score_ddg_only && target.size()==1 ){
+                                        // is ligand, add it's internal energy
+                                        rosetta_score += pose_to_min.energies().onebody_energies(pose_to_min.size()).dot(weights);
+                                    }
+                                    auto const & egraph = pose_to_min.energies().energy_graph();
+                                    for(int ir = 1; ir <= egraph.num_nodes(); ++ir){
+                                        for ( utility::graph::Graph::EdgeListConstIter
+                                             iru  = egraph.get_node(ir)->const_upper_edge_list_begin(),
+                                             irue = egraph.get_node(ir)->const_upper_edge_list_end();
+                                             iru != irue; ++iru
+                                             ){
+                                            EnergyEdge const & edge( static_cast< EnergyEdge const & > (**iru) );
+                                            int jr = edge.get_second_node_ind();
+                                            
+                                            // this is DDG
+                                            if( ir <= scaffold.size() && jr > scaffold.size() ){
+                                                // ir in scaff, jr in target
+                                                rosetta_score += edge.dot(weights);
+                                            }
+                                            if( !opt.rosetta_score_ddg_only && jr <= scaffold.size() ){
+                                                // ir & jr in scaffold
+                                                if( is_rif_res[ir-1] || is_rif_res[jr-1] ){
+                                                    double const edgescore = edge.dot(weights);
+                                                    if( edgescore > 0.0 ){
+                                                        // always assess full score for bad interactions
+                                                        rosetta_score += edgescore;
+                                                    } else if( is_rif_res[ir-1] && is_rif_res[jr-1] ){
+                                                        // both rif residues
+                                                        rosetta_score += opt.rosetta_score_rifres_rifres_weight * edgescore;
+                                                        // bonus for hbonds between rif residues
+                                                        rosetta_score += edge[core::scoring::hbond_sc];
+                                                    } else {
+                                                        // rest: one rif res, one other scaff res
+                                                        rosetta_score += opt.rosetta_score_rifres_scaffold_weight * edgescore;
+                                                    }
+                                                } else {
+                                                    // scaffold / scaffold ignored
+                                                }
+                                            }
+                                        }
+                                    }
+                                    rifine_results[i_samp].score = rosetta_score;
+                                }
+
+                                // store the results?
+                                if( (minimizing+1 == do_min)     && rifine_results[i_samp].score <= opt.rosetta_score_cut && !opt.only_dump_scaffold /*only dump scaffold*/ ){
+                                    rifine_results[i_samp].pose_ = core::pose::PoseOP( new core::pose::Pose(pose_to_min) );
+                                    for(int ir : rifres){
+                                        rifine_results[i_samp].pose_->pdb_info()->add_reslabel(ir, "RIFRES" );
+                                    }
+                                    for(int ir : replaced_scaffold_res){
+                                        rifine_results[i_samp].pose_->pdb_info()->add_reslabel(ir, "PRUNED" );
+                                    }
+                                } else if ( (minimizing+1 == do_min) && rifine_results[i_samp].score <= opt.rosetta_score_cut && opt.only_dump_scaffold ) {
+                                    rifine_results[i_samp].pose_ = pose_to_min.split_by_chain(1);
+                                    for(int ir : rifres){
+                                        rifine_results[i_samp].pose_->pdb_info()->add_reslabel(ir, "RIFRES" );
+                                    }
+                                    for(int ir : replaced_scaffold_res){
+                                        rifine_results[i_samp].pose_->pdb_info()->add_reslabel(ir, "PRUNED" );
+                                    }
+                                } else {
+                                    //
+                                }
+                                
+                            } // end loop of each sample in each seeding position.
+                    
+                    
+                        // sort the results
+                        __gnu_parallel::sort( rifine_results.begin(), rifine_results.end() );
+
+                        if ( opt.test_longxing ) {
+                            if ( minimizing == 0 ) {
+                                std::cout << "Top scores after rosetta score:" << std::endl;
+                            } else {
+                                std::cout << "Top scores after minimization:" << std::endl;
+                            }
+                            for( int64_t ii = 0; ii < 20 && ii < rifine_results.size(); ++ii ) {
+                                std::cout << rifine_results[ii].score << "   ";
+                            }
+                            std::cout << std::endl;
+                        }
+                     // end loop of minimizing
+                    }
+                    std::chrono::duration<double> elapsed_seconds_rosetta = std::chrono::high_resolution_clock::now()-start_rosetta;
+                    std::cout << std::endl << "Rosetta score and min done! Total " << elapsed_seconds_rosetta.count() << " CPU ticks spend." << std::endl << std::endl;
                 }
 
-                // the real redundancy filtering stage happens here
-                if ( opt.do_filtering_before_rosetta ) {
-                    std::vector<EigenXform> selected_xforms;
-                    selected_xforms.reserve(65535);
+
+                    if( opt.test_longxing ) {
+                        real_rmsd_xform<EigenXform, ScenePtr, ObjectivePtr> ( RESLS.size()-1,
+                                                                              rifine_results,
+                                                                              scene_pt,
+                                                                              director,
+                                                                              redundancy_filter_rg,
+                                                                              scaffold_centered);
+                    }
+            
+                // fitering redundancy again, this seems to be useless, since I already filtered this. But any way, to make it more compatible
+                // with legacy results. I would just add the code again. Longxing, 2019-03-21
+                std::vector< RifDockResult > selected_results, allresults;
+                {
+                    int64_t Nout = rifine_results.size();
+                    Nout         = std::min( (int64_t)opt.n_result_limit, Nout );
+                    
+                    std::vector< std::vector< RifDockResult > > allresults_pt( omp_max_threads() );
+                    std::vector< std::pair< EigenXform, uint64_t > > selected_xforms;
+                    selected_xforms.reserve(65536);
+                    
+                    //////////////////////////////
+                    
+                    int nclose = 0;
+                    int nclosemax = opt.force_output_if_close_to_input_num;
+                    float nclosethresh = opt.force_output_if_close_to_input;
+                    int n_pdb_out = opt.n_pdb_out;
                     float redundancy_filter_mag = opt.redundancy_filter_mag;
                     std::cout << "redundancy_filter_mag " << redundancy_filter_mag << "A \"rmsd\"" << std::endl;
-                    int64_t Nout_singlethread = std::min( (int64_t)10000, (int64_t)packed_results_all.size() );
+                    int64_t Nout_singlethread = std::min( (int64_t)10000, Nout );
                     
                     std::cout << "going through 10K results ( 1 thread ): ";
                     int64_t out_interval = 10000/81;
                     for( int64_t isamp=0; isamp < Nout_singlethread; ++isamp ) {
                         if (isamp%out_interval == 0) std::cout << "*"; std::cout.flush();
-                        redundancy_filtering< EigenXform, ScenePtr, ObjectivePtr >(
-                                    isamp, RESLS.size()-1, packed_results_all, scene_pt, director,
-                                    redundancy_filter_rg, redundancy_filter_mag,
-                                    rifine_results, selected_xforms,
-                                    #ifdef USE_OPENMP
-                                    dump_lock
-                                    #endif
-                        );
-                    }
-                    
-                    std::cout << std::endl;
-                    std::cout << "going through all results (threaded): ";
-                    out_interval = (int64_t)( packed_results_all.size() - Nout_singlethread )/ 82;
-                    std::exception_ptr exception = nullptr;
-                    #ifdef USE_OPENMP
-                    #pragma omp parallel for schedule(dynamic,8)
-                    #endif
-                    for( int64_t isamp = Nout_singlethread; isamp < packed_results_all.size(); ++isamp ) {
-                        if( exception ) continue;
-                        try {
-                            if( isamp%out_interval==0 ){ std::cout << '*'; std::cout.flush(); }
-                            redundancy_filtering< EigenXform, ScenePtr, ObjectivePtr >(
-                                    isamp, RESLS.size()-1, packed_results_all, scene_pt, director,
-                                    redundancy_filter_rg, redundancy_filter_mag,
-                                    rifine_results, selected_xforms,
-                                    #ifdef USE_OPENMP
-                                    dump_lock
-                                    #endif
-                            );
-                            
-                        } catch (...) {
-                            #pragma omp critical
-                            exception = std::current_exception();
-                        }
-                    }
-                } else {
-                    rifine_results = packed_results_all;
-                    std::cout << std::endl << "No filtering is done before rosetta score and mean." << std::endl;
-                }// end block of redundancy filtering
-                
-                std::cout << std::endl << "Total number of output after filtering is " << KMGT( rifine_results.size() ) << std::endl;
-                
-            }
-            
-
-            
-            
-            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            //////////////////////////////////////       Rosetta score and min     /////////////////////////////////////////////////////////////
-            ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            // rossetta score and min, you should always do rosetta score and min, there is no way to skip this step
-            // TODO: add code if skip this step, should I do this. Just for fun and a waste of time??
-            // Maybe here I can use the rosetta_score_each_seeding_at_least flag, as it is useful for each seeding position.
-            // all the data are stored in the scoremin_results vector, sorted and redundancy filtered.
-            bool const do_rosetta_score = opt.rosetta_score_fraction > 0 || opt.rosetta_score_then_min_below_thresh > -9e8 || opt.rosetta_score_each_seeding_at_least > 0;
-            if ( do_rosetta_score && opt.hack_pack ) {
-                
-                std::cout << "=========================================  Rosetta score and min ============================================" << std::endl << std::endl;
-                std::chrono::time_point<std::chrono::high_resolution_clock> start_rosetta = std::chrono::high_resolution_clock::now();
-                
-               
-                
-                int n_score_calculations = 0;
-                int do_min = 2;
-                if ( opt.rosetta_min_fraction == 0.0 ) do_min = 1;
-                
-                std::vector<bool> is_scaffold_fixed_res(scaffold.size()+1,true);
-                for(int designable : scaffold_res){
-                    is_scaffold_fixed_res[designable] = false;
-                }
-                
-                
-                
-                for (int minimizing = 0; minimizing < do_min; ++minimizing) {
-
-                    
-                    std::vector<core::kinematics::MoveMapOP> movemap_pt( omp_max_threads() );
-                    std::vector<protocols::minimization_packing::MinMoverOP> minmover_pt( omp_max_threads() );
-                    std::vector<core::scoring::ScoreFunctionOP> scorefunc_pt( omp_max_threads() );
-                    std::vector<core::pose::Pose> work_pose_pt        ( omp_max_threads() );
-                    std::vector<core::pose::Pose> both_per_thread     ( omp_max_threads() );
-                    for ( int i = 0; i < omp_max_threads(); ++i ) {
-                        // both_full_per_thread[i] = both_full_pose;
-                        if( opt.replace_orig_scaffold_res ){
-                            both_per_thread[i] = both_pose;
-                        } else {
-                            both_per_thread[i] = both_full_pose;
-                        }
-                        // create score function
-                        // scorefunc_pt[i] = core::scoring::ScoreFucntionFactory::create_score_function( opt.rosetta_soft_score );
-                        if ( minimizing ) {
-                            if ( opt.rosetta_hard_min ) {
-                                scorefunc_pt[i] = core::scoring::ScoreFunctionFactory::create_score_function( opt.rosetta_hard_score );
-                            } else {
-                                 scorefunc_pt[i] = core::scoring::ScoreFunctionFactory::create_score_function( opt.rosetta_soft_score );
-                            }
-                        } else if ( do_min == 2 ) {
-                            // not minimizing, but will do minimization.
-                            scorefunc_pt[i] = core::scoring::ScoreFunctionFactory::create_score_function( opt.rosetta_soft_score );
-                            if( !opt.rosetta_hard_min ){
-                                scorefunc_pt[i]->set_weight( core::scoring::fa_rep, scorefunc_pt[i]->get_weight(core::scoring::fa_rep)*0.7 );
-                                scorefunc_pt[i]->set_weight( core::scoring::fa_dun, scorefunc_pt[i]->get_weight(core::scoring::fa_dun)*0.7 );
-                            }
-                        } else {
-                            // not minimizing at all, score pass only.
-                            scorefunc_pt[i] = core::scoring::ScoreFunctionFactory::create_score_function( opt.rosetta_soft_score );
-                            if( !opt.rosetta_hard_min ){
-                                scorefunc_pt[i]->set_weight( core::scoring::fa_rep, scorefunc_pt[i]->get_weight(core::scoring::fa_rep)*1.0 );
-                                scorefunc_pt[i]->set_weight( core::scoring::fa_dun, scorefunc_pt[i]->get_weight(core::scoring::fa_dun)*1.0 );
-                            }
-                        }
-                        if( target.size() == 1 ){
-                            // assume this is a ligand, so hbonding is important
-                            scorefunc_pt[i]->set_weight( core::scoring::fa_elec    , scorefunc_pt[i]->get_weight(core::scoring::fa_elec    )*2.0 );
-                            scorefunc_pt[i]->set_weight( core::scoring::hbond_sc   , scorefunc_pt[i]->get_weight(core::scoring::hbond_sc   )*2.0 );
-                            scorefunc_pt[i]->set_weight( core::scoring::hbond_bb_sc, scorefunc_pt[i]->get_weight(core::scoring::hbond_bb_sc)*2.0 );
-                        } else {
-                            scorefunc_pt[i]->set_weight( core::scoring::fa_elec    , scorefunc_pt[i]->get_weight(core::scoring::fa_elec    )*1.0 );
-                            scorefunc_pt[i]->set_weight( core::scoring::hbond_sc   , scorefunc_pt[i]->get_weight(core::scoring::hbond_sc   )*1.0 );
-                            scorefunc_pt[i]->set_weight( core::scoring::hbond_bb_sc, scorefunc_pt[i]->get_weight(core::scoring::hbond_bb_sc)*1.0 );
-                        }
-                        
-                        // set up the minmover
-                        movemap_pt[i] = core::kinematics::MoveMapOP( new core::kinematics::MoveMap() );
-                        movemap_pt[i]->set_chi(true);
-                        movemap_pt[i]->set_jump(true);
-                        for(int ir = 1; ir <= both_full_pose.size(); ++ir){
-                            bool is_scaffold = ir <= scaffold.size();
-                            if( is_scaffold ) movemap_pt[i]->set_bb(ir, opt.rosetta_min_allbb || opt.rosetta_min_scaffoldbb );
-                            else              movemap_pt[i]->set_bb(ir, opt.rosetta_min_allbb || opt.rosetta_min_targetbb );
-                            if( opt.rosetta_min_fix_target && !is_scaffold ){
-                                movemap_pt[i]->set_chi(ir,false);
-                            }
-                        }
-                        minmover_pt[i] = protocols::minimization_packing::MinMoverOP(new protocols::minimization_packing::MinMover( movemap_pt[i], scorefunc_pt[i], "dfpmin_armijo_nonmonotone", 0.001, true ) );
-                    } // end loop of initialize of scorefunctions.
-                    
-                    
-                    // I would make the "fraction" schema simpler.
-                    size_t n_scormin = 0;
-                    if( minimizing ){
-                        // min take ~10x score time, so do on 1/10th of the scored
-                        n_scormin = int( std::ceil(n_score_calculations * opt.rosetta_min_fraction) );
-                        // padding to the num of threads
-                        n_scormin = std::ceil(1.0f*n_scormin/omp_max_threads()) * omp_max_threads();
-                        // make sure not to big.
-                        n_scormin = std::min( (int64_t)n_scormin, (int64_t)n_score_calculations);
-                    } else {
-                        // for scoring, use user cut
-                        n_scormin = opt.rosetta_score_fraction * rifine_results.size();
-                        if( opt.rosetta_score_then_min_below_thresh > -9e8 ){
-                            for( n_scormin=0; n_scormin < rifine_results.size(); ++n_scormin ){
-                                if( rifine_results[n_scormin].score > opt.rosetta_score_then_min_below_thresh )
-                                    break;
-                            }
-                        }
-                        n_scormin = std::min<int>( std::max<int>( n_scormin, opt.rosetta_score_at_least ), opt.rosetta_score_at_most );
-                        n_scormin = std::min<int>( n_scormin, rifine_results.size() );
-                        n_score_calculations = n_scormin;
-                    }
-                    rifine_results.resize(n_scormin);
-                    
-                    
-                    int64_t const out_interval = std::max<int64_t>(1,n_scormin/50);
-                    if( minimizing) std::cout << std::endl << "rosetta min on "   << KMGT(n_scormin) << ": ";
-                    else            std::cout << "rosetta score on " << KMGT(n_scormin) << ": ";
-                    std::exception_ptr exception = nullptr;
-                    
-                    // the real score and min code.
-                    #ifdef USE_OPENMP
-                    #pragma omp parallel for schedule(dynamic,1)
-                    #endif
-                    for (int64_t i_samp = 0; i_samp < n_scormin; ++i_samp) {
-                            
-                            if ( i_samp % out_interval == 0 ) { std::cout << '*'; std::cout.flush();  };
-                            
-                            // get the current thread num
-                            int const ithread = omp_get_thread_num();
-                            
-                            // get the transform of the scaffold
-                            director->set_scene(rifine_results[i_samp].index, 0, *scene_pt[ithread]);
-                            // I don't think there is any need to align everything to the scaffold.
-                            EigenXform xposition1 = scene_pt[ithread]->position(1);
-                            
-                            // transform the scaffold to the position
-                            core::pose::Pose & pose_to_min( work_pose_pt[ithread] );
-                            pose_to_min = both_per_thread[ithread];
-                            xform_pose( pose_to_min, eigen2xyz(xposition1) , 1 , scaffold.size() );
-                            
-                            // place the rotamers.
-                            core::chemical::ResidueTypeSetCAP rts = core::chemical::ChemicalManager::get_instance()->residue_type_set("fa_standard");
-                            std::vector<bool> is_rif_res(pose_to_min.size(),false);
-                            for ( int ipr = 0; ipr < rifine_results[i_samp].numrots(); ++ipr ) {
-                                int ires = scaffres_l2g.at( rifine_results[i_samp].rotamers().at(ipr).first );
-                                int irot =                  rifine_results[i_samp].rotamers().at(ipr).second;
-                                core::conformation::ResidueOP newrsd = core::conformation::ResidueFactory::create_residue( rts.lock()->name_map(rot_index.resname(irot)) );
-                                pose_to_min.replace_residue( ires+1, *newrsd, true );
-                                is_rif_res[ires] = true;
-                                for ( int ichi = 0; ichi < rot_index.nchi(irot); ++ichi ) {
-                                    pose_to_min.set_chi( ichi+1, ires+1, rot_index.chi( irot, ichi ) );
-                                }
-                            }
-                            
-                            
-                            EigenXform Xtorifframe = EigenXform::Identity();
-                            
-                            // replace the clash residues
-                            std::vector<int> replaced_scaffold_res, rifres;
-                            auto alaop = core::conformation::ResidueFactory::create_residue( rts.lock()->name_map("ALA" ) );
-                            
-                            std::vector<int> rifatypemap = get_rif_atype_map();
-                            for (int ir = 1; ir <= scaffold.size(); ++ir) {
-                                auto const & ires = pose_to_min.residue(ir);
-                                if ( !ires.is_protein() ) continue;
-                                if( ires.aa()==core::chemical::aa_gly ||
-                                   ires.aa()==core::chemical::aa_ala ||
-                                   ires.aa()==core::chemical::aa_pro ) continue;
-                                if(is_rif_res[ir-1]){
-                                    rifres.push_back(ir);
-                                    continue;
-                                }
-                                if(is_scaffold_fixed_res[ir]) continue;
-                                
-                                bool ir_clash = false;
-                                float evtarget = 0.0;
-                                for (int ia = 6; ia <= ires.nheavyatoms(); ++ia) {
-                                    auto const & ixyz = ires.xyz(ia);
-                                    
-                                    Eigen::Vector3f satm;
-                                    for(int k = 0; k < 3; ++k) satm[k] = ixyz[k];
-                                    int const irifatype = rifatypemap[ires.atom_type_index(ia)];
-                                    evtarget += target_field_by_atype.at(irifatype)->at(satm);
-                                }
-                                if( evtarget > 3.0f ) ir_clash = true;
-                                
-                                // check against other rif res
-                                for( int ipr = 0; ipr < rifine_results[i_samp].numrots(); ++ipr ){
-                                    int jr = 1+scaffres_l2g.at( rifine_results[i_samp].rotamers().at(ipr).first );
-                                    auto const & jres = pose_to_min.residue(jr);
-                                    // should do rsd nbr check... but speed not critical here ATM...
-                                    for( int ia = 6; ia <= ires.nheavyatoms(); ++ia){
-                                        auto const & ixyz = ires.xyz(ia);
-                                        for( int ja = 6; ja <= jres.nheavyatoms(); ++ja){
-                                            auto const & jxyz = jres.xyz(ja);
-                                            if( ixyz.distance_squared(jxyz) < 9.0 ){
-                                                ir_clash = true;
-                                            }
-                                        }
-                                    }
-                                }
-                                if ( ir_clash ) {
-                                    pose_to_min.replace_residue(ir, *alaop, true);
-                                    replaced_scaffold_res.push_back(ir);
-                                }
-                            } // check clash and replace to AlA
-                            
-                            
-                            // the minimizing block
-                            if ( minimizing ) {
-                                minmover_pt[ithread]->apply( pose_to_min );
-                            } else {
-                                scorefunc_pt[ithread]->score( pose_to_min );
-                            }// the minimizing block
-                            
-                            // store the score
-                            if ( opt.rosetta_score_total ) {
-                                rifine_results[i_samp].score = pose_to_min.energies().total_energy();
-                            } else {
-                                double rosetta_score = 0.0;
-                                auto const & weights = pose_to_min.energies().weights();
-                                if( !opt.rosetta_score_ddg_only ){
-                                    for( int ir = 1; ir <= scaffold.size(); ++ir ){
-                                        if( is_rif_res[ir-1] ){
-                                            rosetta_score += pose_to_min.energies().onebody_energies(ir).dot(weights);
-                                        }
-                                    }
-                                }
-                                if( !opt.rosetta_score_ddg_only && target.size()==1 ){
-                                    // is ligand, add it's internal energy
-                                    rosetta_score += pose_to_min.energies().onebody_energies(pose_to_min.size()).dot(weights);
-                                }
-                                auto const & egraph = pose_to_min.energies().energy_graph();
-                                for(int ir = 1; ir <= egraph.num_nodes(); ++ir){
-                                    for ( utility::graph::Graph::EdgeListConstIter
-                                         iru  = egraph.get_node(ir)->const_upper_edge_list_begin(),
-                                         irue = egraph.get_node(ir)->const_upper_edge_list_end();
-                                         iru != irue; ++iru
-                                         ){
-                                        EnergyEdge const & edge( static_cast< EnergyEdge const & > (**iru) );
-                                        int jr = edge.get_second_node_ind();
-                                        
-                                        // this is DDG
-                                        if( ir <= scaffold.size() && jr > scaffold.size() ){
-                                            // ir in scaff, jr in target
-                                            rosetta_score += edge.dot(weights);
-                                        }
-                                        if( !opt.rosetta_score_ddg_only && jr <= scaffold.size() ){
-                                            // ir & jr in scaffold
-                                            if( is_rif_res[ir-1] || is_rif_res[jr-1] ){
-                                                double const edgescore = edge.dot(weights);
-                                                if( edgescore > 0.0 ){
-                                                    // always assess full score for bad interactions
-                                                    rosetta_score += edgescore;
-                                                } else if( is_rif_res[ir-1] && is_rif_res[jr-1] ){
-                                                    // both rif residues
-                                                    rosetta_score += opt.rosetta_score_rifres_rifres_weight * edgescore;
-                                                    // bonus for hbonds between rif residues
-                                                    rosetta_score += edge[core::scoring::hbond_sc];
-                                                } else {
-                                                    // rest: one rif res, one other scaff res
-                                                    rosetta_score += opt.rosetta_score_rifres_scaffold_weight * edgescore;
-                                                }
-                                            } else {
-                                                // scaffold / scaffold ignored
-                                            }
-                                        }
-                                    }
-                                }
-                                rifine_results[i_samp].score = rosetta_score;
-                            }
-
-                            // store the results?
-                            if( (minimizing+1 == do_min)     && rifine_results[i_samp].score <= opt.rosetta_score_cut && !opt.only_dump_scaffold /*only dump scaffold*/ ){
-                                rifine_results[i_samp].pose_ = core::pose::PoseOP( new core::pose::Pose(pose_to_min) );
-                                for(int ir : rifres){
-                                    rifine_results[i_samp].pose_->pdb_info()->add_reslabel(ir, "RIFRES" );
-                                }
-                                for(int ir : replaced_scaffold_res){
-                                    rifine_results[i_samp].pose_->pdb_info()->add_reslabel(ir, "PRUNED" );
-                                }
-                            } else if ( (minimizing+1 == do_min) && rifine_results[i_samp].score <= opt.rosetta_score_cut && opt.only_dump_scaffold ) {
-                                rifine_results[i_samp].pose_ = pose_to_min.split_by_chain(1);
-                                for(int ir : rifres){
-                                    rifine_results[i_samp].pose_->pdb_info()->add_reslabel(ir, "RIFRES" );
-                                }
-                                for(int ir : replaced_scaffold_res){
-                                    rifine_results[i_samp].pose_->pdb_info()->add_reslabel(ir, "PRUNED" );
-                                }
-                            } else {
-                                //
-                            }
-                            
-                        } // end loop of each sample in each seeding position.
-                
-                
-                    // sort the results
-                    __gnu_parallel::sort( rifine_results.begin(), rifine_results.end() );
-
-                    if ( opt.test_longxing ) {
-                        if ( minimizing == 0 ) {
-                            std::cout << "Top scores after rosetta score:" << std::endl;
-                        } else {
-                            std::cout << "Top scores after minimization:" << std::endl;
-                        }
-                        for( int64_t ii = 0; ii < 20 && ii < rifine_results.size(); ++ii ) {
-                            std::cout << rifine_results[ii].score << "   ";
-                        }
-                        std::cout << std::endl;
-                    }
-                 // end loop of minimizing
-                }
-                std::chrono::duration<double> elapsed_seconds_rosetta = std::chrono::high_resolution_clock::now()-start_rosetta;
-                std::cout << std::endl << "Rosetta score and min done! Total " << elapsed_seconds_rosetta.count() << " CPU ticks spend." << std::endl << std::endl;
-            }
-        
-            // fitering redundancy again, this seems to be useless, since I already filtered this. But any way, to make it more compatible
-            // with legacy results. I would just add the code again. Longxing, 2019-03-21
-            std::vector< RifDockResult > selected_results, allresults;
-            {
-                int64_t Nout = rifine_results.size();
-                Nout         = std::min( (int64_t)opt.n_result_limit, Nout );
-                
-                std::vector< std::vector< RifDockResult > > allresults_pt( omp_max_threads() );
-                std::vector< std::pair< EigenXform, uint64_t > > selected_xforms;
-                selected_xforms.reserve(65536);
-                
-                //////////////////////////////
-                
-                int nclose = 0;
-                int nclosemax = opt.force_output_if_close_to_input_num;
-                float nclosethresh = opt.force_output_if_close_to_input;
-                int n_pdb_out = opt.n_pdb_out;
-                float redundancy_filter_mag = opt.redundancy_filter_mag;
-                std::cout << "redundancy_filter_mag " << redundancy_filter_mag << "A \"rmsd\"" << std::endl;
-                int64_t Nout_singlethread = std::min( (int64_t)10000, Nout );
-                
-                std::cout << "going through 10K results ( 1 thread ): ";
-                int64_t out_interval = 10000/81;
-                for( int64_t isamp=0; isamp < Nout_singlethread; ++isamp ) {
-                    if (isamp%out_interval == 0) std::cout << "*"; std::cout.flush();
-                    awful_compile_output_helper< EigenXform, ScenePtr, ObjectivePtr >(
-                            isamp, RESLS.size()-1, rifine_results, scene_pt, director,
-                            redundancy_filter_rg, redundancy_filter_mag, scaffold_center,
-                            allresults_pt, selected_results, selected_xforms, n_pdb_out,
-                            #ifdef USE_OPENMP
-                            dump_lock,
-                            #endif
-                            objectives.back(), nclose, nclosemax, nclosethresh,
-                            scaffold_perturb
-                    );
-                }
-                
-                std::cout << std::endl;
-                std::cout << "going through all results (threaded): ";
-                out_interval = Nout / 82;
-                std::exception_ptr exception = nullptr;
-                #ifdef USE_OPENMP
-                #pragma omp parallel for schedule(dynamic,8)
-                #endif
-                for( int64_t isamp = Nout_singlethread; isamp < Nout; ++isamp ) {
-                    if( exception ) continue;
-                    try {
-                        if( isamp%out_interval==0 ){ std::cout << '*'; std::cout.flush(); }
                         awful_compile_output_helper< EigenXform, ScenePtr, ObjectivePtr >(
                                 isamp, RESLS.size()-1, rifine_results, scene_pt, director,
                                 redundancy_filter_rg, redundancy_filter_mag, scaffold_center,
@@ -1578,14 +1563,37 @@ int main( int argc, char *argv[] )
                                 objectives.back(), nclose, nclosemax, nclosethresh,
                                 scaffold_perturb
                         );
-                        
-                    } catch (...) {
-                        #pragma omp critical
-                        exception = std::current_exception();
                     }
-                }
-                if( exception ) std::rethrow_exception(exception);
-                std::cout << std::endl;
+                    
+                    std::cout << std::endl;
+                    std::cout << "going through all results (threaded): ";
+                    out_interval = Nout / 82;
+                    std::exception_ptr exception = nullptr;
+                    #ifdef USE_OPENMP
+                    #pragma omp parallel for schedule(dynamic,128)
+                    #endif
+                    for( int64_t isamp = Nout_singlethread; isamp < Nout; ++isamp ) {
+                        if( exception ) continue;
+                        try {
+                            if( isamp%out_interval==0 ){ std::cout << '*'; std::cout.flush(); }
+                            awful_compile_output_helper< EigenXform, ScenePtr, ObjectivePtr >(
+                                    isamp, RESLS.size()-1, rifine_results, scene_pt, director,
+                                    redundancy_filter_rg, redundancy_filter_mag, scaffold_center,
+                                    allresults_pt, selected_results, selected_xforms, n_pdb_out,
+                                    #ifdef USE_OPENMP
+                                    dump_lock,
+                                    #endif
+                                    objectives.back(), nclose, nclosemax, nclosethresh,
+                                    scaffold_perturb
+                            );
+                            
+                        } catch (...) {
+                            #pragma omp critical
+                            exception = std::current_exception();
+                        }
+                    }
+                    if( exception ) std::rethrow_exception(exception);
+                    std::cout << std::endl;
                 
                 std::cout << "sort compiled results" << std::endl;
                 BOOST_FOREACH( std::vector<RifDockResult> const & rs, allresults_pt ) {
