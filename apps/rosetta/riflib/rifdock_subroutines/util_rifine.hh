@@ -395,25 +395,26 @@ typedef _RifDockResult<DirectorBase> RifDockResult;
     // purely based on xform position.
     template<
     class EigenXform,
+		class AnyPoints,
     class ScenePtr,
     class ObjectivePtr
     >
     void redundancy_filtering(
                               int64_t isamp,
                               int iresl,
-                              std::vector< SearchPointWithRots > const & packed_results,
+                              std::vector< AnyPoints > const & packed_results,
                               std::vector< ScenePtr > & scene_pt,
                               DirectorBase director,
                               float redundancy_filter_rg,
                               float redundancy_filter_mag,
-                              std::vector< SearchPointWithRots > & selected_results,
+                              std::vector< AnyPoints > & selected_results,
                               std::vector< EigenXform > & selected_xforms,
                               #ifdef USE_OPENMP
                               omp_lock_t & dump_lock
                               #endif
     )
     {
-        SearchPointWithRots const & sp = packed_results[isamp];
+        AnyPoints const & sp = packed_results[isamp];
         ScenePtr scene_minimal( scene_pt[omp_get_thread_num()] );
         director->set_scene( sp.index, iresl, *scene_minimal );
         EigenXform xposition1 = scene_minimal->position(1);

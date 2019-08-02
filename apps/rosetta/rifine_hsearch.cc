@@ -867,7 +867,7 @@ int main( int argc, char *argv[] )
 
                 
                 
-                std::vector< std::vector< SearchPointWithRots > > packed_results;
+                std::vector< SearchPointWithRots > packed_results;
                 std::vector< ScenePtr > scene_pt( omp_max_threads_1() );
                 std::vector< ScenePtr > scene_hpack_pt( omp_max_threads_1() );
                 
@@ -875,6 +875,7 @@ int main( int argc, char *argv[] )
                     // v(v(v)) each_seeding:hsearch_samples:each_sesolution
                     std::vector< std::vector< SearchPoint > > hsearch_samples;
                     std::vector< std::vector< std::vector< SearchPoint > > > samples;
+                    std::vector< SearchPoint > samples_selected;
                     
                     int64_t seeding_size = director->size(0, RifDockIndex() ).seeding_index;
                 
@@ -967,6 +968,9 @@ int main( int argc, char *argv[] )
                             // already the highest resolution, so jump out of the loop
                             if( iresl+1 == samples[iseed].size() ) break;
                             
+                            // pre allocate the space!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                            samples[iseed][iresl+1].reserve(opt.beam_size);
+                            
                             for ( int64_t i = 0; i < len; ++i ) {
                                 RifDockIndex isamp0 = samples[iseed][iresl][i].index;
                                 if ( samples[iseed][iresl][i].score >= opt.global_score_cut ) continue;
@@ -986,13 +990,85 @@ int main( int argc, char *argv[] )
                         // check in this seeding position, if there is any valide search point.
                         if (search_failed) continue;
                         // now sort the final hsearch result
-                        std::cout << "full sort of final samples" << std::endl;
-                        __gnu_parallel::sort( samples[iseed].back().begin(), samples[iseed].back().end() );
                     } // loop for all seeding positions
                     
                     // selecting the best for hack pack.
                     std::cout << "" << std::endl;
                     std::cout << "Done with hsearch_rifine stage, now selecting the best results for hpack." << std::endl;
+                    
+                    
+                    // put all the samples in one vector and do the sorting
+                    {
+                        std::vector< SearchPoint > sample_tank;
+                        std::cout << "concat all samples into on vector" << std::endl;
+                        // concate all samples together, so it is easier to do filtering
+                        for ( int64_t iseed = 0; iseed<samples.size(); ++iseed ) {
+                            std::copy( samples[iseed].back().begin(),
+                                       samples[iseed].back().end(),
+                                       std::back_inserter(sample_tank) );
+                        }
+                        std::cout << "full sort of " << KMGT( sample_tank.size() )  <<  " samples" << std::endl;
+                        __gnu_parallel::sort( sample_tank.begin(), sample_tank.end() );
+                        
+                        // the real redundancy filtering stage happens here
+                        if ( opt.redundancy_filter_mag_after_hsearch > 0.0 ) {
+                            std::vector<EigenXform> selected_xforms;
+                            // allocated space to make it faster
+                            selected_xforms.reserve(opt.beam_size);
+                            samples_selected.reserve(opt.beam_size);
+                            float redundancy_filter_mag = opt.redundancy_filter_mag_after_hsearch;
+                            std::cout << "redundancy_filter_mag " << redundancy_filter_mag << "A \"rmsd\"" << std::endl;
+                            int64_t Nout_singlethread = std::min( (int64_t)10000, (int64_t)sample_tank.size() );
+                            
+                            std::cout << "going through 10K results ( 1 thread ): ";
+                            int64_t out_interval = 10000/81;
+                            for( int64_t isamp=0; isamp < Nout_singlethread; ++isamp ) {
+                                if (isamp%out_interval == 0) std::cout << "*"; std::cout.flush();
+                                redundancy_filtering< EigenXform, SearchPoint, ScenePtr, ObjectivePtr >(
+                                                                                           isamp, RESLS.size()-1, sample_tank, scene_pt, director,
+                                                                                           redundancy_filter_rg, redundancy_filter_mag,
+                                                                                           samples_selected, selected_xforms,
+                                                                                           #ifdef USE_OPENMP
+                                                                                           dump_lock
+                                                                                           #endif
+                                                                                           );
+                            }
+                            
+                            std::cout << std::endl;
+                            std::cout << "going through all results (threaded): ";
+                            out_interval = (int64_t)( sample_tank.size() - Nout_singlethread )/ 82;
+                            std::exception_ptr exception = nullptr;
+                            #ifdef USE_OPENMP
+                            #pragma omp parallel for schedule(dynamic,128)
+                            #endif
+                            for( int64_t isamp = Nout_singlethread; isamp < sample_tank.size(); ++isamp ) {
+                                if( exception ) continue;
+                                try {
+                                    if( isamp%out_interval==0 ){ std::cout << '*'; std::cout.flush(); }
+                                    redundancy_filtering< EigenXform, SearchPoint, ScenePtr, ObjectivePtr >(
+                                                                                               isamp, RESLS.size()-1, sample_tank, scene_pt, director,
+                                                                                               redundancy_filter_rg, redundancy_filter_mag,
+                                                                                               samples_selected, selected_xforms,
+                                                                                               #ifdef USE_OPENMP
+                                                                                               dump_lock
+                                                                                               #endif
+                                                                                               );
+                                    
+                                } catch (...) {
+                                    #pragma omp critical
+                                    exception = std::current_exception();
+                                }
+                            }
+                            
+                            __gnu_parallel::sort( samples_selected.begin(), samples_selected.end() );
+                        } else {
+                            samples_selected = sample_tank;
+                            std::cout << std::endl << "No filtering is done after hierarchical searching." << std::endl;
+                        }// end block of redundancy filtering
+                        
+                        std::cout << std::endl << "Total number of output after filtering is " << KMGT( samples_selected.size() ) << std::endl;
+
+                    }
                     
                     
                     
@@ -1012,90 +1088,50 @@ int main( int argc, char *argv[] )
                         std::chrono::time_point<std::chrono::high_resolution_clock> start, end;
                         start = std::chrono::high_resolution_clock::now();
                         
-                        
-                        
-                        std::vector<std::vector< bool > > progress_bar(seeding_size);
+                        int64_t out_interval = 0;
                         {
-                            int64_t out_interval = 0;
-                            int64_t total_npack = 0;
-                            // now put all samples into the hsearch_samples.
-                            for ( int64_t iseed = 0; iseed < samples.size(); ++iseed ) {
-                                // make sure there are valide points
-                                if ( samples[iseed].size() != RESLS.size() ) continue;
-                                // count how many designs could pass the global score cut
-                                int64_t n_packsamp = 0;
-                                for ( n_packsamp; n_packsamp < samples[iseed].back().size(); ++n_packsamp ) {
-                                    if ( samples[iseed].back()[n_packsamp].score > opt.global_score_cut ) break;
-                                }
-                                int npack = std::min( n_packsamp, int64_t(samples[iseed].back().size() * opt.hack_pack_frac) );
-                            
-                                if (npack>0) {
-                                    total_npack += npack;
-                                    packed_results.resize( packed_results.size() +1 );
-                                    packed_results.back().resize(npack);
-                                    for (uint64_t ii=0; ii<npack; ++ii) {
-                                        packed_results.back()[ii].index = samples[iseed].back()[ii].index;
-                                        packed_results.back()[ii].prepack_rank = ii;
-                                    }
-                                }
-                            } // loop for each seeding positions
-                            
+                            int64_t n_packsamp = 0;
+                            for ( ; n_packsamp < samples_selected.size(); ++n_packsamp ) {
+                                if ( samples_selected[n_packsamp].score > opt.global_score_cut ) break;
+                            }
+                            int64_t total_npack = std::min( n_packsamp, int64_t(samples_selected.size() * opt.hack_pack_frac) );
                             // no valide results for hackpacking, jump to the next scaffolds.
                             // need to check at each step to make sure there are still valid results.
                             if (total_npack == 0) {
                                 continue;
                             }
-
                             print_header( "hack-packing top " + KMGT(total_npack) );
-                            
                             out_interval = total_npack / 109;
                             out_interval = out_interval > 0 ? out_interval : 1;
-                            total_npack = 0;
-                            progress_bar.resize( packed_results.size() );
-                            for (int64_t i_seed = 0; i_seed < packed_results.size(); ++i_seed) {
-                                progress_bar[i_seed].resize( packed_results[i_seed].size() );
-                                for (int64_t i_samp = 0; i_samp < packed_results[i_seed].size(); ++i_samp) {
-                                    total_npack += 1;
-                                    if (total_npack % out_interval == 0) {
-                                        progress_bar[i_seed][i_samp] = true;
-                                    } else {
-                                        progress_bar[i_seed][i_samp] = false;
-                                    }
-                                }
+                            
+                            packed_results.resize(total_npack);
+                            for (uint64_t ii=0; ii<total_npack; ++ii) {
+                                packed_results[ii].index = samples_selected[ii].index;
+                                packed_results[ii].prepack_rank = ii;
                             }
                         }
                         
                         // the real hackpack part.
-                        
-                        for ( int64_t i_seed = 0; i_seed < packed_results.size(); ++i_seed ) {
-                            #ifdef USE_OPENMP
-                            #pragma omp parallel for schedule(dynamic,64)
-                            #endif
-                            for (int64_t i_sample = 0; i_sample < packed_results[i_seed].size(); ++i_sample) {
-                                
-                                if ( true == progress_bar[i_seed][i_sample] ) { std::cout << '*'; std::cout.flush(); }
-                                
-                                
-                                // choose the scene.
-                                ScenePtr tscene( scene_hpack_pt[omp_get_thread_num()] );
-                                bool director_success = director->set_scene( packed_results[i_seed][i_sample].index, RESLS.size()-1, *tscene );
-                                if ( ! director_success ) {
-                                    // packed_results[ ipack ].rotamers(); // this initializes it to blank
-                                    packed_results[ i_seed ][ i_sample ].score = 9e9;
-                                    continue;
-                                }
-                                //packed_results[ i_seed ][ i_sample ].score = samples[i_seed][i_sample].score;
-                                packed_results[ i_seed ][ i_sample ].score = packing_objective->score_with_rotamers( *tscene, packed_results[i_seed][ i_sample ].rotamers() );
-                            }
-                        }
-                        
-                        // now sorting the results.
                         #ifdef USE_OPENMP
                         #pragma omp parallel for schedule(dynamic,64)
                         #endif
-                        for (int64_t i_seed=0; i_seed < packed_results.size(); ++i_seed) {
-                            std::sort(packed_results[i_seed].begin(), packed_results[i_seed].end());
+                        for (int64_t i_sample = 0; i_sample < packed_results.size(); ++i_sample) {
+                            
+                            if ( i_sample % out_interval == 0 ) { std::cout << '*'; std::cout.flush(); }
+                            
+                            // choose the scene.
+                            ScenePtr tscene( scene_hpack_pt[omp_get_thread_num()] );
+                            bool director_success = director->set_scene( packed_results[i_sample].index, RESLS.size()-1, *tscene );
+                            if ( ! director_success ) {
+                                // packed_results[ ipack ].rotamers(); // this initializes it to blank
+                                packed_results[ i_sample ].score = 9e9;
+                                continue;
+                            }
+                            //packed_results[ i_seed ][ i_sample ].score = samples[i_seed][i_sample].score;
+                            packed_results[ i_sample ].score = packing_objective->score_with_rotamers( *tscene, packed_results[ i_sample ].rotamers() );
                         }
+                        
+                        std::sort(packed_results.begin(), packed_results.end());
                         
                         
                         end = std::chrono::high_resolution_clock::now();
@@ -1112,29 +1148,23 @@ int main( int argc, char *argv[] )
                 // rifine results.
                 std::vector< SearchPointWithRots > rifine_results;
                 {
-                    std::vector< SearchPointWithRots > packed_results_all;
                     
-                    print_header( "Now perform redundancy filtering" );
-                    print_header("condense all results and do redundancy filtering");
-                    
-                    for (int64_t i_seed=0; i_seed < packed_results.size(); ++i_seed) {
-                        int64_t nsamples = 0;
-                        for ( int64_t i_samp=0; i_samp<packed_results[i_seed].size(); ++i_samp) {
-                            if (packed_results[i_seed][i_samp].score > opt.score_after_hackpack_cut) {
-                                break;
-                            }
-                            nsamples += 1;
+                    print_header( "Now perform redundancy filtering after hackpack" );
+                    int64_t nsamples = 0;
+                    for ( ; nsamples<packed_results.size(); ++nsamples) {
+                        if (packed_results[nsamples].score > opt.score_after_hackpack_cut) {
+                            break;
                         }
-                        std::copy( packed_results[i_seed].begin(), packed_results[i_seed].begin()+nsamples, std::back_inserter(packed_results_all) );
                     }
-                    std::sort(packed_results_all.begin(), packed_results_all.end());
+                    if( nsamples == 0 ) continue;
+                    packed_results.resize( nsamples );
                     
-                    std::cout << "Total number of output before filtering is " << KMGT( packed_results_all.size() ) << std::endl;
+                    std::cout << "Total number of output before filtering is " << KMGT( packed_results.size() ) << std::endl;
                     
 
                     if( false ) {
                         real_rmsd_xform<EigenXform, ScenePtr, ObjectivePtr> ( RESLS.size()-1,
-                                                                              packed_results_all,
+                                                                              packed_results,
                                                                               scene_pt,
                                                                               director,
                                                                               redundancy_filter_rg,
@@ -1145,16 +1175,17 @@ int main( int argc, char *argv[] )
                     if ( opt.redundancy_filter_mag_after_hackpack > 0.0 ) {
                         std::vector<EigenXform> selected_xforms;
                         selected_xforms.reserve(65535);
+                        rifine_results.reserve(65535);
                         float redundancy_filter_mag = opt.redundancy_filter_mag_after_hackpack;
                         std::cout << "redundancy_filter_mag " << redundancy_filter_mag << "A \"rmsd\"" << std::endl;
-                        int64_t Nout_singlethread = std::min( (int64_t)10000, (int64_t)packed_results_all.size() );
+                        int64_t Nout_singlethread = std::min( (int64_t)10000, (int64_t)packed_results.size() );
                         
                         std::cout << "going through 10K results ( 1 thread ): ";
                         int64_t out_interval = 10000/81;
                         for( int64_t isamp=0; isamp < Nout_singlethread; ++isamp ) {
                             if (isamp%out_interval == 0) std::cout << "*"; std::cout.flush();
-                            redundancy_filtering< EigenXform, ScenePtr, ObjectivePtr >(
-                                        isamp, RESLS.size()-1, packed_results_all, scene_pt, director,
+                            redundancy_filtering< EigenXform, SearchPointWithRots, ScenePtr, ObjectivePtr >(
+                                        isamp, RESLS.size()-1, packed_results, scene_pt, director,
                                         redundancy_filter_rg, redundancy_filter_mag,
                                         rifine_results, selected_xforms,
                                         #ifdef USE_OPENMP
@@ -1165,17 +1196,17 @@ int main( int argc, char *argv[] )
                         
                         std::cout << std::endl;
                         std::cout << "going through all results (threaded): ";
-                        out_interval = (int64_t)( packed_results_all.size() - Nout_singlethread )/ 82;
+                        out_interval = (int64_t)( packed_results.size() - Nout_singlethread )/ 82;
                         std::exception_ptr exception = nullptr;
                         #ifdef USE_OPENMP
                         #pragma omp parallel for schedule(dynamic,128)
                         #endif
-                        for( int64_t isamp = Nout_singlethread; isamp < packed_results_all.size(); ++isamp ) {
+                        for( int64_t isamp = Nout_singlethread; isamp < packed_results.size(); ++isamp ) {
                             if( exception ) continue;
                             try {
                                 if( isamp%out_interval==0 ){ std::cout << '*'; std::cout.flush(); }
-                                redundancy_filtering< EigenXform, ScenePtr, ObjectivePtr >(
-                                        isamp, RESLS.size()-1, packed_results_all, scene_pt, director,
+                                redundancy_filtering< EigenXform, SearchPointWithRots, ScenePtr, ObjectivePtr >(
+                                        isamp, RESLS.size()-1, packed_results, scene_pt, director,
                                         redundancy_filter_rg, redundancy_filter_mag,
                                         rifine_results, selected_xforms,
                                         #ifdef USE_OPENMP
@@ -1189,7 +1220,7 @@ int main( int argc, char *argv[] )
                             }
                         }
                     } else {
-                        rifine_results = packed_results_all;
+                        rifine_results = packed_results;
                         std::cout << std::endl << "No filtering is done before rosetta score and mean." << std::endl;
                     }// end block of redundancy filtering
                     
