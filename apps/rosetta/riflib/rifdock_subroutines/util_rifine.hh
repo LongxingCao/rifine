@@ -419,23 +419,29 @@ typedef _RifDockResult<DirectorBase> RifDockResult;
         EigenXform xposition1 = scene_minimal->position(1);
         EigenXform xposition1inv = xposition1.inverse();
         
-        float mindiff_candidate = 9e9;
+				bool is_redundant = false;
         BOOST_FOREACH( EigenXform const & xsel, selected_xforms ){
             EigenXform const xdiff = xposition1inv * xsel;
-            mindiff_candidate = std::min( mindiff_candidate, devel::scheme::xform_magnitude( xdiff, redundancy_filter_rg ) );
+            if( devel::scheme::xform_magnitude_redundancy_check( xdiff, redundancy_filter_rg, redundancy_filter_mag) ) {
+								is_redundant = true;
+								break;
+						}
         }
-        if( mindiff_candidate > redundancy_filter_mag ) {
+        if( ! is_redundant ) {
             // need to double check this because of multi-threading issues
             #ifdef USE_OPENMP
             omp_set_lock( &dump_lock );
             #endif
             {
-                float mindiff_candidate = 9e9;
+                bool is_not_redundant = true;
                 BOOST_FOREACH( EigenXform const & xsel, selected_xforms ){
                     EigenXform const xdiff = xposition1inv * xsel;
-                    mindiff_candidate = std::min( mindiff_candidate, devel::scheme::xform_magnitude( xdiff, redundancy_filter_rg ) );
+										if( devel::scheme::xform_magnitude_redundancy_check( xdiff, redundancy_filter_rg, redundancy_filter_mag) ) {
+												is_not_redundant = false;
+												break;
+										}
                 }
-                if ( mindiff_candidate > redundancy_filter_mag ) {
+                if ( is_not_redundant ) {
                     if( redundancy_filter_mag > 0.0001 ) {
                         selected_xforms.push_back( xposition1 );
                     }

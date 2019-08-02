@@ -67,7 +67,7 @@ OPT_1GRP_KEY(     StringVector , rif_dock, scaffolds )
 
 	OPT_1GRP_KEY(  Integer     , rif_dock, n_result_limit )
 	OPT_1GRP_KEY(  Real        , rif_dock, redundancy_filter_mag )
-	OPT_1GRP_KEY(  Real        , rif_dock, redundancy_filter_mag_before )
+	OPT_1GRP_KEY(  Real        , rif_dock, redundancy_filter_mag_after_hackpack )
 
 	OPT_1GRP_KEY(  Real        , rif_dock, force_output_if_close_to_input )
 	OPT_1GRP_KEY(  Integer     , rif_dock, force_output_if_close_to_input_num )
@@ -257,7 +257,7 @@ OPT_1GRP_KEY(     StringVector , rif_dock, scaffolds )
 			NEW_OPT(  rif_dock::n_result_limit, "" , 2000000000 );
 
 			NEW_OPT(  rif_dock::redundancy_filter_mag, "" , 1.0 );
-			NEW_OPT(  rif_dock::redundancy_filter_mag_before, "" , 0.25 );
+			NEW_OPT(  rif_dock::redundancy_filter_mag_after_hackpack, "" , 0.25 );
 
 			NEW_OPT(  rif_dock::force_output_if_close_to_input, "" , 1.0 );
 			NEW_OPT(  rif_dock::force_output_if_close_to_input_num, "" , 0 );
@@ -468,7 +468,7 @@ struct RifDockOpt
 	float       upweight_multi_hbond                 ;
 	int         n_result_limit                       ;
 	float       redundancy_filter_mag                ;
-	float       redundancy_filter_mag_before         ;
+	float       redundancy_filter_mag_after_hackpack ;
 	int         force_output_if_close_to_input_num   ;
 	float       force_output_if_close_to_input       ;
 	int         n_pdb_out                            ;
@@ -647,7 +647,7 @@ struct RifDockOpt
 		upweight_iface                         = option[rif_dock::upweight_iface                        ]();
 		upweight_multi_hbond                   = option[rif_dock::upweight_multi_hbond                  ]();
 		n_result_limit                         = option[rif_dock::n_result_limit                        ]();
-		redundancy_filter_mag_before           = option[rif_dock::redundancy_filter_mag_before          ]();
+		redundancy_filter_mag_after_hackpack   = option[rif_dock::redundancy_filter_mag_after_hackpack  ]();
 		force_output_if_close_to_input_num     = option[rif_dock::force_output_if_close_to_input_num    ]();
 		force_output_if_close_to_input         = option[rif_dock::force_output_if_close_to_input        ]();
 		n_pdb_out                              = option[rif_dock::n_pdb_out                             ]();

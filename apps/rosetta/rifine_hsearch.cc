@@ -1142,10 +1142,10 @@ int main( int argc, char *argv[] )
                     }
 
                     // the real redundancy filtering stage happens here
-                    if ( opt.redundancy_filter_mag_before > 0.0 ) {
+                    if ( opt.redundancy_filter_mag_after_hackpack > 0.0 ) {
                         std::vector<EigenXform> selected_xforms;
                         selected_xforms.reserve(65535);
-                        float redundancy_filter_mag = opt.redundancy_filter_mag_before;
+                        float redundancy_filter_mag = opt.redundancy_filter_mag_after_hackpack;
                         std::cout << "redundancy_filter_mag " << redundancy_filter_mag << "A \"rmsd\"" << std::endl;
                         int64_t Nout_singlethread = std::min( (int64_t)10000, (int64_t)packed_results_all.size() );
                         
@@ -1333,7 +1333,7 @@ int main( int argc, char *argv[] )
                                 int const ithread = omp_get_thread_num();
                                 
                                 // get the transform of the scaffold
-                                director->set_scene(rifine_results[i_samp].index, 0, *scene_pt[ithread]);
+                                director->set_scene(rifine_results[i_samp].index, RESLS.size()-1, *scene_pt[ithread]);
                                 // I don't think there is any need to align everything to the scaffold.
                                 EigenXform xposition1 = scene_pt[ithread]->position(1);
                                 

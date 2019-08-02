@@ -192,6 +192,28 @@ float xform_magnitude(
 	return err;
 }
 
+// return value
+// true: redundant
+// false: not redundant
+template<class EigenXform>
+inline bool xform_magnitude_redundancy_check(
+	EigenXform const & x,
+	float rg,
+	float redundancy_filter_mag
+){
+
+  float mag2 = redundancy_filter_mag * redundancy_filter_mag;
+	float err_trans2 = x.translation().squaredNorm();
+	if ( err_trans2 > mag2 ) return false;
+
+	float cos_theta = (x.rotation().trace()-1.0)/2.0;
+	if( cos_theta < 0 ) {
+			return mag2 > err_trans2 + rg * rg;
+	} else {
+			return mag2 > std::max(0.0, 1.0-cos_theta*cos_theta) * rg * rg;
+	}
+}
+
 void pose_to_ala( core::pose::Pose & pose );
 void pose_to_gly( core::pose::Pose & pose );
 void pose_to_val( core::pose::Pose & pose );
