@@ -905,7 +905,7 @@ int main( int argc, char *argv[] )
                         for( int iresl = 0; iresl < RESLS.size(); ++iresl)
                         {
                             std::cout << "HSearsh stage " << iresl+1 << " resl " << F(5,2,RESLS[iresl]) << " begin threaded sampling, " << KMGT(samples[iseed][iresl].size()) << " samples: ";
-                            int64_t const out_interval = samples[iseed][iresl].size()/50;
+                            int64_t const out_interval = std::max( 1, samples[iseed][iresl].size()/50 );
                             std::exception_ptr exception = nullptr;
                             std::chrono::time_point<std::chrono::high_resolution_clock> start, end;
                             start = std::chrono::high_resolution_clock::now();
@@ -1037,6 +1037,7 @@ int main( int argc, char *argv[] )
                             std::cout << std::endl;
                             std::cout << "going through all results (threaded): ";
                             out_interval = (int64_t)( sample_tank.size() - Nout_singlethread )/ 82;
+                            out_interval = out_interval > 0 ? out_interval : 1;
                             std::exception_ptr exception = nullptr;
                             #ifdef USE_OPENMP
                             #pragma omp parallel for schedule(dynamic,128)
@@ -1197,6 +1198,7 @@ int main( int argc, char *argv[] )
                         std::cout << std::endl;
                         std::cout << "going through all results (threaded): ";
                         out_interval = (int64_t)( packed_results.size() - Nout_singlethread )/ 82;
+                        out_interval = out_interval > 0: out_interval : 1;
                         std::exception_ptr exception = nullptr;
                         #ifdef USE_OPENMP
                         #pragma omp parallel for schedule(dynamic,128)
@@ -1599,6 +1601,7 @@ int main( int argc, char *argv[] )
                     std::cout << std::endl;
                     std::cout << "going through all results (threaded): ";
                     out_interval = Nout / 82;
+                    out_interval = out_interval > 0 ? out_interval : 1;
                     std::exception_ptr exception = nullptr;
                     #ifdef USE_OPENMP
                     #pragma omp parallel for schedule(dynamic,128)
