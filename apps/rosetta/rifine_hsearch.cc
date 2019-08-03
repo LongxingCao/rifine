@@ -1198,7 +1198,7 @@ int main( int argc, char *argv[] )
                         std::cout << std::endl;
                         std::cout << "going through all results (threaded): ";
                         out_interval = (int64_t)( packed_results.size() - Nout_singlethread )/ 82;
-                        out_interval = out_interval > 0: out_interval : 1;
+                        out_interval = out_interval > 0 ? out_interval : 1;
                         std::exception_ptr exception = nullptr;
                         #ifdef USE_OPENMP
                         #pragma omp parallel for schedule(dynamic,128)
