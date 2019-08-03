@@ -905,7 +905,7 @@ int main( int argc, char *argv[] )
                         for( int iresl = 0; iresl < RESLS.size(); ++iresl)
                         {
                             std::cout << "HSearsh stage " << iresl+1 << " resl " << F(5,2,RESLS[iresl]) << " begin threaded sampling, " << KMGT(samples[iseed][iresl].size()) << " samples: ";
-                            int64_t const out_interval = std::max( 1, samples[iseed][iresl].size()/50 );
+                            int64_t const out_interval = std::max<int64_t>( 1, samples[iseed][iresl].size()/50 );
                             std::exception_ptr exception = nullptr;
                             std::chrono::time_point<std::chrono::high_resolution_clock> start, end;
                             start = std::chrono::high_resolution_clock::now();
