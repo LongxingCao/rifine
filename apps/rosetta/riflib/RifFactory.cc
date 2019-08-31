@@ -684,7 +684,7 @@ std::string get_rif_type_from_file( std::string fname )
 								//if ( requirements_.size() > 0 ) sat_bonus += -10.0;
 
 
-								sat_bonus = packopts_.user_rotamer_bonus_per_chi * rot_tgt_scorer_.rot_index_p_->nchi(irot) +
+								sat_bonus += packopts_.user_rotamer_bonus_per_chi * rot_tgt_scorer_.rot_index_p_->nchi(irot) +
 								            packopts_.user_rotamer_bonus_constant;
 								// std::cout << "ires " << ires << " cdirot " << irot << std::endl;
 								// std::cout << "Sat bonus: " << sat_bonus << " Score: " << score_rot_v_target + rot1be << std::endl;
