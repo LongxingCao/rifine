@@ -67,6 +67,14 @@ message( "install prefix ................ " ${CMAKE_INSTALL_PREFIX} )
 #if( ${EIGEN3_INCLUDE_DIR} MATCHES EIGEN3_INCLUDE_DIR-NOTFOUND )
 #	message( FATAL_ERROR "NO eigen3/Eigen found")
 #endif()
+
+# Hey Hey Hey, Longxing, you need always use your own boost
+# download boost library and no need to compile it
+# 2020-09-05
+# digs boost
+include_directories( "/home/longxing/Rifdock/include/boost_1_67_0/" )
+link_directories( "/home/longxing/Rifdock/include/boost_1_67_0/libs/" )
+
 set( EIGEN3_INCLUDE_DIR external )
 include_directories( ${EIGEN3_INCLUDE_DIR}/eigen3 )
 
