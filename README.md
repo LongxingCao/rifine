@@ -27,6 +27,14 @@ CMAKE_ROSETTA_PATH=/home/longxing/Rifdock/rosetta_rifdock/ cmake .. -DCMAKE_BUIL
 //digs debug mode
 CMAKE_ROSETTA_PATH=/home/longxing/Rifdock/rosetta_rifdock/ cmake .. -DCMAKE_BUILD_TYPE=Debug
 
+// use your own boost
+// download boost library
+// https://www.boost.org/users/history/
+// boost_1.67
+// add the following lines to CMakeLists.txt
+// include_directories( "/home/longxing/Rifdock/include/boost_1_67_0/" )
+// link_directories( "/home/longxing/Rifdock/include/boost_1_67_0/libs/" )
+
 
 
 Clone this repository and perform:  
