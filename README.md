@@ -23,6 +23,9 @@ CXX=/my/g++/version CC=/my/gcc/version ./ninja_build cxx11_omp -remake
 // xps15
 CXX=/usr/local/bin/g++ CC=/usr/local/bin/gcc CMAKE_ROSETTA_PATH=/software/rosetta-rifdock/ cmake .. -DCMAKE_BUILD_TYPE=Release
 //digs
+
+CXX=/home/longxing/.linuxbrew/Cellar/gcc@6/6.5.0_5/bin/g++-6 CC=/home/longxing/.linuxbrew/Cellar/gcc@6/6.5.0_5/bin/gcc-6
+
 CMAKE_ROSETTA_PATH=/home/longxing/Rifdock/rosetta_rifdock/ cmake .. -DCMAKE_BUILD_TYPE=Release
 //digs debug mode
 CMAKE_ROSETTA_PATH=/home/longxing/Rifdock/rosetta_rifdock/ cmake .. -DCMAKE_BUILD_TYPE=Debug
